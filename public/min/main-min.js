@@ -2146,11 +2146,15 @@ LG.FileModel = Backbone.Model.extend({
 		userid:null,
 		img:null
 	},
-	urlRoot:"index.php/pages/files",
+	urlRoot:"/files",
 	
 	initialize:function(){
 		this.listenTo(this, "save", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
+	},
+	parse: function(data) {
+		data.id = data._id;
+		return data;
 	},
 	error:function(model, xhr, options){
 		var response = $.parseJSON(xhr.responseText);
@@ -2238,7 +2242,7 @@ LG.AFileCollection.validateFileName = function(name){
 
 
 LG.FileCollection = LG.AFileCollection.extend({
-	url:"index.php/pages/files",
+	url:"/files",
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.selected = null;
@@ -2361,11 +2365,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 		model = new LG.FileModel();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userid":LG.userModel.get("userid")};
+		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userid")};
 		options = {
 			"success":function(model, response, options){
+				console.log("added "+JSON.stringify(model));
+				console.log("added "+JSON.stringify(response));
+				model.set({"id":response.id});
 				_this.add(model);
-				_this.loadById(model.get("id"), false);
+				_this.loadById(response.get("id"), false);
 				if(callback && callback.success){
 					callback.success();
 				}
@@ -2381,7 +2388,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 
 
 LG.AllFileCollection = LG.AFileCollection.extend({
-	url:"index.php/pages/files",
+	url:"/files",
 	initialize:function(){
 		this.page = 0;
 		this.num = 0;
@@ -2450,7 +2457,7 @@ LG.UserModel = Backbone.Model.extend({
 		var _this = this;
 		LG.facebook.getMe({
 			"success":function(response){
-				_this.set( {"name":response.name, "userid":response.id } );
+				_this.set( {"name":response.name, "userId":response.id, "loggedIn":"facebook" } );
 				_this.fbDataLoaded(response, options);
 			},
 			"fail":function(){
@@ -2634,8 +2641,14 @@ LG.Button = Backbone.View.extend({
 	getDisabled:function(){
 		return this.model.get("disabled");
 	},
+	getData:function(){
+		return {};
+	},
 	render:function(){
-		this.loadTemplate(  this.template, { show: this.getShow(), disabled: this.getDisabled() } , {replace:true} );
+		var defaultData, data;
+		defaultData = { show: this.getShow(), disabled: this.getDisabled() };
+		data = _.extend(defaultData, this.getData());
+		this.loadTemplate(  this.template, data , {replace:true} );
 		return this;
 	},
 	disableButton:function(data){
@@ -3368,7 +3381,6 @@ LG.MenuView = LG.AMenuView.extend({
 		this.menuButtons = new LG.MenuButtonsView();
 		this.menuTop = new LG.MenuTopView();
 		this.$el.append(this.menuTop.render().$el).append(this.menuButtons.render().$el);
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	swipeMe:function(e){
@@ -3463,6 +3475,9 @@ LG.WriteButtonView = LG.MenuButton.extend({
 			"_click":"clickMe"
 		});
 		return obj;
+	},
+	getData:function(){
+		return {"name":"Johns file", "saved":true};
 	},
 	clickMe:function(e){
 		this.stopProp(e);
@@ -3682,7 +3697,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.writeButtons = new LG.WriteButtonsView();
 		this.writeTop = new LG.WriteTopView();
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	draw:function(){
@@ -4150,6 +4164,7 @@ LG.GalleryListView = Backbone.View.extend({
 		numPages = Math.ceil(this.collection.length / this.perPage);
 		this.removeAllPages();
 		models = this.collection.toJSON();
+		alert("models "+JSON.stringify(models));
 		this.pages = [ ];
 		for(i = 0; i <= numPages - 1; i++){
 			pageModels = [models[0], models[1], models[2]];
@@ -4309,7 +4324,6 @@ LG.AGalleryView = LG.AMenuView.extend({
 	render:function(){
 		this.loadTemplate(  this.template, {} , {replace:true} );
 		this.addMenus();
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	onHide:function(){
@@ -4531,7 +4545,8 @@ LG.Launcher.prototype.fbChecked = function(){
 	if(LG.Network.FACEBOOK && !LG.Config.PHONEGAP){
 		LG.facebook = new LG.WebFacebook();
 	}
-	this.login({"success":$.proxy(this.onLoggedIn, this)});
+	//this.login({"success":$.proxy(this.onLoggedIn, this)});
+	this.onLoggedIn();
 };
 
 LG.Launcher.prototype.start = function(){
