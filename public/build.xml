@@ -33,6 +33,7 @@
 		<delete file="min/**.css"/>
 		<delete file="min/**.js"/>
 		<delete dir="min/parser"/>
+		<delete dir="min/images"/>
 		<delete dir="min/fonts"/>
 		<delete dir="min/font-awesome"/>
 		
@@ -64,7 +65,7 @@
 				<file name="backbone-1.0.0.js" /> 
 				<file name="jquery.easing.js" />
 				<file name="iscroll5.js" />
-			<file name="createjs/easeljs-0.6.0.min.js" /> 	
+				<file name="createjs/easeljs-0.6.0.min.js" /> 	
 				<file name="createjs/tweenjs-0.4.0.min.js" />
 				<file name="createjs/filters/Filter.js" /> 	
 				
@@ -171,6 +172,10 @@
 		
 		<copy todir="min/font-awesome">
 			<fileset dir="css/font-awesome"/>
+		</copy>
+		
+		<copy todir="min/images">
+			<fileset dir="css/images"/>
 		</copy>
 		
 		<copy todir="min/fonts">
