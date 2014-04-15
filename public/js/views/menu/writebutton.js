@@ -8,6 +8,9 @@ LG.WriteButtonView = LG.MenuButton.extend({
 		});
 		return obj;
 	},
+	getData:function(){
+		return {"name":"Johns file", "saved":true};
+	},
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.router.navigate("write", {"trigger":true});

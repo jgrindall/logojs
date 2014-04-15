@@ -159,8 +159,14 @@ LG.Button = Backbone.View.extend({
 	getDisabled:function(){
 		return this.model.get("disabled");
 	},
+	getData:function(){
+		return {};
+	},
 	render:function(){
-		this.loadTemplate(  this.template, { show: this.getShow(), disabled: this.getDisabled() } , {replace:true} );
+		var defaultData, data;
+		defaultData = { show: this.getShow(), disabled: this.getDisabled() };
+		data = _.extend(defaultData, this.getData());
+		this.loadTemplate(  this.template, data , {replace:true} );
 		return this;
 	},
 	disableButton:function(data){
