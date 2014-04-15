@@ -62,14 +62,8 @@
 				<file name="underscore-1.4.4.js" /> 			
 				<file name="backbone-1.0.0.js" /> 
 				<file name="jquery.easing.js" />
-				<file name="cufon.js" />
 				<file name="iscroll5.js" />
-				<file name="Roboto_Condensed_400.font.js" />
-				<file name="createjs/easeljs-0.6.0.min.js" /> 	
-				<file name="createjs/tweenjs-0.4.0.min.js" />
-				<file name="createjs/filters/Filter.js" /> 	
-				<file name="hammer.min.js" /> 	
-				<file name="jquery.hammer.js" /> 	
+			
 				
 			</filelist>
 	
