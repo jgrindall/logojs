@@ -1,0 +1,15 @@
+assets 
+
+assets/
+
+assets/**
+
+assets/*.*
+
+public/gen
+
+public/gen/**
+
+public/gen/*.*
+
+

@@ -1,0 +1,131 @@
+
+#basebuttons{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+a.button{
+	height:@buttonheight;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	padding: 15px;
+	font-size: 14px;
+	line-height: 1.4;
+	border-radius: 4px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	box-sizing:border-box;
+	border-width: 0 1px 4px 1px;
+	font-weight: bold;
+	color: white;
+	background-color: #158CBA;
+	border-color: #127BA3;
+	min-width:100px;
+	.noselect;
+	.animate;
+}
+
+a.button.transparent{
+	border:none !important;
+	background:none !important;
+}
+
+a.button.disabled{
+	opacity:0.3;
+	cursor: default;
+	color:@buttontextdisabled;
+}
+
+a.button i{
+	font-size:175%;
+}
+
+#filebutton{
+	font-size:20px !important;
+	padding-top: 9px;
+}
+
+#loginbutton img{
+	width: 32px;
+	height: 32px;
+	float: left;
+}
+
+#textbutton{
+	display:none;
+}
+
+#writebuttons a.button{
+	min-width:75px;
+	margin-top: 5px;
+}
+
+
+#writebuttons a.button span{
+	.animate;
+}
+
+#writebuttons a.button:hover span{
+	position:relative;
+	top:-3px;
+}
+
+#writebuttons a.button.disabled:hover span{
+	position:relative;
+	top:0px;
+}
+
+#menu li{
+	margin-top: 15px;
+}
+
+a.button span i{
+	padding-right:3px;
+}
+
+#filebutton i{
+	display:none;
+}
+
+.menutop a.button{
+	height:100%;
+	width:120px !important;
+}
+
+a.right{
+	float: right;
+}
+
+a.right span{
+	float: right;
+}
+
+a.right i{
+	float: right;
+}
+
+.alertbuttons{
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 40px;
+}
+
+.alertbuttons a.button:first-child{
+	margin-right:40px;
+}
+
+.menutop .button.right.transparent span{
+	margin-right: 10px;
+	font-size:15px;
+}

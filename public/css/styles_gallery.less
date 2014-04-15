@@ -1,0 +1,116 @@
+
+
+.menuxlarge ul{
+	position: absolute;
+	top: 40px;
+	left: 0;
+	width:100%;
+	margin: 0;
+	padding: 0;
+	bottom: 40px;
+	.animate(3s);
+}
+
+.menuxlarge ul.moveleft{
+	left:-100%;
+}
+.menuxlarge ul.moveright{
+	left:100%;
+}
+
+.menuxlarge .layout12 .galleryrow{
+	width:25%;
+	height:33.5%;
+}
+
+.menuxlarge .galleryrow{
+	width:100%;
+	opacity: 1;
+	padding:0px;
+	height:33%;
+	margin:0;
+}
+
+.menuxlarge .galleryrow div.mainblock{
+	height: 100%;
+	background:@filebg;
+	color:#111;
+	position:relative;
+	width:100%;
+}
+
+.menuxlarge .galleryrow div.mainblock span{
+	position: absolute;
+	left: 40px;
+}
+.menuxlarge .galleryrow div.mainblock span:nth-child(1){
+	top: 15px;
+};
+.menuxlarge .galleryrow div.mainblock span:nth-child(2){
+	top: 30px;
+};
+.menuxlarge .galleryrow div.mainblock img{
+	position: absolute;
+	left: 160px;
+	max-height:98%;
+};
+
+.menuxlarge .galleryrow div.sidebar{
+	height: 82%;
+	background: red;
+	width: 12px;
+	position: relative;
+	top:9%;
+}
+
+
+
+.menuxlarge .gallerybottom, .menuxlarge .gallerytop{
+	position: absolute;
+	width:100%;
+	height:@bottomheight;
+}
+.menuxlarge .gallerybottom{
+	bottom: 0;
+	left:0;
+}
+
+.menuxlarge .gallerybottom a.action.button{
+	width:49%;
+}
+
+.menuxlarge .gallerytop{
+	left:0;
+	top:0;
+	-webkit-box-shadow: 0px 5px 5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 5px 5px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 5px 5px rgba(50, 50, 50, 0.75);
+}
+
+.menuxlarge .gallerytop a{
+	width:100%;
+	margin:0;
+}
+
+#gallery{
+	.rightmenutransparent;
+}
+
+.listwrapper{
+	width:100%;
+	position:absolute;
+	top:50px;
+	bottom:0px;
+	overflow: hidden;
+}
+
+.listscroller{
+	height:100%;
+}
+
+.gallerypage{
+	height:100%;
+	width:200px;
+	float:left;
+}
+

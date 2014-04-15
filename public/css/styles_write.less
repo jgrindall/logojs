@@ -1,0 +1,65 @@
+
+#textcontainer{
+	width:100%;
+	height:100%;
+}
+
+#write textarea{
+	position:absolute;
+	outline: none;
+	border:none;
+	font-family:Roboto, Tahoma, Arial, Helvetica, sans-serif;
+	font-size:190%;
+	background:transparent;
+	left:0;
+	right:0;
+	top:45px;
+	bottom:@bottomheight;
+	padding: 5px;
+	color:#111;
+	resize:none;
+}
+
+#write textarea::-webkit-scrollbar {
+    width: 12px;
+}
+
+#write textarea::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+	background:@grey;
+	border-radius:0;
+}
+
+#write textarea::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	background:@scrollbar;
+	border-radius:0;
+}
+
+
+
+
+#writebuttons{
+	position:absolute;
+	bottom:0;
+	left:0;
+	right:0;
+	height:@bottomheight;
+	background:@greydark;
+}
+
+#writetop{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	height:@bottomheight;
+	background:@greydark;
+}
+
+#writetop a.button, #writebuttons a.button{
+	background:transparent;
+	color:white;
+}

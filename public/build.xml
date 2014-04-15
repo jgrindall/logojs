@@ -1,0 +1,178 @@
+<?xml version="1.0"?> 
+
+<project name="Logotacular" default="build"> 
+	
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+	
+	<property file="build.properties">
+		
+	</property>
+	
+	
+	
+	<target name="minjs" if="${min}">
+		<echo message="compressing js"/>
+		
+		<java jar="${yuijar}" fork="true" failonerror="true" >
+			<arg line='"min/main-min.js" -o "min/main-min.js"'/> 
+		</java>
+		
+		
+	</target>
+	
+	<target name="build" unless="built">
+		
+		<echo message="build"/>
+		<echo message="less is ${less}"> </echo>
+		<echo message="${built}"/>
+		
+		<echo message="deleting"/>
+		
+		<delete file="min/main-min.css"/>
+		<delete file="min/main-min.js"/>
+		<delete file="min/libs-min.js"/>
+		
+		<echo message="linting"/>
+		
+		<exec executable="jsl" failifexecutionfails="false">
+			<arg line="conf min/logo.conf"/>
+		</exec>
+		
+		<echo message="handle css"/>
+		
+		
+		<exec executable="node">
+			<arg line="${lessc} css/main.less -x --yui-compress min/main-min.css"/>
+		</exec>
+		
+		<echo message="concatening libs"/>
+		
+		<concat destfile="min/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+			<filelist dir="libs">
+				<file name="jquery.min.js" />
+				<file name="jquery.jgrowl.js" />
+				<file name="jquery.ba-throttle-debounce.js" /> 
+				<file name="json2.js" /> 
+				<file name="underscore-1.4.4.js" /> 			
+				<file name="backbone-1.0.0.js" /> 
+				<file name="jquery.easing.js" />
+				<file name="cufon.js" />
+				<file name="iscroll5.js" />
+				<file name="Roboto_Condensed_400.font.js" />
+				<file name="createjs/easeljs-0.6.0.min.js" /> 	
+				<file name="createjs/tweenjs-0.4.0.min.js" />
+				<file name="createjs/filters/Filter.js" /> 	
+				<file name="hammer.min.js" /> 	
+				<file name="jquery.hammer.js" /> 	
+				
+			</filelist>
+	
+		</concat>
+		
+		
+		
+		
+		<echo message="concatening js"/>
+		
+		<concat destfile="min/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+			<filelist dir="js">
+				
+				<!--  utils MUST come first -->
+				<!--  the rest must be loaded in order or dependence (superclasses first) bit of a pain...-->
+				
+				
+				<file name="utils/utils.js"/>
+				<file name="config.js"/>
+				
+				
+				
+				<file name="utils/network.js"/>
+				<file name="utils/storage.js"/>
+			
+				<file name="utils/templates.js"/> 	
+				
+				<file name="routes.js"/>		
+				<file name="events.js"/>		
+				
+				<file name="social/facebook.js"/>
+				<file name="parser/parser.js"/>
+				<file name="parser/output.js"/>
+				<file name="parser/commands.js"/>
+				<file name="models/base.js"/>		
+				<file name="models/logomodel.js"/>
+				
+				<file name="models/spinner.js"/>
+				<file name="models/filemodel.js"/>
+				<file name="models/usermodel.js"/>
+				<file name="models/sizemodel.js"/>
+				<file name="views/base.js"/>
+				<file name="views/header/base.js"/>
+				<file name="views/header/textbutton.js"/>
+				<file name="views/header/logobutton.js"/>
+				<file name="views/header/loginbutton.js"/>
+				<file name="views/header/gallerybutton.js"/>
+				<file name="views/header/helpbutton.js"/>
+				<file name="views/header/savebutton.js"/>
+				<file name="views/header/loadbutton.js"/>
+				<file name="views/header/filebutton.js"/>
+			
+				<file name="views/spinner/spinner.js"/>		
+								
+				<file name="views/easel/turtle.js"/>
+				<file name="views/activity/activity.js"/>	
+				<file name="views/activity/base.js"/>	
+				<file name="views/activity/activitybuttons.js"/>	
+				<file name="views/canvas/canvas.js"/>	
+				
+				<file name="views/menu/base.js"/>	
+				<file name="views/menu/menu.js"/>	
+				<file name="views/menu/menubuttons.js"/>
+				<file name="views/menu/menutop.js"/>				
+				<file name="views/menu/writebutton.js"/>	
+				<file name="views/menu/settingsbutton.js"/>	
+				
+				<file name="views/popups/base.js"/>
+				<file name="views/popups/alert.js"/>
+				<file name="views/popups/filename.js"/>
+				
+				
+				<file name="views/write/base.js"/>	
+				<file name="views/write/write.js"/>	
+				<file name="views/write/writebuttons.js"/>	
+				<file name="views/write/writetop.js"/>	
+				<file name="views/write/undobutton.js"/>
+				<file name="views/write/redobutton.js"/>	
+				<file name="views/write/tidybutton.js"/>	
+				<file name="views/write/clearbutton.js"/>	
+				
+				<file name="views/write/deletebutton.js"/>
+				<file name="views/write/newbutton.js"/>
+				
+				<file name="views/help/help.js"/>		
+				
+				<file name="views/gallery/gallerybutton.js"/>
+
+				<file name="views/gallery/gallerylist.js"/>	
+				<file name="views/gallery/gallerytop.js"/>	
+				<file name="views/gallery/base.js"/>	
+				<file name="views/gallery/gallery.js"/>	
+				
+				<file name="views/load/load.js"/>	
+				
+				<file name="launcher.js"/>	
+			</filelist>
+		</concat>
+		
+		
+		<antcall target="minjs"/>
+		
+		<property name="built" value="true"></property>
+		
+	</target>
+	
+	
+	
+	
+</project>

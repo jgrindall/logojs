@@ -1,0 +1,64 @@
+
+@leftsmallwidth:		230px;
+@leftlargewidth:		450px;
+
+@filebg:				#fff;
+
+@grey:					#fff;
+@greydark:				#28B62C;
+@scrollbar:				#ddd;
+
+@topheight:				50px;
+@bottomheight:			50px;
+@buttonheight:			60px;
+@buttontext:			white;
+@buttontextdisabled:	#ccc;
+@maintext:				#333;
+
+.rightmenugrey{
+	border-color:@greydark;
+	background-color:@grey;
+}
+
+.rightmenutransparent{
+	border-color:transparent;
+	background-color:white;
+}
+
+.menusmall, .menularge, .menuxlarge{
+	position: fixed;
+	top: 0;
+	height: 100%;
+	color:white;
+	.animate;
+	border:none;
+}
+
+.menusmall, .menularge {
+	.rightmenugrey;
+}
+
+.menusmall{
+	width:@leftsmallwidth;
+	right: -@leftsmallwidth;
+}
+
+.menularge{
+	width:@leftlargewidth;
+	right: -@leftlargewidth;
+}
+
+.menusmall.show, .menularge.show{
+	right: 0;
+}
+
+.menuxlarge{
+	width:100%;
+	right: -100%;
+	.rightmenutransparent;
+}
+
+.menuxlarge.show{
+	right: 0;
+}
+

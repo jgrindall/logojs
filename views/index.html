@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html class="ui-mobile-rendering">  
+	<head> 
+	
+		<title>logojs</title> 
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
+		
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+		
+		
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		
+			
+		
+		<link rel="icon" 							href="img/icon.png">
+		<link rel="shortcut icon" 					href="img/icon.ico"> 
+		<link rel="apple-touch-icon" 				href="img/icon.png">
+		<link rel="apple-touch-icon-precomposed" 	href="img/icon.png">
+		<link rel="stylesheet" 						href="css/main-min.css">
+		<link rel="stylesheet" 						href="css/font-awesome/css/font-awesome.min.css">
+		
+		<script>
+			
+			// this is a global namespace for all objects in this app.
+			window.LG = {color:"#FF4136"};
+			
+		</script>
+		
+		<!-- include all the javascript libraries -->
+		
+		<script src="min/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
+		
+		
+		
+		<!-- the main javascript -->
+		<script src="min/main-min.js" 					type="text/javascript" charset="utf-8"></script>
+		
+		
+		<!-- There follows all the template files in html in no particular order-->
+		
+		<script id="tpl_menubuttons" type="text/template">
+			<ul id="menubuttons">
+				
+			</ul>
+		</script>
+		
+		
+		
+		
+		<script id="tpl_activitybuttons" type="text/template">
+			<div id="basebuttons">
+			</div>
+		</script>
+		
+		<script id="tpl_writebuttons" type="text/template">
+			<div id="writebuttons">
+			</div>
+		</script>
+		
+		<script id="tpl_writetop" type="text/template">
+			<div id="writetop" class="menutop">
+			</div>
+		</script>
+		
+		<script id="tpl_menutop" type="text/template">
+			<div id="menutop" class="menutop">
+			</div>
+		</script>
+		
+		<script id="tpl_redobutton" type="text/template">
+
+			<a href="#"  class="action transparent button<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-rotate-right"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		
+		
+		
+		<script id="tpl_settingsbutton" type="text/template">
+
+			 <a href="#"  class="action button right transparent" >
+				 <span>
+					<i class="fa fa fa-align-justify"></i>
+				 </span>
+			 </a>
+			 
+			
+		</script>
+		
+		
+		
+		<script id="tpl_undobutton" type="text/template">
+
+			<a href="#"  class="action transparent button<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-undo"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		<script id="tpl_deletebutton" type="text/template">
+
+			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-trash-o"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		<script id="tpl_newbutton" type="text/template">
+
+			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-plus"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		
+		
+		<script id="tpl_spinner" type="text/template">
+
+			
+			<div id="spinner">
+				
+			</div>
+			
+		</script>
+		
+		
+		
+		
+		<script id="tpl_writebutton" type="text/template">
+
+			
+			<a href="#"  class="action button right transparent" >
+				<i class="fa fa-chevron-right"></i>
+				<span>Back</span>
+			</a>
+			
+		</script>
+		
+		
+		<script id="tpl_clearbutton" type="text/template">
+
+			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-times"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		<script id="tpl_startbutton" type="text/template">
+
+			<a href="#"  class="action button" ><span><i class="fa fa-play"></i></span></a>
+			
+		</script>
+		
+		<script id="tpl_stopbutton" type="text/template">
+
+			<a href="#"  class="action button" ><span><i class="fa fa-stop"></i></span></a>
+			
+		</script>
+		
+	
+		
+		
+		
+
+		<script id="tpl_filebutton" type="text/template">
+
+			<a href="#" id="filebutton" class="action button transparent" >
+				<span>
+					<i class="fa fa-save"></i>
+				<% if(name){print(name)}else{print("unsaved file")}%>
+				<% if(!saved){print("*");}%>
+				</span>
+			</a>
+			
+		</script>
+		
+		
+		
+		<script id="tpl_helpbutton" type="text/template">
+
+			<a href="#" id="helpbutton" class="action button transparent" >
+				<span>
+					<i class="fa fa-question"></i>
+				</span>
+			</a>
+			
+		</script>
+		
+		<script id="tpl_helpbuttonmenu" type="text/template">
+			
+			<li>
+				<a href="#" id="helpbuttonmenu" class="action button" >
+					<i class="fa fa-question"></i>
+					<span>Help</span>
+				</a>
+			</li>
+			
+		</script>
+		
+		<script id="tpl_gallerybutton" type="text/template">
+
+			  <li>
+				<a href="#" class="action button">
+					<i class="fa fa-save"></i>
+					<span>Gallery</span>
+				</a>
+			</li>
+			  
+
+		</script>
+		
+		
+		
+		<script id="tpl_galleryleftbutton" type="text/template">
+			<a href="#" id="leftbutton" class="action button<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-left"></i>
+				</span>
+			</a>
+		</script>
+		
+		<script id="tpl_galleryrightbutton" type="text/template">
+			<a href="#" id="rightbutton" class="action button<% if(disabled){print(" disabled");} %>" >
+				<span>
+					<i class="fa fa-right"></i>
+				</span>
+			</a>
+		</script>
+		
+		<script id="tpl_loadbutton" type="text/template">
+
+			 <li>
+				<a href="#"  class="action button">
+					<i class="fa fa-folder-open"></i>
+					<span>My files</span>
+				</a>
+			</li>
+			  
+
+		</script>
+		
+		
+		<script id="tpl_savebutton" type="text/template">
+
+			 <a href="#" id="savebutton" class="transparent action button<% if(disabled){print(" disabled");}%>" >
+			 
+				 <span>
+					<i class="fa fa-save"></i>
+				 </span>
+				 
+			 </a>
+			
+		</script>
+		
+		<script id="tpl_loginbutton" type="text/template">
+			<li>
+				<a href="#" id="loginbutton" class="action button" >
+				
+					<% if(pic){ %>
+						<img src='<%= pic %>'/>
+					<% } %>
+					
+							
+					<% if(name){ %>
+						name
+					<% } else { %>
+						<i class="fa fa-user"></i>
+						<span><%=label%></span>
+						
+						
+						
+					<% } %>
+				
+				</a>
+			</li>
+			  
+		</script>
+		
+		
+		<script id="tpl_header" type="text/template">
+
+			<div id="header"></div>
+			  
+		</script>
+
+		<script id="tpl_canvas" type="text/template">
+			
+			<div id="canvas" >
+				<canvas width="<%=width%>" height="<%=height%>" id="gamecanvas">
+				</canvas>
+				
+			</div>
+			
+		</script>
+		
+		
+		<script id="tpl_write" type="text/template">
+			
+			<div id="write" class="menularge">
+				<textarea spellcheck="false" placeholder="write your logo here"></textarea>
+			</div>
+			
+		</script>
+		
+		
+		<script id="tpl_help" type="text/template">
+			
+			<div id="help" class="menuxlarge">
+				
+				<div class="gallerytop menutop" >
+					<a href="#" id="cancelbutton" class="action button button1 right transparent">
+						<i class="fa fa-chevron-right"></i>
+						<span>Back</span>
+					</a>
+				</div>
+				
+				<div id="helpwrapper" >
+				
+					<div id="helpscroller">
+						
+						<div class='helpcontainer'>
+							<div class="helpcontent">
+							<h3>What is LOGO?</h3>
+							
+							<p>
+							
+								Logo was created in 1967 by Wally Feurzeig and Seymour Papert at MIT, with specific educational uses in mind. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
+							</p>
+							<p>
+								Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, supporting the Constructivist approach towards teaching:
+							</p>
+							<p class="quote">
+								" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
+							
+								...Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
+							</p>
+							<p>
+								In contrast to a Cartesian turtle with (x,y) coordinates, a Logo turtle has only a location on screen and an orientation (the direction it is facing). Indeed,
+							</p>
+							<p>
+								" the Turtle is like a person: ' I am here and I am facing north...'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.  "
+							</p>
+							<p>
+							In the UK, the Primary National Strategy describes Logo as one way to support teaching primary school maths and ICT:
+							</p>
+							<p class="quote">
+								" ...by using a computer, pupils in Key Stages 1 and 2 can...estimate and compare measures of length or distance, angle, time, and so on...for example, by devising a sequence of instructions to move a floor robot or screen 'turtle' along a path, then modifying their instructions in the light of the robot's response.  "
+							
+							</p>
+							
+							
+							</div>
+						</div>
+						
+						<div class='helpcontainer'>
+							<div class="helpcontent">
+							<h3>
+								How to write a program
+							</h3>
+							<p>
+								
+								
+								
+								LOGO is a programming language based on LISP. The most basic commands in Logo that control the graphical turtle are the 'go forward' command (written variously as FORWARD, forward, FD or fd), and the 'turn right' command (RIGHT, RT, rt).
+							
+								Logotacular uses the 'fd' and 'rt' variants of these commands, and like many other programming languages, each statement is terminated by a semicolon, for example:
+							</p>
+							<p class="code">
+								<pre>fd(100);
+rt(100);</pre>
+							</p>
+							<p>
+								This tells the turtle to go forward 100 units (in whatever direction it is facing), and then to turn on the spot 90 degrees clockwise.
+							</p>
+							<p>
+
+								One of the first Logo programs that a pupil would typically be exposed to would be to draw a square using:
+							</p>
+							<p class="code">
+								<pre>fd(100);
+rt(90);
+fd(100);
+rt(90);
+fd(100);
+rt(90);
+fd(100);
+rt(90);</pre>
+								
+							</p>
+							<p>
+
+								Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
+
+								So, our 'draw square' program could be written as :
+							</p>
+							<p class="code">
+								<pre>rpt 4[
+  fd(100);
+  rt(90);
+]</pre>
+
+							</p>
+							<p>
+
+								Can you work out what the following code will draw?
+							</p>
+							<p class="code">
+								<pre>rpt 5[
+  fd(100);
+  rt(72);
+]</pre>
+								
+															</p>
+							<p>
+
+								Advanced
+								For children, a function or procedure is often thought of as telling the turtle the meaning of a new word.
+							</p>
+							<p>
+
+								We could rewrite our 'draw square' program once more:
+							</p>
+							<p class="code">
+								<pre>proc drawSquare(){
+  rpt 4[
+	fd(100);
+	rt(90);
+  ]
+}
+drawSquare();</pre>
+							</p>
+							<p>
+
+								Recursion can also be used in Logo - for example the following program defines a procedure called drawSpiral which repeatedly calls itself, increasing the value of dist each time, with the result that an increasing series of line segments is drawn, forming a spiral:
+							</p>
+							<p class="code">
+								<pre>
+proc drawSpiral(dist){
+  fd(dist);
+  rt(90);
+  drawSpiral(dist+5);
+}
+drawSpiral(10);</pre>
+								
+															</p>
+							<p>
+
+
+								To find out about all the Logo commands you can use, see the 
+								Quick reference»
+							</p>
+							<p>
+
+
+								Features of Logotacular
+								Large set of Logo commands to explore concepts from geometry and programming
+								Use your Facebook id to log in to Logotacular - no need to register or use an extra password
+								Save and load your Logo files so that users can see your creations and so that you can access them anywhere
+								Export your Logo designs to Facebook
+								Download the offline version to use on your desktop PC/Mac
+								
+							</p>
+							</div>
+						</div>
+						
+						
+						
+						
+						<div class='helpcontainer'>
+							<div class="helpcontent">
+							
+							<h3>
+							What is Logotacular?
+								
+							</h3>
+							
+							<p>
+								Logotacular is a one-man project developed by myself (John Grindall). It is based on my MSc dissertation at the University of Westminster, London, UK called 'A Logo programming environment for Lego Mindstorms robots.'
+							</p>
+							<p>
+								Whereas that project was written in the Java programming language and intended to run on a Lego™ Mindstorms robot, Logotacular is a web-based application.
+							</p>
+							<p>
+								I developed the application primarily to learn some new technologies, but because I enjoyed messing around with Logo myself and found it interesting!
+							</p>
+							<p>
+
+								Technologies
+								The primary technologies used are:
+							</p>
+							<p>
+								The most important bit (and the one you can't see!) is the main Logo interpreter which parses and interprets your program. It is written in a combination of Java, using ANTLR, and Actionscript 3
+								The main application itself is written in Actionscript 3, using Flex 3 and the RobotLegs framework
+								The web sections of the application use HTML, CSS, jQuery and Javascript
+								The back-end uses mySQL, PHP and the CodeIgniter PHP framework.
+								Facebook connect is implemented using ideas from Danny Herran
+								The offline version of Logotacular was created using Adobe AIR.
+
+							</p>
+							<p>
+								Links
+								Many different versions of Logo are available, using many different dialects of the language. For more information you might like to look at the following pages:
+
+								Wikipedia: Logo programming language
+								MathsNet online Logo interpreter
+								Math and programming website - another online Logo interpreter
+								Another excellent online Logo application - written in JavaScript with a large Logo vocabulary
+								Microworlds - Links, examples, worksheets
+								MSWLogo - downloadable Logo application for Microsoft Windows™
+							
+							</p>
+							</div>
+						</div>
+						
+						
+						
+						
+					</div>
+				
+				</div>
+			
+			</div>
+			
+		</script>
+		
+		
+		<script id="tpl_menu" type="text/template">
+			
+			<div id="menu" class="menusmall">
+				
+			</div>
+			
+		</script>
+		
+		
+		
+		<script id="tpl_alert" type="text/template">
+			
+			<div id="alert" class="menularge">
+				
+				<div class="menutop">
+					<p><%= message %></p>
+				</div>
+					
+				<div class="alertbuttons">
+					<a href="#" id="okbutton" class="action button button0" ><span><%= okLabel %></span></a>
+					<a href="#" id="cancelbutton" class="action button button1" ><span><%= cancelLabel %></span></a>
+				</div>
+				
+			</div>
+			
+			
+		</script>
+		
+		
+		<script id="tpl_galleryrow" type="text/template">
+			
+			<div
+				
+				<%
+					if(id!=null){
+						print(" data-id = '"+id+"'");
+					}
+					
+				%>
+				
+				
+				<%
+					print(" class='galleryrow rnd"+rnd+"'");
+					
+				%>
+				
+			>
+				
+				
+				<div class="mainblock">
+				
+					<span><%= name %></span>
+					<span><%= userid %></span>
+					<span><%= logo %></span>
+					<img src="thumbs/img<%= id %>.png"/>
+					<div class="sidebar"></div>
+				
+				</div>
+			
+			</div>
+			
+		</script>
+		
+		
+		
+		
+		<script id="tpl_gallerypage" type="text/template">
+			
+			<div class="gallerypage">
+				
+			</div>
+					
+		</script>
+		
+		
+		
+		<script id="tpl_gallerybottom" type="text/template">
+			
+			<div class="gallerybottom">
+						
+				
+			</div>
+					
+		</script>
+		
+		<script id="tpl_cancelbutton" type="text/template">
+			<a href="#" id="cancelbutton" class="action button button1 right transparent">
+				<i class="fa fa-chevron-right"></i>
+				<span>Back</span>
+			</a>
+		</script>
+		
+		<script id="tpl_gallerytop" type="text/template">
+			
+			<div class="gallerytop menutop" >
+				
+			</div>
+		
+					
+		</script>
+		
+		
+		
+		<script id="tpl_gallerylist" type="text/template">
+			
+			<div class="listwrapper" id="listwrapper<%=showName%>" >
+			
+				<div class="listscroller" id="listscroller<%=showName%>">
+					
+				</div>
+			
+			</div>
+			
+		</script>
+		
+		
+		
+		
+		<script id="tpl_gallery" type="text/template">
+			
+			<div id="gallery" class="menuxlarge">
+				
+			</div>
+			
+		</script>
+		
+		
+		<script id="tpl_load" type="text/template">
+			
+			<div id="load" class="menuxlarge">
+				
+			</div>
+		
+		</script>
+		
+		
+		<script id="tpl_filename" type="text/template">
+			
+			<div id="filename" class="menularge">
+				<div class="menutop">
+					<p>Please choose a filename</p>
+				</div>
+				
+				<input type="text" id="filenametext" value="" placeholder="your filename"></input>
+					
+				<div class="alertbuttons">
+					<a href="#" id="okbutton" class="action button button0" ><span>Ok</span></a>
+					<a href="#" id="cancelbutton" class="action button button1" ><span>Cancel</span></a>
+				</div>
+				
+			</div>
+			
+			
+		</script>
+		
+		
+		
+		<script id="tpl_activity" type="text/template">
+			
+			<div id="activity">
+				
+			</div>
+			
+		</script>
+
+		
+	</head>
+	
+	
+	
+	<body>
+		<div id="fb-root"></div>
+		<div id="container"></div>
+	</body>
+	
+	
+</html>
