@@ -597,6 +597,7 @@ LG.Facebook = function(){
 };
 
 LG.Facebook.SRC 						= 	"http://connect.facebook.net/en_US/all.js";
+LG.Facebook.APP_ID						=	"169857723045523";
 LG.Facebook.ID 							= 	"facebook-jssdk";
 LG.Facebook.REDIRECT_URI 				= 	"https://www.facebook.com/connect/login_success.html";
 LG.Facebook.WEB_REDIRECT_URI 			= 	"http://www.numbersandpictures.com/logojs/build/web";
