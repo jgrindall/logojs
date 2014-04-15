@@ -11,7 +11,6 @@ LG.MenuView = LG.AMenuView.extend({
 		this.menuButtons = new LG.MenuButtonsView();
 		this.menuTop = new LG.MenuTopView();
 		this.$el.append(this.menuTop.render().$el).append(this.menuButtons.render().$el);
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	swipeMe:function(e){

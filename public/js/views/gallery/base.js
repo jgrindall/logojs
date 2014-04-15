@@ -33,7 +33,6 @@ LG.AGalleryView = LG.AMenuView.extend({
 	render:function(){
 		this.loadTemplate(  this.template, {} , {replace:true} );
 		this.addMenus();
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	onHide:function(){

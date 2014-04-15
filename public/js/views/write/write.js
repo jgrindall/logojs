@@ -18,7 +18,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.writeButtons = new LG.WriteButtonsView();
 		this.writeTop = new LG.WriteTopView();
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
-		this.$el.hammer( {"prevent_mouseevents": false} );
 		return this;
 	},
 	draw:function(){
