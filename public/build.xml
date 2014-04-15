@@ -30,9 +30,13 @@
 		
 		<echo message="deleting"/>
 		
-		<delete file="min/main-min.css"/>
-		<delete file="min/main-min.js"/>
-		<delete file="min/libs-min.js"/>
+		<delete file="min/**.css"/>
+		<delete file="min/**.js"/>
+		<delete dir="min/parser"/>
+		<delete dir="min/fonts"/>
+		<delete dir="min/font-awesome"/>
+		
+		
 		
 		<echo message="linting"/>
 		
@@ -175,6 +179,11 @@
 		<copy todir="min/fonts">
 			<fileset dir="css/fonts"/>
 		</copy>
+		
+		<copy todir="min/parser">
+			<fileset dir="js/parser"/>
+		</copy>
+		
 		
 		<property name="built" value="true"></property>
 		

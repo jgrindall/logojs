@@ -3110,7 +3110,6 @@ LG.ActivityButtonsView = Backbone.View.extend({
 
 
 
-
 LG.CanvasView = Backbone.View.extend({
 	
 	initialize:function(){
@@ -3247,7 +3246,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.process(tree);
 	},
 	process:function(tree){
-		this.worker = new Worker("js/visit.js");
+		this.worker = new Worker("min/parser/visit.js");
 		this.worker.onmessage = $.proxy(this.onMessage, this);
 		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
 		setTimeout($.proxy(this.drawBatch, this), LG.output.TIMEOUT);
