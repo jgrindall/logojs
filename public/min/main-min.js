@@ -2450,7 +2450,7 @@ LG.UserModel = Backbone.Model.extend({
 		var _this = this;
 		LG.facebook.getMe({
 			"success":function(response){
-				_this.set( {"name":data.name, "userid":response.id } );
+				_this.set( {"name":response.name, "userid":response.id } );
 				_this.fbDataLoaded(response, options);
 			},
 			"fail":function(){
