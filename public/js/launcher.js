@@ -130,7 +130,8 @@ LG.Launcher.prototype.fbChecked = function(){
 	if(LG.Network.FACEBOOK && !LG.Config.PHONEGAP){
 		LG.facebook = new LG.WebFacebook();
 	}
-	this.login({"success":$.proxy(this.onLoggedIn, this)});
+	//this.login({"success":$.proxy(this.onLoggedIn, this)});
+	this.onLoggedIn();
 };
 
 LG.Launcher.prototype.start = function(){
