@@ -148,7 +148,12 @@
 			
 			<a href="#"  class="action button right transparent" >
 				<i class="fa fa-chevron-right"></i>
-				<span>Back</span>
+				<span>Back to 
+				
+					<% if(name){print(name)}else{print("unsaved file")}%>
+					<% if(!saved){print("*");}%>
+				
+				</span>
 			</a>
 			
 		</script>
@@ -595,7 +600,7 @@ drawSpiral(10);</pre>
 				<div class="mainblock">
 				
 					<span><%= name %></span>
-					<span><%= userid %></span>
+					<span><%= userId %></span>
 					<span><%= logo %></span>
 					<img src="thumbs/img<%= id %>.png"/>
 					<div class="sidebar"></div>
