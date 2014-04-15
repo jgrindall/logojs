@@ -168,6 +168,14 @@
 		
 		<antcall target="minjs"/>
 		
+		<copy todir="min/font-awesome">
+			<fileset dir="css/font-awesome"/>
+		</copy>
+		
+		<copy todir="min/fonts">
+			<fileset dir="css/fonts"/>
+		</copy>
+		
 		<property name="built" value="true"></property>
 		
 	</target>
