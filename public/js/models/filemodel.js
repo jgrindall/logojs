@@ -13,11 +13,15 @@ LG.FileModel = Backbone.Model.extend({
 		userid:null,
 		img:null
 	},
-	urlRoot:"index.php/pages/files",
+	urlRoot:"/files",
 	
 	initialize:function(){
 		this.listenTo(this, "save", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
+	},
+	parse: function(data) {
+		data.id = data._id;
+		return data;
 	},
 	error:function(model, xhr, options){
 		var response = $.parseJSON(xhr.responseText);
@@ -105,7 +109,7 @@ LG.AFileCollection.validateFileName = function(name){
 
 
 LG.FileCollection = LG.AFileCollection.extend({
-	url:"index.php/pages/files",
+	url:"/files",
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.selected = null;
@@ -228,11 +232,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 		model = new LG.FileModel();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userid":LG.userModel.get("userid")};
+		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userid")};
 		options = {
 			"success":function(model, response, options){
+				console.log("added "+JSON.stringify(model));
+				console.log("added "+JSON.stringify(response));
+				model.set({"id":response.id});
 				_this.add(model);
-				_this.loadById(model.get("id"), false);
+				_this.loadById(response.get("id"), false);
 				if(callback && callback.success){
 					callback.success();
 				}
@@ -248,7 +255,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 
 
 LG.AllFileCollection = LG.AFileCollection.extend({
-	url:"index.php/pages/files",
+	url:"/files",
 	initialize:function(){
 		this.page = 0;
 		this.num = 0;
