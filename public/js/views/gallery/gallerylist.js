@@ -27,13 +27,15 @@ LG.GalleryListView = Backbone.View.extend({
 		this.collection.loadById(id, true);
 	},
 	addFiles:function(){
-		var _this = this, i, page, numPages, models, pageModels;
+		var _this = this, i, page, numPages, models, pageModels, startIndex;
 		numPages = Math.ceil(this.collection.length / this.perPage);
 		this.removeAllPages();
 		models = this.collection.toJSON();
 		this.pages = [ ];
 		for(i = 0; i <= numPages - 1; i++){
-			pageModels = [models[0], models[1], models[2]];
+			startIndex = i * LG.GalleryListView.NUMY;
+			pageModels = models.slice(startIndex, startIndex + LG.GalleryListView.NUMY);
+			console.log("pageModels "+JSON.stringify(pageModels));
 			page = new LG.GalleryPageView({"pageModels":pageModels});
 			_this.scroller.append(page.render().$el);
 			_this.pages.push(page);
@@ -43,10 +45,12 @@ LG.GalleryListView = Backbone.View.extend({
 		this.goBack();
 	},
 	goBack:function(){
-		this.myScroll.scrollTo(-this.scrollPos, 0);
+		if(this.myScroll){
+			this.myScroll.scrollTo(-this.scrollPos, 0);
+		}
 	},
 	onShow:function(){
-		this.listenTo(this.collection, "add", _.debounce($.proxy(this.addFiles, this)), 500);
+		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
 		this.collection.start();
 	},
 	onHide:function(){
@@ -95,8 +99,10 @@ LG.GalleryListView = Backbone.View.extend({
 		if(this.myScroll){
 			this.removeScroll();
 		}
-		this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
-		this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+		if(this.$(".gallerypage").length >= 1){
+			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
+			this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+		}
 	}
 });
 
