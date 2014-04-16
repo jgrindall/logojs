@@ -30,6 +30,9 @@ LG.GalleryButtonView = LG.HeaderButton.extend({
 				LG.router.navigate("gallery", {"trigger":true});
 			}
 		}
+		else{
+			LG.router.navigate("gallery", {"trigger":true});
+		}
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
