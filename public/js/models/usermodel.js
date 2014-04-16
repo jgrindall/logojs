@@ -12,9 +12,41 @@ LG.UserModel = Backbone.Model.extend({
 	clear:function(){
 		this.set( {"name":null, "userId":null, "pic":null, "pwd":null, "loggedIn":false} );
 	},
+	loginClicked:function(){
+		if(LG.facebook && 1===2){
+			if(this.isConnected()){
+				LG.facebook.logout({
+					"success":function(){
+						alert("ok");
+					},
+					"fail":function(){
+						alert("fail");
+					}
+				});
+			}
+			else{
+				LG.facebook.login({
+					"success":function(){
+						alert("ok");
+					},
+					"fail":function(){
+						alert("fail");
+					}
+				});
+			}
+		}
+		else{
+			if(this.isConnected()){
+				this.set({"loggedIn":false});
+			}
+			else{
+				this.set({"loggedIn":true, "userId":100000 + Math.ceil(Math.random()*100000)});
+			}
+		}
+	},
 	isConnected:function(){
 		// facebook or pwd
-		return (this.loggedIn !== false);
+		return (this.get("loggedIn") !== false);
 	},
 	fbLoggedIn:function(options){
 		this.loadFbData(options);
