@@ -7,25 +7,27 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
 		this.listenTo(LG.fileCollection, "sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		if(this.$el.hasClass("disabled")){
-			return;
+		var data = this.getData();
+		if(data.loggedIn && !data.disabled){
+			LG.fileCollection.save({});
 		}
-		LG.fileCollection.save({});
+		else if(!data.loggedIn){
+			LG.Utils.growl("Please log in to save your work");
+		}
 	},
-	getDisabled:function(){
-		var saved = false, fileModel;
+	getData:function(){
+		var disable = true, fileModel, loggedIn;
+		loggedIn = LG.userModel.isConnected();
 		fileModel = LG.fileCollection.selected;
-		if(fileModel){
-			saved = LG.fileCollection.isSaved();
+		console.log("gd "+loggedIn+" , "+fileModel+", "+LG.fileCollection.isSaved());
+		if(loggedIn){
+			disable = LG.fileCollection.isSaved();
 		}
-		return saved;
-	},
-	render:function(){
-		this.loadTemplate(  this.template, { show: this.getShow(), disabled:this.getDisabled()  } , {replace:true} );
-		return this;
+		return {"loggedIn":loggedIn, "disabled":disable};
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
