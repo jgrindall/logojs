@@ -8,19 +8,17 @@ LG.FileModel = Backbone.Model.extend({
 	defaults:{
 		name:"",
 		logo:"",
-		id:null,
 		votes:0,
-		userid:null,
+		userId:null,
 		img:null
 	},
+	idAttribute: "_id", 
 	urlRoot:"/files",
-	
 	initialize:function(){
 		this.listenTo(this, "save", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
 	},
 	parse: function(data) {
-		data.id = data._id;
 		return data;
 	},
 	error:function(model, xhr, options){
@@ -56,6 +54,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 	getByProperty:function(propName, propVal){
 		var selectedModel = null;
 		this.each( function(model){
+			console.log("getByProperty "+propName+"  "+propVal+"      =?     "+model.get(propName));
 			if(model.get(propName) == propVal){
 				selectedModel = model;
 			}
@@ -66,7 +65,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 		return this.getByProperty("name", name);
 	},
 	getById:function(id){
-		return this.getByProperty("id", parseInt(id, 10));
+		return this.getByProperty("_id", id);
 	},
 	nextPage:function(){
 		var c = this.pageModel.get("numPages");
@@ -77,7 +76,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 	},
 	getData:function(){
 		var options = {};
-		options.userid = LG.userModel.get("userid");
+		options.userId = LG.userModel.get("userId");
 		options.numPages = this.pageModel.get("numPages");
 		options.perPage = 24;
 		return options;
@@ -135,16 +134,19 @@ LG.FileCollection = LG.AFileCollection.extend({
 		this.trigger("change");
 	},
 	save:function(options){
+		alert("save ");
 		if(LG.userModel.isConnected()){
 			if(this.selected){
+				alert("save  cf");
 				this.saveCurrentFile(options);
 			}
 			else{
+				alert("fn");
 				LG.router.navigate("filename", {"trigger":true});
 			}
 		}
 		else{
-			LG.popups.openPopup({"message":"Please log in"});
+			LG.Utils.growl("Please log in to save your work");
 		}
 	},
 	loadModel:function(model){
@@ -158,8 +160,8 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	loadById:function(id){
 		alert("laod by id "+id);
-		this.id = parseInt(id, 10);
-		var selectedModel = this.getById(this.id);
+		var selectedModel = this.getById(id);
+		console.log("selectedModel "+selectedModel+"  "+JSON.stringify(selectedModel.toJSON()));
 		if(selectedModel){
 			if(this.selected === selectedModel){
 				LG.Utils.growl("File already open");
@@ -176,7 +178,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			return false;
 		}
 		else {
-			return (this.selected.get("id")===id);
+			return (this.selected.get("_id")===id);
 		}
 	},
 	deleteCurrentFile:function(){
@@ -186,6 +188,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		else{
 			var options = {
 				"success":function(){
+					alert("oks");
 					LG.Utils.growl("File deleted");
 					LG.EventDispatcher.trigger(LG.Events.RESTART);
 				}
@@ -195,7 +198,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	saveCurrentFile:function(options){
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		var data = {"img":LG.imageModel.get("img"),"logo":LG.logoModel.get("logo"),"userid":LG.userModel.get("userid")};
+		var data = {"img":LG.imageModel.get("img"),"logo":LG.logoModel.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
 		this.selected.save(data, options);
 	},
@@ -232,14 +235,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 		model = new LG.FileModel();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userid")};
+		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
 		options = {
 			"success":function(model, response, options){
-				console.log("added "+JSON.stringify(model));
-				console.log("added "+JSON.stringify(response));
-				model.set({"id":response.id});
+				model.set({"_id":response._id});
 				_this.add(model);
-				_this.loadById(response.get("id"), false);
+				console.log("model "+JSON.stringify(model.toJSON()));
+				console.log("response "+JSON.stringify(response));
+				_this.loadById(response._id, false);
 				if(callback && callback.success){
 					callback.success();
 				}
@@ -262,7 +265,7 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		LG.AFileCollection.prototype.initialize.call(this);
 	},
 	getData:function(){
-		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userid": null});
+		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
 	},
 	loadById:function(id, check){
 		var _this = this, oldModel, model, data, newName, options, yours;
