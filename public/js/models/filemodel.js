@@ -134,14 +134,11 @@ LG.FileCollection = LG.AFileCollection.extend({
 		this.trigger("change");
 	},
 	save:function(options){
-		alert("save ");
 		if(LG.userModel.isConnected()){
 			if(this.selected){
-				alert("save  cf");
 				this.saveCurrentFile(options);
 			}
 			else{
-				alert("fn");
 				LG.router.navigate("filename", {"trigger":true});
 			}
 		}
