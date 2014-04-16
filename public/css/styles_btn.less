@@ -4,7 +4,7 @@
 	bottom: 0;
 	width: 100%;
 }
-a.button{
+.button{
 	height:@buttonheight;
 	display: inline-block;
 	margin-bottom: 0;
@@ -35,24 +35,25 @@ a.button{
 	.animate;
 }
 
-a.button.transparent{
+.button.transparent{
 	border:none !important;
 	background:none !important;
 }
 
-a.button.disabled{
+.button.disabled{
 	opacity:0.3;
 	cursor: default;
 	color:@buttontextdisabled;
 }
 
-a.button i{
+.button i{
 	font-size:175%;
 }
 
 #filebutton{
 	font-size:20px !important;
 	padding-top: 9px;
+	text-align: left !important;
 }
 
 #loginbutton img{
@@ -65,31 +66,22 @@ a.button i{
 	display:none;
 }
 
-#writebuttons a.button{
+#writebuttons .button{
 	min-width:75px;
-	margin-top: 5px;
+	padding: 0;
+	margin: 0;
 }
 
 
-#writebuttons a.button span{
+#writebuttons .button span{
 	.animate;
-}
-
-#writebuttons a.button:hover span{
-	position:relative;
-	top:-3px;
-}
-
-#writebuttons a.button.disabled:hover span{
-	position:relative;
-	top:0px;
 }
 
 #menu li{
 	margin-top: 15px;
 }
 
-a.button span i{
+.button span i{
 	padding-right:3px;
 }
 
@@ -97,7 +89,7 @@ a.button span i{
 	display:none;
 }
 
-.menutop a.button{
+.menutop .button{
 	height:100%;
 	width:120px !important;
 }
@@ -121,7 +113,7 @@ a.right i{
 	margin-top: 40px;
 }
 
-.alertbuttons a.button:first-child{
+.alertbuttons .button:first-child{
 	margin-right:40px;
 }
 
