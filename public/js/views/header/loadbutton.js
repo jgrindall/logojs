@@ -6,9 +6,15 @@ LG.LoadButtonView = LG.HeaderButton.extend({
 	template:"tpl_loadbutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
+		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	alertOk:function(){
 		LG.fileCollection.save();
+	},
+	getData:function(){
+		var loggedIn = LG.userModel.isConnected();
+		console.log("loadbutton "+loggedIn);
+		return {"disabled":!loggedIn};
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
@@ -33,7 +39,7 @@ LG.LoadButtonView = LG.HeaderButton.extend({
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click":"onClick"
+			"_click button:not(.disabled)":"onClick"
 		});
 		return obj;
 	
