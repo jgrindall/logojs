@@ -40,13 +40,14 @@ LG.Utils.growl = function(msg){
 		"beforeClose":function(){
 			$(this).off("click");
 		},
+		"closeTemplate":"",
 		"position":"bottom-left"
 	
 	};
 	$.jGrowl(msg, data);
 };
 
-$.jGrowl.defaults.pool = 1;
+$.jGrowl.defaults.pool = 3;
 
 LG.Utils.supportsLocalStorage = function(){
 	if (typeof window.localStorage !== 'undefined'){
