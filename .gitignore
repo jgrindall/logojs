@@ -6,10 +6,10 @@ assets/**
 
 assets/*.*
 
-public/gen
+public/thumbs
 
-public/gen/**
+public/thumbs/**
 
-public/gen/*.*
+public/thumbs/*.*
 
 
