@@ -40,13 +40,14 @@ LG.Utils.growl = function(msg){
 		"beforeClose":function(){
 			$(this).off("click");
 		},
+		"closeTemplate":"",
 		"position":"bottom-left"
 	
 	};
 	$.jGrowl(msg, data);
 };
 
-$.jGrowl.defaults.pool = 1;
+$.jGrowl.defaults.pool = 3;
 
 LG.Utils.supportsLocalStorage = function(){
 	if (typeof window.localStorage !== 'undefined'){
@@ -2141,19 +2142,17 @@ LG.FileModel = Backbone.Model.extend({
 	defaults:{
 		name:"",
 		logo:"",
-		id:null,
 		votes:0,
-		userid:null,
+		userId:null,
 		img:null
 	},
+	idAttribute: "_id", 
 	urlRoot:"/files",
-	
 	initialize:function(){
 		this.listenTo(this, "save", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
 	},
 	parse: function(data) {
-		data.id = data._id;
 		return data;
 	},
 	error:function(model, xhr, options){
@@ -2189,6 +2188,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 	getByProperty:function(propName, propVal){
 		var selectedModel = null;
 		this.each( function(model){
+			console.log("getByProperty "+propName+"  "+propVal+"      =?     "+model.get(propName));
 			if(model.get(propName) == propVal){
 				selectedModel = model;
 			}
@@ -2199,7 +2199,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 		return this.getByProperty("name", name);
 	},
 	getById:function(id){
-		return this.getByProperty("id", parseInt(id, 10));
+		return this.getByProperty("_id", id);
 	},
 	nextPage:function(){
 		var c = this.pageModel.get("numPages");
@@ -2210,7 +2210,7 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 	},
 	getData:function(){
 		var options = {};
-		options.userid = LG.userModel.get("userid");
+		options.userId = LG.userModel.get("userId");
 		options.numPages = this.pageModel.get("numPages");
 		options.perPage = 24;
 		return options;
@@ -2277,7 +2277,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			}
 		}
 		else{
-			LG.popups.openPopup({"message":"Please log in"});
+			LG.Utils.growl("Please log in to save your work");
 		}
 	},
 	loadModel:function(model){
@@ -2291,8 +2291,8 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	loadById:function(id){
 		alert("laod by id "+id);
-		this.id = parseInt(id, 10);
-		var selectedModel = this.getById(this.id);
+		var selectedModel = this.getById(id);
+		console.log("selectedModel "+selectedModel+"  "+JSON.stringify(selectedModel.toJSON()));
 		if(selectedModel){
 			if(this.selected === selectedModel){
 				LG.Utils.growl("File already open");
@@ -2309,7 +2309,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			return false;
 		}
 		else {
-			return (this.selected.get("id")===id);
+			return (this.selected.get("_id")===id);
 		}
 	},
 	deleteCurrentFile:function(){
@@ -2319,6 +2319,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		else{
 			var options = {
 				"success":function(){
+					alert("oks");
 					LG.Utils.growl("File deleted");
 					LG.EventDispatcher.trigger(LG.Events.RESTART);
 				}
@@ -2328,7 +2329,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	saveCurrentFile:function(options){
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		var data = {"img":LG.imageModel.get("img"),"logo":LG.logoModel.get("logo"),"userid":LG.userModel.get("userid")};
+		var data = {"img":LG.imageModel.get("img"),"logo":LG.logoModel.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
 		this.selected.save(data, options);
 	},
@@ -2365,14 +2366,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 		model = new LG.FileModel();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userid")};
+		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
 		options = {
 			"success":function(model, response, options){
-				console.log("added "+JSON.stringify(model));
-				console.log("added "+JSON.stringify(response));
-				model.set({"id":response.id});
+				model.set({"_id":response._id});
 				_this.add(model);
-				_this.loadById(response.get("id"), false);
+				console.log("model "+JSON.stringify(model.toJSON()));
+				console.log("response "+JSON.stringify(response));
+				_this.loadById(response._id, false);
 				if(callback && callback.success){
 					callback.success();
 				}
@@ -2395,7 +2396,7 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		LG.AFileCollection.prototype.initialize.call(this);
 	},
 	getData:function(){
-		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userid": null});
+		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
 	},
 	loadById:function(id, check){
 		var _this = this, oldModel, model, data, newName, options, yours;
@@ -2430,9 +2431,41 @@ LG.UserModel = Backbone.Model.extend({
 	clear:function(){
 		this.set( {"name":null, "userId":null, "pic":null, "pwd":null, "loggedIn":false} );
 	},
+	loginClicked:function(){
+		if(LG.facebook && 1===2){
+			if(this.isConnected()){
+				LG.facebook.logout({
+					"success":function(){
+						alert("ok");
+					},
+					"fail":function(){
+						alert("fail");
+					}
+				});
+			}
+			else{
+				LG.facebook.login({
+					"success":function(){
+						alert("ok");
+					},
+					"fail":function(){
+						alert("fail");
+					}
+				});
+			}
+		}
+		else{
+			if(this.isConnected()){
+				this.set({"loggedIn":false});
+			}
+			else{
+				this.set({"loggedIn":true, "userId":100000 + Math.ceil(Math.random()*100000)});
+			}
+		}
+	},
 	isConnected:function(){
 		// facebook or pwd
-		return (this.loggedIn !== false);
+		return (this.get("loggedIn") !== false);
 	},
 	fbLoggedIn:function(options){
 		this.loadFbData(options);
@@ -2725,35 +2758,29 @@ LG.LoginButtonView = LG.HeaderButton.extend({
 		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	render:function(){
-		var user = LG.userModel.toJSON(), label = "Login with Facebook";
+		var user = LG.userModel.toJSON(), label;
 		if(LG.Config.PHONEGAP === "ios"){
-			label = "Register/Login";
+			if(LG.userModel.isConnected()){
+				label = "Register/Login";
+			}
+			else{
+				label = "Register/Login";
+			}
+		}
+		else{
+			if(LG.userModel.isConnected()){
+				label = "Logout";
+			}
+			else{
+				label = "Login with Facebook";
+			}
 		}
 		this.loadTemplate(  this.template, { "label":label,"loggedin":user.loggedin, "name":user.name, "email":user.email, "pic":user.pic, "show": this.getShow(), disabled:this.getDisabled()  } , {replace:true} );
 		return this;
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		if(LG.userModel.get("loggedin")){
-			LG.facebook.logout({
-				"success":function(){
-					alert("ok");
-				},
-				"fail":function(){
-					alert("fail");
-				}
-			});
-		}
-		else{
-			LG.facebook.login({
-				"success":function(){
-					alert("ok");
-				},
-				"fail":function(){
-					alert("fail");
-				}
-			});
-		}
+		LG.userModel.loginClicked();
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -2796,6 +2823,9 @@ LG.GalleryButtonView = LG.HeaderButton.extend({
 			else{
 				LG.router.navigate("gallery", {"trigger":true});
 			}
+		}
+		else{
+			LG.router.navigate("gallery", {"trigger":true});
 		}
 	},
 	events:function(){
@@ -2857,25 +2887,27 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
 		this.listenTo(LG.fileCollection, "sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		if(this.$el.hasClass("disabled")){
-			return;
+		var data = this.getData();
+		if(data.loggedIn && !data.disabled){
+			LG.fileCollection.save({});
 		}
-		LG.fileCollection.save({});
+		else if(!data.loggedIn){
+			LG.Utils.growl("Please log in to save your work");
+		}
 	},
-	getDisabled:function(){
-		var saved = false, fileModel;
+	getData:function(){
+		var disable = true, fileModel, loggedIn;
+		loggedIn = LG.userModel.isConnected();
 		fileModel = LG.fileCollection.selected;
-		if(fileModel){
-			saved = LG.fileCollection.isSaved();
+		console.log("gd "+loggedIn+" , "+fileModel+", "+LG.fileCollection.isSaved());
+		if(loggedIn){
+			disable = LG.fileCollection.isSaved();
 		}
-		return saved;
-	},
-	render:function(){
-		this.loadTemplate(  this.template, { show: this.getShow(), disabled:this.getDisabled()  } , {replace:true} );
-		return this;
+		return {"loggedIn":loggedIn, "disabled":disable};
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -2894,9 +2926,15 @@ LG.LoadButtonView = LG.HeaderButton.extend({
 	template:"tpl_loadbutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
+		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	alertOk:function(){
 		LG.fileCollection.save();
+	},
+	getData:function(){
+		var loggedIn = LG.userModel.isConnected();
+		console.log("loadbutton "+loggedIn);
+		return {"disabled":!loggedIn};
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
@@ -2921,7 +2959,7 @@ LG.LoadButtonView = LG.HeaderButton.extend({
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click":"onClick"
+			"_click button:not(.disabled)":"onClick"
 		});
 		return obj;
 	
@@ -4010,6 +4048,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
 		LG.EventDispatcher.trigger(LG.Events.RESTART);
+		LG.router.navigate("write", {"trigger":true});
 	},
 	modelSynced:function(){
 		this.stopListening(LG.fileCollection, "sync");
@@ -4160,14 +4199,15 @@ LG.GalleryListView = Backbone.View.extend({
 		this.collection.loadById(id, true);
 	},
 	addFiles:function(){
-		var _this = this, i, page, numPages, models, pageModels;
+		var _this = this, i, page, numPages, models, pageModels, startIndex;
 		numPages = Math.ceil(this.collection.length / this.perPage);
 		this.removeAllPages();
 		models = this.collection.toJSON();
-		alert("models "+JSON.stringify(models));
 		this.pages = [ ];
 		for(i = 0; i <= numPages - 1; i++){
-			pageModels = [models[0], models[1], models[2]];
+			startIndex = i * LG.GalleryListView.NUMY;
+			pageModels = models.slice(startIndex, startIndex + LG.GalleryListView.NUMY);
+			console.log("pageModels "+JSON.stringify(pageModels));
 			page = new LG.GalleryPageView({"pageModels":pageModels});
 			_this.scroller.append(page.render().$el);
 			_this.pages.push(page);
@@ -4177,10 +4217,12 @@ LG.GalleryListView = Backbone.View.extend({
 		this.goBack();
 	},
 	goBack:function(){
-		this.myScroll.scrollTo(-this.scrollPos, 0);
+		if(this.myScroll){
+			this.myScroll.scrollTo(-this.scrollPos, 0);
+		}
 	},
 	onShow:function(){
-		this.listenTo(this.collection, "add", _.debounce($.proxy(this.addFiles, this)), 500);
+		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
 		this.collection.start();
 	},
 	onHide:function(){
@@ -4229,8 +4271,10 @@ LG.GalleryListView = Backbone.View.extend({
 		if(this.myScroll){
 			this.removeScroll();
 		}
-		this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
-		this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+		if(this.$(".gallerypage").length >= 1){
+			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
+			this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+		}
 	}
 });
 
