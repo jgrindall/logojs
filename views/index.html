@@ -75,11 +75,11 @@
 		
 		<script id="tpl_redobutton" type="text/template">
 
-			<a href="#"  class="action transparent button<% if(disabled){print(" disabled");} %>" >
+			<button class="action transparent button<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-rotate-right"></i>
 				</span>
-			</a>
+			</button>
 			
 		</script>
 		
@@ -101,38 +101,37 @@
 		
 		<script id="tpl_undobutton" type="text/template">
 
-			<a href="#"  class="action transparent button<% if(disabled){print(" disabled");} %>" >
+			<button class="action transparent button<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-undo"></i>
 				</span>
-			</a>
+			</button>
 			
 		</script>
 		
 		<script id="tpl_deletebutton" type="text/template">
 
-			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+			<button class="action button transparent<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-trash-o"></i>
 				</span>
-			</a>
+			</button>
 			
 		</script>
 		
 		<script id="tpl_newbutton" type="text/template">
 
-			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+			<button class="action button transparent<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-plus"></i>
 				</span>
-			</a>
+			</button>
 			
 		</script>
 		
 		
 		
 		<script id="tpl_spinner" type="text/template">
-
 			
 			<div id="spinner">
 				
@@ -147,12 +146,9 @@
 
 			
 			<a href="#"  class="action button right transparent" >
-				<i class="fa fa-chevron-right"></i>
-				<span>Back to 
-				
-					<% if(name){print(name)}else{print("unsaved file")}%>
-					<% if(!saved){print("*");}%>
-				
+				<i class="fa fa-pencil-square-o"></i>
+				<span>
+					Back
 				</span>
 			</a>
 			
@@ -161,11 +157,11 @@
 		
 		<script id="tpl_clearbutton" type="text/template">
 
-			<a href="#"  class="action button transparent<% if(disabled){print(" disabled");} %>" >
+			<button class="action button transparent<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-times"></i>
 				</span>
-			</a>
+			</button>
 			
 		</script>
 		
@@ -224,10 +220,10 @@
 		<script id="tpl_gallerybutton" type="text/template">
 
 			  <li>
-				<a href="#" class="action button">
+				<button class="action button">
 					<i class="fa fa-save"></i>
 					<span>Gallery</span>
-				</a>
+				</button>
 			</li>
 			  
 
@@ -254,10 +250,10 @@
 		<script id="tpl_loadbutton" type="text/template">
 
 			 <li>
-				<a href="#"  class="action button">
+				<button class="action button<% if(disabled){print(" disabled");}%>">
 					<i class="fa fa-folder-open"></i>
 					<span>My files</span>
-				</a>
+				</button>
 			</li>
 			  
 
@@ -266,13 +262,13 @@
 		
 		<script id="tpl_savebutton" type="text/template">
 
-			 <a href="#" id="savebutton" class="transparent action button<% if(disabled){print(" disabled");}%>" >
+			 <button id="savebutton" class="transparent action button<% if(disabled){print(" disabled");}%>" >
 			 
 				 <span>
 					<i class="fa fa-save"></i>
 				 </span>
 				 
-			 </a>
+			 </button>
 			
 		</script>
 		
@@ -582,8 +578,8 @@ drawSpiral(10);</pre>
 			<div
 				
 				<%
-					if(id!=null){
-						print(" data-id = '"+id+"'");
+					if(_id!=null){
+						print(" data-id = '"+_id+"'");
 					}
 					
 				%>
@@ -602,7 +598,7 @@ drawSpiral(10);</pre>
 					<span><%= name %></span>
 					<span><%= userId %></span>
 					<span><%= logo %></span>
-					<img src="thumbs/img<%= id %>.png"/>
+					<img src="thumbs/thumb_<%= _id %>.png"/>
 					<div class="sidebar"></div>
 				
 				</div>
