@@ -14,8 +14,8 @@ LG.LoadView = LG.AGalleryView.extend({
 
 
 LG.LoadRowView = LG.AGalleryRowView.extend({
-	initialize:function(model, rnd){
-		LG.AGalleryRowView.prototype.initialize.call(this, model, rnd);
+	initialize:function(model){
+		LG.AGalleryRowView.prototype.initialize.call(this, model);
 	},
 	template:"tpl_galleryrow"
 });
