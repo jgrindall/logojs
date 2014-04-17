@@ -9,34 +9,51 @@ LG.ImageModel = Backbone.Model.extend({
 LG.UndoRedoFileModel = Backbone.Model.extend({
 	initialize: function(){
 		this.restart();
-		this.listenTo(this, "change:"+this.watchString, $.proxy(this.modelChanged, this));
+		this.editing = false;
+		this.listenTo(this, this.getWatchString(), $.proxy(this.modelChanged, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
+	},
+	getWatchString:function(){
+		var i, s = [ ];
+		for(i = 0;i <= this.watchString.length - 1;i++){
+			s.push ("change:"+this.watchString[i]);
+		}
+		return s.join(" ");
 	},
 	restart:function(options){
 		this.history = [ "" ];
 		this.pointer = 0;
 	},
+	getValues : function(){
+		var i, obj = {};
+		for(i = 0;i <= this.watchString.length - 1;i++){
+			obj[this.watchString[i]] = this.get(this.watchString[i]);
+		}
+		return obj;
+	},
 	modelChanged:function(){
-		// see where pointer is first!
+		if(this.editing){
+			return;
+		}
 		var h, p, newValue;
 		h = this.history;
 		p = this.pointer;
-		newValue = this.get(this.watchString);
+		newValues = this.getValues();
 		while(p < h.length - 1){
 			h.pop();
 		}
 		if(h.length === 0){
-			h.push(newValue);
+			h.push(newValues);
 			this.pointer = 0;
 		}
 		else if(h.length < LG.UndoRedoFileModel.MAX_HISTORY){
-			h.push(newValue);
+			h.push(newValues);
 			this.pointer = p + 1;
 		}
 		else{
 			h.splice(0, 1);
-			h.push(newValue);
+			h.push(newValues);
 		}
 	},
 	canUndo:function(){
@@ -51,12 +68,17 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		}
 		return true;
 	},
+	reload:function(){
+		this.editing = true;
+		this.set(this.history[this.pointer]);
+		this.editing = false;
+	},
 	undo:function(){
 		if(!this.canUndo()){
 			return;
 		}
 		this.pointer = this.pointer - 1;
-		// set logo as this.history[this.pointer];
+		this.reload();
 	},
 	redo:function(){
 		var h, p;
@@ -64,7 +86,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 			return;
 		}
 		this.pointer = p + 1;
-		// set logo as this.history[this.pointer];
+		this.reload();
 	}	
 });
 
@@ -79,12 +101,15 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		img:null,
 		dino:0
 	},
-	watchString:"logo",
+	watchString:["logo","dino"],
 	idAttribute: "_id", 
 	urlRoot:"/files",
-	initialize:function(){
+	initialize:function(data){
 		LG.UndoRedoFileModel.prototype.initialize.call(this);
-		this.dirty = true;
+		this.dirty = false;
+		if(data && data.dirty){
+			this.dirty = true;
+		}
 		this.listenTo(this, "save sync", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
 		this.listenTo(this, "change:logo change:dino", $.proxy(this.onChanged, this));
@@ -107,12 +132,6 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		var saved = !this.dirty;
 		console.log(">>>  isSaved "+saved);
 		return saved;
-	},
-	canUndo:function(){
-		return false;
-	},
-	canRedo:function(){
-		return false;
 	},
 	onChanged:function(){
 		alert("dirty, saved!!");
