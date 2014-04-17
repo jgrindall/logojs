@@ -16,4 +16,13 @@ LG.ButtonModel = Backbone.Model.extend({
 	}
 });
 
-		
+
+Backbone.Collection.prototype.getByProperty = function(propName, propVal){
+	var selectedModel = null;
+	this.each( function(model){
+		if(model.get(propName) == propVal){
+			selectedModel = model;
+		}
+	});
+	return selectedModel;
+};
