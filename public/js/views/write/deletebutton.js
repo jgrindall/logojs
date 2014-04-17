@@ -14,7 +14,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 	},
 	getDisabled:function(){
 		var fileModel = LG.fileCollection.selected;
-		if(fileModel){
+		if(!fileModel.isNew()){
 			return false;
 		}
 		return true;
@@ -27,18 +27,21 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 		LG.fileCollection.deleteCurrentFile();
 		LG.router.navigate("write", {"trigger":true});
 	},
+	alertNo:function(){
+		LG.router.navigate("write", {"trigger":true});
+	},
 	alertCancel:function(){
 		LG.router.navigate("write", {"trigger":true});
 	},
 	modelSynced:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		LG.EventDispatcher.trigger(LG.Events.RESTART);
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		var model = LG.fileCollection.selected;
 		if(LG.userModel.isConnected()){
-			if(LG.fileCollection.selected){
-				LG.popups.openPopup({"message":LG.Config.WANT_TO_DELETE, "okLabel":"yes", "cancelLabel":"no"}, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(this.alertCancel, this) });
+			if(!model.isNew()){
+				LG.popups.openPopup({"message":LG.Config.WANT_TO_DELETE, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 			}
 		}
 	}	

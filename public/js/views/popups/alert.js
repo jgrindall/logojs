@@ -14,7 +14,8 @@ LG.AlertView = LG.APopUpView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click a#cancelbutton":"clickCancel",
-			"_click a#okbutton":"clickOk"
+			"_click a#okbutton":"clickOk",
+			"_click a#nobutton":"clickNo"
 		});
 		return obj;
 	},
@@ -29,6 +30,10 @@ LG.AlertView = LG.APopUpView.extend({
 	clickCancel:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.ALERT_CANCEL);
+	},
+	clickNo:function(e){
+		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.ALERT_NO);
 	},
 	onShow:function(){
 		

@@ -130,7 +130,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.ended = false;
 		this.output = new LG.output();
 		this.commandIndex = 0;
-		var logo = LG.logoModel.get("logo");
+		var logo = LG.fileCollection.selected.get("logo");
 		var tree = LG.Utils.logoparser.parse(logo); // put this in a worker too?? YES!
 		this.process(tree);
 	},

@@ -33,6 +33,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.loadView = new LG.LoadView({"collection":LG.fileCollection});	
 		this.$el.append(this.loadView.render().el);
 		
+		this.helpOverlayView = new LG.HelpOverlayView();	
+		this.$el.append(this.helpOverlayView.render().el);
+		
 		
 		return this;
 	},

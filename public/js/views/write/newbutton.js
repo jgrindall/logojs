@@ -12,42 +12,43 @@ LG.NewButtonView = LG.WriteButton.extend({
 		});
 		return obj;
 	},
-	getDisabled:function(){
-		var fileModel = LG.fileCollection.selected;
-		if(fileModel){
-			return false;
-		}
-		return true;
-	},
-	render:function(){
-		this.loadTemplate(  this.template, { "disabled":this.getDisabled()  } , {replace:true} );
-		return this;
+	getData:function(){
+		return {"disabled":false};
 	},
 	alertOk:function(){
 		LG.fileCollection.save();
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		LG.EventDispatcher.trigger(LG.Events.RESTART);
+		LG.router.navigate("write", {"trigger":true});
+	},
+	alertNo:function(){
+		this.stopListening(LG.fileCollection, "sync");
 		LG.router.navigate("write", {"trigger":true});
 	},
 	modelSynced:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		LG.EventDispatcher.trigger(LG.Events.RESTART);
 	},
 	clickMe:function(e){
 		this.stopProp(e);
-		if(LG.userModel.isConnected()){
-			if(!LG.fileCollection.isSaved()){
-				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"yes", "cancelLabel":"no"}, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(this.alertCancel, this) });
-				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
-			}
-			else{
-				LG.EventDispatcher.trigger(LG.Events.RESTART);
-			}
+		var loggedIn = LG.userModel.isConnected();
+		var fileModel = LG.fileCollection.selected;
+		if(!loggedIn || !fileModel){
+			LG.EventDispatcher.trigger(LG.Events.CLICK_CLEAR);
 		}
 		else{
-			LG.EventDispatcher.trigger(LG.Events.RESTART);
+			if(loggedIn){
+				if(!LG.fileCollection.selected.isSaved()){
+					LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+					this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
+				}
+				else{
+					LG.fileCollection.selected.reset();
+				}
+			}
+			else{
+				LG.fileCollection.selected.reset();
+			}
 		}
 	}
 	

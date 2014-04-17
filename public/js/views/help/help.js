@@ -6,8 +6,13 @@ LG.HelpView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.updateLayout, this));
 	},
 	events:function(){
-		var obj = Backbone.View.getTouch( {      });
+		var obj = Backbone.View.getTouch( {
+			"_click #cancelbutton":"clickCancel"
+		});
 		return obj;
+	},
+	clickCancel:function(){
+		window.history.back();
 	},
 	updateLayout : function() {
 		if(this.wrapper && this.scroller && this.myScroll){

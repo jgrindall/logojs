@@ -6,11 +6,10 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.AMenuView.prototype.initialize.call(this);
 		this.changedTextDeBounce = $.debounce( 750, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
-		this.listenTo(LG.logoModel, "autochange:logo", $.proxy(this.load, this));
+		this.listenTo(LG.fileCollection, "change sync", $.proxy(this.load, this));
 		LG.EventDispatcher.on(LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		LG.EventDispatcher.bind(LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
 	},
-	
 	template:"tpl_write",
 	showName:"write",
 	render:function(){
@@ -25,14 +24,17 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		this.setLogo(LG.logoModel.get("logo"));
+		alert("LOAD");
+		this.setLogo(LG.fileCollection.selected.get("logo"));
 	},
 	clear:function(){
 		this.setLogo("");
 		this.changedTextDeBounce();
 	},
 	save:function(){
-		LG.logoModel.set({"logo":this.getLogo()});
+		var data = {"logo":this.getLogo()};
+		alert("saving it in the model "+JSON.stringify(data));
+		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
 		this.$("textarea").val(s);
@@ -42,10 +44,13 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	changedText:function(e){
 		if(e.which === 186 || e.which === 13 || e.which === 32){
-			LG.logoModel.set({"logo":this.getLogo()});
+			LG.fileCollection.selected.set({"logo":this.getLogo()});
 		}
 		else{
 			this.changedTextDeBounce();
+			if(Math.random() < 0.3){
+				LG.Utils.growl("Click here to draw your program!");
+			}
 		}
 	},
 	swipeMe:function(e){

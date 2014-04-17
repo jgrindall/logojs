@@ -47,7 +47,7 @@ LG.Utils.growl = function(msg){
 	$.jGrowl(msg, data);
 };
 
-$.jGrowl.defaults.pool = 3;
+$.jGrowl.defaults.pool = 1;
 
 LG.Utils.supportsLocalStorage = function(){
 	if (typeof window.localStorage !== 'undefined'){

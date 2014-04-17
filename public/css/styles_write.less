@@ -47,7 +47,7 @@
 	left:0;
 	right:0;
 	height:@bottomheight;
-	background:@greydark;
+	background:transparent;
 }
 
 #writetop{
@@ -59,7 +59,17 @@
 	background:@greydark;
 }
 
-#writetop .button, #writebuttons .button{
-	background:transparent;
-	color:white;
+#writebuttons .button{
+	color:#158CBA;
+	float:left;
+}
+
+#writebuttons #savebutton, #writebuttons #newbutton{
+	color: white;
+	position: relative;
+	bottom: 4px;
+	margin:7px;
+}
+#writebuttons #newbutton{
+	margin-left:0px !important;
 }

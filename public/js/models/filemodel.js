@@ -4,19 +4,119 @@ LG.ImageModel = Backbone.Model.extend({
 
 });
 
-LG.FileModel = Backbone.Model.extend({
+
+
+LG.UndoRedoFileModel = Backbone.Model.extend({
+	initialize: function(){
+		this.restart();
+		this.listenTo(this, "change:"+this.watchString, $.proxy(this.modelChanged, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
+	},
+	restart:function(options){
+		this.history = [ "" ];
+		this.pointer = 0;
+	},
+	modelChanged:function(){
+		// see where pointer is first!
+		var h, p, newValue;
+		h = this.history;
+		p = this.pointer;
+		newValue = this.get(this.watchString);
+		while(p < h.length - 1){
+			h.pop();
+		}
+		if(h.length === 0){
+			h.push(newValue);
+			this.pointer = 0;
+		}
+		else if(h.length < LG.UndoRedoFileModel.MAX_HISTORY){
+			h.push(newValue);
+			this.pointer = p + 1;
+		}
+		else{
+			h.splice(0, 1);
+			h.push(newValue);
+		}
+	},
+	canUndo:function(){
+		if(this.history.length === 0 || this.pointer === 0){
+			return false;
+		}
+		return true;
+	},
+	canRedo:function(){
+		if(this.history.length === 0 || this.pointer === this.history.length - 1){
+			return false;
+		}
+		return true;
+	},
+	undo:function(){
+		if(!this.canUndo()){
+			return;
+		}
+		this.pointer = this.pointer - 1;
+		// set logo as this.history[this.pointer];
+	},
+	redo:function(){
+		var h, p;
+		if(!this.canRedo()){
+			return;
+		}
+		this.pointer = p + 1;
+		// set logo as this.history[this.pointer];
+	}	
+});
+
+LG.UndoRedoFileModel.MAX_HISTORY = 20;
+
+LG.FileModel = LG.UndoRedoFileModel.extend({
 	defaults:{
-		name:"",
-		logo:"",
+		name:null,
+		logo:null,
 		votes:0,
 		userId:null,
-		img:null
+		img:null,
+		dino:0
 	},
+	watchString:"logo",
 	idAttribute: "_id", 
 	urlRoot:"/files",
 	initialize:function(){
-		this.listenTo(this, "save", $.proxy(this.synced, this));
+		LG.UndoRedoFileModel.prototype.initialize.call(this);
+		this.dirty = true;
+		this.listenTo(this, "save sync", $.proxy(this.synced, this));
 		this.listenTo(this, "error", $.proxy(this.error, this));
+		this.listenTo(this, "change:logo change:dino", $.proxy(this.onChanged, this));
+	},
+	parse:function(data){
+		delete data._v;
+		delete data.success;
+		return data;
+	},
+	incrementDino:function(){
+		var d1, d2;
+		d1 = this.get("dino");
+		d2 = (d1 + 1) % LG.FileModel.NUM_DINO;
+		this.set({"dino":d2});
+	},
+	reset:function(){
+		this.set({"logo":""});
+	},
+	isSaved:function(){
+		var saved = !this.dirty;
+		console.log(">>>  isSaved "+saved);
+		return saved;
+	},
+	canUndo:function(){
+		return false;
+	},
+	canRedo:function(){
+		return false;
+	},
+	onChanged:function(){
+		alert("dirty, saved!!");
+		this.dirty = true;
 	},
 	parse: function(data) {
 		return data;
@@ -26,259 +126,12 @@ LG.FileModel = Backbone.Model.extend({
 		LG.Utils.growl("Error: "+response.error);
 	},
 	synced:function(e){
-		LG.Utils.growl("File saved");
-		LG.fileCollection.currentLogo = this.get("logo");
-	}
-});
-
-LG.APaginatedCollection  = Backbone.Collection.extend({
-	
-});
-
-LG.PageModel = Backbone.Model.extend({
-	defaults:{
-		numPages:1,
-		maxPage:1
-	}
-});
-
-LG.AFileCollection  = LG.APaginatedCollection.extend({
-	model:LG.FileModel,
-	initialize:function(){
-		this.pageModel = new LG.PageModel();
-	},
-	parse: function(response) {
-		this.pageModel.set({"numPages":parseInt(response.numPages, 10), "maxPage":parseInt(response.maxPage, 10)});
-		return response.files;
-	},
-	getByProperty:function(propName, propVal){
-		var selectedModel = null;
-		this.each( function(model){
-			console.log("getByProperty "+propName+"  "+propVal+"      =?     "+model.get(propName));
-			if(model.get(propName) == propVal){
-				selectedModel = model;
-			}
-		});
-		return selectedModel;
-	},
-	getByName:function(name){
-		return this.getByProperty("name", name);
-	},
-	getById:function(id){
-		return this.getByProperty("_id", id);
-	},
-	nextPage:function(){
-		var c = this.pageModel.get("numPages");
-		if(  (c + 1) <= this.pageModel.get("maxPage")){
-			this.pageModel.set({"numPages": c + 1});
-			this.start();
-		}
-	},
-	getData:function(){
-		var options = {};
-		options.userId = LG.userModel.get("userId");
-		options.numPages = this.pageModel.get("numPages");
-		options.perPage = 24;
-		return options;
-	},
-	start:function(){
-		var options = {"data" : this.getData() , "processData" : true};
-		LG.spinnerModel.set({"show":true});
-		options.success = function(){
-			setTimeout(function(){
-				LG.spinnerModel.set({"show":false});
-			},
-			2000);
-		};
-		this.fetch(options);
-	}
-});
-
-LG.AFileCollection.validateFileName = function(name){
-	var ws;
-	if(name.length <= 2){
-		return false;
-	}
-	ws = name.replace(/\s/g, "");
-	if(ws.length === 0){
-		return false;
-	}
-	return true;
-};
-
-
-LG.FileCollection = LG.AFileCollection.extend({
-	url:"/files",
-	initialize:function(){
-		LG.AFileCollection.prototype.initialize.call(this);
-		this.selected = null;
-		this.currentLogo = null;
-		this.listenTo(LG.logoModel, "change:logo autochange:logo", $.proxy(this.logoChanged, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.RESTART, $.proxy(this.restart, this));
-	},
-	restart:function(options){
-		LG.Utils.log("restart files");
-		options = _.extend({"logo":""}, options);
-		this.selected = null;
-		this.currentLogo = options.logo;
-		this.trigger("sync");
-	},
-	isSaved:function(){
-		if(this.selected){
-			return (this.currentLogo == this.selected.get("logo") );
-		}
-		return false;
-	},
-	logoChanged:function(){
-		this.currentLogo = LG.logoModel.get("logo");
+		alert("syncved");
+		this.dirty = false;
 		this.trigger("change");
-	},
-	save:function(options){
-		if(LG.userModel.isConnected()){
-			if(this.selected){
-				this.saveCurrentFile(options);
-			}
-			else{
-				LG.router.navigate("filename", {"trigger":true});
-			}
-		}
-		else{
-			LG.Utils.growl("Please log in to save your work");
-		}
-	},
-	loadModel:function(model){
-		alert("load Model "+JSON.stringify(model.toJSON()));
-		this.selected = model;
-		var logo = model.get("logo");
-		LG.logoModel.set({"logo":logo});
-		LG.logoModel.trigger("autochange:logo");
-		this.currentLogo = logo;
-		this.trigger("change");
-	},
-	loadById:function(id){
-		alert("laod by id "+id);
-		var selectedModel = this.getById(id);
-		console.log("selectedModel "+selectedModel+"  "+JSON.stringify(selectedModel.toJSON()));
-		if(selectedModel){
-			if(this.selected === selectedModel){
-				LG.Utils.growl("File already open");
-				LG.router.navigate("write", {"trigger":true});
-			}
-			else{
-				this.loadModel(selectedModel);
-			}
-		}
-		LG.router.navigate("write", {"trigger":true});
-	},
-	isOpen:function(id){
-		if(!this.selected){
-			return false;
-		}
-		else {
-			return (this.selected.get("_id")===id);
-		}
-	},
-	deleteCurrentFile:function(){
-		if(!this.selected){
-			return;
-		}
-		else{
-			var options = {
-				"success":function(){
-					alert("oks");
-					LG.Utils.growl("File deleted");
-					LG.EventDispatcher.trigger(LG.Events.RESTART);
-				}
-			};
-			this.selected.destroy(options);
-		}
-	},
-	saveCurrentFile:function(options){
-		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		var data = {"img":LG.imageModel.get("img"),"logo":LG.logoModel.get("logo"),"userId":LG.userModel.get("userId")};
-		LG.Utils.log("save "+JSON.stringify(data));
-		this.selected.save(data, options);
-	},
-	getNextName:function(name){
-		if(this.nameOk(name)){
-			return name;
-		}
-		var i = 1;
-		while(!this.nameOk(name+""+i)){
-			i++;
-		}
-		return name+""+i;
-	},
-	nameOk:function(name){
-		LG.Utils.log("nameOk "+name);
-		var ok = true;
-		if(!LG.AFileCollection.validateFileName(name)){
-			LG.Utils.growl("Please enter a valid filename");
-			return false;
-		}
-		this.each( function(model){
-			if(model.get("name") === name){
-				ok = false;
-			}
-		});
-		return ok;
-	},
-	saveFileAs:function(name, callback){
-		var _this = this, model, data, options, namedModel;
-		namedModel = this.getByName(name);
-		if(namedModel){
-			LG.Utils.growl("File exists");
-			return;
-		}
-		model = new LG.FileModel();
-		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		data = {"name":name, "logo":LG.logoModel.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
-		options = {
-			"success":function(model, response, options){
-				model.set({"_id":response._id});
-				_this.add(model);
-				console.log("model "+JSON.stringify(model.toJSON()));
-				console.log("response "+JSON.stringify(response));
-				_this.loadById(response._id, false);
-				if(callback && callback.success){
-					callback.success();
-				}
-			},
-			"error":function(model, xhr, options){
-				
-			}
-		};
-		LG.Utils.log("save as "+JSON.stringify(data));
-		model.save(data, options);
-	}
-});
-
-
-LG.AllFileCollection = LG.AFileCollection.extend({
-	url:"/files",
-	initialize:function(){
-		this.page = 0;
-		this.num = 0;
-		LG.AFileCollection.prototype.initialize.call(this);
-	},
-	getData:function(){
-		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
-	},
-	loadById:function(id, check){
-		var _this = this, oldModel, model, data, newName, options, yours;
-		yours = (LG.fileCollection.getById(id) !== null);
-		LG.Utils.log("all load "+id+" "+yours);
-		if(yours){
-			LG.fileCollection.loadById(id, check);
-			return;
-		}
-		else{
-			oldModel = this.getById(id);
-			LG.EventDispatcher.trigger(LG.Events.RESTART, {"logo":oldModel.get("logo")});
-			LG.router.navigate("write", {"trigger":true});
-		}
 	}
 });
 
 
 
+LG.FileModel.NUM_DINO = 5;

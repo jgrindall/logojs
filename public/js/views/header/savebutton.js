@@ -23,9 +23,9 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 		var disable = true, fileModel, loggedIn;
 		loggedIn = LG.userModel.isConnected();
 		fileModel = LG.fileCollection.selected;
-		console.log("gd "+loggedIn+" , "+fileModel+", "+LG.fileCollection.isSaved());
+		console.log("get data "+loggedIn+" , "+fileModel+", "+LG.fileCollection.selected.isSaved());
 		if(loggedIn){
-			disable = LG.fileCollection.isSaved();
+			disable = LG.fileCollection.selected.isSaved();
 		}
 		return {"loggedIn":loggedIn, "disabled":disable};
 	},

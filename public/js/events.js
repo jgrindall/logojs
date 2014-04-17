@@ -13,7 +13,6 @@ LG.Events.CLICK_REDO			=	"LG::clickRedo";
 LG.Events.CLICK_CLEAR			=	"LG::clickClear";
 LG.Events.CLICK_STOP			=	"LG::clickStop";
 LG.Events.CLICK_NEW				=	"LG::clickNew";
-LG.Events.RESTART				=	"LG::restart";
 LG.Events.CAPTURE_IMAGE			=	"LG::captureImage";
 LG.Events.DRAW_FINISHED			=	"LG::drawFinished";
 LG.Events.COMMAND_FINISHED		=	"LG::commandFinished";
@@ -26,4 +25,5 @@ LG.Events.UNDO_REDO_DONE		=	"LG::undoRedoDone";
 LG.Events.CHANGE_FILE			=	"LG::changeFile";
 LG.Events.ALERT_OK				=	"LG::alertOk";
 LG.Events.ALERT_CANCEL			=	"LG::alertCancel";
-
+LG.Events.ALERT_NO				=	"LG::alertNo";
+LG.Events.DINO_CHANGED			=	"LG::dinoChanged";

@@ -15,9 +15,8 @@ LG.WriteButtonsView = Backbone.View.extend({
 		this.clearButton = new LG.ClearButtonView();
 		this.saveButton = 	new LG.SaveButtonView ();
 		this.deleteButton = new LG.DeleteButtonView ();
-		//this.helpButton = 	new LG.HelpButtonView();
 		this.newButton = new LG.NewButtonView ();
-		this.$el.append(this.saveButton.render().el).append(this.undoButton.render().el).append(this.redoButton.render().el).append(this.clearButton.render().el).append(this.deleteButton.render().el).append(this.newButton.render().el);
+		this.$el.append(this.saveButton.render().el).append(this.newButton.render().el).append(this.undoButton.render().el).append(this.redoButton.render().el).append(this.clearButton.render().el).append(this.deleteButton.render().el);
 		return this;
 	},
 	events:function(){

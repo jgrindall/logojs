@@ -2,7 +2,7 @@
 LG.UndoRedoButton = LG.WriteButton.extend({
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
-		this.listenTo(LG.logoModel, "change autochange autochange:logo", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "change", $.proxy(this.rerender, this));
 	},
 	clickMe:function(e){
 		
@@ -27,7 +27,7 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_UNDO);
 	},
 	getDisabled:function(){
-		var canUndo = LG.logoModel.canUndo();
+		var canUndo = LG.fileCollection.selected.canUndo();
 		return !canUndo;
 	}
 });

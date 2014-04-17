@@ -11,15 +11,15 @@ LG.FileButtonView = LG.HeaderButton.extend({
 	onClick:function(e){
 		this.stopProp(e);
 	},
-	render:function(){
+	getData:function(){
 		var name = null, saved = false, fileModel;
 		fileModel = LG.fileCollection.selected;
 		if(fileModel){
 			name = fileModel.get("name");
-			saved = LG.fileCollection.isSaved();
+			saved = LG.fileCollection.selected.isSaved();
 		}
-		this.loadTemplate(  this.template, { show: this.getShow(), disabled:this.getDisabled(), "name":name, "saved": saved } , {replace:true} );
-		return this;
+		console.log("gd "+name+" "+saved);
+		return {"name":name, "saved": saved};
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {

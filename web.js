@@ -35,7 +35,8 @@ FileSchema = new mongoose.Schema({
 	"name"		:	{"type":String},
 	"userId"	:	{"type":String},
 	"logo"		:	{"type":String},
-	"active"	:	{"type":Boolean}
+	"active"	:	{"type":Boolean},
+	"dino"		:	{"type":Number}
 });
 
 File = mongoose.model("File", FileSchema);
@@ -100,14 +101,15 @@ app.delete('/files/:_id', function(req, res){
 
 app.put('/files/:_id', function(req, res){
 	console.log("put");
-	var _id, logo, img, base64, defaultImage;
+	var _id, logo, img, base64, defaultImage, dino;
 	defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
 	_id = req.params._id;
 	logo = req.param("logo", "fd100");
 	img = req.param("img", defaultImage);
+	dino = req.param("dino", 0);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
 	console.log("updating "+_id+" with "+logo);
-	File.update({"_id":_id, "active":true}, {"logo":logo}, function(err, doc){
+	File.update({"_id":_id, "active":true}, {"logo":logo, "dino":dino}, function(err, doc){
 		if(err){
 			console.log('make file error: ' + err);
 			res.send(400);
@@ -117,7 +119,7 @@ app.put('/files/:_id', function(req, res){
 			saveImage(_id, base64, {
 				"success":function(){
 					console.log("ok! put");
-					res.send(200);
+					res.send({"success":true});
 				},
 				"error":function(err){
 					res.send(400);
@@ -132,14 +134,15 @@ app.put('/files/:_id', function(req, res){
 
 app.post('/files', function(req, res){
 	console.log("posting...");
-	var name, userId, logo, img, base64, defaultImage, model;
+	var name, userId, logo, img, base64, defaultImage, model, dino;
 	defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
 	name = req.param("name", "John");
 	userId = req.param("userId", "1234");
 	logo = req.param("logo", "fd100");
+	dino = req.param("dino", 0);
 	img = req.param("img", defaultImage);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
-	model = {"name": name, "userId": userId, "logo":logo, "active":true};
+	model = {"name": name, "userId": userId, "logo":logo, "active":true, "dino":dino};
 	console.log('make file model: ' + JSON.stringify(model));
 	new File(model).save(function(err, doc){
 		if(err){

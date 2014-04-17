@@ -4,7 +4,7 @@ LG.ClearButtonView = LG.WriteButton.extend({
 	template:"tpl_clearbutton",
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
-		this.listenTo(LG.logoModel, "change autochange", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "change", $.proxy(this.rerender, this));
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -17,7 +17,7 @@ LG.ClearButtonView = LG.WriteButton.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_CLEAR);
 	},
 	getDisabled:function(){
-		var logo = LG.logoModel.get("logo");
+		var logo = LG.fileCollection.selected.get("logo");
 		if(!logo || logo === ""){
 			return true;
 		}

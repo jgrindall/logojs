@@ -21,10 +21,42 @@ LG.GalleryListView = Backbone.View.extend({
 		});
 		this.pages = [ ];
 	},
+	alertOk:function(){
+		LG.fileCollection.save();
+	},
+	alertNo:function(){
+		this.stopListening(LG.fileCollection, "sync");
+		this.collection.loadById(this.idToOpen);
+	},
+	alertCancel:function(){
+		this.stopListening(LG.fileCollection, "sync");
+		this.collection.loadById(this.idToOpen);
+	},
+	modelSynced:function(){
+		alert("modelSynced");
+		this.stopListening(LG.fileCollection, "sync");
+		this.collection.loadById(this.idToOpen);
+	},
+	tryOpenFile:function(){
+		var options;
+		if(LG.userModel.isConnected()){
+			if(!LG.fileCollection.selected.isSaved()){
+				options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
+				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, options);
+				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
+			}
+			else{
+				this.collection.loadById(this.idToOpen);
+			}
+		}
+		else{
+			this.collection.loadById(this.idToOpen);
+		}
+	},
 	clickItem:function(e){
 		this.stopProp(e);
-		var id = $(e.currentTarget).data("id");
-		this.collection.loadById(id, true);
+		this.idToOpen = $(e.currentTarget).data("id");
+		this.tryOpenFile();
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
@@ -43,6 +75,14 @@ LG.GalleryListView = Backbone.View.extend({
 		this.initScroll();
 		this.updateLayout();
 		this.goBack();
+		this.status();
+	},
+	status:function(){
+		var d = "block";
+		this.$(".nonefound").css("display", d);
+		if(this.collection.length === 0){
+			d = "none";	
+		}
 	},
 	goBack:function(){
 		if(this.myScroll){
@@ -61,7 +101,7 @@ LG.GalleryListView = Backbone.View.extend({
 	render:function(){
 		this.loadTemplate(  this.template, {"showName":this.showName} , {replace:true} );
 		this.scroller = this.$("#listscroller"+this.showName);
-		this.wrapper = this.$el;
+		this.wrapper = this.$("#listwrapper"+this.showName);
 		return this;
 	},
 	beforeClose:function(){

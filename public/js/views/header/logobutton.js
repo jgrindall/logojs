@@ -9,7 +9,7 @@ LG.LogoButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		alert("text");
+		LG.router.navigate("write", {"trigger":true});
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {

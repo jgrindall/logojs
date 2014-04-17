@@ -53,7 +53,6 @@ LG.Launcher.prototype.templatesLoaded = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
-	LG.logoModel = new LG.LogoModel();
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = new LG.UserModel();
 	LG.layoutModel = new LG.LayoutModel();
@@ -109,7 +108,6 @@ LG.Launcher.prototype.login = function(options){
 LG.Launcher.prototype.launch = function(){
 	window.location.hash = "";
 	this.addActivity();
-	LG.Utils.growl("Click to play or stop");
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
 	Backbone.history.start();
 };

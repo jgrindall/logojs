@@ -28,11 +28,33 @@
 	border-width: 0 1px 4px 1px;
 	font-weight: bold;
 	color: white;
+	min-width:100px;
 	background-color: #158CBA;
 	border-color: #127BA3;
-	min-width:100px;
 	.noselect;
 	.animate;
+}
+
+.buttonsmall{
+	height:43px;
+	min-width:80px !important; 
+}
+
+.clr1{
+	background-color:#28b62c;
+	border-color:#23a127;
+}
+.clr2{
+	background-color:#ff4136;
+	border-color:#ff291c;
+}
+.clr3{
+	background-color:#75caeb;
+	border-color:#5fc1e8;
+}
+.clr4{
+	background-color:#ff851b;
+	border-color:#ff7701;
 }
 
 .button.transparent{
@@ -41,9 +63,9 @@
 }
 
 .button.disabled{
-	opacity:0.3;
+	opacity:0.55;
 	cursor: default;
-	color:@buttontextdisabled;
+	color:@buttontextdisabled !important;
 }
 
 .button i{
@@ -54,6 +76,12 @@
 	font-size:20px !important;
 	padding-top: 9px;
 	text-align: left !important;
+}
+
+#filebutton span{
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 
 #loginbutton img{
@@ -67,7 +95,7 @@
 }
 
 #writebuttons .button{
-	min-width:75px;
+	min-width:65px;
 	padding: 0;
 	margin: 0;
 }
@@ -89,32 +117,45 @@
 	display:none;
 }
 
-.menutop .button{
-	height:100%;
-	width:120px !important;
+.menutop #helpbutton{
+	position: absolute;
+	right: 92px;
+	top: 3px;
 }
 
-a.right{
+.menutop #helpbutton span{
+	position: relative;
+	top: -4px;
+}
+
+.menutop #dinobutton{
+	padding:0;
+	margin:0;
+	position: absolute;
+	right: 164px;
+}
+
+.right{
 	float: right;
 }
 
-a.right span{
+.right span{
 	float: right;
 }
 
-a.right i{
+.right i{
 	float: right;
 }
 
 .alertbuttons{
-	width: 250px;
+	width: 357px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 40px;
 }
 
-.alertbuttons .button:first-child{
-	margin-right:40px;
+.alertbuttons .button:nth-child(1),.alertbuttons .button:nth-child(2){
+	margin-right:25px;
 }
 
 .menutop .button.right.transparent span{

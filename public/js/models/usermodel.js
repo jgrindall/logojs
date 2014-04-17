@@ -40,7 +40,10 @@ LG.UserModel = Backbone.Model.extend({
 				this.set({"loggedIn":false});
 			}
 			else{
-				this.set({"loggedIn":true, "userId":100000 + Math.ceil(Math.random()*100000)});
+				var users = ["100","200","300"];
+				var user = users[Math.floor(Math.random()*100)%users.length];
+				alert("you are "+user);
+				this.set({"loggedIn":true, "userId":user});
 			}
 		}
 	},

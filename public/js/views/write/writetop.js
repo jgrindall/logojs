@@ -11,8 +11,10 @@ LG.WriteTopView = Backbone.View.extend({
 	render:function(){
 		this.loadTemplate(  this.template, { }, {replace:true}  );
 		this.fileButton = new LG.FileButtonView ( );
+		this.dinoButton = new LG.DinoButtonView ( );
 		this.settingsButton = new LG.SettingsButtonView ( );
-		this.$el.append(this.fileButton.render().el).append(this.settingsButton.render().el);
+		this.helpButton = new LG.HelpButtonView ( );
+		this.$el.append(this.fileButton.render().el).append(this.dinoButton.render().el).append(this.settingsButton.render().el).append(this.helpButton.render().el);
 		return this;
 	},
 	events:function(){

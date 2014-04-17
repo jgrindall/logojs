@@ -20,6 +20,12 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 			callbacks.cancel();
 		}
 	});
+	LG.EventDispatcher.on(LG.Events.ALERT_NO, function(){
+		LG.EventDispatcher.off(LG.Events.ALERT_NO);
+		if(_.isFunction(callbacks.no)){
+			callbacks.no();
+		}
+	});
 };
 
 LG.Popups.prototype.closePopup = function(){
@@ -28,6 +34,7 @@ LG.Popups.prototype.closePopup = function(){
 		this.alertView = null;
 		LG.EventDispatcher.off(LG.Events.ALERT_OK);
 		LG.EventDispatcher.off(LG.Events.ALERT_CANCEL);
+		LG.EventDispatcher.off(LG.Events.ALERT_NO);
 	}
 };
 
