@@ -3,7 +3,7 @@ LG.GalleryListView = Backbone.View.extend({
 	
 	initialize:function(options){
 		this.pages = [ ];
-		this.collection = options.collection;
+		this.collection = options.collection
 		this.showName = options.showName;
 		this.perPage = LG.GalleryListView.NUMY;
 		this.scrollPos = 0;
@@ -60,14 +60,15 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
-		numPages = Math.ceil(this.collection.length / this.perPage);
+		models = this.collection.filter(function(model){
+			return !model.isNew();
+		});
+		numPages = Math.ceil(models.length / this.perPage);
 		this.removeAllPages();
-		models = this.collection.toJSON();
 		this.pages = [ ];
 		for(i = 0; i <= numPages - 1; i++){
 			startIndex = i * LG.GalleryListView.NUMY;
 			pageModels = models.slice(startIndex, startIndex + LG.GalleryListView.NUMY);
-			console.log("pageModels "+JSON.stringify(pageModels));
 			page = new LG.GalleryPageView({"pageModels":pageModels});
 			_this.scroller.append(page.render().$el);
 			_this.pages.push(page);
@@ -91,7 +92,7 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	onShow:function(){
 		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
-		this.collection.start();
+		this.collection.load();
 	},
 	onHide:function(){
 		this.stopListening(this.collection);
@@ -168,8 +169,7 @@ LG.GalleryPageView = Backbone.View.extend({
 		this.elts = [ ];
 		docFragm = document.createDocumentFragment();
 		_.each(this.pageModels, function(model, i){
-			var elt;
-			elt = new LG.GalleryRowView(model);
+			var elt = new LG.GalleryRowView(model);
 			docFragm.appendChild(elt.render().el);
 			_this.elts.push(elt);
 		});
