@@ -7,10 +7,8 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
 		this.listenTo(LG.fileCollection, "change:dino", $.proxy(this.rerender, this));
-		this.listenTo(LG.fileCollection, "change", $.proxy(this.rerender, this));
 	},
 	getData:function(){
-		alert("get data dino");
 		return {"dino":LG.fileCollection.selected.get("dino")};
 	},
 	onClick:function(e){
