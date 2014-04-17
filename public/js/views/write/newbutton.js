@@ -33,21 +33,18 @@ LG.NewButtonView = LG.WriteButton.extend({
 		this.stopProp(e);
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;
-		if(!loggedIn || !fileModel){
-			LG.EventDispatcher.trigger(LG.Events.CLICK_CLEAR);
+		if(!loggedIn){
+			// can't save it anyway
+			LG.fileCollection.selected.set({"logo":null});
 		}
 		else{
-			if(loggedIn){
-				if(!LG.fileCollection.selected.isSaved()){
-					LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
-					this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
-				}
-				else{
-					LG.fileCollection.selected.reset();
-				}
+			if(!LG.fileCollection.selected.isSaved()){
+				// unsaved
+				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
-				LG.fileCollection.selected.reset();
+				fileModel.reset();
 			}
 		}
 	}
