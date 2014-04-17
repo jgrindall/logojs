@@ -4,7 +4,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 	template:"tpl_deletebutton",
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "add sync change", $.proxy(this.rerender, this));
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {

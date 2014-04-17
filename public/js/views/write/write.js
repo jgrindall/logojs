@@ -6,7 +6,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.AMenuView.prototype.initialize.call(this);
 		this.changedTextDeBounce = $.debounce( 750, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
-		this.listenTo(LG.fileCollection, "change sync", $.proxy(this.load, this));
+		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		LG.EventDispatcher.on(LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		LG.EventDispatcher.bind(LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
 	},
@@ -24,7 +24,6 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		alert("LOAD");
 		this.setLogo(LG.fileCollection.selected.get("logo"));
 	},
 	clear:function(){
