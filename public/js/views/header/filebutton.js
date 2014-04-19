@@ -16,7 +16,6 @@ LG.FileButtonView = LG.HeaderButton.extend({
 		fileModel = LG.fileCollection.selected;
 		name = fileModel.get("name");
 		saved = LG.fileCollection.selected.isSaved();
-		console.log("gd "+name+" "+saved);
 		return {"name":name, "saved": saved};
 	},
 	events:function(){
