@@ -6,10 +6,26 @@ LG.PageModel = Backbone.Model.extend({
 	}
 });
 
+LG.SpinnerCollection  = Backbone.Collection.extend({
+	initialize:function(data){
+		Backbone.Collection.prototype.initialize.call(this, data);
+		this.listenTo(this, "sync", $.proxy(this.onSync, this));
+	},
+	onSync:function(){
+		console.log("synced spinner collection");
+		LG.spinnerModel.set({"show":false});
+	},
+	fetch:function(data){
+		LG.spinnerModel.set({"show":true});
+		Backbone.Collection.prototype.fetch.call(this, data);
+	}
+});
 
-LG.APaginatedCollection  = Backbone.Collection.extend({
+
+LG.APaginatedCollection  = LG.SpinnerCollection.extend({
 	model:LG.FileModel,
-	initialize:function(){
+	initialize:function(data){
+		LG.SpinnerCollection.prototype.initialize.call(this, data);
 		this.pageModel = new LG.PageModel();
 	},
 	parse: function(response) {
@@ -38,17 +54,9 @@ LG.AFileCollection  = LG.APaginatedCollection.extend({
 		options.perPage = 24;
 		return options;
 	},
-	load:function(){
-		this.reset();
-		var options = {"data" : this.getData() , "processData" : true};
-		LG.spinnerModel.set({"show":true});
-		options.success = function(){
-			setTimeout(function(){
-				LG.spinnerModel.set({"show":false});
-			},
-			2000);
-		};
-		this.fetch(options);
+	load:function(options){
+		var data = _.extend({"data" : this.getData() , "processData" : true}, options);
+		this.fetch(data);
 	}
 });
 
@@ -71,32 +79,37 @@ LG.SelectedFileCollection = LG.AFileCollection.extend({
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
-		this.listenTo(this, "sync", $.proxy(this.onSync, this));
 		this.addTempModel();
 	},
 	addTempModel:function(options){
 		if(options && options.force){
+			this.remove(this.selected);
 			this.selected = null;
 		}
 		if(!this.selected){
-			this.selected = new LG.FileModel({"dirty":true});
+			this.selected = new LG.FileModel({"dirty":false});
 		}
 		this.add(this.selected);
+		if(options && options.force){
+			LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
+		}
 	},
 	onSync:function(){
-		alert("sync");
+		LG.AFileCollection.prototype.onSync.call(this);
 		this.addTempModel();
 	},
 	onLoginChanged:function(){
-		var loggedIn = LG.userModel.get("loggedIn");
-		alert("log in change "+loggedIn);
-		if(!loggedIn){
-			this.reset();
-			this.addTempModel({"force":true});
+		var logo, dino, loggedIn = LG.userModel.get("loggedIn");
+		if(loggedIn){
+			logo = this.selected.get("logo");
+			dino = this.selected.get("dino");
+			this.load({"success":function(){
+				console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+			}});
 		}
 		else{
-			alert("load your files");
-			this.load();
+			this.reset();
+			this.addTempModel({"force":true});
 		}
 	}
 });
@@ -115,7 +128,8 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 	},
 	openOthers:function(model){
 		var newModel, data;
-		data = {"logo":model.logo, "dino":model.dino};
+		// set name as null because you need to change it
+		data = {"name":null, "logo":model.logo, "dino":model.dino};
 		if(this.selected.isNew()){
 			this.selected.set(data);
 		}
@@ -146,7 +160,6 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 		this.trigger("change");
 	},
 	loadById:function(id){
-		alert("load by id "+id);
 		var selectedModel;
 		if(this.selected.get("_id") === id){
 			LG.Utils.growl("File already open");
@@ -253,7 +266,6 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
 	},
 	loadById:function(id){
-		alert("load by id all "+id);
 		var _this = this, oldModel, model, data, newName, options, yours = false, userId;
 		oldModel = this.getByProperty("_id", id);
 		if(LG.userModel.isConnected()){
@@ -267,7 +279,6 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		}
 		else{
 			model = oldModel.toJSON();
-			alert("oldModel "+JSON.stringify(model));
 			LG.fileCollection.openOthers(model);
 			LG.router.navigate("write", {"trigger":true});
 		}
