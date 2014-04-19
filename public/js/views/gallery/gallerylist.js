@@ -42,7 +42,7 @@ LG.GalleryListView = Backbone.View.extend({
 		if(LG.userModel.isConnected()){
 			if(!LG.fileCollection.selected.isSaved()){
 				options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, options);
+				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
 				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
@@ -80,10 +80,10 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	status:function(){
 		var d = "block";
-		this.$(".nonefound").css("display", d);
 		if(this.collection.length === 0){
 			d = "none";	
 		}
+		this.$(".nonefound").css("display", d);
 	},
 	goBack:function(){
 		if(this.myScroll){
