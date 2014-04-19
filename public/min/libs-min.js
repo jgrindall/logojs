@@ -2842,7 +2842,7 @@ if (typeof JSON !== 'object') {
       var success = options.success;
 
       var destroy = function() {
-        model.trigger('destroy', model, model.collection, options);
+		 model.trigger('destroy', model, model.collection, options);
       };
 
       options.success = function(resp) {
