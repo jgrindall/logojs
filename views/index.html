@@ -583,8 +583,8 @@ drawSpiral(10);</pre>
 				</div>
 					
 				<div class="alertbuttons">
-					<a href="#" id="okbutton" class="action button button0 clr1" ><span><%= okLabel %></span></a>
-					<a href="#" id="nobutton" class="action button button1 clr2" ><span><%= noLabel %></span></a>
+					<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
+					<a href="#" id="nobutton" class="action button button1 clr<%= noColor %>" ><span><%= noLabel %></span></a>
 					<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
 				</div>
 				
@@ -614,8 +614,7 @@ drawSpiral(10);</pre>
 					<span><%= logo %></span>
 					<img src="img/dino<%=dino%>.png"/>
 					<img src="thumbs/thumb_<%= _id %>.png"/>
-					<div class="sidebar"></div>
-				
+					
 				</div>
 			
 			</div>
@@ -721,7 +720,7 @@ drawSpiral(10);</pre>
 				</div>
 				
 				<input type="text" id="filenametext" value="" placeholder="your filename"></input>
-					
+				<p class="error">Error <%=error %></p>
 				<div class="alertbuttons">
 					<a href="#" id="okbutton" class="action button button0" ><span>Ok</span></a>
 					<a href="#" id="cancelbutton" class="action button button1" ><span>Cancel</span></a>
