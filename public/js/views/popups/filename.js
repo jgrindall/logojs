@@ -22,10 +22,11 @@ LG.FileNameView = LG.APopUpView.extend({
 		return obj;
 	},
 	onShow:function(){
+		this.$("p.error").text("");
 		$("input#filenametext").val("");
 	},
 	render:function(){
-		this.loadTemplate(  this.template, {} , {replace:true} );
+		this.loadTemplate(  this.template, {"error":""} , {replace:true} );
 		return this;
 	},
 	getName:function(){
@@ -45,8 +46,11 @@ LG.FileNameView = LG.APopUpView.extend({
 		};
 		if(LG.fileCollection.nameOk(name)){
 			LG.fileCollection.saveFileAs(name, options);
+			LG.router.navigate("write", {"trigger":true});
 		}
-		LG.router.navigate("write", {"trigger":true});
+		else{
+			this.$("p.error").text("That name is taken, please choose another name");
+		}
 	},
 	clickCancel:function(e){
 		this.stopProp(e);
