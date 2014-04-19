@@ -6,7 +6,7 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 	template:"tpl_dinobutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "change:dino", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "add  sync change:dino", $.proxy(this.rerender, this));
 	},
 	getData:function(){
 		return {"dino":LG.fileCollection.selected.get("dino")};
