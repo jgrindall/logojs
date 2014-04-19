@@ -15,6 +15,7 @@ LG.ClearButtonView = LG.WriteButton.extend({
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_CLEAR);
+		LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 	},
 	getDisabled:function(){
 		var logo = LG.fileCollection.selected.get("logo");
