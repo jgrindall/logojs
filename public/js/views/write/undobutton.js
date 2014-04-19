@@ -2,7 +2,7 @@
 LG.UndoRedoButton = LG.WriteButton.extend({
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "change", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "change add sync", $.proxy(this.rerender, this));
 	},
 	clickMe:function(e){
 		
