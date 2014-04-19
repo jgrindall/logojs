@@ -24,7 +24,9 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		this.setLogo(LG.fileCollection.selected.get("logo"));
+		var fileModel = LG.fileCollection.selected;
+		console.log("load "+JSON.stringify(fileModel.toJSON())+"     "+fileModel.get("logo"));
+		this.setLogo(fileModel.get("logo"));
 	},
 	clear:function(){
 		this.setLogo("");
@@ -32,7 +34,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	save:function(){
 		var data = {"logo":this.getLogo()};
-		alert("saving it in the model "+JSON.stringify(data));
+		console.log("saving it in the model "+JSON.stringify(data));
 		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
@@ -47,9 +49,6 @@ LG.WriteView = LG.AMenuView.extend({
 		}
 		else{
 			this.changedTextDeBounce();
-			if(Math.random() < 0.3){
-				LG.Utils.growl("Click here to draw your program!");
-			}
 		}
 	},
 	swipeMe:function(e){
