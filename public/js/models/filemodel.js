@@ -22,7 +22,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		return s.join(" ");
 	},
 	restart:function(options){
-		this.history = [ "" ];
+		this.history = [  { "logo":null, "dino":0 }  ];
 		this.pointer = 0;
 	},
 	getValues : function(){
@@ -71,6 +71,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 	reload:function(){
 		this.editing = true;
 		this.set(this.history[this.pointer]);
+		this.trigger("change");
 		this.editing = false;
 	},
 	undo:function(){
@@ -81,11 +82,10 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		var h, p;
 		if(!this.canRedo()){
 			return;
 		}
-		this.pointer = p + 1;
+		this.pointer = this.pointer + 1;
 		this.reload();
 	}	
 });
@@ -130,11 +130,9 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 	},
 	isSaved:function(){
 		var saved = !this.dirty;
-		console.log(">>>  isSaved "+saved);
 		return saved;
 	},
 	onChanged:function(){
-		alert("dirty, saved!!");
 		this.dirty = true;
 	},
 	parse: function(data) {
@@ -145,7 +143,7 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		LG.Utils.growl("Error: "+response.error);
 	},
 	synced:function(e){
-		alert("syncved");
+		console.log("syncved");
 		this.dirty = false;
 		this.trigger("change");
 	}
