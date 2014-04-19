@@ -4,7 +4,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	template:"tpl_newbutton",
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "add sync change", $.proxy(this.rerender, this));
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -24,6 +24,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	alertNo:function(){
 		this.stopListening(LG.fileCollection, "sync");
+		LG.fileCollection.addTempModel({"force":true});
 		LG.router.navigate("write", {"trigger":true});
 	},
 	modelSynced:function(){
@@ -34,17 +35,18 @@ LG.NewButtonView = LG.WriteButton.extend({
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;
 		if(!loggedIn){
-			// can't save it anyway
-			LG.fileCollection.selected.set({"logo":null});
+			// can't save it anyway 
+			LG.fileCollection.addTempModel({"force":true});
 		}
 		else{
-			if(!LG.fileCollection.selected.isSaved()){
+			if(!fileModel.isSaved()){
 				// unsaved
-				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
-				fileModel.reset();
+				// dump the old file, make a new one
+				LG.fileCollection.addTempModel({"force":true});
 			}
 		}
 	}
