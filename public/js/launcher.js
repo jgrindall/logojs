@@ -124,7 +124,7 @@ LG.Launcher.prototype.onLoggedIn = function(){
 
 LG.Launcher.prototype.fbChecked = function(){
 	this.fbComplete = true;
-	alert(LG.Network.FACEBOOK +"  "+LG.Config.PHONEGAP);
+	console.log(LG.Network.FACEBOOK +"  "+LG.Config.PHONEGAP);
 	if(LG.Network.FACEBOOK && !LG.Config.PHONEGAP){
 		LG.facebook = new LG.WebFacebook();
 	}

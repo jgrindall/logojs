@@ -8,6 +8,7 @@ LG.CanvasView = Backbone.View.extend({
 		LG.EventDispatcher.bind(LG.Events.CLICK_DRAW, $.proxy(this.draw, this));
 		LG.EventDispatcher.bind(LG.Events.CLICK_STOP, $.proxy(this.stop, this));
 		LG.EventDispatcher.bind(LG.Events.RESIZE, $.proxy(this.onResize, this));
+		LG.EventDispatcher.bind(LG.Events.RESET_CANVAS, $.proxy(this.reset, this));
 		LG.EventDispatcher.bind(LG.Events.CAPTURE_IMAGE, $.proxy(this.capture, this));
 		this.listenTo(LG.layoutModel, "change", $.proxy(this.onLayoutChanged, this));
 		this.listenTo(this.model, "change", $.proxy(this.reset, this));
@@ -39,7 +40,6 @@ LG.CanvasView = Backbone.View.extend({
 		}
 	},
 	clickMe:function(){
-		alert("click "+this.active);
 		if(LG.layoutModel.get("show") == "write"){
 			if(this.active){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
@@ -111,7 +111,6 @@ LG.CanvasView = Backbone.View.extend({
 			this.output.add(command);
 			size = this.output.size();
 			if(size >= LG.output.MAX_SIZE){
-				alert("full");
 				this.worker.terminate();
 				this.ended = true;
 			}
@@ -145,7 +144,7 @@ LG.CanvasView = Backbone.View.extend({
 		context = this.canvas.getContext("2d");
 		var x0 = Math.max(0, (this.canvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
 		var y0 = Math.max(0, (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2 );
-		alert(this.canvas.width+","+this.canvas.height+": "+x0+","+y0+","+LG.CanvasView.SNAPSHOT_WIDTH+","+LG.CanvasView.SNAPSHOT_HEIGHT);
+		//console.log(this.canvas.width+","+this.canvas.height+": "+x0+","+y0+","+LG.CanvasView.SNAPSHOT_WIDTH+","+LG.CanvasView.SNAPSHOT_HEIGHT);
 		data = context.getImageData(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
 		tempCanvas = document.createElement("canvas");
 		tempContext = tempCanvas.getContext("2d");
