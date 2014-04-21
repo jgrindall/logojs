@@ -26,16 +26,20 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	alertNo:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
+	},
+	openFile:function(){
+		alert("open file");
+		LG.router.navigate("write/"+this.idToOpen, {"trigger":true});
 	},
 	modelSynced:function(){
 		alert("modelSynced");
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
 	},
 	tryOpenFile:function(){
 		var options;
@@ -46,11 +50,11 @@ LG.GalleryListView = Backbone.View.extend({
 				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
-				this.collection.loadById(this.idToOpen);
+				this.openFile();
 			}
 		}
 		else{
-			this.collection.loadById(this.idToOpen);
+			this.openFile();
 		}
 	},
 	clickItem:function(e){
@@ -79,9 +83,9 @@ LG.GalleryListView = Backbone.View.extend({
 		this.status();
 	},
 	status:function(){
-		var d = "block";
-		if(this.collection.length === 0){
-			d = "none";	
+		var d = "none";
+		if(this.pages.length === 0){
+			d = "block";	
 		}
 		this.$(".nonefound").css("display", d);
 	},
