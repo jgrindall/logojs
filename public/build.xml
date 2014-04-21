@@ -113,7 +113,7 @@
 				<file name="models/filecollection.js"/>
 				
 				<file name="models/fileopener.js"/>
-				
+				<file name="models/graphicsmodel.js"/>		
 				<file name="models/usermodel.js"/>
 				<file name="models/sizemodel.js"/>
 				<file name="views/base.js"/>
