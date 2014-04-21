@@ -141,12 +141,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		return error;
 	},
 	saveFileAs:function(name, callback){
-		var _this = this, model, data, options, namedModel;
-		namedModel = this.getByProperty("name", name);
-		if(namedModel){
-			LG.Utils.growl("File exists");
-			return;
-		}
+		var _this = this, model, data, options;
 		model = new this.model();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
@@ -154,12 +149,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			"success":function(model, response, options){
 				model.set({"_id":response._id});
 				_this.add(model);
-				console.log("model "+JSON.stringify(model.toJSON()));
-				console.log("response "+JSON.stringify(response));
-				_this.loadById(response._id);
-				if(callback && callback.success){
-					callback.success();
-				}
+				callback.success(response._id);
 			},
 			"error":function(model, xhr, options){
 				
