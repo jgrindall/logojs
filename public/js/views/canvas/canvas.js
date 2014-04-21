@@ -51,7 +51,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onResize:function(){
 		var w, h;
-		w = $("body").width();
+		w = $("body").width() - 230;
 		h = $("body").height();
 		this.$el.width(w).height(h);
 		this.model.set({"width":w, "height":h});
