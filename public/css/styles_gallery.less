@@ -1,6 +1,6 @@
 
 
-.menuxlarge ul{
+ ul{
 	position: absolute;
 	top: 40px;
 	left: 0;
@@ -11,27 +11,23 @@
 	.animate(3s);
 }
 
-.menuxlarge ul.moveleft{
+ ul.moveleft{
 	left:-100%;
 }
-.menuxlarge ul.moveright{
+ ul.moveright{
 	left:100%;
 }
 
-.menuxlarge .layout12 .galleryrow{
-	width:25%;
-	height:33.5%;
-}
 
-.menuxlarge .galleryrow{
+ .galleryrow{
 	width:100%;
 	opacity: 1;
 	padding:0px;
-	height:33%;
+	height:33.2%;
 	margin:0;
 }
 
-.galleryrow div.mainblock{
+.galleryrow .mainblock{
 	color:#111;
 	position:relative;
 	background: #eee;
@@ -46,78 +42,148 @@
 }
 
 
-.galleryrow div.mainblock .leftcontent{
+.galleryrow .mainblock .leftcontent{
 	width:50%;
 	float:left;
 	position:relative;
 	height:100%;
 }
-.galleryrow div.mainblock .rightcontent{
-	width: 49%;
+.galleryrow .mainblock .rightcontent{
+	width: 46%;
 	height: 100%;
 	position: relative;
+	left: 3%;
 }
 
-.galleryrow div.mainblock .leftcontent .speech{
+.galleryrow .mainblock .leftcontent .speech{
 	border:none;
 	border-radius:5px;
 	position:absolute;
-	background:@ltgreen;
+	background:@lightdino0;
 	display:inline-block;
 	left:5px;
 	top:5px;
-	bottom:70px;
+	bottom:54px;
 	right:0;
+	border-style:solid;
+	border-width:1px;
 	border-bottom-left-radius:0;
+	border-bottom-width:3px;
 }
 
-.galleryrow.dino0 div.mainblock .leftcontent .speech{
-	background:pink;
+.galleryrow.dino0 .mainblock .leftcontent .speech{
+	background:@lightdino0;
+	border-color:@lightdino0b;
+}
+.galleryrow.dino1 .mainblock .leftcontent .speech{
+	background:@lightdino1;
+	border-color:@lightdino1b;
+}
+.galleryrow.dino2 .mainblock .leftcontent .speech{
+	background:@lightdino2;
+	border-color:@lightdino2b;
+}
+.galleryrow.dino3 .mainblock .leftcontent .speech{
+	background:@lightdino3;
+	border-color:@lightdino3b;
+}
+.galleryrow.dino4 .mainblock .leftcontent .speech{
+	background:@lightdino4;
+	border-color:@lightdino4b
 }
 
-.galleryrow div.mainblock .leftcontent img{
-	position:absolute;
-	left:2px;
-	bottom:2px;
+.galleryrow .triangle{
+	width:0px;
+	height:0px;
+	border-width: @tri_size_gallery @tri_size_gallery 0 0;
+	border-style:solid;
+	position: absolute;
+	bottom: -(@tri_size_gallery);
+	left: 0px;
+	z-index: 10;
 }
-.galleryrow div.mainblock .speech:after {
+
+.galleryrow.dino0 .triangle{
+	border-color: @lightdino0 transparent transparent transparent;
+}
+.galleryrow.dino1 .triangle{
+	border-color: @lightdino1 transparent transparent transparent;
+}
+.galleryrow.dino2 .triangle{
+	border-color: @lightdino2 transparent transparent transparent;
+}
+.galleryrow.dino3 .triangle{
+	border-color: @lightdino3 transparent transparent transparent;
+}
+.galleryrow.dino4 .triangle{
+	border-color: @lightdino4 transparent transparent transparent;
+}
+
+.galleryrow .mainblock .speech:after {
 	content: "";
 	position: absolute;
-	left: 0px;
-	bottom: -15px;
+	left: -1px;
+	bottom: -(@tri_size_gallery + 5);
 	display: block;
 	width: 0px;
 	height: 0px;
 	border-style: solid;
-	border-width: 15px 15px 0 0;
-	border-color: green transparent transparent transparent;
+	border-width: (@tri_size_gallery + 5) (@tri_size_gallery + 5) 0 0;
 }
-.galleryrow div.mainblock .logo{
-	color:white;
-	font-size:83%;
+.galleryrow.dino0 .mainblock .speech:after {
+	border-color: @lightdino0b transparent transparent transparent;
+}
+.galleryrow.dino1 .mainblock .speech:after {
+	border-color: @lightdino1b transparent transparent transparent;
+}
+.galleryrow.dino2 .mainblock .speech:after {
+	border-color: @lightdino2b transparent transparent transparent;
+}
+.galleryrow.dino3 .mainblock .speech:after {
+	border-color: @lightdino3b transparent transparent transparent;
+}
+.galleryrow.dino4 .mainblock .speech:after {
+	border-color: @lightdino4b transparent transparent transparent;
+}
+
+
+
+.galleryrow .mainblock .leftcontent img{
+	position:absolute;
+	left:7px;
+	bottom:0px;
+}
+.galleryrow.dino0 .mainblock .leftcontent img{
+	left:10px;
+}
+
+.galleryrow .mainblock .logo{
+	color:#fff;
+	font-size:95%;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	position: absolute;
 	left: 5px;
-	top: 19px;
+	top: 26px;
 	bottom: 3px;
 	right: 3px;
 }
 
-.galleryrow div.mainblock .title{
+.galleryrow .mainblock .title{
 	width:100%;
 	text-align:center;
 	display: block;
-	color:#ddd;
+	color:white;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
+	font-size:110%;
 }
 
 
 
-.galleryrow div.mainblock .rightcontent img{
+.galleryrow .mainblock .rightcontent img{
 	max-height: 98%;
 	position: absolute;
 	max-width: 99%;
@@ -125,15 +191,7 @@
 	top: 1%;
 };
 
-.galleryrow div.sidebar{
-	height: 82%;
-	background: red;
-	width: 12px;
-	position: relative;
-	top:9%;
-}
-
-.gallerybottom, .menuxlarge .gallerytop{
+.gallerybottom,  .gallerytop{
 	position: absolute;
 	width:100%;
 	height:@bottomheight;

@@ -6,12 +6,32 @@
 	position: absolute;
 }
 
-.helpoverlay .helpbox > div{
+.helpoverlay .helpbox > div:first-child{
 	position:absolute;
 	left:6px;
 	right:6px;
 	top:4px;
 	bottom:4px;
+}
+
+.helpoverlay .helpbox .triangle{
+	width:0px;
+	height:0px;
+	border-style:solid;
+	position: absolute;
+	bottom: -(@tri_size_help + 5);
+}
+
+.helpoverlay .helpboxleft .triangle{
+	border-width: (@tri_size_help + 5) (@tri_size_help + 5) 0 0;
+	left: -1px;
+	border-color:#ccc transparent transparent transparent;
+}
+
+.helpoverlay .helpboxright .triangle{
+	border-width: 0 (@tri_size_help + 5) (@tri_size_help + 5) 0;
+	right: -1px;
+	border-color:transparent #ccc transparent transparent;
 }
 
 .helpoverlay .helpbox p{
@@ -26,7 +46,6 @@
 	left: 250px;
 	background:white;
 	border-radius: 8px;
-	border-bottom-left-radius:0px;
 	width: 480px;
 	height: 250px;
 	border: 1px solid #ccc;
@@ -34,24 +53,33 @@
 	word-wrap:break-word;
 }
 
+.helpoverlay .helpboxleft{
+	border-bottom-left-radius:0px;
+}
+
+.helpoverlay .helpboxright{
+	border-bottom-right-radius:0px;
+}
+
+
 .helpbox:after{
 	content: "";
 	position: absolute;
 	left: 0px;
-	bottom: -15px;
+	bottom: -(@tri_size_help);
 	display: block;
 	width: 0px;
 	height: 0px;
 	border-style: solid;
-	border-width: 15px 15px 0 0;
+	border-width: @tri_size_help @tri_size_help 0 0;
 	border-color: white transparent transparent transparent;
 }
 
 
 .helpboxright:after{
 	left: 100% !important;
-	margin-left: -15px !important;
-	border-width: 0px 15px 15px 0px !important;
+	margin-left: -(@tri_size_help) !important;
+	border-width: 0px @tri_size_help @tri_size_help 0px !important;
 	border-color: white white transparent transparent !important;
 }
 
