@@ -5,18 +5,12 @@
 	
 		<title>logojs</title> 
 		
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-		
-		
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		
-			
+		<meta http-equiv="Content-Type"						content="text/html; charset=UTF-8">
+		<meta name="HandheldFriendly"						content="true">
+		<meta name="viewport"								content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+		<meta name="apple-mobile-web-app-capable"			content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style"	content="black-translucent">
+		<meta http-equiv="X-UA-Compatible"					content="IE=Edge">
 		
 		<link rel="icon" 							href="img/icon.png">
 		<link rel="shortcut icon" 					href="img/icon.ico"> 
@@ -28,19 +22,15 @@
 		<script>
 			
 			// this is a global namespace for all objects in this app.
-			window.LG = {color:"#FF4136"};
+			window.LG = {};
 			
 		</script>
 		
 		<!-- include all the javascript libraries -->
-		
 		<script src="min/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
-		
-		
 		
 		<!-- the main javascript -->
 		<script src="min/main-min.js" 					type="text/javascript" charset="utf-8"></script>
-		
 		
 		<!-- There follows all the template files in html in no particular order-->
 		
@@ -134,7 +124,8 @@
 		<script id="tpl_spinner" type="text/template">
 			
 			<div id="spinner">
-				
+				<div id="spinneroverlay"></div>
+				<div id="spinnerbox"></div>
 			</div>
 			
 		</script>
@@ -215,7 +206,7 @@
 		<script id="tpl_helpbuttonmenu" type="text/template">
 			
 			<li>
-				<a href="#" id="helpbuttonmenu" class="action button clr1" >
+				<a href="#" id="helpbuttonmenu" class="action button clr3" >
 					<i class="fa fa-question"></i>
 					<span>Help</span>
 				</a>
@@ -596,7 +587,7 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_galleryrow" type="text/template">
 			
-			<div class="galleryrow"
+			<div class="galleryrow dino<%=dino%>"
 				
 				<%
 					if(_id!=null){
@@ -609,11 +600,19 @@ drawSpiral(10);</pre>
 				
 				<div class="mainblock">
 				
-					<span><%= name %></span>
-					<span><%= userId %></span>
-					<span><%= logo %></span>
-					<img src="img/dino<%=dino%>.png"/>
-					<img src="thumbs/thumb_<%= _id %>.png"/>
+					<div class="leftcontent">
+						<img src="img/dino<%=dino%>.png"/>
+						<div class="speech">
+							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
+							<div class="logo">
+								<%= logo %>
+							</div>
+						</div>
+					</div>
+					
+					<div class="rightcontent">
+						<img src="thumbs/thumb_<%= _id %>.png"/>
+					</div>
 					
 				</div>
 			
@@ -667,9 +666,46 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_helpoverlay" type="text/template">
 			
-			<div class="helpoverlay" >
-				<img src="img/dino4.png"/>
-				<p>Help!</p>
+			<div class="helpoverlay help0" >
+				<div class="helpbg" ></div>
+				
+				<div class = "helpcontent helpcontent0">
+					<img src="img/dino4large.png"/>
+					<div class="helpbox">
+						<div>
+							<p>Welcome to Logotacular!</p>
+							<p>Logotacular is a simple programming app that lets you draw geometric shapes and patterns.</p>
+							<p>Try writing this in the right hand panel: fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);</p>
+							
+							<button class="transparent button1 copy"><span>Copy it!</span></button>
+							<button class="transparent button0 next"><span>Next</span></button>
+						</div>
+					</div>
+				</div>
+				<div class = "helpcontent helpcontent1">
+					<img src="img/dino1large.png"/>
+					<div class="helpbox helpboxright">
+						<div>
+							<p>When you're ready, click anywhere on the left hand side to draw your Logo!</p>
+							<p style="margin-right:130px;">fd(100); moves forward 100 units, and rt(90); turns 90 degrees, so repeating that four times draws a square!</p>
+							<img style="position:absolute;bottom:50px;right:6px;" src="img/square.png"/>
+							<button class="transparent button1 draw"><span>Draw it!</span></button>
+							<button class="transparent button0 next"><span>Next</span></button>
+						</div>
+					</div>
+				</div>
+				<div class = "helpcontent helpcontent2">
+					<img src="img/dino1large.png"/>
+					<div class="helpbox helpboxright">
+						<div>
+							
+							<p>You can save your work, and you can also open other people's work and see how they wrote their Logo to help you.</p>
+							<p>Enjoy using Logotacular!</p>
+							<button class="transparent button1 more"><span>More help</span></button>
+							<button class="transparent button0 close"><span>Close</span></button>
+						</div>
+					</div>
+				</div>
 			</div>
 		
 					
