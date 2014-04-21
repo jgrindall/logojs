@@ -139,7 +139,7 @@
 			<button class="action button right transparent" >
 				<i class="fa fa-chevron-right"></i>
 				<span>
-					Back
+					Back to your file
 				</span>
 			</button>
 			
@@ -173,7 +173,7 @@
 		<script id="tpl_dinobutton" type="text/template">
 
 			<button href="#" id="dinobutton" class="action button transparent" >
-				<img src="img/dino<%=dino%>.png"/>
+				<img src="img/dino<%=dino%>right.png"/>
 			</button>
 			
 		</script>
@@ -341,7 +341,7 @@
 				<div class="gallerytop menutop" >
 					<button id="cancelbutton" class="action button button1 right transparent">
 						<i class="fa fa-chevron-right"></i>
-						<span>Back</span>
+						<span>Main menu</span>
 					</button>
 				</div>
 				
@@ -601,12 +601,13 @@ drawSpiral(10);</pre>
 				<div class="mainblock">
 				
 					<div class="leftcontent">
-						<img src="img/dino<%=dino%>.png"/>
+						<img src="img/dino<%=dino%>left.png"/>
 						<div class="speech">
 							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
 							<div class="logo">
 								<%= logo %>
 							</div>
+							<div class="triangle"></div>
 						</div>
 					</div>
 					
@@ -647,7 +648,7 @@ drawSpiral(10);</pre>
 		<script id="tpl_cancelbutton" type="text/template">
 			<button id="cancelbutton" class="action button button1 right transparent">
 				<i class="fa fa-chevron-right"></i>
-				<span>Back</span>
+				<span>Main menu</span>
 			</button>
 		</script>
 		
@@ -670,8 +671,8 @@ drawSpiral(10);</pre>
 				<div class="helpbg" ></div>
 				
 				<div class = "helpcontent helpcontent0">
-					<img src="img/dino4large.png"/>
-					<div class="helpbox">
+					<img src="img/dino4rightlarge.png"/>
+					<div class="helpbox helpboxleft">
 						<div>
 							<p>Welcome to Logotacular!</p>
 							<p>Logotacular is a simple programming app that lets you draw geometric shapes and patterns.</p>
@@ -680,10 +681,11 @@ drawSpiral(10);</pre>
 							<button class="transparent button1 copy"><span>Copy it!</span></button>
 							<button class="transparent button0 next"><span>Next</span></button>
 						</div>
+						<div class="triangle"></div>
 					</div>
 				</div>
 				<div class = "helpcontent helpcontent1">
-					<img src="img/dino1large.png"/>
+					<img src="img/dino1leftlarge.png"/>
 					<div class="helpbox helpboxright">
 						<div>
 							<p>When you're ready, click anywhere on the left hand side to draw your Logo!</p>
@@ -692,10 +694,11 @@ drawSpiral(10);</pre>
 							<button class="transparent button1 draw"><span>Draw it!</span></button>
 							<button class="transparent button0 next"><span>Next</span></button>
 						</div>
+						<div class="triangle"></div>
 					</div>
 				</div>
 				<div class = "helpcontent helpcontent2">
-					<img src="img/dino1large.png"/>
+					<img src="img/dino1leftlarge.png"/>
 					<div class="helpbox helpboxright">
 						<div>
 							
@@ -704,6 +707,7 @@ drawSpiral(10);</pre>
 							<button class="transparent button1 more"><span>More help</span></button>
 							<button class="transparent button0 close"><span>Close</span></button>
 						</div>
+						<div class="triangle"></div>
 					</div>
 				</div>
 			</div>
