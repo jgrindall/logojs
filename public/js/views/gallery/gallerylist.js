@@ -125,7 +125,7 @@ LG.GalleryListView = Backbone.View.extend({
 			numPages = Math.ceil(this.collection.length / this.perPage);
 			wrapperWidth = this.wrapper.width();
 			wrapperHeight = this.wrapper.height();
-			pageWidth = wrapperWidth / 4;
+			pageWidth = wrapperWidth / LG.GalleryListView.NUMX;
 			this.$(".gallerypage").width(pageWidth);
 			this.scroller.width(numPages * pageWidth);
 			this.myScroll.refresh();
@@ -151,7 +151,7 @@ LG.GalleryListView = Backbone.View.extend({
 	}
 });
 
-LG.GalleryListView.NUMX = 4;
+LG.GalleryListView.NUMX = 3;
 LG.GalleryListView.NUMY = 3;
 
 
