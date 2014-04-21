@@ -166,9 +166,10 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 		}
 		else{
 			selectedModel = this.getByProperty("_id", id);
-			this.loadModel(selectedModel);
+			if(selectedModel){
+				this.loadModel(selectedModel);
+			}
 		}
-		LG.router.navigate("write", {"trigger":true});
 	},
 	isOpen:function(id){
 		if(!this.selected){
@@ -200,29 +201,19 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 		LG.Utils.log("save "+JSON.stringify(data));
 		this.selected.save(data, options);
 	},
-	getNextName:function(name){
-		if(this.nameOk(name)){
-			return name;
-		}
-		var i = 1;
-		while(!this.nameOk(name+""+i)){
-			i++;
-		}
-		return name+""+i;
-	},
 	nameOk:function(name){
-		LG.Utils.log("nameOk "+name);
-		var ok = true;
+		var error = false;
 		if(!LG.AFileCollection.validateFileName(name)){
-			LG.Utils.growl("Please enter a valid filename");
-			return false;
+			error = "Please enter a valid filename";
 		}
-		this.each( function(model){
-			if(model.get("name") === name){
-				ok = false;
-			}
-		});
-		return ok;
+		else{
+			this.each( function(model){
+				if(model.get("name") === name){
+					error = "That name is taken, please choose another filename";
+				}
+			});
+		}
+		return error;
 	},
 	saveFileAs:function(name, callback){
 		var _this = this, model, data, options, namedModel;
@@ -266,8 +257,10 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
 	},
 	loadById:function(id){
+		console.log("loadById "+id);
 		var _this = this, oldModel, model, data, newName, options, yours = false, userId;
 		oldModel = this.getByProperty("_id", id);
+		console.log(oldModel+"  "+JSON.stringify(oldModel));
 		if(LG.userModel.isConnected()){
 			userId = LG.userModel.get("userId");
 			yours = (oldModel.get("userId") === userId);

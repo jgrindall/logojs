@@ -7,6 +7,7 @@ LG.Router = Backbone.Router.extend({
     routes:{
 		""											:	"write",
 		"write"										:	"write",
+		"write/:id"									:	"write",
 		"gallery"									:	"gallery",
 		"load"										:	"load",
 		"filename"									:	"filename",
@@ -23,7 +24,11 @@ LG.Router = Backbone.Router.extend({
 		}
 		LG.layoutModel.set({"show":s});
 	},
-	write:function(){
+	write:function(id){
+		console.log("file "+id);
+		if(id){
+			LG.allFilesCollection.loadById(id);
+		}
 		this.show("write");
 	},
 	filename:function(){
