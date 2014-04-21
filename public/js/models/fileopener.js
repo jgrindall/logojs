@@ -6,9 +6,10 @@ LG.FileOpener = function(){
 
 LG.FileOpener.prototype.open = function(id){
 	var oldModel, yours = false, userId;
-	oldModel = LG.fileCollection.getByProperty("_id", id);
+	oldModel = LG.allFilesCollection.getByProperty("_id", id);
 	if(!oldModel){
 		// doesn't exist at all!
+		console.log("nope!");
 		return;
 	}
 	if(!LG.userModel.isConnected()){
