@@ -9,7 +9,7 @@ LG.HelpButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		LG.router.navigate("help", {"trigger":true});
+		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
