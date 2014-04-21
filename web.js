@@ -1,4 +1,4 @@
-var express, app, port, exec, fs, mkdirp, mongoose, File, FileSchema;
+var express, app, port, exec, fs, mkdirp, mongoose, File, FileSchema, saveImage, mongoUri;
 
 express = require("express");
 app = express();
@@ -8,7 +8,14 @@ fs = require('fs');
 mkdirp = require('mkdirp');
 mongoose = require('mongoose');
 
-var saveImage = function(id, base64, options){
+console.log("process.env.MONGOLAB_URI "+process.env.MONGOLAB_URI);
+console.log("process.env.MONGOHQ_URL "+process.env.MONGOHQ_URL);
+
+mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/logotacular'; 
+
+console.log(mongoUri);
+
+saveImage = function(id, base64, options){
 	mkdirp('./public/thumbs', function(err) { 
 		if(err){
 			console.log('makeThumbs error: ' + err);
@@ -44,7 +51,7 @@ File = mongoose.model("File", FileSchema);
 app.configure(function(){
 	app.use(express.static(__dirname+"/public"));
 	app.use(express.bodyParser());
-	mongoose.connect("mongodb://localhost/logotacular");
+	mongoose.connect(mongoUri);
 });
 
 app.get('/', function(req, res){
@@ -61,6 +68,7 @@ app.get('/files', function(req, res){
 	}
 	File.count(function(err, count){
 		if(err){
+			console.log("err "+err);
 			res.send(400);
 			return;
 		}
