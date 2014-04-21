@@ -34,7 +34,7 @@ LG.FileNameView = LG.APopUpView.extend({
 	},
 	clickOk:function(e){
 		this.stopProp(e);
-		var name, options;
+		var name, options, error;
 		name = this.getName();
 		options = {
 			"success":function(){
@@ -44,12 +44,14 @@ LG.FileNameView = LG.APopUpView.extend({
 				
 			}
 		};
-		if(LG.fileCollection.nameOk(name)){
-			LG.fileCollection.saveFileAs(name, options);
-			LG.router.navigate("write", {"trigger":true});
+		error = LG.fileCollection.nameOk(name);
+		if(error){
+			this.$("p.error").text(error);
+			// add here the css class
 		}
 		else{
-			this.$("p.error").text("That name is taken, please choose another name");
+			LG.fileCollection.saveFileAs(name, options);
+			LG.router.navigate("write", {"trigger":true});
 		}
 	},
 	clickCancel:function(e){
