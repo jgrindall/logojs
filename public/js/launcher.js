@@ -12,18 +12,16 @@ LG.Launcher = function(){
 	this.hash = null;
 };
 
-
 // bind into events
 LG.Launcher.prototype.bindEvents = function(){
 	$(document).bind ("ready", 		$.proxy (this.domReady, this)  );
 	$(window).on("resize", $.proxy(this.onResize, this));
+	$(window).on("orientationchange", $.proxy(this.onResize, this));
 };
-
 
 LG.Launcher.prototype.onResize = $.debounce( 500, function(){
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
 });
-
 
 LG.Launcher.prototype.domReady = function(){
 	this._domReady = true;
@@ -106,10 +104,14 @@ LG.Launcher.prototype.login = function(options){
 
 
 LG.Launcher.prototype.launch = function(){
+	var h = window.location.hash;
+	h = h.replace(/^#/,'');
 	window.location.hash = "";
 	this.addActivity();
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
 	Backbone.history.start();
+	console.log("go to "+h);
+	//LG.router.navigate(h, {"trigger":true});
 };
 
 LG.Launcher.prototype.addActivity = function(){
@@ -158,7 +160,6 @@ LG.IPadPhoneGapLauncher.prototype.bindEvents = function(){
 	// also bind to extra PG events
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
-	$(window).on("orientationchange", $.proxy(this.onOrient, this));
 };
 
 LG.IPadPhoneGapLauncher.prototype.deviceReady = function(){
@@ -168,10 +169,6 @@ LG.IPadPhoneGapLauncher.prototype.deviceReady = function(){
 		this.startLoad();
 	}
 };
-
-LG.IPadPhoneGapLauncher.prototype.onOrient = $.debounce( 500, function(){
-	LG.EventDispatcher.trigger(LG.Events.RESIZE);
-});
 
 LG.IPadPhoneGapLauncher.prototype.check = function(){
 	// check is different for PG
