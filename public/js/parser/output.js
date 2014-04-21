@@ -24,6 +24,6 @@ LG.output.MAX_SIZE_REACHED = "Exceeded output size";
 
 LG.output.MAX_SIZE = 10000;
 
-LG.output.BATCH_SIZE = 20;
+LG.output.BATCH_SIZE = 40;
 
 LG.output.TIMEOUT = 50;
