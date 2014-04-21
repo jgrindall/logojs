@@ -25,9 +25,8 @@ LG.Router = Backbone.Router.extend({
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){
-		console.log("file "+id);
 		if(id){
-			LG.allFilesCollection.loadById(id);
+			LG.fileOpener.open(id);
 		}
 		this.show("write");
 	},

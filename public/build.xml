@@ -106,7 +106,14 @@
 				
 				<file name="models/spinner.js"/>
 				<file name="models/filemodel.js"/>
+				
+				<file name="models/spinnercollection.js"/>
+				<file name="models/paginatedcollection.js"/>
+				<file name="models/selectedcollection.js"/>
 				<file name="models/filecollection.js"/>
+				
+				<file name="models/fileopener.js"/>
+				
 				<file name="models/usermodel.js"/>
 				<file name="models/sizemodel.js"/>
 				<file name="views/base.js"/>

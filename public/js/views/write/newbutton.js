@@ -16,6 +16,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 		return {"disabled":false};
 	},
 	alertOk:function(){
+		this.listenToOnce(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 		LG.fileCollection.save();
 	},
 	alertCancel:function(){
@@ -24,8 +25,11 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	alertNo:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		LG.fileCollection.addTempModel({"force":true});
+		this.newFile();
 		LG.router.navigate("write", {"trigger":true});
+	},
+	newFile:function(){
+		LG.fileCollection.addNewModel({"force":true});
 	},
 	modelSynced:function(){
 		this.stopListening(LG.fileCollection, "sync");
@@ -36,17 +40,16 @@ LG.NewButtonView = LG.WriteButton.extend({
 		var fileModel = LG.fileCollection.selected;
 		if(!loggedIn){
 			// can't save it anyway 
-			LG.fileCollection.addTempModel({"force":true});
+			this.newFile();
 		}
 		else{
 			if(!fileModel.isSaved()){
 				// unsaved
 				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
-				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
 				// dump the old file, make a new one
-				LG.fileCollection.addTempModel({"force":true});
+				this.newFile();
 			}
 		}
 	}

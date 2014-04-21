@@ -1,64 +1,37 @@
 
-LG.PageModel = Backbone.Model.extend({
-	defaults:{
-		numPages:1,
-		maxPage:1
-	}
-});
 
-LG.SpinnerCollection  = Backbone.Collection.extend({
-	initialize:function(data){
-		Backbone.Collection.prototype.initialize.call(this, data);
-		this.listenTo(this, "sync", $.proxy(this.onSync, this));
-	},
-	onSync:function(){
-		console.log("synced spinner collection");
-		LG.spinnerModel.set({"show":false});
-	},
-	fetch:function(data){
-		LG.spinnerModel.set({"show":true});
-		Backbone.Collection.prototype.fetch.call(this, data);
-	}
-});
-
-
-LG.APaginatedCollection  = LG.SpinnerCollection.extend({
+LG.AFileCollection  = LG.ASelectedFileCollection.extend({
 	model:LG.FileModel,
-	initialize:function(data){
-		LG.SpinnerCollection.prototype.initialize.call(this, data);
-		this.pageModel = new LG.PageModel();
+	initialize:function(){
+		LG.ASelectedFileCollection.prototype.initialize.call(this);
+		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
 	},
-	parse: function(response) {
-		this.pageModel.set({"numPages":parseInt(response.numPages, 10), "maxPage":parseInt(response.maxPage, 10)});
-		return response.files;
+	getData:function(){
+		var data = LG.ASelectedFileCollection.prototype.getData.call(this);
+		data.userId = LG.userModel.get("userId");
+		return data;
 	},
-	nextPage:function(){
-		var c = this.pageModel.get("numPages");
-		if(  (c + 1) <= this.pageModel.get("maxPage")){
-			this.pageModel.set({"numPages": c + 1});
-			this.load();
+	load:function(options){
+		var data = _.extend({"data" : this.getData() , "processData" : true}, options);
+		this.fetch(data);
+	},
+	onLoginChanged:function(){
+		var logo, dino, loggedIn = LG.userModel.get("loggedIn");
+		if(loggedIn){
+			logo = this.selected.get("logo");
+			dino = this.selected.get("dino");
+			this.load({"success":function(){
+				console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+			}});
+		}
+		else{
+			this.reset();
+			this.addNewModel({"force":true});
 		}
 	}
 });
 
 
-LG.AFileCollection  = LG.APaginatedCollection.extend({
-	model:LG.FileModel,
-	initialize:function(){
-		LG.APaginatedCollection.prototype.initialize.call(this);
-	},
-	getData:function(){
-		var options = {};
-		options.userId = LG.userModel.get("userId");
-		options.numPages = this.pageModel.get("numPages");
-		options.perPage = 24;
-		return options;
-	},
-	load:function(options){
-		var data = _.extend({"data" : this.getData() , "processData" : true}, options);
-		this.fetch(data);
-	}
-});
 
 
 LG.AFileCollection.validateFileName = function(name){
@@ -75,50 +48,10 @@ LG.AFileCollection.validateFileName = function(name){
 
 
 
-LG.SelectedFileCollection = LG.AFileCollection.extend({
-	initialize:function(){
-		LG.AFileCollection.prototype.initialize.call(this);
-		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
-		this.addTempModel();
-	},
-	addTempModel:function(options){
-		if(options && options.force){
-			this.remove(this.selected);
-			this.selected = null;
-		}
-		if(!this.selected){
-			this.selected = new LG.FileModel({"dirty":false});
-		}
-		this.add(this.selected);
-		if(options && options.force){
-			LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
-		}
-	},
-	onSync:function(){
-		LG.AFileCollection.prototype.onSync.call(this);
-		this.addTempModel();
-	},
-	onLoginChanged:function(){
-		var logo, dino, loggedIn = LG.userModel.get("loggedIn");
-		if(loggedIn){
-			logo = this.selected.get("logo");
-			dino = this.selected.get("dino");
-			this.load({"success":function(){
-				console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
-			}});
-		}
-		else{
-			this.reset();
-			this.addTempModel({"force":true});
-		}
-	}
-});
-
-
-LG.FileCollection = LG.SelectedFileCollection.extend({
+LG.FileCollection = LG.AFileCollection.extend({
 	url:"/files",
 	initialize:function(){
-		LG.SelectedFileCollection.prototype.initialize.call(this);
+		LG.AFileCollection.prototype.initialize.call(this);
 	},
 	isSaved:function(){
 		return this.selected.isSaved();
@@ -134,8 +67,8 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 			this.selected.set(data);
 		}
 		else{
-			// proper file
-			this.selected = new LG.FileModel(_.extend({}, data, {"dirty":true}));
+			// proper file is open
+			this.selected = new this.model(_.extend({}, data, {"dirty":true}));
 			this.add(this.selected);
 		}
 	},
@@ -171,20 +104,12 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 			}
 		}
 	},
-	isOpen:function(id){
-		if(!this.selected){
-			return false;
-		}
-		else {
-			return (this.selected.get("_id")===id);
-		}
-	},
 	deleteCurrentFile:function(){
 		var _this = this;
 		var options = {
 			"success":function(){
 				LG.Utils.growl("File deleted");
-				_this.addTempModel({"force":true});
+				_this.addNewModel({"force":true});
 			}
 		};
 		if(this.selected.isNew()){
@@ -222,7 +147,7 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 			LG.Utils.growl("File exists");
 			return;
 		}
-		model = new LG.FileModel();
+		model = new this.model();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
 		options = {
@@ -255,28 +180,7 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 	},
 	getData:function(){
 		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
-	},
-	loadById:function(id){
-		console.log("loadById "+id);
-		var _this = this, oldModel, model, data, newName, options, yours = false, userId;
-		oldModel = this.getByProperty("_id", id);
-		console.log(oldModel+"  "+JSON.stringify(oldModel));
-		if(LG.userModel.isConnected()){
-			userId = LG.userModel.get("userId");
-			yours = (oldModel.get("userId") === userId);
-		}
-		LG.Utils.log("-- all load "+id+" "+yours);
-		if(yours){
-			LG.fileCollection.loadById(id);
-			return;
-		}
-		else{
-			model = oldModel.toJSON();
-			LG.fileCollection.openOthers(model);
-			LG.router.navigate("write", {"trigger":true});
-		}
 	}
 });
-
 
 
