@@ -4,6 +4,7 @@
 // _started makes sure that the app is launched only once
 
 LG.Launcher = function(){
+	_.extend(this, Backbone.Events);
 	this._domReady = false;
 	this._mobReady = false;
 	this._deviceReady = false;
@@ -51,6 +52,7 @@ LG.Launcher.prototype.templatesLoaded = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
+	LG.graphicsModel = new LG.GraphicsModel();
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = new LG.UserModel();
 	LG.layoutModel = new LG.LayoutModel();
@@ -110,8 +112,7 @@ LG.Launcher.prototype.launch = function(){
 	this.addActivity();
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
 	Backbone.history.start();
-	console.log("go to "+h);
-	//LG.router.navigate(h, {"trigger":true});
+	LG.router.navigate(h, {"trigger":true});
 };
 
 LG.Launcher.prototype.addActivity = function(){
@@ -120,8 +121,17 @@ LG.Launcher.prototype.addActivity = function(){
 	LG.activityView.afterAdded();
 };
 
-LG.Launcher.prototype.onLoggedIn = function(){
+LG.Launcher.prototype.catalogueLoaded = function(){
 	this.launch();
+};
+
+LG.Launcher.prototype.loadCatalogue = function(){
+	this.listenToOnce(LG.allFilesCollection, "sync", $.proxy(this.catalogueLoaded, this));
+	LG.allFilesCollection.load();
+};
+
+LG.Launcher.prototype.onLoggedIn = function(){
+	this.loadCatalogue();
 };
 
 LG.Launcher.prototype.fbChecked = function(){
