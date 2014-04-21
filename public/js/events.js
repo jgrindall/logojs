@@ -28,4 +28,5 @@ LG.Events.ALERT_CANCEL			=	"LG::alertCancel";
 LG.Events.ALERT_NO				=	"LG::alertNo";
 LG.Events.DINO_CHANGED			=	"LG::dinoChanged";
 LG.Events.RESET_CANVAS			=	"LG::resetCanvas";
+LG.Events.HIDE_HELP_OVERLAY		=	"LG::hideHelpOverlay";
 
