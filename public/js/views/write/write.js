@@ -4,7 +4,7 @@ LG.WriteView = LG.AMenuView.extend({
 	initialize:function(){
 		var _this = this;
 		LG.AMenuView.prototype.initialize.call(this);
-		this.changedTextDeBounce = $.debounce( 750, $.proxy(this.save, this));
+		this.changedTextDeBounce = $.debounce( 500, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		LG.EventDispatcher.on(LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
