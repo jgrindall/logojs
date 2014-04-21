@@ -5,10 +5,22 @@ LG.ActivityView = LG.AbstractPageView.extend({
 	template:"tpl_activity",
 	name:"activity",
 	initialize:function(){
-		
+		this.listenTo(LG.EventDispatcher, LG.Events.SHOW_HELP_OVERLAY, $.proxy(this.showHelp, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.HIDE_HELP_OVERLAY, $.proxy(this.hideHelp, this));
+	},
+	showHelp:function(){
+		if(!this.helpOverlayView){
+			this.helpOverlayView = new LG.HelpOverlayView();	
+			this.$el.append(this.helpOverlayView.render().el);
+		}
+	},
+	hideHelp:function(){
+		if(this.helpOverlayView){
+			this.helpOverlayView.close();
+			this.helpOverlayView = null;
+		}
 	},
 	render:function(){
-		var _this = this;
 		
 		this.loadTemplate(  this.template, { }, {replace:true}  );
 		
@@ -33,10 +45,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.loadView = new LG.LoadView({"collection":LG.fileCollection});	
 		this.$el.append(this.loadView.render().el);
 		
-		this.helpOverlayView = new LG.HelpOverlayView();	
-		this.$el.append(this.helpOverlayView.render().el);
-		
-		
 		return this;
 	},
 	events:function(){
@@ -44,7 +52,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 			
 		});
 		return obj;
-		
 	},
 	beforeClose:function(){
 		
