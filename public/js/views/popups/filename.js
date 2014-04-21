@@ -34,29 +34,26 @@ LG.FileNameView = LG.APopUpView.extend({
 	},
 	clickOk:function(e){
 		this.stopProp(e);
-		var name, options, error;
-		name = this.getName();
-		options = {
-			"success":function(){
-				
-			},
-			"error":function(){
-				
-			}
-		};
+		var name = this.getName(), options, error;
 		error = LG.fileCollection.nameOk(name);
 		if(error){
 			this.$("p.error").text(error);
-			// add here the css class
 		}
 		else{
+			options = {
+				"success":function(id){
+					LG.router.navigate("write/"+id, {"trigger":true});
+				},
+				"error":function(){
+					
+				}
+			};
 			LG.fileCollection.saveFileAs(name, options);
-			LG.router.navigate("write", {"trigger":true});
 		}
 	},
 	clickCancel:function(e){
 		this.stopProp(e);
-		LG.router.navigate("write", {"trigger":true});
+		window.history.back();
 	}
 });
 

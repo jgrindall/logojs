@@ -24,14 +24,18 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 		return this;
 	},
 	alertOk:function(){
-		LG.fileCollection.deleteCurrentFile();
-		LG.router.navigate("write", {"trigger":true});
+		var options = {
+			"success":function(){
+				LG.router.navigate("write", {"trigger":true});
+			}
+		};
+		LG.fileCollection.deleteCurrentFile(options);
 	},
 	alertNo:function(){
-		LG.router.navigate("write", {"trigger":true});
+		window.history.back();
 	},
 	alertCancel:function(){
-		LG.router.navigate("write", {"trigger":true});
+		window.history.back();
 	},
 	modelSynced:function(){
 		this.stopListening(LG.fileCollection, "sync");

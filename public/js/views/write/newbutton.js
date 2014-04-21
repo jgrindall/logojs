@@ -21,7 +21,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		LG.router.navigate("write", {"trigger":true});
+		window.history.back();
 	},
 	alertNo:function(){
 		this.stopListening(LG.fileCollection, "sync");
