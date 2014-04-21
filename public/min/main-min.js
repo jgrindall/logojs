@@ -522,6 +522,7 @@ LG.Router = Backbone.Router.extend({
     routes:{
 		""											:	"write",
 		"write"										:	"write",
+		"write/:id"									:	"write",
 		"gallery"									:	"gallery",
 		"load"										:	"load",
 		"filename"									:	"filename",
@@ -538,7 +539,11 @@ LG.Router = Backbone.Router.extend({
 		}
 		LG.layoutModel.set({"show":s});
 	},
-	write:function(){
+	write:function(id){
+		console.log("file "+id);
+		if(id){
+			LG.allFilesCollection.loadById(id);
+		}
 		this.show("write");
 	},
 	filename:function(){
@@ -2089,7 +2094,6 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 	restart:function(options){
 		this.history = [  { "logo":null, "dino":0 }  ];
 		this.pointer = 0;
-		console.log("restart the model");
 	},
 	getValues : function(){
 		var i, obj = {};
@@ -2121,7 +2125,6 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 			h.splice(0, 1);
 			h.push(newValues);
 		}
-		console.log("model changed, now : "+JSON.stringify(this.history)+"  <-  "+this.pointer);
 	},
 	canUndo:function(){
 		if(this.history.length === 0 || this.pointer === 0){
@@ -2137,11 +2140,9 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 	},
 	reload:function(){
 		this.editing = true;
-		console.log("set as "+JSON.stringify(this.history[this.pointer]));
 		this.set(this.history[this.pointer]);
 		this.trigger("change");
 		this.editing = false;
-		console.log("done, now : "+JSON.stringify(this.history)+"  <-  "+this.pointer);
 	},
 	undo:function(){
 		if(!this.canUndo()){
@@ -2390,9 +2391,10 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 		}
 		else{
 			selectedModel = this.getByProperty("_id", id);
-			this.loadModel(selectedModel);
+			if(selectedModel){
+				this.loadModel(selectedModel);
+			}
 		}
-		LG.router.navigate("write", {"trigger":true});
 	},
 	isOpen:function(id){
 		if(!this.selected){
@@ -2424,29 +2426,19 @@ LG.FileCollection = LG.SelectedFileCollection.extend({
 		LG.Utils.log("save "+JSON.stringify(data));
 		this.selected.save(data, options);
 	},
-	getNextName:function(name){
-		if(this.nameOk(name)){
-			return name;
-		}
-		var i = 1;
-		while(!this.nameOk(name+""+i)){
-			i++;
-		}
-		return name+""+i;
-	},
 	nameOk:function(name){
-		LG.Utils.log("nameOk "+name);
-		var ok = true;
+		var error = false;
 		if(!LG.AFileCollection.validateFileName(name)){
-			LG.Utils.growl("Please enter a valid filename");
-			return false;
+			error = "Please enter a valid filename";
 		}
-		this.each( function(model){
-			if(model.get("name") === name){
-				ok = false;
-			}
-		});
-		return ok;
+		else{
+			this.each( function(model){
+				if(model.get("name") === name){
+					error = "That name is taken, please choose another filename";
+				}
+			});
+		}
+		return error;
 	},
 	saveFileAs:function(name, callback){
 		var _this = this, model, data, options, namedModel;
@@ -2490,8 +2482,10 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
 	},
 	loadById:function(id){
+		console.log("loadById "+id);
 		var _this = this, oldModel, model, data, newName, options, yours = false, userId;
 		oldModel = this.getByProperty("_id", id);
+		console.log(oldModel+"  "+JSON.stringify(oldModel));
 		if(LG.userModel.isConnected()){
 			userId = LG.userModel.get("userId");
 			yours = (oldModel.get("userId") === userId);
@@ -2977,7 +2971,6 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 		var disable = true, fileModel, loggedIn;
 		loggedIn = LG.userModel.isConnected();
 		fileModel = LG.fileCollection.selected;
-		//console.log("get data "+loggedIn+" , "+fileModel+", "+LG.fileCollection.selected.isSaved());
 		if(loggedIn){
 			disable = fileModel.isSaved();
 		}
@@ -3039,7 +3032,6 @@ LG.FileButtonView = LG.HeaderButton.extend({
 		fileModel = LG.fileCollection.selected;
 		name = fileModel.get("name");
 		saved = LG.fileCollection.selected.isSaved();
-		//console.log("gd "+name+" "+saved);
 		return {"name":name, "saved": saved};
 	},
 	events:function(){
@@ -3778,7 +3770,7 @@ LG.FileNameView = LG.APopUpView.extend({
 	},
 	clickOk:function(e){
 		this.stopProp(e);
-		var name, options;
+		var name, options, error;
 		name = this.getName();
 		options = {
 			"success":function(){
@@ -3788,12 +3780,14 @@ LG.FileNameView = LG.APopUpView.extend({
 				
 			}
 		};
-		if(LG.fileCollection.nameOk(name)){
-			LG.fileCollection.saveFileAs(name, options);
-			LG.router.navigate("write", {"trigger":true});
+		error = LG.fileCollection.nameOk(name);
+		if(error){
+			this.$("p.error").text(error);
+			// add here the css class
 		}
 		else{
-			this.$("p.error").text("That name is taken, please choose another name");
+			LG.fileCollection.saveFileAs(name, options);
+			LG.router.navigate("write", {"trigger":true});
 		}
 	},
 	clickCancel:function(e){
@@ -4332,16 +4326,20 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	alertNo:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
 	},
 	alertCancel:function(){
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
+	},
+	openFile:function(){
+		alert("open file");
+		LG.router.navigate("write/"+this.idToOpen, {"trigger":true});
 	},
 	modelSynced:function(){
 		alert("modelSynced");
 		this.stopListening(LG.fileCollection, "sync");
-		this.collection.loadById(this.idToOpen);
+		this.openFile();
 	},
 	tryOpenFile:function(){
 		var options;
@@ -4352,11 +4350,11 @@ LG.GalleryListView = Backbone.View.extend({
 				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
-				this.collection.loadById(this.idToOpen);
+				this.openFile();
 			}
 		}
 		else{
-			this.collection.loadById(this.idToOpen);
+			this.openFile();
 		}
 	},
 	clickItem:function(e){
@@ -4385,9 +4383,9 @@ LG.GalleryListView = Backbone.View.extend({
 		this.status();
 	},
 	status:function(){
-		var d = "block";
-		if(this.collection.length === 0){
-			d = "none";	
+		var d = "none";
+		if(this.pages.length === 0){
+			d = "block";	
 		}
 		this.$(".nonefound").css("display", d);
 	},
