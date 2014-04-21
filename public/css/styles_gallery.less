@@ -31,7 +31,7 @@
 	margin:0;
 }
 
-.menuxlarge .galleryrow div.mainblock{
+.galleryrow div.mainblock{
 	color:#111;
 	position:relative;
 	background: #eee;
@@ -45,23 +45,87 @@
 	cursor:pointer;
 }
 
-.menuxlarge .galleryrow div.mainblock span{
-	position: absolute;
-	left: 40px;
+
+.galleryrow div.mainblock .leftcontent{
+	width:50%;
+	float:left;
+	position:relative;
+	height:100%;
 }
-.menuxlarge .galleryrow div.mainblock span:nth-child(1){
-	top: 15px;
-};
-.menuxlarge .galleryrow div.mainblock span:nth-child(2){
-	top: 30px;
-};
-.menuxlarge .galleryrow div.mainblock img{
+.galleryrow div.mainblock .rightcontent{
+	width: 49%;
+	height: 100%;
+	position: relative;
+}
+
+.galleryrow div.mainblock .leftcontent .speech{
+	border:none;
+	border-radius:5px;
+	position:absolute;
+	background:@ltgreen;
+	display:inline-block;
+	left:5px;
+	top:5px;
+	bottom:70px;
+	right:0;
+	border-bottom-left-radius:0;
+}
+
+.galleryrow.dino0 div.mainblock .leftcontent .speech{
+	background:pink;
+}
+
+.galleryrow div.mainblock .leftcontent img{
+	position:absolute;
+	left:2px;
+	bottom:2px;
+}
+.galleryrow div.mainblock .speech:after {
+	content: "";
 	position: absolute;
-	left: 160px;
-	max-height:98%;
+	left: 0px;
+	bottom: -15px;
+	display: block;
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 15px 15px 0 0;
+	border-color: green transparent transparent transparent;
+}
+.galleryrow div.mainblock .logo{
+	color:white;
+	font-size:83%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	position: absolute;
+	left: 5px;
+	top: 19px;
+	bottom: 3px;
+	right: 3px;
+}
+
+.galleryrow div.mainblock .title{
+	width:100%;
+	text-align:center;
+	display: block;
+	color:#ddd;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+
+
+.galleryrow div.mainblock .rightcontent img{
+	max-height: 98%;
+	position: absolute;
+	max-width: 99%;
+	width: 99%;
+	top: 1%;
 };
 
-.menuxlarge .galleryrow div.sidebar{
+.galleryrow div.sidebar{
 	height: 82%;
 	background: red;
 	width: 12px;
@@ -69,23 +133,21 @@
 	top:9%;
 }
 
-
-
-.menuxlarge .gallerybottom, .menuxlarge .gallerytop{
+.gallerybottom, .menuxlarge .gallerytop{
 	position: absolute;
 	width:100%;
 	height:@bottomheight;
 }
-.menuxlarge .gallerybottom{
+.gallerybottom{
 	bottom: 0;
 	left:0;
 }
 
-.menuxlarge .gallerybottom a.action.button{
+.gallerybottom a.action.button{
 	width:49%;
 }
 
-.menuxlarge .gallerytop{
+.gallerytop{
 	left:0;
 	top:0;
 	-webkit-box-shadow: 0px 5px 5px rgba(50, 50, 50, 0.75);
@@ -93,7 +155,7 @@
 	box-shadow:         0px 5px 5px rgba(50, 50, 50, 0.75);
 }
 
-.menuxlarge .gallerytop a{
+.gallerytop a{
 	width:100%;
 	margin:0;
 }

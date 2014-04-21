@@ -2,7 +2,7 @@
 	color:#111;
 }
 
-.helpcontainer{
+#help .helpcontainer{
 	display:inline-block;
 	float:left;
 	padding:0px;
@@ -12,10 +12,12 @@
 	color:#111;
 	overflow:hidden;
 }
-.helpcontent{
+
+#help .helpcontainer .helpcontent{
 	padding:10px;
 }
-.helpcontent pre{
+
+#help .helpcontent pre{
 	display: inline-block;
 	width: 100px;
 	background: #EEE;
@@ -23,7 +25,8 @@
 	position: relative;
 	left: -100px;
 }
-.helpcontent p.quote{
+
+#help .helpcontent p.quote{
 	width: 75%;
 	background: #EEE;
 	padding: 10px;
@@ -31,15 +34,18 @@
 	margin-left: 25px;
 	color: #444;
 }
-.helpcontainer p{
+
+#help.helpcontainer p{
 	margin:4px;
 	line-height:1.7em;
 }
 
-#helpwrapper{
+#help #helpwrapper{
 	position:absolute;
 	left:0;
 	right:0;
 	top:50px;
 	bottom:0px;
+	overflow: hidden;
 }
+
