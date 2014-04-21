@@ -8,10 +8,10 @@ fs = require('fs');
 mkdirp = require('mkdirp');
 mongoose = require('mongoose');
 
-console.log("process.env.MONGOLAB_URI "+process.env.MONGOLAB_URI);
-console.log("process.env.MONGOHQ_URL "+process.env.MONGOHQ_URL);
+var DEFAULT_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
+var MAX_FILES = 500;
 
-mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/logotacular'; 
+mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/logotacular'; 
 
 console.log(mongoUri);
 
@@ -38,12 +38,25 @@ saveImage = function(id, base64, options){
 	});
 };
 
+var countAllFiles = function(options){
+	File.count(function(err, count){
+		if(err){
+			console.log("err "+err);
+			options.fail();
+		}
+		else{
+			options.success(count);
+		}
+	});
+};
+
 FileSchema = new mongoose.Schema({
 	"name"		:	{"type":String},
 	"userId"	:	{"type":String},
 	"logo"		:	{"type":String},
 	"active"	:	{"type":Boolean},
-	"dino"		:	{"type":Number}
+	"dino"		:	{"type":Number},
+	"modified"	:	{"type":Date, default:Date.now}
 });
 
 File = mongoose.model("File", FileSchema);
@@ -66,15 +79,12 @@ app.get('/files', function(req, res){
 	if(userId){
 		query.userId = userId;
 	}
-	File.count(function(err, count){
-		if(err){
-			console.log("err "+err);
+	countAllFiles({
+		"fail":function(err){
 			res.send(400);
-			return;
-		}
-		else{
-			console.log("query is "+JSON.stringify(query));
-			File.find(query).skip(0).limit(perPage * numPages).exec(function(err, doc){
+		},
+		"success":function(count){
+			File.find(query).skip(0).limit(Math.min(perPage * numPages, MAX_FILES)).sort({"modified":-1}).exec(function(err, doc){
 				if(err){
 					res.send(400);
 					return;
@@ -92,9 +102,9 @@ app.get('/files', function(req, res){
 
 app.delete('/files/:_id', function(req, res){
 	console.log("delete");
-	var _id, logo, img, base64, defaultImage;
+	var _id, logo, img, base64, date;
 	_id = req.params._id;
-	File.update({"_id":_id}, {"active":false}, function(err, doc){
+	File.update({"_id":_id}, {"active":false, "modified":new Date()}, function(err, doc){
 		if(err){
 			console.log('delete file error: ' + err);
 			res.send(400);
@@ -109,15 +119,14 @@ app.delete('/files/:_id', function(req, res){
 
 app.put('/files/:_id', function(req, res){
 	console.log("put");
-	var _id, logo, img, base64, defaultImage, dino;
-	defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
+	var _id, logo, img, base64, dino;
 	_id = req.params._id;
-	logo = req.param("logo", "fd100");
-	img = req.param("img", defaultImage);
+	logo = req.param("logo", "");
+	img = req.param("img", DEFAULT_IMAGE);
 	dino = req.param("dino", 0);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
 	console.log("updating "+_id+" with "+logo);
-	File.update({"_id":_id, "active":true}, {"logo":logo, "dino":dino}, function(err, doc){
+	File.update({"_id":_id, "active":true}, {"logo":logo, "dino":dino, "modified":new Date()}, function(err, doc){
 		if(err){
 			console.log('make file error: ' + err);
 			res.send(400);
@@ -142,15 +151,14 @@ app.put('/files/:_id', function(req, res){
 
 app.post('/files', function(req, res){
 	console.log("posting...");
-	var name, userId, logo, img, base64, defaultImage, model, dino;
-	defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
+	var name, userId, logo, img, base64, model, dino;
 	name = req.param("name", "John");
 	userId = req.param("userId", "1234");
 	logo = req.param("logo", "fd100");
 	dino = req.param("dino", 0);
-	img = req.param("img", defaultImage);
+	img = req.param("img", DEFAULT_IMAGE);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
-	model = {"name": name, "userId": userId, "logo":logo, "active":true, "dino":dino};
+	model = {"name": name, "userId": userId, "logo":logo, "active":true, "dino":dino, "modified":new Date()};
 	console.log('make file model: ' + JSON.stringify(model));
 	new File(model).save(function(err, doc){
 		if(err){
