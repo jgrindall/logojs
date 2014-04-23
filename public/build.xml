@@ -87,9 +87,11 @@
 				
 				<file name="utils/utils.js"/>
 				<file name="config.js"/>
+				<file name="messages.js"/>
 				<file name="create.js"/>
 				
-				
+				<file name="utils/implementations.js"/>
+				<file name="utils/browser.js"/>
 				<file name="utils/network.js"/>
 				<file name="utils/storage.js"/>
 			
