@@ -33,11 +33,9 @@ LG.GalleryListView = Backbone.View.extend({
 		this.openFile();
 	},
 	openFile:function(){
-		alert("open file");
 		LG.router.navigate("write/"+this.idToOpen, {"trigger":true});
 	},
 	modelSynced:function(){
-		alert("modelSynced");
 		this.stopListening(LG.fileCollection, "sync");
 		this.openFile();
 	},
@@ -46,7 +44,7 @@ LG.GalleryListView = Backbone.View.extend({
 		if(LG.userModel.isConnected()){
 			if(!LG.fileCollection.selected.isSaved()){
 				options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-				LG.popups.openPopup({"message":LG.Config.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
+				LG.popups.openPopup({"message":LG.Config.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
 				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 			}
 			else{
