@@ -5,21 +5,23 @@ LG.FileOpener = function(){
 };
 
 LG.FileOpener.prototype.open = function(id){
-	var oldModel, yours = false, userId;
+	var oldModel, oldModelYours, yours = false, userId;
 	oldModel = LG.allFilesCollection.getByProperty("_id", id);
-	if(!oldModel){
+	oldModelYours = LG.fileCollection.getByProperty("_id", id);
+	if(!oldModel && !oldModelYours){
 		// doesn't exist at all!
-		console.log("nope!");
+		console.log("error opening file");
 		return;
 	}
 	if(!LG.userModel.isConnected()){
-		// not logged in
+		// not logged in at all
+		console.log("open others");
 		LG.fileCollection.openOthers(oldModel.toJSON());
 	}
 	else{
 		userId = LG.userModel.get("userId");
-		yours = (oldModel.get("userId") === userId && LG.fileCollection.getByProperty("_id", id) !== null);
-		if(yours){
+		if(oldModelYours && oldModelYours.get("userId") === userId){
+			// yours!
 			LG.fileCollection.loadById(id);
 		}
 		else{
@@ -28,4 +30,4 @@ LG.FileOpener.prototype.open = function(id){
 	}
 };
 
-LG.fileOpener = new LG.FileOpener();
+

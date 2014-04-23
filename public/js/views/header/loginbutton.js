@@ -2,32 +2,11 @@
 
 // extends LG.Headerbutton
 
-LG.LoginButtonView = LG.HeaderButton.extend({
+LG.ALoginButtonView = LG.HeaderButton.extend({
 	template:"tpl_loginbutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
-	},
-	render:function(){
-		var user = LG.userModel.toJSON(), label;
-		if(LG.Config.PHONEGAP === "ios"){
-			if(LG.userModel.isConnected()){
-				label = "Register/Login";
-			}
-			else{
-				label = "Register/Login";
-			}
-		}
-		else{
-			if(LG.userModel.isConnected()){
-				label = "Logout";
-			}
-			else{
-				label = "Login with Facebook";
-			}
-		}
-		this.loadTemplate(  this.template, { "label":label,"loggedin":user.loggedin, "name":user.name, "email":user.email, "pic":user.pic, "show": this.getShow(), disabled:this.getDisabled()  } , {replace:true} );
-		return this;
 	},
 	onClick:function(e){
 		this.stopProp(e);
@@ -41,4 +20,49 @@ LG.LoginButtonView = LG.HeaderButton.extend({
 	
 	}
 });
+
+
+
+
+// web
+
+LG.WebLoginButtonView  = function(){
+	LG.ALoginButtonView.call(this);
+}
+
+LG.WebLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
+
+LG.WebLoginButtonView.prototype.constructor = LG.WebLoginButtonView;
+
+LG.WebLoginButtonView.prototype.getData = function(){
+	var user = LG.userModel.toJSON(), label, connected;
+	connected = LG.userModel.isConnected();
+	if(connected){
+		label = "Logout";
+	}
+	else{
+		label = "Facebook login";
+	}
+	return {"label":label, "name":user.name, "pic":user.pic};
+};
+
+
+// ipad
+
+LG.IPadLoginButtonView  = function(){
+	LG.ALoginButtonView.call(this);
+}
+
+LG.IPadLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
+
+LG.IPadLoginButtonView.prototype.constructor = LG.IPadLoginButtonView;
+
+LG.IPadLoginButtonView.prototype.getData = function(){
+	return {"label":"", "pic":null, "disabled":true};
+};
+
+
+
+
+
 

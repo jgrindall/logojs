@@ -2,16 +2,11 @@
 
 // extends LG.Headerbutton
 
-LG.LoadButtonView = LG.HeaderButton.extend({
+LG.ALoadButtonView = LG.HeaderButton.extend({
 	template:"tpl_loadbutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
-	},
-	getData:function(){
-		var loggedIn = LG.userModel.isConnected();
-		console.log("loadbutton "+loggedIn);
-		return {"disabled":!loggedIn};
 	},
 	onClick:function(e){
 		this.stopProp(e);
@@ -25,4 +20,40 @@ LG.LoadButtonView = LG.HeaderButton.extend({
 	
 	}
 });
+
+
+
+// web
+
+LG.WebLoadButtonView  = function(){
+	LG.ALoadButtonView.call(this);
+}
+
+LG.WebLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
+
+LG.WebLoadButtonView.prototype.constructor = LG.WebLoadButtonView;
+
+LG.WebLoadButtonView.prototype.getData = function(){
+	var loggedIn = LG.userModel.isConnected();
+	return {"disabled":!loggedIn};
+};
+
+
+// ipad
+
+LG.IPadLoadButtonView  = function(){
+	LG.ALoadButtonView.call(this);
+}
+
+LG.IPadLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
+
+LG.IPadLoadButtonView.prototype.constructor = LG.IPadLoadButtonView;
+
+LG.IPadLoadButtonView.prototype.getData = function(){
+	var loggedIn = LG.userModel.isConnected();
+	return {"disabled":!loggedIn};
+};
+
+
+
 

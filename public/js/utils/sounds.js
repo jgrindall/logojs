@@ -46,5 +46,5 @@ LG.Sounds.prototype.playClick = function(s){
 	this.sounds[1].play();
 };
 
-LG.sounds = new LG.Sounds();
+
 

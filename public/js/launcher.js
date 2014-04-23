@@ -37,22 +37,22 @@ LG.Launcher.prototype.domReady = function(){
 LG.Launcher.prototype.startLoad = function(){
 	var _this = this;
 	this.loadTemplates();
+	this.bindEvents();
+	this.makeObjects();
+	this.loadStorage();
 };
 
 LG.Launcher.prototype.loadTemplates = function(){
 	// load the templates, compile each one using underscore templating
-	LG.templates = new LG.Templates(LG.Config.TEMPLATES, $.proxy(this.templatesLoaded, this));
-	LG.templates.init();
-};
-
-
-LG.Launcher.prototype.templatesLoaded = function(){
-	LG.router = new LG.Router();
-	this.start();
+	LG.templates.init(LG.Config.TEMPLATES);
 };
 
 LG.Launcher.prototype.makeObjects = function(){
+	LG.fileOpener = new LG.FileOpener();
+	LG.router = new LG.Router();
+	LG.storage = LG.create.storage();
 	LG.graphicsModel = new LG.GraphicsModel();
+	LG.sounds = new LG.Sounds();
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = new LG.UserModel();
 	LG.layoutModel = new LG.LayoutModel();
@@ -62,7 +62,67 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.spinnerView = new LG.SpinnerView({"model":LG.spinnerModel});
 };
 
-LG.Launcher.prototype.checkFacebook = function(options){
+LG.Launcher.prototype.launch = function(){
+	var h = window.location.hash;
+	h = h.replace(/^#/,'');
+	window.location.hash = "";
+	this.addActivity();
+	LG.EventDispatcher.trigger(LG.Events.RESIZE);
+	Backbone.history.start();
+	LG.router.navigate(h, {"trigger":true});
+};
+
+LG.Launcher.prototype.addActivity = function(){
+	LG.activityView = new LG.ActivityView();
+	$("body > #container").empty().append(LG.activityView.render().$el);
+	LG.activityView.afterAdded();
+};
+
+LG.Launcher.prototype.allFilesLoaded = function(){
+	this.launch();
+};
+
+LG.Launcher.prototype.loadStorage = function(){
+	var keys = ["userId"];
+	LG.storage.loadAll(keys, $.proxy(this.storageLoaded, this));
+};
+
+LG.Launcher.prototype.loadUserId = function(){
+	
+};
+
+LG.Launcher.prototype.storageLoaded = function(){
+	this.loadUserId();
+	this.login();
+};
+
+LG.Launcher.prototype.loadFiles = function(){
+	this.listenToOnce(LG.allFilesCollection, "sync", $.proxy(this.allFilesLoaded, this));
+	LG.allFilesCollection.load();
+};
+
+LG.Launcher.prototype.onLoggedIn = function(){
+	this.loadFiles();
+};
+
+LG.Launcher.prototype.check = function(){
+	return false;
+};
+
+
+
+
+
+// web specific class
+
+LG.WebLauncher = function(){
+	LG.Launcher.apply(this, arguments);
+};
+
+LG.WebLauncher.prototype = Object.create(LG.Launcher.prototype);
+LG.WebLauncher.prototype.constructor = LG.WebLauncher;
+
+LG.WebLauncher.prototype.social = function(options){
 	var url, img, _this = this;
 	if(LG.Config.PHONEGAP){
 		options.success();
@@ -88,110 +148,35 @@ LG.Launcher.prototype.checkFacebook = function(options){
 	}, 2500);
 };
 
-LG.Launcher.prototype.login = function(options){
-	if(LG.facebook){
+LG.WebLauncher.prototype.socialChecked = function(){
+	var _this = this;
+	this.fbComplete = true;
+	if(LG.Network.FACEBOOK){
+		LG.facebook = new LG.WebFacebook();
 		LG.facebook.init({
 			"success":function(){
-				LG.facebook.load(options);
+				LG.facebook.load({
+					"fail":function(){
+						_this.onLoggedIn();
+					},
+					"success":function(){
+						_this.onLoggedIn();
+					}
+				});
 			},
 			"fail":function(){
-				options.success();
+				_this.onLoggedIn();
 			}
 		});
 	}
 	else{
-		options.success();
+		_this.onLoggedIn();
 	}
 };
 
-
-LG.Launcher.prototype.launch = function(){
-	var h = window.location.hash;
-	h = h.replace(/^#/,'');
-	window.location.hash = "";
-	this.addActivity();
-	LG.EventDispatcher.trigger(LG.Events.RESIZE);
-	Backbone.history.start();
-	LG.router.navigate(h, {"trigger":true});
+LG.WebLauncher.prototype.login = function(options){
+	this.social({"success":$.proxy(this.socialChecked, this)} );
 };
-
-LG.Launcher.prototype.addActivity = function(){
-	LG.activityView = new LG.ActivityView();
-	$("body > #container").empty().append(LG.activityView.render().$el);
-	LG.activityView.afterAdded();
-};
-
-LG.Launcher.prototype.catalogueLoaded = function(){
-	this.launch();
-};
-
-LG.Launcher.prototype.loadCatalogue = function(){
-	this.listenToOnce(LG.allFilesCollection, "sync", $.proxy(this.catalogueLoaded, this));
-	LG.allFilesCollection.load();
-};
-
-LG.Launcher.prototype.onLoggedIn = function(){
-	this.loadCatalogue();
-};
-
-LG.Launcher.prototype.fbChecked = function(){
-	this.fbComplete = true;
-	console.log(LG.Network.FACEBOOK +"  "+LG.Config.PHONEGAP);
-	if(LG.Network.FACEBOOK && !LG.Config.PHONEGAP){
-		LG.facebook = new LG.WebFacebook();
-	}
-	//this.login({"success":$.proxy(this.onLoggedIn, this)});
-	this.onLoggedIn();
-};
-
-LG.Launcher.prototype.start = function(){
-	this.bindEvents();
-	this.makeObjects();
-	this.checkFacebook({"success":$.proxy(this.fbChecked, this)} );
-};
-
-LG.Launcher.prototype.check = function(){
-	return false;
-};
-
-
-
-
-
-// phonegap specific class
-
-LG.IPadPhoneGapLauncher = function(){
-	LG.Launcher.apply(this, arguments);
-};
-
-LG.IPadPhoneGapLauncher.prototype = new LG.Launcher();
-
-LG.IPadPhoneGapLauncher.prototype.bindEvents = function(){
-	// also bind to extra PG events
-	LG.Launcher.prototype.bindEvents.call(this);
-	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
-};
-
-LG.IPadPhoneGapLauncher.prototype.deviceReady = function(){
-	this._deviceReady = true;
-	if(	this.check() ){
-		this._started = true;
-		this.startLoad();
-	}
-};
-
-LG.IPadPhoneGapLauncher.prototype.check = function(){
-	// check is different for PG
-	return (!this._started && this._domReady  && this._deviceReady);
-};
-
-// web specific class
-
-LG.WebLauncher = function(){
-	LG.Launcher.apply(this, arguments);
-};
-
-LG.WebLauncher.prototype = new LG.Launcher();
 
 LG.WebLauncher.prototype.check = function(){
 	return (!this._started && this._domReady );
@@ -199,12 +184,81 @@ LG.WebLauncher.prototype.check = function(){
 
 
 
-// finally, make a new instance depending on what set up we have
-if(LG.Config.PHONEGAP){
-	LG.launcher = new LG.IPadPhoneGapLauncher();
-}	
-else{
-	LG.launcher = new LG.WebLauncher();
-}
 
+
+// ipad
+
+LG.IPadLauncher = function(){
+	LG.Launcher.apply(this, arguments);
+};
+
+LG.IPadLauncher.prototype = Object.create(LG.Launcher.prototype);
+LG.IPadLauncher.prototype.constructor = LG.IPadLauncher;
+
+LG.IPadLauncher.prototype.login = function(){
+	// just log them in automatically
+	LG.userModel.set({"loggedIn":true});
+	this.onLoggedIn();
+};
+
+LG.IPadLauncher.prototype.loadUserId = function(){
+	var userId = LG.storage.loadCached("userId");
+	alert("user id found "+userId);
+	if(!userId){
+		userId = LG.Utils.getUuid();
+	}
+	LG.userModel.set({"userId":userId});
+};
+
+LG.IPadLauncher.prototype.bindEvents = function(){
+	// also bind to extra PG events
+	LG.Launcher.prototype.bindEvents.call(this);
+	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
+};
+
+LG.IPadLauncher.prototype.deviceReady = function(){
+	this._deviceReady = true;
+	if(	this.check() ){
+		this._started = true;
+		this.startLoad();
+	}
+};
+
+LG.IPadLauncher.prototype.check = function(){
+	// check is different for PG
+	return (!this._started && this._domReady  && this._deviceReady);
+};
+
+
+
+// fake ipad
+
+LG.FakeIPadLauncher = function(){
+	LG.Launcher.apply(this, arguments);
+};
+
+LG.FakeIPadLauncher.prototype = Object.create(LG.Launcher.prototype);
+LG.FakeIPadLauncher.prototype.constructor = LG.FakeIPadLauncher;
+
+LG.FakeIPadLauncher.prototype.login = function(){
+	LG.IPadLauncher.prototype.login.call(this);
+};
+
+LG.FakeIPadLauncher.prototype.loadUserId = function(){
+	LG.IPadLauncher.prototype.loadUserId.call(this);
+};
+
+LG.FakeIPadLauncher.prototype.bindEvents = function(){
+	LG.Launcher.prototype.bindEvents.call(this);
+};
+
+LG.FakeIPadLauncher.prototype.check = function(){
+	return LG.WebLauncher.prototype.check.call(this);
+};
+
+
+
+// make
+
+LG.launcher = LG.create.launcher();
 LG.launcher.bindEvents();
