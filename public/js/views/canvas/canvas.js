@@ -4,7 +4,7 @@ LG.CanvasView = Backbone.View.extend({
 	initialize:function(){
 		this.model = new LG.CanvasModel();
 		LG.EventDispatcher.bind(LG.Events.COMMAND_FINISHED, $.proxy(this.nextCommand, this));
-		LG.EventDispatcher.bind(LG.Events.COMMAND_TICK, $.proxy(this.tick, this));
+		LG.EventDispatcher.bind(LG.Events.TICK, $.proxy(this.tick, this));
 		LG.EventDispatcher.bind(LG.Events.CLICK_DRAW, $.proxy(this.draw, this));
 		LG.EventDispatcher.bind(LG.Events.CLICK_STOP, $.proxy(this.stop, this));
 		LG.EventDispatcher.bind(LG.Events.RESIZE, $.proxy(this.onResize, this));
@@ -88,10 +88,11 @@ LG.CanvasView = Backbone.View.extend({
 		this.tick();
 	},
 	tick:function(){
-		LG.Utils.log("tick "+JSON.stringify(this.position));
-		this.turtle.x = this.position.x;
-		this.turtle.y = this.position.y;
-		this.turtle.rotation = this.position.theta*180/Math.PI;
+		if(this.turtle){
+			this.turtle.x = this.position.x;
+			this.turtle.y = this.position.y;
+			this.turtle.rotation = this.position.theta*180/Math.PI;
+		}
 		this.stage.update();
 	},
 	stop:function(){
