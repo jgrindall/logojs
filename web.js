@@ -56,7 +56,8 @@ FileSchema = new mongoose.Schema({
 	"logo"		:	{"type":String},
 	"active"	:	{"type":Boolean},
 	"dino"		:	{"type":Number},
-	"modified"	:	{"type":Date, default:Date.now}
+	"modified"	:	{"type":Date, default:Date.now},
+	"views"		:	{"type":Number, default:0}
 });
 
 File = mongoose.model("File", FileSchema);
@@ -72,19 +73,21 @@ app.get('/', function(req, res){
 });
 
 app.get('/files', function(req, res){
-	var perPage, numPages, query = {"active":true}, userId;
+	var perPage, numPages, query = {"active":true}, userId, sort;
 	perPage = req.param("perPage", 24);
 	numPages = req.param("numPages", 1);
 	userId = req.param("userId", null);
+	sort = {"views":-1};
 	if(userId){
 		query.userId = userId;
+		sort = {"modified":-1};
 	}
 	countAllFiles({
 		"fail":function(err){
 			res.send(400);
 		},
 		"success":function(count){
-			File.find(query).skip(0).limit(Math.min(perPage * numPages, MAX_FILES)).sort({"modified":-1}).exec(function(err, doc){
+			File.find(query).skip(0).limit(Math.min(perPage * numPages, MAX_FILES)).sort(sort).exec(function(err, doc){
 				if(err){
 					res.send(400);
 					return;
@@ -182,6 +185,33 @@ app.post('/files', function(req, res){
 			}); 
 		}
 	});
+});
+
+
+app.post('/open', function(req, res){
+	var _id, query, proj;
+	_id = req.param("_id", null);
+	if(!_id){
+		res.send(200);
+		return;
+	}
+	else{
+		File.findOne({"_id":_id}, {"views":1}).exec(function(err, doc){
+			if(err){
+				res.send(400);
+			}
+			else{
+				File.update({"_id":_id}, {"views": (doc.views + 1)}, function(err, doc){
+					if(err){
+						res.send(400);
+					}
+					else{
+						res.send(200);
+					}
+				});
+			}
+		});
+	}
 });
 
 app.listen(port, function(){

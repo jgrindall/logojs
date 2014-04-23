@@ -58,7 +58,21 @@ LG.GalleryListView = Backbone.View.extend({
 	clickItem:function(e){
 		this.stopProp(e);
 		this.idToOpen = $(e.currentTarget).data("id");
+		this.logOpen();
 		this.tryOpenFile();
+	},
+	logOpen:function(){
+		$.ajax({
+			url: "/open",
+			type:"post",
+			data: {"_id":this.idToOpen},
+			error:function(jqXHR, textStatus, errorThrown){
+				
+			},
+			success: function(data, textStatus, request){
+				
+			}
+		});
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
