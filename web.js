@@ -57,7 +57,8 @@ FileSchema = new mongoose.Schema({
 	"active"	:	{"type":Boolean},
 	"dino"		:	{"type":Number},
 	"modified"	:	{"type":Date, default:Date.now},
-	"views"		:	{"type":Number, default:0}
+	"views"		:	{"type":Number, default:0},
+	"votes"		:	{"type":Number, default:0}
 });
 
 File = mongoose.model("File", FileSchema);
@@ -187,21 +188,22 @@ app.post('/files', function(req, res){
 	});
 });
 
-
-app.post('/open', function(req, res){
-	var _id, query, proj;
+var logFile = function(param, req, res){
+	var _id, query, proj1 = {}, proj2 = {};
+	proj1[param] = 1;
 	_id = req.param("_id", null);
 	if(!_id){
 		res.send(200);
 		return;
 	}
 	else{
-		File.findOne({"_id":_id}, {"views":1}).exec(function(err, doc){
+		File.findOne({"_id":_id}, proj1).exec(function(err, doc){
 			if(err){
 				res.send(400);
 			}
 			else{
-				File.update({"_id":_id}, {"views": (doc.views + 1)}, function(err, doc){
+				proj2[param] = (doc.views + 1);
+				File.update({"_id":_id}, proj2, function(err, doc){
 					if(err){
 						res.send(400);
 					}
@@ -212,6 +214,14 @@ app.post('/open', function(req, res){
 			}
 		});
 	}
+};
+
+app.post('/view', function(req, res){
+	logFile("views", req, res);
+});
+
+app.post('/vote', function(req, res){
+	logFile("votes", req, res);
 });
 
 app.listen(port, function(){

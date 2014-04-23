@@ -651,6 +651,37 @@ drawSpiral(10);</pre>
 		</script>
 		
 		
+		<script id="tpl_galleryside" type="text/template">
+			
+			<div class="galleryside">
+			
+				<a href="#" id="likebutton" class="action button button1 clr1" >Like it!</span></a>
+				
+				<p class="title">
+					<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
+				</p>
+				
+				<div class="logo">
+					<%= logo %>
+				</div>
+				
+				<% if(_id) { %>
+					<div class="imgcontainer">
+						<img src="thumbs/thumb_<%= _id %>.png"/>
+					</div>
+				<% } %>
+				
+				<div class="alertbuttons alertbuttonssmall">
+					<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
+					<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
+				</div>
+				
+			</div>
+		
+					
+		</script>
+		
+		
 		
 		<script id="tpl_gallerytop" type="text/template">
 			

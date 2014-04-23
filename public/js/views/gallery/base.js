@@ -8,6 +8,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 	bottomView:LG.GalleryBottomView,
 	topView:LG.GalleryTopView,
 	listView:LG.GalleryListView,
+	sideView:LG.GallerySideView,
 	removeMenus:function(){
 		if(this.galleryTop){
 			this.galleryTop.unbind();
@@ -19,16 +20,24 @@ LG.AGalleryView = LG.AMenuView.extend({
 			this.galleryList.close();
 			this.galleryList = null;
 		}
+		if(this.gallerySide){
+			this.gallerySide.unbind();
+			this.gallerySide.close();
+			this.gallerySide = null;
+		}
 	},
 	addMenus:function(){
 		this.removeMenus();
 		this.galleryTop = new this.topView();
 		this.galleryList = new this.listView(this.options);
+		this.gallerySide = new this.sideView(this.options);
 		this.$el.prepend(this.galleryTop.render().$el);
 		this.$el.append(this.galleryList.render().$el);
+		this.$el.append(this.gallerySide.render().$el);
 	},
 	onShow:function(){
 		this.galleryList.onShow();
+		this.gallerySide.onShow();
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {} , {replace:true} );

@@ -21,58 +21,11 @@ LG.GalleryListView = Backbone.View.extend({
 		});
 		this.pages = [ ];
 	},
-	alertOk:function(){
-		LG.fileCollection.save();
-	},
-	alertNo:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
-	},
-	alertCancel:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
-	},
-	openFile:function(){
-		LG.router.navigate("write/"+this.idToOpen, {"trigger":true});
-	},
-	modelSynced:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
-	},
-	tryOpenFile:function(){
-		var options;
-		if(LG.userModel.isConnected()){
-			if(!LG.fileCollection.selected.isSaved()){
-				options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
-				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
-			}
-			else{
-				this.openFile();
-			}
-		}
-		else{
-			this.openFile();
-		}
-	},
 	clickItem:function(e){
 		this.stopProp(e);
-		this.idToOpen = $(e.currentTarget).data("id");
-		this.logOpen();
-		this.tryOpenFile();
-	},
-	logOpen:function(){
-		$.ajax({
-			url: "/open",
-			type:"post",
-			data: {"_id":this.idToOpen},
-			error:function(jqXHR, textStatus, errorThrown){
-				
-			},
-			success: function(data, textStatus, request){
-				
-			}
-		});
+		var idToOpen = $(e.currentTarget).data("id");
+		this.myScroll.scrollTo(0, 0); // fix this
+		LG.EventDispatcher.trigger(LG.Events.PREVIEW_FILE, idToOpen);
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
