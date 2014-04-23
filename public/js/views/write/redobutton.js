@@ -4,7 +4,6 @@ LG.RedoButtonView = LG.UndoRedoButton.extend({
 	template:"tpl_redobutton",
 	getDisabled:function(){
 		var canRedo = LG.fileCollection.selected.canRedo();
-		console.log(canRedo);
 		return !canRedo;
 	},
 	clickMe:function(e){

@@ -25,7 +25,6 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	load:function(){
 		var fileModel = LG.fileCollection.selected;
-		console.log("load "+JSON.stringify(fileModel.toJSON())+"     "+fileModel.get("logo"));
 		this.setLogo(fileModel.get("logo"));
 	},
 	clear:function(){
@@ -34,7 +33,6 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	save:function(){
 		var data = {"logo":this.getLogo()};
-		console.log("saving it in the model "+JSON.stringify(data));
 		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
