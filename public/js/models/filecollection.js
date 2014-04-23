@@ -4,30 +4,13 @@ LG.AFileCollection  = LG.ASelectedFileCollection.extend({
 	model:LG.FileModel,
 	initialize:function(){
 		LG.ASelectedFileCollection.prototype.initialize.call(this);
-		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
 	},
 	getData:function(){
-		var data = LG.ASelectedFileCollection.prototype.getData.call(this);
-		data.userId = LG.userModel.get("userId");
-		return data;
+		return data = LG.ASelectedFileCollection.prototype.getData.call(this);
 	},
 	load:function(options){
 		var data = _.extend({"data" : this.getData() , "processData" : true}, options);
 		this.fetch(data);
-	},
-	onLoginChanged:function(){
-		var logo, dino, loggedIn = LG.userModel.get("loggedIn");
-		if(loggedIn){
-			logo = this.selected.get("logo");
-			dino = this.selected.get("dino");
-			this.load({"success":function(){
-				console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
-			}});
-		}
-		else{
-			this.reset();
-			this.addNewModel({"force":true});
-		}
 	}
 });
 
@@ -52,6 +35,26 @@ LG.FileCollection = LG.AFileCollection.extend({
 	url:"/files",
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
+		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
+	},
+	getData:function(){
+		var data = LG.AFileCollection.prototype.getData.call(this);
+		data.userId = LG.userModel.get("userId");
+		return data;
+	},
+	onLoginChanged:function(){
+		var logo, dino, loggedIn = LG.userModel.get("loggedIn");
+		if(loggedIn){
+			logo = this.selected.get("logo");
+			dino = this.selected.get("dino");
+			this.load({"success":function(){
+				// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+			}});
+		}
+		else{
+			this.reset();
+			this.addNewModel({"force":true});
+		}
 	},
 	isSaved:function(){
 		return this.selected.isSaved();
@@ -155,7 +158,6 @@ LG.FileCollection = LG.AFileCollection.extend({
 				
 			}
 		};
-		LG.Utils.log("save as "+JSON.stringify(data));
 		model.save(data, options);
 	}
 });
