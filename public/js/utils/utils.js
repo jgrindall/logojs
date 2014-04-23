@@ -25,6 +25,17 @@ LG.Utils.shuffleArray = function(array) {
     return array;
 };
 
+LG.Utils.getUuid = function(){
+	var az, len, i, index, s ="", SIZE = 48;
+	az = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	len = az.length;
+	for(i = 1; i <= SIZE; i++){
+		index = Math.floor(Math.random() * len);
+		s += az.charAt(index);
+	}
+	return s;
+};
+
 LG.Utils.growl = function(msg){
 	// open a little popup message
 	// close all if there are any
@@ -127,9 +138,9 @@ LG.Utils.log = function(s){
 };
 
 LG.Utils.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
+	return	window.requestAnimationFrame       ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame    ||
           function( callback ){
             window.setTimeout(callback, 1000 / 60);
           };
