@@ -152,9 +152,12 @@ app.put('/files/:_id', function(req, res){
 app.post('/files', function(req, res){
 	console.log("posting...");
 	var name, userId, logo, img, base64, model, dino;
-	name = req.param("name", "John");
-	userId = req.param("userId", "1234");
-	logo = req.param("logo", "fd100");
+	name = req.param("name", null);
+	userId = req.param("userId", null);
+	if(!name || !userId){
+		res.send(400);
+	}
+	logo = req.param("logo", "");
 	dino = req.param("dino", 0);
 	img = req.param("img", DEFAULT_IMAGE);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
