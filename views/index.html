@@ -218,8 +218,8 @@
 
 			  <li>
 				<button class="action button clr2">
-					<i class="fa fa-save"></i>
-					<span>Gallery</span>
+					<i class="fa fa-files-o"></i>
+					<span>Gallery of work</span>
 				</button>
 			</li>
 			  
@@ -248,8 +248,8 @@
 
 			 <li>
 				<button class="action button clr4<% if(disabled){print(" disabled");}%>">
-					<i class="fa fa-folder-open"></i>
-					<span>My files</span>
+					<i class="fa fa-file"></i>
+					<span>Your files</span>
 				</button>
 			</li>
 			  
@@ -285,7 +285,7 @@
 		
 		<script id="tpl_loginbutton" type="text/template">
 			<li>
-				<button id="loginbutton" class="action button" >
+				<button id="loginbutton" class="action button<% if(disabled){print(" disabled");} %>" >
 				
 					<% if(pic){ %>
 						<img src='<%= pic %>'/>
@@ -295,10 +295,8 @@
 					<% if(name){ %>
 						name
 					<% } else { %>
-						<i class="fa fa-user"></i>
+						<i class="fa fa-sign-in"></i>
 						<span><%=label%></span>
-						
-						
 						
 					<% } %>
 				
