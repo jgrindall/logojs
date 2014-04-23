@@ -87,13 +87,14 @@
 				
 				<file name="utils/utils.js"/>
 				<file name="config.js"/>
-				
+				<file name="create.js"/>
 				
 				
 				<file name="utils/network.js"/>
 				<file name="utils/storage.js"/>
 			
 				<file name="utils/templates.js"/> 	
+				<file name="utils/sounds.js"/> 	
 				
 				<file name="routes.js"/>		
 				<file name="events.js"/>		
