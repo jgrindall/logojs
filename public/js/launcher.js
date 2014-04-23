@@ -51,12 +51,12 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
 	LG.storage = LG.create.storage();
-	LG.graphicsModel = new LG.GraphicsModel();
 	LG.sounds = new LG.Sounds();
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = new LG.UserModel();
 	LG.layoutModel = new LG.LayoutModel();
 	LG.fileCollection = new LG.FileCollection();
+	LG.graphicsModel = new LG.GraphicsModel();
 	LG.imageModel = new LG.ImageModel();
 	LG.allFilesCollection = new LG.AllFileCollection();
 	LG.spinnerView = new LG.SpinnerView({"model":LG.spinnerModel});
@@ -203,7 +203,6 @@ LG.IPadLauncher.prototype.login = function(){
 
 LG.IPadLauncher.prototype.loadUserId = function(){
 	var userId = LG.storage.loadCached("userId");
-	alert("user id found "+userId);
 	if(!userId){
 		userId = LG.Utils.getUuid();
 	}
