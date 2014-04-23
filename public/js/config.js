@@ -17,7 +17,3 @@ LG.Config.TEMPLATES = ["tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gal
 
 LG.Config.PRODUCT_ID = "logojs";
 
-
-LG.Config.Messages = {};
-LG.Config.Messages.WANT_TO_SAVE = "Do you want to save your current file?";
-LG.Config.Messages.WANT_TO_DELETE = "Are you sure you want to delete this file?";
