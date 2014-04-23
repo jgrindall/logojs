@@ -5,7 +5,8 @@ LG.Easel.Turtle = function(size) {
 	this.initialize(size);
 }
 
-LG.Easel.Turtle.prototype = new createjs.Shape();
+LG.Easel.Turtle.prototype = Object.create(createjs.Shape.prototype);
+LG.Easel.Turtle.prototype.constructor = LG.Easel.Turtle;
 
 LG.Easel.Turtle.prototype.initialize = function(size) {
 	createjs.Shape.prototype.initialize.call(this);

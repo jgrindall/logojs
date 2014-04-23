@@ -17,7 +17,9 @@ LG.Command.prototype.execute = function(stage, container, position){
 LG.ShapeCommand = function(amount){
 	LG.Command.call(this, amount);
 };
-LG.ShapeCommand.prototype = new LG.Command();
+
+LG.ShapeCommand.prototype = Object.create(LG.Command.prototype);
+LG.ShapeCommand.prototype.constructor = LG.ShapeCommand;
 
 LG.ShapeCommand.prototype.execute = function(stage, container, position){
 	LG.Command.prototype.execute.apply(this,arguments);
@@ -33,7 +35,9 @@ LG.ShapeCommand.prototype.execute = function(stage, container, position){
 LG.FdCommand = function(amount){
 	LG.ShapeCommand.call(this, amount);
 };
-LG.FdCommand.prototype = new LG.ShapeCommand();
+
+LG.FdCommand.prototype = Object.create(LG.ShapeCommand.prototype);
+LG.FdCommand.prototype.constructor = LG.FdCommand;
 
 LG.FdCommand.prototype.execute = function(stage, container, position){
 	console.log("fd "+this.amount+" from "+position.x+", "+position.y);
@@ -56,7 +60,9 @@ LG.FdCommand.prototype.output = function(){
 LG.RtCommand = function(amount){
 	LG.Command.call(this, amount);
 };
-LG.RtCommand.prototype = new LG.Command();
+
+LG.RtCommand.prototype = Object.create(LG.Command.prototype);
+LG.RtCommand.prototype.constructor = LG.RtCommand;
 
 LG.RtCommand.prototype.execute = function(stage, container, position){
 	LG.Command.prototype.execute.apply(this,arguments);

@@ -8,7 +8,7 @@ LG.AbstractStorage = function(){
 };
 
 LG.AbstractStorage.getNewKey = function(key){
-	key = LG.Config.PRODUCT_ID+key;
+	key = LG.Config.PRODUCT_ID+"_"+key;
 	return key;
 };
 
@@ -82,9 +82,8 @@ LG.WebStorage = function(){
 	this.store = window.localStorage;
 };
 
-LG.WebStorage.prototype = new LG.AbstractStorage();
-
-LG.WebStorage.prototype.constructor = LG.AbstractStorage;
+LG.WebStorage.prototype = Object.create(LG.AbstractStorage.prototype);
+LG.WebStorage.prototype.constructor = LG.WebStorage;
 
 LG.WebStorage.prototype.save = function(key, val, success){
 	if(val===null || typeof val === "undefined" || val === "undefined"){
@@ -145,9 +144,8 @@ LG.IPadStorage = function(){
 	this.servicename = "com.heymath.smfh"+LG.Config.PRODUCT_ID;
 };
 
-LG.IPadStorage.prototype = new LG.AbstractStorage();
-
-LG.IPadStorage.prototype.constructor = LG.AbstractStorage;
+LG.IPadStorage.prototype = Object.create(LG.AbstractStorage.prototype);
+LG.IPadStorage.prototype.constructor = LG.IPadStorage;
 
 LG.IPadStorage.prototype.save = function(key, val, success){
 	var _this = this, newKey, win, fail;
@@ -226,9 +224,8 @@ LG.NoSupportStorage = function(){
 	this.store = {};
 };
 
-LG.NoSupportStorage.prototype = new LG.AbstractStorage();
-
-LG.NoSupportStorage.prototype.constructor = LG.AbstractStorage;
+LG.NoSupportStorage.prototype = Object.create(LG.AbstractStorage.prototype);
+LG.NoSupportStorage.prototype.constructor = LG.NoSupportStorage;
 
 LG.NoSupportStorage.prototype.save = function(key, val, success){
 	if(val===null || typeof val === "undefined" || val === "undefined"){
@@ -271,9 +268,8 @@ LG.CookieStorage = function(){
 	this.store = {};
 };
 
-LG.CookieStorage.prototype = new LG.AbstractStorage();
-
-LG.CookieStorage.prototype.constructor = LG.AbstractStorage;
+LG.CookieStorage.prototype = Object.create(LG.AbstractStorage.prototype);
+LG.CookieStorage.prototype.constructor = LG.CookieStorage;
 
 LG.CookieStorage.prototype.save = function(key, val, success){
 	if(val===null || typeof val === "undefined" || val === "undefined"){
@@ -306,18 +302,3 @@ LG.CookieStorage.prototype.remove = function(key, success){
 };
 
 
-
-///////////////////////////////////
-
-if(LG.Config.PHONEGAP === "ios"){
-	LG.storage = new LG.IPadStorage();
-}
-else if(LG.Utils.supportsLocalStorage()){
-	LG.storage = new LG.WebStorage();
-}
-else if(LG.Utils.supportsCookies()){
-	LG.storage = new LG.CookieStorage();
-}
-else{
-	LG.storage = new LG.NoSupportStorage();
-}

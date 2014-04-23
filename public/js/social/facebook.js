@@ -42,7 +42,8 @@ LG.WebFacebook = function(){
 	this.useFb = true;
 };
 
-LG.WebFacebook.prototype = new LG.Facebook();
+LG.WebFacebook.prototype = Object.create(LG.Facebook.prototype);
+LG.WebFacebook.prototype.constructor = LG.WebFacebook;
 
 LG.WebFacebook.prototype.init = function(options){
 	var _this = this;
@@ -112,7 +113,7 @@ LG.WebFacebook.prototype.load = function(options){
 LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
 		FB.getLoginStatus(function(response) {
-			if(response.status === 'connected' && response.authResponse){
+			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
 			else{
