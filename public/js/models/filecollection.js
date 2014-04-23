@@ -107,12 +107,13 @@ LG.FileCollection = LG.AFileCollection.extend({
 			}
 		}
 	},
-	deleteCurrentFile:function(){
+	deleteCurrentFile:function(callback){
 		var _this = this;
 		var options = {
 			"success":function(){
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
+				callback.success();
 			}
 		};
 		if(this.selected.isNew()){
