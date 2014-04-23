@@ -14,7 +14,6 @@ LG.Easel.Turtle.prototype.drawMe = function() {
 	var g = this.graphics, clr = LG.graphicsModel.get("color");
 	g.clear();
 	g.setStrokeStyle(0);
-	alert("d "+clr);
 	g.beginStroke(clr);
 	g.beginFill(clr);
 	g.moveTo(-this.size,-this.size);

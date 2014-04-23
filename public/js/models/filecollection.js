@@ -172,7 +172,9 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 		LG.AFileCollection.prototype.initialize.call(this);
 	},
 	getData:function(){
-		return _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
+		var data = _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
+		alert("get data all "+JSON.stringify(data));
+		return data;
 	}
 });
 
