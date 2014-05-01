@@ -3,12 +3,24 @@
 LG.GallerySideView = Backbone.View.extend({
 	initialize:function(){
 		this.model = {"logo":null, "name":null, "_id":null};
-		this.listenTo(LG.EventDispatcher, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.updateLayout, this));
+	},
+	openPreview:function(id){
+		var _this = this;
+		this.id = id;
+		this.model = LG.allFilesCollection.getByProperty("_id", id).toJSON();
+		this.rerender();
+		this.$el.addClass("show");
+		setTimeout(function(){
+			_this.$(".galleryside").addClass("show");
+		}, 50);
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click a#okbutton":"clickOk",
-			"_click a#cancelbutton":"clickCancel"
+			"_click img.centre":"clickOk",
+			"_click a#cancelbutton":"clickCancel",
+			"_click button#cancelbuttontop":"clickCancel"
 		});
 		return obj;
 	},
@@ -38,59 +50,27 @@ LG.GallerySideView = Backbone.View.extend({
 	logOpen:function(){
 		this.logFile("/view");
  	},
-	logVote:function(){
-		this.logFile("/vote");
- 	},
-	preview:function(id){
-		this.id = id;
-		this.model = LG.allFilesCollection.getByProperty("_id", id).toJSON();
-		this.rerender();
-		this.$el.addClass("show");
-	},
 	render:function(){
-		var model = _.extend(this.model, {"okColor":2, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
+		var model = _.extend(this.model, {"okColor":1, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
 		this.loadTemplate(  this.template, model , {replace:true} );
+		this.updateLayout();
 		return this;
+	},
+	updateLayout:function(){
+		LG.Utils.centreImages(this.$el);
 	},
 	hide:function(){
 		this.$el.removeClass("show");
+		this.$(".galleryside").removeClass("show");
 	},
 	onShow:function(){
 		this.hide();
 	},
-	openFile:function(){
-		LG.router.navigate("write/"+this.id, {"trigger":true});
-	},
-	alertOk:function(){
-		LG.fileCollection.save();
-	},
-	alertNo:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
-	},
-	alertCancel:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
-	},
-	modelSynced:function(){
-		this.stopListening(LG.fileCollection, "sync");
-		this.openFile();
+	onHide:function(){
+		this.hide();
 	},
 	tryOpenFile:function(){
-		var options;
-		if(LG.userModel.isConnected()){
-			if(!LG.fileCollection.selected.isSaved()){
-				options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
-				this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
-			}
-			else{
-				this.openFile();
-			}
-		}
-		else{
-			this.openFile();
-		}
+		LG.fileOpener.openFromGallery(this.id);
 	}
 });
 
