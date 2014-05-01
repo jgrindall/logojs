@@ -2,7 +2,9 @@
 
 LG.AFileCollection  = LG.ASelectedFileCollection.extend({
 	model:LG.FileModel,
-	url:"/files",
+	url:function(){
+		return LG.baseUrl + "/files";
+	},
 	initialize:function(){
 		LG.ASelectedFileCollection.prototype.initialize.call(this);
 	},
@@ -53,7 +55,9 @@ LG.FileCollection = LG.AFileCollection.extend({
 				// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
 				},
 				"error":function(){
-					LG.router.openErrorPage();
+					LG.router.openErrorPage({"cancel":function(){
+						LG.router.navigate("write", {"trigger":true});
+					}});
 				}
 			});
 		}
@@ -163,8 +167,10 @@ LG.FileCollection = LG.AFileCollection.extend({
 				_this.add(model);
 				callback.success(response._id);
 			},
-			"error":function(model, xhr, options){
-				
+			"error":function(){
+				LG.router.openErrorPage({"cancel":function(){
+					LG.router.navigate("write", {"trigger":true});
+				}});
 			}
 		};
 		model.save(data, options);

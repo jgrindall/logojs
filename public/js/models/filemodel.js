@@ -103,7 +103,9 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 	},
 	watchString:["logo","dino"],
 	idAttribute: "_id", 
-	urlRoot:"/files",
+	urlRoot:function(){
+		return LG.baseUrl + "/files";
+	},
 	initialize:function(data){
 		LG.UndoRedoFileModel.prototype.initialize.call(this);
 		this.dirty = false;

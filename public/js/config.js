@@ -17,3 +17,8 @@ LG.Config.TEMPLATES = ["tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl
 
 LG.Config.PRODUCT_ID = "logojs";
 
+LG.baseUrl = "";
+
+if(LG.Config.PHONEGAP){
+	LG.baseUrl = "http://heroku.com";
+}

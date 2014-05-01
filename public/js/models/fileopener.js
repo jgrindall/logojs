@@ -36,7 +36,14 @@ LG.FileOpener.prototype.openFile = function(){
 };
 
 LG.FileOpener.prototype.alertOk = function(){
-	LG.fileCollection.save();
+	LG.fileCollection.save({
+		"success":function(){
+			
+		},
+		"error":function(){
+			
+		}
+	});
 };
 
 LG.FileOpener.prototype.alertNo = function(){
