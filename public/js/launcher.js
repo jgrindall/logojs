@@ -63,22 +63,22 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var h = window.location.hash;
-	h = h.replace(/^#/,'');
-	window.location.hash = "";
-	this.addActivity();
-	LG.EventDispatcher.trigger(LG.Events.RESIZE);
-	Backbone.history.start();
-	LG.router.navigate(h, {"trigger":true});
+	this.hash = window.location.hash.replace(/^#/,'');
+	// TODO - go there?!
 };
 
 LG.Launcher.prototype.addActivity = function(){
+	window.location.hash = "";
 	LG.activityView = new LG.ActivityView();
 	$("body > #container").empty().append(LG.activityView.render().$el);
 	LG.activityView.afterAdded();
+	LG.EventDispatcher.trigger(LG.Events.RESIZE);
+	Backbone.history.start();
+	LG.router.navigate("write", {"trigger":true});
 };
 
 LG.Launcher.prototype.allFilesLoaded = function(){
+	this.stopListening(LG.EventDispatcher, LG.Events.ALERT_CLOSED);
 	this.launch();
 };
 
@@ -92,13 +92,22 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.storageLoaded = function(){
+	this.addActivity();
 	this.loadUserId();
 	this.login();
 };
 
 LG.Launcher.prototype.loadFiles = function(){
-	this.listenToOnce(LG.allFilesCollection, "sync", $.proxy(this.allFilesLoaded, this));
-	LG.allFilesCollection.load();
+	var _this = this;
+	LG.allFilesCollection.load({
+		"error":function(){
+			LG.router.openErrorPage();
+			_this.listenToOnce(LG.EventDispatcher, LG.Events.ALERT_CLOSED, $.proxy(_this.allFilesLoaded, _this));
+		},
+		"success":function(){
+			_this.allFilesLoaded();
+		}
+	});
 };
 
 LG.Launcher.prototype.onLoggedIn = function(){
