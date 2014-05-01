@@ -44,8 +44,8 @@ LG.FdCommand.prototype.execute = function(stage, container, position){
 	LG.ShapeCommand.prototype.execute.apply(this, arguments);
 	this.endPosition = {theta:position.theta, x:position.x + Math.cos(position.theta)*this.amount, y:position.y + Math.sin(position.theta)*this.amount};
 	this.graphics.clear();
-	this.graphics.setStrokeStyle(5, "round", "round");
-	this.graphics.beginStroke(LG.graphicsModel.get("color"));
+	this.graphics.setStrokeStyle(LG.graphicsModel.getThickness(), "round", "round");
+	this.graphics.beginStroke(LG.graphicsModel.getInner());
 	this.graphics.moveTo(this.startPosition.x, this.startPosition.y);
 	this.graphics.lineTo(this.endPosition.x, this.endPosition.y);
 	this.position.x = this.endPosition.x;
