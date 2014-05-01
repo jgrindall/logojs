@@ -21,7 +21,6 @@
 
  .galleryrow{
 	width:100%;
-	opacity: 1;
 	padding:0px;
 	height:33.2%;
 	margin:0;
@@ -33,8 +32,7 @@
 	background: #eee;
 	height: 84%;
 	width: 90%;	
-	border: 5px solid #ddd;
-	border-radius: 8px;
+	border: none;
 	left: 5%;
 	top: 8%;
 	cursor:hand;
@@ -47,106 +45,25 @@
 	float:left;
 	position:relative;
 	height:100%;
+	
+	
 }
 .galleryrow .mainblock .rightcontent{
-	width: 46%;
+	width: 50%;
 	height: 100%;
 	position: relative;
-	left: 3%;
+	left: 50%;
 }
 
 .galleryrow .mainblock .leftcontent .speech{
 	border:none;
-	border-radius:5px;
 	position:absolute;
-	background:@lightdino0;
 	display:inline-block;
 	left:5px;
 	top:5px;
-	bottom:54px;
+	bottom:5px;
 	right:0;
-	border-style:solid;
-	border-width:1px;
-	border-bottom-left-radius:0;
-	border-bottom-width:3px;
 }
-
-.galleryrow.dino0 .mainblock .leftcontent .speech{
-	background:@lightdino0;
-	border-color:@lightdino0b;
-}
-.galleryrow.dino1 .mainblock .leftcontent .speech{
-	background:@lightdino1;
-	border-color:@lightdino1b;
-}
-.galleryrow.dino2 .mainblock .leftcontent .speech{
-	background:@lightdino2;
-	border-color:@lightdino2b;
-}
-.galleryrow.dino3 .mainblock .leftcontent .speech{
-	background:@lightdino3;
-	border-color:@lightdino3b;
-}
-.galleryrow.dino4 .mainblock .leftcontent .speech{
-	background:@lightdino4;
-	border-color:@lightdino4b
-}
-
-.galleryrow .triangle{
-	width:0px;
-	height:0px;
-	border-width: @tri_size_gallery @tri_size_gallery 0 0;
-	border-style:solid;
-	position: absolute;
-	bottom: -(@tri_size_gallery);
-	left: 0px;
-	z-index: 10;
-}
-
-.galleryrow.dino0 .triangle{
-	border-color: @lightdino0 transparent transparent transparent;
-}
-.galleryrow.dino1 .triangle{
-	border-color: @lightdino1 transparent transparent transparent;
-}
-.galleryrow.dino2 .triangle{
-	border-color: @lightdino2 transparent transparent transparent;
-}
-.galleryrow.dino3 .triangle{
-	border-color: @lightdino3 transparent transparent transparent;
-}
-.galleryrow.dino4 .triangle{
-	border-color: @lightdino4 transparent transparent transparent;
-}
-
-.galleryrow .mainblock .speech:after {
-	content: "";
-	position: absolute;
-	left: -1px;
-	bottom: -(@tri_size_gallery + 5);
-	display: block;
-	width: 0px;
-	height: 0px;
-	border-style: solid;
-	border-width: (@tri_size_gallery + 5) (@tri_size_gallery + 5) 0 0;
-}
-.galleryrow.dino0 .mainblock .speech:after {
-	border-color: @lightdino0b transparent transparent transparent;
-}
-.galleryrow.dino1 .mainblock .speech:after {
-	border-color: @lightdino1b transparent transparent transparent;
-}
-.galleryrow.dino2 .mainblock .speech:after {
-	border-color: @lightdino2b transparent transparent transparent;
-}
-.galleryrow.dino3 .mainblock .speech:after {
-	border-color: @lightdino3b transparent transparent transparent;
-}
-.galleryrow.dino4 .mainblock .speech:after {
-	border-color: @lightdino4b transparent transparent transparent;
-}
-
-
 
 .galleryrow .mainblock .leftcontent img{
 	position:absolute;
@@ -158,7 +75,7 @@
 }
 
 .galleryrow .mainblock .logo{
-	color:#fff;
+	color:#888;
 	font-size:95%;
 	white-space:nowrap;
 	overflow:hidden;
@@ -168,13 +85,15 @@
 	top: 26px;
 	bottom: 3px;
 	right: 3px;
+	word-wrap: break-word;
+	text-align: center;
 }
 
 .galleryrow .mainblock .title{
 	width:100%;
 	text-align:center;
 	display: block;
-	color:white;
+	color:#2c3e50;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -182,14 +101,6 @@
 }
 
 
-
-.galleryrow .mainblock .rightcontent img{
-	max-height: 98%;
-	position: absolute;
-	max-width: 99%;
-	width: 99%;
-	top: 1%;
-};
 
 .gallerybottom,  .gallerytop{
 	position: absolute;
@@ -240,45 +151,82 @@
 	float:left;
 }
 
+.gallerysideoverlay{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	bottom:0;
+	display:none;
+}
+
+.gallerysidebg{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	bottom:0;
+	background:#34495e;
+	opacity:0.75;
+}
+
 .galleryside{
 	position:absolute;
-	top:54px;
+	top:0px;
 	bottom:10px;
-	right:-33%;
-	width:33%;
-	background:#ccc;
+	right:-450px;
+	width:450px;
+	background:#eee;
 	.animate;
+	
 }
 .galleryside .logo{
 	width:100%;
-	height:100px;
-	background:#123;
+	height:82px;
+	color:#34495e;
 	padding:6px;
 	box-sizing:border-box;
+	word-wrap:break-word;
+	position: absolute;
+	top: 51px;
 }
+.galleryside #cancelbuttontop{
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
 .galleryside .imgcontainer{
 	position: absolute;
-	top: 138px;
-	bottom: 50px;
-	border: 1px solid orange;
+	top: 142px;
+	bottom: 61px;
 	width:100%;
 }
 
 .galleryside #likebutton{
 	position: absolute;
-	top: 0;
 	right: 0;
+	width: 45px;
+	min-width: 45px;
+	top: -6px;
+	color:#1abc9c;
 }
 
 .galleryside p.title{
 	text-align:center;
 	font-size: 121%;
 	margin:4px;
+	color:white;
+	margin-top: -2px;
 }
 .galleryside .alertbuttons{
 	position: absolute;
-	bottom: 0;
-	left: 165px;
+	bottom: 3px;
+	left: 120px;
+}
+
+.gallerysideoverlay.show{
+	display:block;
 }
 
 .galleryside.show{
