@@ -25,6 +25,38 @@ LG.Utils.shuffleArray = function(array) {
     return array;
 };
 
+LG.Utils.centreImage = function($img, options){
+	var p, w, h;
+	p = $img.parent();
+	p.css("background", "#eee");
+	w = p.width();
+	h = p.height();
+	console.log( $(this)+ " w,h  "+w+","+h);
+	if(w > h){
+		if(options && options.left){
+			$img.width(h).height(h).css("left", 0).css("right", "auto").css("top", 0);
+		}
+		else if(options && options.right){
+			$img.width(h).height(h).css("right", 0).css("left", "auto").css("top", 0);
+		}
+		else{
+			$img.width(h).height(h).css("left", (w - h)/2).css("right", "auto").css("top", 0);
+		}
+	}
+	else{
+		$img.width(w).height(w).css("top", (h - w)/2).css("left", 0);
+	}
+};
+
+LG.Utils.centreImages = function($el, options){
+	$("img.centre", $el).each(function(){
+		$(this).load(function(){
+			LG.Utils.centreImage($(this), options);
+		});
+		LG.Utils.centreImage($(this), options);
+	});
+};
+
 LG.Utils.getUuid = function(){
 	var az, len, i, index, s ="", SIZE = 48;
 	az = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
