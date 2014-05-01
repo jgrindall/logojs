@@ -63,22 +63,21 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	this.hash = window.location.hash.replace(/^#/,'');
-	// TODO - go there?!
+	LG.router.navigate("write", {"trigger":true});
 };
 
 LG.Launcher.prototype.addActivity = function(){
+	this.hash = window.location.hash.replace(/^#/,'');
 	window.location.hash = "";
 	LG.activityView = new LG.ActivityView();
 	$("body > #container").empty().append(LG.activityView.render().$el);
 	LG.activityView.afterAdded();
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
 	Backbone.history.start();
-	LG.router.navigate("write", {"trigger":true});
 };
 
 LG.Launcher.prototype.allFilesLoaded = function(){
-	this.stopListening(LG.EventDispatcher, LG.Events.ALERT_CLOSED);
+	alert("afloaded, launch");
 	this.launch();
 };
 
@@ -101,8 +100,9 @@ LG.Launcher.prototype.loadFiles = function(){
 	var _this = this;
 	LG.allFilesCollection.load({
 		"error":function(){
-			LG.router.openErrorPage();
-			_this.listenToOnce(LG.EventDispatcher, LG.Events.ALERT_CLOSED, $.proxy(_this.allFilesLoaded, _this));
+			LG.router.openErrorPage({"cancel":function(){
+				_this.allFilesLoaded();
+			}});
 		},
 		"success":function(){
 			_this.allFilesLoaded();
