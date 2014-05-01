@@ -7,6 +7,9 @@ LG.LoadView = LG.AGalleryView.extend({
 		var obj = Backbone.View.getTouch( { } );
 		return obj;
 	},
+	preview:function(id){
+		LG.fileOpener.openFromGallery(id);
+	},
 	template:"tpl_load",
 	showName:"load"
 });
