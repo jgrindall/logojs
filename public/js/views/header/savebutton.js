@@ -13,7 +13,11 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 		this.stopProp(e);
 		var data = this.getData();
 		if(data.loggedIn && !data.disabled){
-			LG.fileCollection.save({});
+			LG.fileCollection.save({
+				"success":function(){
+					LG.Utils.growl("File saved");
+				}
+			});
 		}
 		else if(!data.loggedIn){
 			LG.Utils.growl("Please log in to save your work");
