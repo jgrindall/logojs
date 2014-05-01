@@ -17,6 +17,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 		}
 		if(this.galleryList){
 			this.galleryList.unbind();
+			this.stopListening(this.galleryList, LG.Events.PREVIEW_FILE);
 			this.galleryList.close();
 			this.galleryList = null;
 		}
@@ -30,10 +31,14 @@ LG.AGalleryView = LG.AMenuView.extend({
 		this.removeMenus();
 		this.galleryTop = new this.topView();
 		this.galleryList = new this.listView(this.options);
+		this.listenTo(this.galleryList, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
 		this.gallerySide = new this.sideView(this.options);
 		this.$el.prepend(this.galleryTop.render().$el);
 		this.$el.append(this.galleryList.render().$el);
 		this.$el.append(this.gallerySide.render().$el);
+	},
+	preview:function(id){
+	
 	},
 	onShow:function(){
 		this.galleryList.onShow();
@@ -46,6 +51,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 	},
 	onHide:function(){
 		this.galleryList.onHide();
+		this.gallerySide.onHide();
 	},
 	beforeClose:function(){
 		this.removeMenus();
@@ -55,29 +61,3 @@ LG.AGalleryView = LG.AMenuView.extend({
 		return obj;
 	}
 });
-
-
-LG.AGalleryRowView = Backbone.View.extend({
-	initialize:function(model){
-		this.model = model;
-	},
-	setSelected:function(sel){
-		if(sel){
-			this.$el.addClass("selected");
-		}
-		else{
-			this.$el.removeClass("selected");
-		}
-	},
-	render:function(){
-		var data = this.model.toJSON();
-		data.logo = LG.Utils.truncate(data.logo, 20);
-		this.loadTemplate(  this.template, data , {replace:true} );
-		return this;
-	}
-
-});
-
-
-
-
