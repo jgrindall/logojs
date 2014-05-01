@@ -21,7 +21,6 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 		if(_.isFunction(callbacks.cancel)){
 			callbacks.cancel();
 		}
-		LG.EventDispatcher.trigger(LG.Events.ALERT_CLOSED);
 	});
 	LG.EventDispatcher.on(LG.Events.ALERT_NO, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_NO);
