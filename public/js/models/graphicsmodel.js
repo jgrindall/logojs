@@ -47,8 +47,8 @@ LG.GraphicsModel.CLR19 = "#7f8c8d";
 
 
 LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18, LG.GraphicsModel.CLR19];
-LG.GraphicsModel.BG		=	[4, 10, 10, 13, 9, 9, 7, 3, 18, 9, 16, 11, 18, 14, 18, 16, 9, 13, 13, 17, 4, 13, 13, 13, 2, 7, 12, 13, 18, 2, 2, 8, 12, 13, 17, 10, 13, 11, 8, 13];
-LG.GraphicsModel.INNER	=	[12, 4, 7, 1, 10, 12, 10, 13, 12, 18, 13, 9, 4, 4, 3, 9, 13, 6, 7, 10, 13, 0, 17, 8, 10, 13, 4, 12, 17, 4, 13, 13, 13, 10, 13, 2, 9, 13, 10, 3];
+LG.GraphicsModel.BG		=	[9, 10, 13,  3,  10, 7,   13, 18, 9, 16, 11, 18, 14, 13, 16, 9, 18, 13, 17, 4,  13, 9, 13, 2,   7, 12, 13, 18, 2, 2,  8,  12, 13, 17, 10, 13, 11, 8, 13];
+LG.GraphicsModel.INNER	=	[12, 4, 1,  13,  7, 10,  8, 12, 18, 13, 9, 4,  4,  6,  9,  13, 3, 7, 10, 13,  0, 17, 10, 10, 13, 4, 12, 17,  4, 13, 13, 13, 10, 13, 2,  9,  13, 10, 3];
 
 
 
