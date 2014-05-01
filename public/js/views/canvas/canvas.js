@@ -12,6 +12,7 @@ LG.CanvasView = Backbone.View.extend({
 		LG.EventDispatcher.bind(LG.Events.CAPTURE_IMAGE, $.proxy(this.capture, this));
 		this.listenTo(LG.layoutModel, "change", $.proxy(this.onLayoutChanged, this));
 		this.listenTo(this.model, "change", $.proxy(this.reset, this));
+		this.listenTo(LG.graphicsModel, "change:bg", $.proxy(this.drawBg, this));
 	},
 	template:"tpl_canvas",
 	render:function(){
@@ -20,14 +21,9 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click img.help":"clickHelp",
 			"_click":"clickMe"
 		});
 		return obj;
-	},
-	clickHelp:function(e){
-		this.stopProp(e);
-		alert("help");
 	},
 	onLayoutChanged:function(){
 		var show = LG.layoutModel.get("show");
@@ -69,23 +65,34 @@ LG.CanvasView = Backbone.View.extend({
 			this.stage.removeAllChildren();
 		}
 		this.stage = null;
+		this.bg = null;
 		this.turtle = null;
 		this.container = null;
 		this.canvas = null;
 	},
+	drawBg:function(){
+		var w = this.model.get("width") ;
+		var h = this.model.get("height") ;
+		this.bg.graphics.beginFill(LG.graphicsModel.getBg()).drawRect(0, 0, w, h);
+		this.tick();
+	},
 	reset:function(){
+		var w = this.model.get("width") ;
+		var h = this.model.get("height") ;
 		this.active = false;
 		this.ended = false;
 		this.removeAll();
 		this.canvas = document.getElementById("gamecanvas");
-		$(this.canvas).attr("width", this.model.get("width") ).attr("height", this.model.get("height") );
+		$(this.canvas).attr("width", w).attr("height", h );
 		this.stage = new createjs.Stage(this.canvas);
 		this.turtle = new LG.Easel.Turtle(10);
+		this.bg = new createjs.Shape();
 		this.container = new createjs.Container();
+		this.container.addChild(this.bg);
 		this.container.addChild(this.turtle);
 		this.stage.addChild(this.container);
-		this.position = {theta:-Math.PI/2, x:this.model.get("width")/2, y:this.model.get("height")/2};
-		this.tick();
+		this.position = {theta:-Math.PI/2, x:w/2, y:h/2};
+		this.drawBg();
 	},
 	tick:function(){
 		if(this.turtle){
@@ -144,8 +151,8 @@ LG.CanvasView = Backbone.View.extend({
 		var context, data, compositeOperation, tempCanvas, tempContext, img;
 		context = this.canvas.getContext("2d");
 		var x0 = Math.max(0, (this.canvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
-		var y0 = Math.max(0, (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2 );
-		//console.log("canvas: "+this.canvas.width+","+this.canvas.height+": "+x0+","+y0+","+LG.CanvasView.SNAPSHOT_WIDTH+","+LG.CanvasView.SNAPSHOT_HEIGHT);
+		var y0 = (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2;
+		y0 = Math.max(0, y0 - LG.CanvasView.SNAPSHOT_HEIGHT/3);
 		data = context.getImageData(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
 		tempCanvas = document.createElement("canvas");
 		tempContext = tempCanvas.getContext("2d");
@@ -154,6 +161,19 @@ LG.CanvasView = Backbone.View.extend({
 		tempContext.putImageData(data, 0, 0);
 		img = tempCanvas.toDataURL("image/png");
 		LG.imageModel.set({"img":img});
+		this.addRect(x0,y0);
+	},
+	addRect:function(x0, y0){
+		var _this = this;
+		var rect = new createjs.Shape();
+		rect.alpha = 0.25;
+		rect.graphics.beginFill("#eeeeee").drawRect(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
+		this.container.addChild(rect);
+		setTimeout(function(){
+			_this.container.removeChild(rect);
+			_this.tick();
+		}, 500);
+		this.tick();
 	},
 	finished:function(){
 		LG.Utils.growl("Finished!");
