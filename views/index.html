@@ -173,7 +173,9 @@
 		<script id="tpl_dinobutton" type="text/template">
 
 			<button href="#" id="dinobutton" class="action button transparent" >
-				<img src="img/dino<%=dino%>right.png"/>
+				<div class="dino dino<%=bg%>">
+					<div class="dinoinner dino<%=inner%>"></div>
+				</div>
 			</button>
 			
 		</script>
@@ -206,7 +208,7 @@
 		<script id="tpl_helpbuttonmenu" type="text/template">
 			
 			<li>
-				<a href="#" id="helpbuttonmenu" class="action button clr3" >
+				<a href="#" id="helpbuttonmenu" class="action button clr0" >
 					<i class="fa fa-question"></i>
 					<span>Help</span>
 				</a>
@@ -570,11 +572,32 @@ drawSpiral(10);</pre>
 				<div class="menutop">
 					<p><%= message %></p>
 				</div>
+				<p class="errorbody"><%= body %></p>
+				<div class="alertbuttons
+				
+				<%  
+					if(okLabel && noLabel){
+						print(" alertbuttons3");
+					}
+					else if(okLabel || noLabel){
+						print(" alertbuttons2");
+					}
+					else{
+						print(" alertbuttons1");
+					}
+				%>
+				
+				">
 					
-				<div class="alertbuttons">
-					<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
-					<a href="#" id="nobutton" class="action button button1 clr<%= noColor %>" ><span><%= noLabel %></span></a>
-					<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
+					<% if(okLabel){%>
+						<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
+					<%}%>
+					
+					<% if(noLabel){%>
+						<a href="#" id="nobutton" class="action button button1 clr<%= noColor %>" ><span><%= noLabel %></span></a>
+					<%}%>	
+					
+					<a href="#" id="cancelbutton" class="action button button2" ><span><%= cancelLabel %></span></a>
 				</div>
 				
 			</div>
@@ -585,7 +608,7 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_galleryrow" type="text/template">
 			
-			<div class="galleryrow dino<%=dino%>"
+			<div class="galleryrow"
 				
 				<%
 					if(_id!=null){
@@ -599,18 +622,17 @@ drawSpiral(10);</pre>
 				<div class="mainblock">
 				
 					<div class="leftcontent">
-						<img src="img/dino<%=dino%>left.png"/>
 						<div class="speech">
 							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
 							<div class="logo">
 								<%= logo %>
 							</div>
-							<div class="triangle"></div>
+							
 						</div>
 					</div>
 					
 					<div class="rightcontent">
-						<img src="thumbs/thumb_<%= _id %>.png"/>
+						<img class="centre" src="thumbs/thumb_<%= _id %>.png"/>
 					</div>
 					
 				</div>
@@ -653,31 +675,47 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_galleryside" type="text/template">
 			
-			<div class="galleryside">
-			
-				<a href="#" id="likebutton" class="action button button1 clr1" >Like it!</span></a>
+			<div class="gallerysideoverlay">
 				
-				<p class="title">
-					<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
-				</p>
+				<div class="gallerysidebg"></div>
 				
-				<div class="logo">
-					<%= logo %>
-				</div>
+				<div class="galleryside">
 				
-				<% if(_id) { %>
-					<div class="imgcontainer">
-						<img src="thumbs/thumb_<%= _id %>.png"/>
+					
+					
+					<div class="gallerytop menutop" >
+						<p class="title">
+							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
+						</p>
+						
+						<button id="cancelbuttontop" class="action button button1 right transparent">
+							<i class="fa fa-chevron-right"></i>
+							<span>Cancel</span>
+						</button>
+						
+						
 					</div>
-				<% } %>
-				
-				<div class="alertbuttons alertbuttonssmall">
-					<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
-					<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
+			
+					
+					
+					<div class="logo">
+						<%= logo %>
+					</div>
+					
+					<% if(_id) { %>
+						<div class="imgcontainer">
+							<img class="centre" src="thumbs/thumb_<%= _id %>.png"/>
+						</div>
+					<% } %>
+					
+					<div class="alertbuttons alertbuttons2">
+						<a href="#" id="okbutton" class="action button button0 clr<%= okColor %>" ><span><%= okLabel %></span></a>
+						<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
+					</div>
+					
 				</div>
-				
+			
 			</div>
-		
 					
 		</script>
 		
@@ -700,7 +738,6 @@ drawSpiral(10);</pre>
 				<div class="helpbg" ></div>
 				
 				<div class = "helpcontent helpcontent0">
-					<img src="img/dino4rightlarge.png"/>
 					<div class="helpbox helpboxleft">
 						<div>
 							<p>Welcome to Logotacular!</p>
@@ -713,8 +750,7 @@ drawSpiral(10);</pre>
 						<div class="triangle"></div>
 					</div>
 				</div>
-				<div class = "helpcontent helpcontent1">
-					<img src="img/dino1leftlarge.png"/>
+				<div class = "helpcontent helpcontent1">s
 					<div class="helpbox helpboxright">
 						<div>
 							<p>When you're ready, click anywhere on the left hand side to draw your Logo!</p>
@@ -727,7 +763,7 @@ drawSpiral(10);</pre>
 					</div>
 				</div>
 				<div class = "helpcontent helpcontent2">
-					<img src="img/dino1leftlarge.png"/>
+					
 					<div class="helpbox helpboxright">
 						<div>
 							
@@ -790,7 +826,7 @@ drawSpiral(10);</pre>
 				
 				<input type="text" id="filenametext" value="" placeholder="your filename"></input>
 				<p class="error">Error <%=error %></p>
-				<div class="alertbuttons alertbuttonssmall">
+				<div class="alertbuttons alertbuttons2">
 					<a href="#" id="okbutton" class="action button button0" ><span>Ok</span></a>
 					<a href="#" id="cancelbutton" class="action button button1" ><span>Cancel</span></a>
 				</div>
