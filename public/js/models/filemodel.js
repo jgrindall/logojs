@@ -122,7 +122,7 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 	incrementDino:function(){
 		var d1, d2;
 		d1 = this.get("dino");
-		d2 = (d1 + 1) % LG.FileModel.NUM_DINO;
+		d2 = (d1 + 1) % LG.GraphicsModel.BG.length;
 		this.set({"dino":d2});
 	},
 	reset:function(){
@@ -151,4 +151,4 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 
 
 
-LG.FileModel.NUM_DINO = 5;
+
