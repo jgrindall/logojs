@@ -4,14 +4,14 @@ window.LG.Easel = window.LG.Easel || {};
 LG.Easel.Turtle = function(size) {
 	this.initialize(size);
 	_.extend(this, Backbone.Events);
-	this.listenTo(LG.graphicsModel, "change", $.proxy(this.drawMe, this));
+	this.listenTo(LG.graphicsModel, "change:inner", $.proxy(this.drawMe, this));
 }
 
 LG.Easel.Turtle.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Turtle.prototype.constructor = LG.Easel.Turtle;
 
 LG.Easel.Turtle.prototype.drawMe = function() {
-	var g = this.graphics, clr = LG.graphicsModel.get("color");
+	var g = this.graphics, clr = LG.graphicsModel.getInner();
 	g.clear();
 	g.setStrokeStyle(0);
 	g.beginStroke(clr);
