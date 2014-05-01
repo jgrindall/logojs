@@ -2,9 +2,9 @@
 LG.ASpinnerCollection  = Backbone.Collection.extend({
 	initialize:function(data){
 		Backbone.Collection.prototype.initialize.call(this, data);
-		this.listenTo(this, "sync", $.proxy(this.onSync, this));
+		this.listenTo(this, "sync error", $.proxy(this.onLoaded, this));
 	},
-	onSync:function(){
+	onLoaded:function(){
 		setTimeout(function(){
 			LG.spinnerModel.set({"show":false});
 		}, 1000);

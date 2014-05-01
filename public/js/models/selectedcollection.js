@@ -15,8 +15,8 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 		}
 		this.add(this.selected);
 	},
-	onSync:function(){
-		LG.APaginatedCollection.prototype.onSync.call(this);
+	onLoaded:function(){
+		LG.APaginatedCollection.prototype.onLoaded.call(this);
 		this.addNewModel();
 	}
 });
