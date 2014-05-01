@@ -24,8 +24,8 @@ LG.GalleryListView = Backbone.View.extend({
 	clickItem:function(e){
 		this.stopProp(e);
 		var idToOpen = $(e.currentTarget).data("id");
-		this.myScroll.scrollTo(0, 0); // fix this
-		LG.EventDispatcher.trigger(LG.Events.PREVIEW_FILE, idToOpen);
+		this.myScroll.scrollTo(0, 0); // TODO fix this!!
+		this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
@@ -61,7 +61,16 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	onShow:function(){
 		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
-		this.collection.load();
+		this.collection.load({
+			"error":function(){
+				LG.router.openErrorPage({"cancel":function(){
+					LG.router.navigate("write", {"trigger":true});
+				}});
+			},
+			"success":function(){
+				
+			}
+		});
 	},
 	onHide:function(){
 		this.stopListening(this.collection);
