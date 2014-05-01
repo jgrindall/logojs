@@ -3,10 +3,12 @@ LG.Popups = function(){
 };
 
 LG.Popups.prototype.openPopup = function(data, callbacks){
+	var _this = this, defaultData = {"message":"", "body":"", "okLabel":null, "noLabel":null, "cancelLabel":"Cancel"};
+	callbacks = callbacks || {};
+	data = _.extend(defaultData, data);
 	this.alertView = new LG.AlertView(data);
 	$("#activity").append(this.alertView.render().el);
 	LG.router.navigate("alert", {"trigger":true});
-	
 	LG.EventDispatcher.on(LG.Events.ALERT_OK, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_OK);
 		if(_.isFunction(callbacks.ok)){
@@ -19,6 +21,7 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 		if(_.isFunction(callbacks.cancel)){
 			callbacks.cancel();
 		}
+		LG.EventDispatcher.trigger(LG.Events.ALERT_CLOSED);
 	});
 	LG.EventDispatcher.on(LG.Events.ALERT_NO, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_NO);
