@@ -47,6 +47,10 @@ LG.Router = Backbone.Router.extend({
 	},
 	gallery:function(){
 		this.show("gallery");
+	},
+	openErrorPage:function(callbacks){
+		var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+		LG.popups.openPopup(data, callbacks);
 	}
 });
 
