@@ -2,6 +2,7 @@
 
 LG.AFileCollection  = LG.ASelectedFileCollection.extend({
 	model:LG.FileModel,
+	url:"/files",
 	initialize:function(){
 		LG.ASelectedFileCollection.prototype.initialize.call(this);
 	},
@@ -32,7 +33,7 @@ LG.AFileCollection.validateFileName = function(name){
 
 
 LG.FileCollection = LG.AFileCollection.extend({
-	url:"/files",
+	name:"your",
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
@@ -47,9 +48,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 		if(loggedIn){
 			logo = this.selected.get("logo");
 			dino = this.selected.get("dino");
-			this.load({"success":function(){
+			this.load({
+				"success":function(){
 				// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
-			}});
+				},
+				"error":function(){
+					LG.router.openErrorPage();
+				}
+			});
 		}
 		else{
 			this.reset();
@@ -74,6 +80,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			this.selected = new this.model(_.extend({}, data, {"dirty":true}));
 			this.add(this.selected);
 		}
+		LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 	},
 	save:function(options){
 		if(LG.userModel.isConnected()){
@@ -105,6 +112,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			if(selectedModel){
 				this.loadModel(selectedModel);
 			}
+			LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 		}
 	},
 	deleteCurrentFile:function(callback){
@@ -165,7 +173,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 
 
 LG.AllFileCollection = LG.AFileCollection.extend({
-	url:"/files",
+	name:"all",
 	initialize:function(){
 		this.page = 0;
 		this.num = 0;
@@ -173,7 +181,6 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 	},
 	getData:function(){
 		var data = _.extend(LG.AFileCollection.prototype.getData.call(this), {"userId": null});
-		alert("get data all "+JSON.stringify(data));
 		return data;
 	}
 });
