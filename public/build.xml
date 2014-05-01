@@ -169,6 +169,7 @@
 				<file name="views/gallery/gallerylist.js"/>	
 				<file name="views/gallery/gallerytop.js"/>	
 				<file name="views/gallery/galleryside.js"/>	
+				<file name="views/gallery/galleryrow.js"/>	
 				<file name="views/gallery/base.js"/>	
 				<file name="views/gallery/gallery.js"/>	
 				
