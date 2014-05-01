@@ -145,7 +145,7 @@ $.ajaxSetup({
 	// always go here if we get a 404 on the backend
 	statusCode: {
 		404: function(){
-			alert("404 error");
+			
 		}
 	},
 	cache:false
