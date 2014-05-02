@@ -41,6 +41,16 @@ sep* f4:makestmt sep*
 {
 	return {type:"insidestmt", children:[f4]};
 }
+/
+sep* f5:callfnstmt sep*
+{
+return {type:"insidestmt", children:[f5]};
+}
+
+callfnstmt = sep* f:fnname sep* '(' sep* a:expressionlist sep* ')' eoline
+{
+return {type:"callfnstmt", name:f.name, args:a}
+}
 
 
 fdstmt  = 'fd' sep* '(' num:expression  ')' eoline 
@@ -58,7 +68,7 @@ rptstmt  = 'rpt' sep* num:expression sep* '[' sep* list:insidefnlist sep* ']'
 	return {type:"rptstmt", children:[num,list]};
 }
 
-insidefnlist = l:insidestmt*
+insidefnlist = sep* l:insidestmt*
 {
     var obj={};
 	obj.type="insidefnlist";
@@ -76,7 +86,7 @@ makestmt = v:vardef sep* ':=' sep* e:expression eoline
 
 definefnstmt = 'proc' sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}'
 {
-         return {type:"definefnstmt", name:f.toString(), args:a, stmts:s};
+         return {type:"definefnstmt", name:f.name, args:a, stmts:s};
 }
 
 
@@ -86,13 +96,29 @@ vardef = n:[a-z]
 } 
 
 
-arglist = 
+expressionlist = 
+c:csvexpressionlist e:expression sep*
+{
+var allchildren = c.children;
+return {type:"expressionlist", children:allchildren.concat([e])};
+}
+/
+sep* e:expression sep*
+{
+return {type:"expressionlist", children:[e]};
+}
+/
+sep*
+{
+return {type:"expressionlist", children:[]};
+}
 
+
+arglist =
 c:csvarglist v:varname sep*
 {
 var allchildren = c.children;
-allchildren.push(v)
-return {type:"arglist", children:allchildren};
+return {type:"arglist", children:allchildren.concat([v])};
 }
 /
 sep* v:varname sep*
@@ -109,13 +135,23 @@ return {type:"arglist", children:[]};
 
 csvarglist = v:varnamecomma+
 {
-return {type:"csvarglist", children:[v]};
+return {type:"csvarglist", children:v};
+}
+
+csvexpressionlist = e:expressioncomma+
+{
+return {type:"csvexpressionlist", children:e};
 }
 
 
 varnamecomma = sep* v:varname sep* ',' sep*
 {
 return {type:"varname", name:v.name};
+}
+
+expressioncomma = sep* e:expression sep* ',' sep*
+{
+return e;
 }
 
 fnname = n:[a-z]*
