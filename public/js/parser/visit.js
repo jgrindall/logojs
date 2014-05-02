@@ -5,7 +5,6 @@ importScripts("symtable.js");
 
 var stack = new LG.Stack();
 var symTable = new LG.SymTable();
-var vars = {};
 
 self.addEventListener('message', function(msg) {
 	if(msg.data.type === "tree"){
@@ -19,12 +18,15 @@ function visitchildren(node){
 	var ch = node.children;
 	var len = ch.length;
 	for(var i = 0; i < len; i++){
+		self.postMessage({"type":"message", "message":"visiting child "+JSON.stringify(ch[i])});
 		visitNode(ch[i]);
 	}
 }
 
 function visitstart(node){
+	symTable.enterBlock();
 	visitchildren(node);
+	symTable.exitBlock();
 }
 
 function visitinsidestmt(node){
@@ -34,7 +36,7 @@ function visitmakestmt(node){
 	var ch = node.children;
 	var name = ch[0].name;
 	visitNode( ch[1] );
-	vars[name] = stack.pop();
+	symTable.add(name, stack.pop());
 }
 
 function visitfdstmt(node){
@@ -44,23 +46,29 @@ function visitfdstmt(node){
 }
 
 function visitexpression(node){
+	var num  = 0;
+	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	visitchildren(node);
-	var num = 0;
+	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	var l = node.children.length;
 	for(var i=0;i<l;i++){
 		num += stack.pop();
 	}
 	stack.push(num);
+	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 }
 
 function visitmultexpression(node){
+	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	visitchildren(node);
+	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	var num  = 1;
 	var l = node.children.length;
 	for(var i=0;i<l;i++){
 		num *= stack.pop();
 	}
 	stack.push(num);
+	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 }
 
 function visitrptstmt(node){
@@ -129,7 +137,7 @@ function visitplusexpression(node){
 }
 
 function visitvarname(node){
-	var num = vars[node.name];
+	var num = symTable.get(node.name);
 	if(!num){
 		throw new Error("not found "+node.name);
 	}
@@ -145,12 +153,38 @@ function visitminusexpression(node){
 }
 function visitdefinefnstmt(node){
 	var name = node.name;
-	var argsNode = node.args;    //arglist node
-	var statementsNode = node.stmts; // insidefnlist node
-	self.postMessage({"type":"message", "message":"visiting definefn "+argsNode+" , "+statementsNode});
+	var argsNode = node.args;
+	var statementsNode = node.stmts;
 	self.postMessage({"type":"message", "message":"visiting definefn "+JSON.stringify(argsNode)+" , "+JSON.stringify(statementsNode)});
-	self.postMessage({"type":"message", "message":"visiting definefn "+argsNode.children.length+"  "+statementsNode.children.length});
-	//symTable.addFunction (name, argsNode, statementsNode);
+	symTable.addFunction(name, argsNode, statementsNode);
+}
+function visitcallfnstmt(node){
+	var name = node.name;
+	self.postMessage({"type":"message", "message":"visiting callfn "+JSON.stringify(node)});
+	var f = symTable.getFunction(name);
+	self.postMessage({"type":"message", "message":"f is "+JSON.stringify(f)+" <- "+name});
+	symTable.enterBlock();
+	visitchildren(node.args);
+	self.postMessage({"type":"message", "message":"visited "+node.args.children.length+" vars, and stack is now "+stack.describe()});
+	executeFunction(f);
+	symTable.exitBlock();
+}
+
+function executeFunction(f){
+	self.postMessage({"type":"message", "message":"fn is "+JSON.stringify(f)});
+	var i;
+	var vals = [ ];
+	var len = f.argsNode.children.length;
+	for(i = 0; i <= len - 1; i++){
+		vals.push(stack.pop());
+	}
+	for(i = 0; i <= len - 1; i++){
+		var argNode = f.argsNode.children[i];
+		var varname = argNode.name;
+		//self.postMessage({"type":"message", "message":"stack var "+varname+" = "+s});
+		symTable.add(varname, vals[len - 1 - i]);
+	}
+	visitNode(f.statementsNode);
 }
 
 function visitNode(node){
@@ -163,6 +197,9 @@ function visitNode(node){
 	}
 	else if(t == "definefnstmt"){
 		visitdefinefnstmt(node);
+	}
+	else if(t == "callfnstmt"){
+		visitcallfnstmt(node);
 	}
 	else if(t=="fdstmt"){
 		visitfdstmt(node);

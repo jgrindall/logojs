@@ -13,4 +13,7 @@ LG.Stack.prototype.pop = function(){
 	return r;
 };
 
+LG.Stack.prototype.describe = function(){
+	return this.s.toString();
+};
 
