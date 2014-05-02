@@ -1,14 +1,14 @@
 
-LG.stack = function(){
+LG.Stack = function(){
 	this.s = [];
 };
 
 
-LG.stack.prototype.push = function(n){
+LG.Stack.prototype.push = function(n){
 	this.s.push(n);
 };
 
-LG.stack.prototype.pop = function(){
+LG.Stack.prototype.pop = function(){
 	var r = this.s.pop();
 	return r;
 };
