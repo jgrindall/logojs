@@ -87,8 +87,10 @@ LG.CanvasView = Backbone.View.extend({
 		this.stage = new createjs.Stage(this.canvas);
 		this.turtle = new LG.Easel.Turtle(10);
 		this.bg = new createjs.Shape();
+		this.commands = new createjs.Shape();
 		this.container = new createjs.Container();
 		this.container.addChild(this.bg);
+		this.container.addChild(this.commands);
 		this.container.addChild(this.turtle);
 		this.stage.addChild(this.container);
 		this.position = {theta:-Math.PI/2, x:w/2, y:h/2};
@@ -107,7 +109,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onMessage:function(msg){
 		var data = msg.data, command, size;
-		console.log("Worker said : " + JSON.stringify(msg.data));
+		//console.log("Worker said : " + JSON.stringify(msg.data));
 		if(data.type === "command"){
 			if(data.name === "fd"){
 				command = new LG.FdCommand(data.amount);
@@ -124,7 +126,7 @@ LG.CanvasView = Backbone.View.extend({
 			}
 		}
 		else if(data.type === "message"){
-			alert("message "+data.message);
+			console.log("message "+data.message);
 		}
 		else if(data.type === "end"){
 			console.log("ended!");
@@ -138,8 +140,23 @@ LG.CanvasView = Backbone.View.extend({
 		this.output = new LG.output();
 		this.commandIndex = 0;
 		var logo = LG.fileCollection.selected.get("logo");
-		var tree = LG.Utils.logoparser.parse(logo); // put this in a worker too?? YES!
-		this.process(tree);
+		var tree;
+		try {
+			tree = LG.Utils.logoparser.parse(logo);
+		}
+		catch(e){
+			console.log("e: "+e+", message: "+e.message+", expected: "+e.expected+", found: "+e.found+", offset: "+e.offset+", line: "+e.line+", column: "+e.column);
+		}
+		if(tree){
+			try{
+				this.process(tree);
+			}
+			catch(e){
+				console.log("e: "+e);
+			}
+		}
+		// TODO put this in a worker too?? YES!
+		
 	},
 	process:function(tree){
 		this.worker = new Worker("min/parser/visit.js");
@@ -187,9 +204,8 @@ LG.CanvasView = Backbone.View.extend({
 		}
 		for(i = 0; i <= LG.output.BATCH_SIZE - 1; i++){
 			var command = this.output.at(this.commandIndex);
-			console.log("drawBatch "+command);
 			if(command){
-				command.execute(this.stage, this.container, this.position);
+				command.execute(this.commands, this.position, this.container);
 				this.commandIndex++;
 			}
 		}
