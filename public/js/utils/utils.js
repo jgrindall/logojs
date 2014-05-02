@@ -28,7 +28,6 @@ LG.Utils.shuffleArray = function(array) {
 LG.Utils.centreImage = function($img, options){
 	var p, w, h;
 	p = $img.parent();
-	p.css("background", "#eee");
 	w = p.width();
 	h = p.height();
 	console.log( $(this)+ " w,h  "+w+","+h);
