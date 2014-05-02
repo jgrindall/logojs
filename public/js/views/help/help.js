@@ -22,11 +22,13 @@ LG.HelpView = LG.AMenuView.extend({
 			console.log("wrapperWidth "+wrapperWidth + "  " + this.$(".helpcontainer").length);
 			this.myScroll.refresh();
 		}
+		LG.Utils.centreImages(this.$el);
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
 		this.scroller = this.$("#helpscroller");
 		this.wrapper = this.$("#helpwrapper");
+		LG.Utils.centreImages(this.$el);
 		return this;
 	},
 	onShow:function(){
