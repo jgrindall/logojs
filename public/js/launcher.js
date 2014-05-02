@@ -77,7 +77,6 @@ LG.Launcher.prototype.addActivity = function(){
 };
 
 LG.Launcher.prototype.allFilesLoaded = function(){
-	alert("afloaded, launch");
 	this.launch();
 };
 
