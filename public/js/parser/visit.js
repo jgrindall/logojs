@@ -1,8 +1,10 @@
 self.LG = {};
 
 importScripts("stack.js");
+importScripts("symtable.js");
 
-var stack = new LG.stack();
+var stack = new LG.Stack();
+var symTable = new LG.SymTable();
 var vars = {};
 
 self.addEventListener('message', function(msg) {
@@ -61,6 +63,15 @@ function visitmultexpression(node){
 	stack.push(num);
 }
 
+function visitrptstmt(node){
+	var ch = node.children;
+	visitNode( ch[0] );
+	var num = stack.pop();	
+	for(var i = 1;i<=num; i++){
+		self.postMessage({"type":"message", "message":"visiting "+JSON.stringify(ch[1])+"  "+i+"/"+num});
+		visitNode(ch[1]);
+	}
+}
 
 function visitunaryexpression(node){
 	visitchildren(node);
@@ -86,7 +97,7 @@ function visittimesordivterms(node){
 	var l = ch.length;
 	// now there are 'l' values on the stack.
 	var num  = 1;
-	for(var i=0;i<l;i++){
+	for(var i = 0; i < l; i++){
 		num *= stack.pop();
 	}
 	stack.push(num);
@@ -101,6 +112,15 @@ function visittimesterm(node){
 }	
 
 function visitplusorminus(node){
+	visitchildren(node);
+}
+
+function visitoutsidefnlist(node){
+	visitchildren(node);
+}
+
+function visitinsidefnlist(node){
+	self.postMessage({"type":"message", "message":"visiting visitinsidefnlist "});
 	visitchildren(node);
 }
 
@@ -123,15 +143,26 @@ function visitminusexpression(node){
 	var num = stack.pop();
 	stack.push(-1*num);
 }
+function visitdefinefnstmt(node){
+	var name = node.name;
+	var argsNode = node.args;    //arglist node
+	var statementsNode = node.stmts; // insidefnlist node
+	self.postMessage({"type":"message", "message":"visiting definefn "+argsNode+" , "+statementsNode});
+	self.postMessage({"type":"message", "message":"visiting definefn "+JSON.stringify(argsNode)+" , "+JSON.stringify(statementsNode)});
+	self.postMessage({"type":"message", "message":"visiting definefn "+argsNode.children.length+"  "+statementsNode.children.length});
+	//symTable.addFunction (name, argsNode, statementsNode);
+}
 
 function visitNode(node){
 	var t = node.type;
-	//postMessage({"message":"worker received "+node.type+", "+JSON.stringify(node)});
 	if(t=="start"){
 		visitstart(node);
 	}
 	else if(t=="insidestmt"){
 		visitinsidestmt(node);
+	}
+	else if(t == "definefnstmt"){
+		visitdefinefnstmt(node);
 	}
 	else if(t=="fdstmt"){
 		visitfdstmt(node);
@@ -148,8 +179,11 @@ function visitNode(node){
 	else if(t=="expression"){
 		visitexpression(node);
 	}
-	else if(t=="insidefnlis"){
+	else if(t=="insidefnlist"){
 		visitinsidefnlist(node);
+	}
+	else if(t=="outsidefnlist"){
+		visitoutsidefnlist(node);
 	}
 	else if(t=="vardef"){
 		visitvardef(node);
