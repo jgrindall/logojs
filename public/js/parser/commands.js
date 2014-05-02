@@ -3,10 +3,10 @@ LG.Command = function(amount){
 	this.amount = amount;
 };
 
-LG.Command.prototype.execute = function(stage, container, position){
-	this.container = container;
+LG.Command.prototype.execute = function(context, position){
+	this.context = context;
+	this.graphics = context.graphics;
 	this.position = position;
-	this.stage = stage;
 	this.startPosition = $.extend({}, position);
 };
 
@@ -21,11 +21,8 @@ LG.ShapeCommand = function(amount){
 LG.ShapeCommand.prototype = Object.create(LG.Command.prototype);
 LG.ShapeCommand.prototype.constructor = LG.ShapeCommand;
 
-LG.ShapeCommand.prototype.execute = function(stage, container, position){
+LG.ShapeCommand.prototype.execute = function(context, position){
 	LG.Command.prototype.execute.apply(this,arguments);
-	this.graphics = new createjs.Graphics();
-	var shape = new createjs.Shape(this.graphics);
-	this.container.addChild(shape);
 };
 
 
@@ -39,11 +36,9 @@ LG.FdCommand = function(amount){
 LG.FdCommand.prototype = Object.create(LG.ShapeCommand.prototype);
 LG.FdCommand.prototype.constructor = LG.FdCommand;
 
-LG.FdCommand.prototype.execute = function(stage, container, position){
-	console.log("fd "+this.amount+" from "+position.x+", "+position.y);
+LG.FdCommand.prototype.execute = function(context, position){
 	LG.ShapeCommand.prototype.execute.apply(this, arguments);
-	this.endPosition = {theta:position.theta, x:position.x + Math.cos(position.theta)*this.amount, y:position.y + Math.sin(position.theta)*this.amount};
-	this.graphics.clear();
+	this.endPosition = {"theta":position.theta, "x":position.x + Math.cos(position.theta)*this.amount, "y":position.y + Math.sin(position.theta)*this.amount};
 	this.graphics.setStrokeStyle(LG.graphicsModel.getThickness(), "round", "round");
 	this.graphics.beginStroke(LG.graphicsModel.getInner());
 	this.graphics.moveTo(this.startPosition.x, this.startPosition.y);
@@ -51,6 +46,7 @@ LG.FdCommand.prototype.execute = function(stage, container, position){
 	this.position.x = this.endPosition.x;
 	this.position.y = this.endPosition.y;
 };
+
 
 LG.FdCommand.prototype.output = function(){
 	return "fd " +this.amount;
@@ -64,9 +60,9 @@ LG.RtCommand = function(amount){
 LG.RtCommand.prototype = Object.create(LG.Command.prototype);
 LG.RtCommand.prototype.constructor = LG.RtCommand;
 
-LG.RtCommand.prototype.execute = function(stage, container, position){
+LG.RtCommand.prototype.execute = function(context, position){
 	LG.Command.prototype.execute.apply(this,arguments);
-	this.endPosition = {theta:position.theta+this.amount*Math.PI/180, x:position.x , y:position.y };
+	this.endPosition = {"theta": position.theta + this.amount*Math.PI/180, "x":position.x , "y":position.y };
 	this.position.theta = this.endPosition.theta;
 };
 
