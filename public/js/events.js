@@ -31,4 +31,5 @@ LG.Events.DINO_CHANGED			=	"LG::dinoChanged";
 LG.Events.RESET_CANVAS			=	"LG::resetCanvas";
 LG.Events.HIDE_HELP_OVERLAY		=	"LG::hideHelpOverlay";
 LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
+LG.Events.ERROR_ROW				=	"LG::errorRow";
 
