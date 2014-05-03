@@ -140,12 +140,14 @@ LG.CanvasView = Backbone.View.extend({
 		this.output = new LG.output();
 		this.commandIndex = 0;
 		var logo = LG.fileCollection.selected.get("logo");
+		var logoString = LG.WriteView.getLogoInfo(logo).spacedString;
 		var tree;
 		try {
-			tree = LG.Utils.logoparser.parse(logo);
+			tree = LG.Utils.logoparser.parse(logoString);
 		}
 		catch(e){
 			console.log("e: "+e+", message: "+e.message+", expected: "+e.expected+", found: "+e.found+", offset: "+e.offset+", line: "+e.line+", column: "+e.column);
+			this.showError(e.message,e.offset);
 		}
 		if(tree){
 			try{
@@ -157,6 +159,9 @@ LG.CanvasView = Backbone.View.extend({
 		}
 		// TODO put this in a worker too?? YES!
 		
+	},
+	showError:function(msg, offset){
+		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, msg, offset);
 	},
 	process:function(tree){
 		this.worker = new Worker("min/parser/visit.js");
