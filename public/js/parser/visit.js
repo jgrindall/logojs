@@ -18,7 +18,6 @@ function visitchildren(node){
 	var ch = node.children;
 	var len = ch.length;
 	for(var i = 0; i < len; i++){
-		self.postMessage({"type":"message", "message":"visiting child "+JSON.stringify(ch[i])});
 		visitNode(ch[i]);
 	}
 }
@@ -47,28 +46,22 @@ function visitfdstmt(node){
 
 function visitexpression(node){
 	var num  = 0;
-	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	visitchildren(node);
-	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	var l = node.children.length;
 	for(var i=0;i<l;i++){
 		num += stack.pop();
 	}
 	stack.push(num);
-	self.postMessage({"type":"message", "message":"visiting expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 }
 
 function visitmultexpression(node){
-	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	visitchildren(node);
-	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 	var num  = 1;
 	var l = node.children.length;
 	for(var i=0;i<l;i++){
 		num *= stack.pop();
 	}
 	stack.push(num);
-	self.postMessage({"type":"message", "message":"visiting m expression, "+JSON.stringify(node)+" stack is "+stack.describe()});
 }
 
 function visitrptstmt(node){
@@ -76,7 +69,6 @@ function visitrptstmt(node){
 	visitNode( ch[0] );
 	var num = stack.pop();	
 	for(var i = 1;i<=num; i++){
-		self.postMessage({"type":"message", "message":"visiting "+JSON.stringify(ch[1])+"  "+i+"/"+num});
 		visitNode(ch[1]);
 	}
 }
@@ -128,7 +120,6 @@ function visitoutsidefnlist(node){
 }
 
 function visitinsidefnlist(node){
-	self.postMessage({"type":"message", "message":"visiting visitinsidefnlist "});
 	visitchildren(node);
 }
 
@@ -155,23 +146,18 @@ function visitdefinefnstmt(node){
 	var name = node.name;
 	var argsNode = node.args;
 	var statementsNode = node.stmts;
-	self.postMessage({"type":"message", "message":"visiting definefn "+JSON.stringify(argsNode)+" , "+JSON.stringify(statementsNode)});
 	symTable.addFunction(name, argsNode, statementsNode);
 }
 function visitcallfnstmt(node){
 	var name = node.name;
-	self.postMessage({"type":"message", "message":"visiting callfn "+JSON.stringify(node)});
 	var f = symTable.getFunction(name);
-	self.postMessage({"type":"message", "message":"f is "+JSON.stringify(f)+" <- "+name});
 	symTable.enterBlock();
 	visitchildren(node.args);
-	self.postMessage({"type":"message", "message":"visited "+node.args.children.length+" vars, and stack is now "+stack.describe()});
 	executeFunction(f);
 	symTable.exitBlock();
 }
 
 function executeFunction(f){
-	self.postMessage({"type":"message", "message":"fn is "+JSON.stringify(f)});
 	var i;
 	var vals = [ ];
 	var len = f.argsNode.children.length;
@@ -181,7 +167,6 @@ function executeFunction(f){
 	for(i = 0; i <= len - 1; i++){
 		var argNode = f.argsNode.children[i];
 		var varname = argNode.name;
-		//self.postMessage({"type":"message", "message":"stack var "+varname+" = "+s});
 		symTable.add(varname, vals[len - 1 - i]);
 	}
 	visitNode(f.statementsNode);
