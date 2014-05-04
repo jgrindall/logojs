@@ -11,6 +11,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.ERROR_ROW, $.proxy(this.showErrorRow, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.FORCE_LOGO, $.proxy(this.forceLogo, this));
 	},
 	template:"tpl_write",
 	showName:"write",
@@ -21,6 +22,9 @@ LG.WriteView = LG.AMenuView.extend({
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
 		this.logoDiv = this.$("#logodiv");
 		return this;
+	},
+	forceLogo:function(s){
+		this.setLogo(s);
 	},
 	draw:function(){
 		this.save();
@@ -63,7 +67,9 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
+		alert(s+"  "+this.logoDiv);
 		var html = LG.WriteView.decodeToHtml(s);
+		alert(html+"  "+this.logoDiv);
 		this.logoDiv.html(html);
 	},
 	getLogo:function(){
@@ -114,6 +120,7 @@ LG.WriteView.decodeToHtml = function(html){
 	var nodes = html.split("$");
 	var s = nodes.join("</div><div>");
 	s = "<div>"+s+"</div>";
+	return s;
 };
 
 
