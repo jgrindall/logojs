@@ -291,6 +291,6 @@ varname = n:[a-z]
 	return {type:"varname",name:n.toString()};
 }
 
-sep = [ \t\r\n$] / '&nbsp;'
+sep = [ \t\r\n$] 
 
 eoline = sep* ';' sep*
