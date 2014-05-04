@@ -19,6 +19,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.writeButtons = new LG.WriteButtonsView();
 		this.writeTop = new LG.WriteTopView();
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
+		this.logoDiv = this.$("#logodiv");
 		return this;
 	},
 	draw:function(){
@@ -31,15 +32,27 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	showErrorRow:function(expected, offset){
 		var s, okChars, i, row;
-		this.reset();
 		s = this.getLogo();
+		this.setLogo(s);
 		okChars = s.substr(0, offset);
 		i = LG.Utils.countCharsIn(okChars, '$');
-		row = this.$("#logodiv").children()[i];
+		row = this.logoDiv.children()[i];
 		this.error = {"show":true, "row":i};
-		$(row).css("background", "pink");
-		console.log("set error "+JSON.stringify(this.error));
-		this.$(".error").text("Error, expected: \""+expected[0].value+"\" check your code!").css("display", "block");
+		$(row).css("background-color", "#FFA07A");
+		this.$(".error").text("Error, expected: \""+expected[0].value+"\" check your code!").addClass("show");
+		this.scrollToChild(i);
+	},
+	scrollToChild:function(index){
+		var h = 0, rows = this.logoDiv.children(), top = this.logoDiv.scrollTop();
+		for(var i = 0; i <= index - 1; i++){
+			h += $(rows[i]).height();
+		}
+		if(top > h && top < h + this.$().height()){
+			// already visible
+		}
+		else{
+			this.logoDiv.scrollTop(h);
+		}
 	},
 	clear:function(){
 		this.setLogo("");
@@ -51,15 +64,14 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	setLogo:function(s){
 		var html = LG.WriteView.decodeToHtml(s);
-		this.$("#logodiv").html(html);
+		this.logoDiv.html(html);
 	},
 	getLogo:function(){
 		var html, decoded;
-		html = this.$("#logodiv").html();
+		html = this.logoDiv.html();
 		html = html.replace(/&nbsp;/g, "");
 		html = html.replace(/<br>/g, "");
 		decoded = LG.WriteView.decodeFromHtml(html);
-		console.log("html is "+html+" decoded is "+decoded);
 		return decoded;
 	},
 	changedText:function(e){
@@ -71,11 +83,10 @@ LG.WriteView = LG.AMenuView.extend({
 		}
 	},
 	reset:function(){
-		console.log("RESET "+JSON.stringify(this.error));
 		if(this.error.show){
 			var row = this.$("#logodiv").children()[this.error.row];
-			$(row).css("background", "none");
-			this.$(".error").css("display", "none");
+			$(row).css("background-color", "transparent").removeAttr("style");
+			this.$(".error").removeClass("show");
 			this.error = {"show":false, "row":-1};
 		}
 	},
