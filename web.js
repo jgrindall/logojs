@@ -106,6 +106,7 @@ app.get('/files', function(req, res){
 
 app.delete('/files/:_id', function(req, res){
 	console.log("delete");
+	// TO DO - check userid!
 	var _id, logo, img, base64, date;
 	_id = req.params._id;
 	File.update({"_id":_id}, {"active":false, "modified":new Date()}, function(err, doc){
