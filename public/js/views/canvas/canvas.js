@@ -36,6 +36,7 @@ LG.CanvasView = Backbone.View.extend({
 		}
 	},
 	clickMe:function(){
+		console.log("click "+this.active);
 		if(LG.layoutModel.get("show") == "write"){
 			if(this.active){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
@@ -146,8 +147,8 @@ LG.CanvasView = Backbone.View.extend({
 			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
-			console.log("e: "+e+", message: "+e.message+", expected: "+e.expected+", found: "+e.found+", offset: "+e.offset+", line: "+e.line+", column: "+e.column);
 			this.showError(e.expected,e.offset);
+			this.active = false;
 		}
 		if(tree){
 			try{
@@ -155,13 +156,14 @@ LG.CanvasView = Backbone.View.extend({
 			}
 			catch(e){
 				console.log("e: "+e);
+				// run time errors here!
 			}
 		}
 		// TODO put this in a worker too?? YES!
 		
 	},
-	showError:function(msg, offset){
-		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, msg, offset);
+	showError:function(expected, offset){
+		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, offset);
 	},
 	process:function(tree){
 		this.worker = new Worker("min/parser/visit.js");
