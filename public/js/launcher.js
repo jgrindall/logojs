@@ -63,7 +63,13 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	LG.router.navigate("write", {"trigger":true});
+	if(this.hash && this.hash.length >= 1 && this.hash!="write"){
+		LG.router.navigate(this.hash, {"trigger":true});
+	}
+	else{
+		LG.router.navigate("write", {"trigger":true});
+		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
+	}
 };
 
 LG.Launcher.prototype.addActivity = function(){
@@ -90,7 +96,6 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.storageLoaded = function(){
-	this.addActivity();
 	this.loadUserId();
 	this.login();
 };
@@ -110,6 +115,7 @@ LG.Launcher.prototype.loadFiles = function(){
 };
 
 LG.Launcher.prototype.onLoggedIn = function(){
+	this.addActivity();
 	this.loadFiles();
 };
 

@@ -32,8 +32,8 @@ LG.HelpOverlayView = Backbone.View.extend({
 		this.copy();
 	},
 	copy:function(){
-		var s = "fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);";
-		LG.fileCollection.selected.set({"logo":s});
+		var s = "rpt 6$[$fd(100);rt(60);$]";
+		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 	},
 	next:function(){
 		this.$el.removeClass("help"+this.page);

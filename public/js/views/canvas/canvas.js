@@ -118,7 +118,6 @@ LG.CanvasView = Backbone.View.extend({
 			else if(data.name === "rt"){
 				command = new LG.RtCommand(data.amount);
 			}
-			console.log("command "+command+" "+command.output());
 			this.output.add(command);
 			size = this.output.size();
 			if(size >= LG.output.MAX_SIZE){
@@ -141,7 +140,6 @@ LG.CanvasView = Backbone.View.extend({
 		this.output = new LG.output();
 		this.commandIndex = 0;
 		var logo = LG.fileCollection.selected.get("logo");
-		console.log("LOGO is "+logo);
 		var tree;
 		try {
 			tree = LG.Utils.logoparser.parse(logo);
