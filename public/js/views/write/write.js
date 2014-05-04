@@ -71,7 +71,9 @@ LG.WriteView = LG.AMenuView.extend({
 	save:function(){
 		var data = {"logo":this.getLogo()};
 		this.logo = data.logo;
-		LG.fileCollection.selected.set(data, {"silent":true});
+		this.stopListening(LG.fileCollection);
+		LG.fileCollection.selected.set(data);
+		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 	},
 	setLogo:function(s){
 		var html = LG.WriteView.decodeToHtml(s);
