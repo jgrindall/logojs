@@ -18,6 +18,7 @@
 	padding: 5px;
 	color:#111;
 	resize:none;
+	overflow-y:scroll;
 }
 
 #write #logodiv::-webkit-scrollbar {
@@ -72,4 +73,26 @@
 }
 #writebuttons #newbutton{
 	margin-left:0px !important;
+}
+
+#write .error{
+	position: absolute;
+	bottom: 50px;
+	right: -250px;
+	width: 250px;
+	height: 60px;
+	background: #E9967A;
+	font-size: 90%;
+	box-sizing: border-box;
+	padding: 5px;
+	color: #A00;
+	text-align: center;
+	overflow: hidden;
+	visibility:hidden;
+	.animate;
+}
+
+#write .error.show{
+	right:0px;
+	visibility:visible;
 }
