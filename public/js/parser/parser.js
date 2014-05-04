@@ -239,8 +239,8 @@ LG.Utils.logoparser = (function() {
         peg$c81 = function(n) {
         	return {type:"varname",name:n.toString()};
         },
-        peg$c82 = /^[ \t\r\n]/,
-        peg$c83 = { type: "class", value: "[ \\t\\r\\n]", description: "[ \\t\\r\\n]" },
+        peg$c82 = /^[ \t\r\n$]/,
+        peg$c83 = { type: "class", value: "[ \\t\\r\\n$]", description: "[ \\t\\r\\n$]" },
         peg$c84 = ";",
         peg$c85 = { type: "literal", value: ";", description: "\";\"" },
 
