@@ -1,56 +1,53 @@
-
-start = t:node*
+start = n:nodelist
 {
-var a = [];
-for(var i=0;i<=t.length-1;i++)	{
-a.push(t[i].text);
+return {"text":n.text};
 }
-return a.join("$");
-return t;
+
+nodelist = n:node+
+{
+var s=[];
+for(var i = 0;i<=n.length-1;i++){
+s.push(n[i].text);
+}
+return {"text":s.join("$")};
 }
 
 
-text = t:[a-z0-9\[\]\(\);\t\r\n ]+
+node = t:text
+{
+return {"text":t.text};
+}
+/
+w:wrappednode
+{
+return {"text":w.text};
+}
+
+
+text = t:[a-z0-9\[\]\(\);\t\r\n\& ]+
 {
 	var s = "";
 	for(var i = 0;i<=t.length-1;i++){
 		s += t[i].toString();
 	}
-	return {"text":s}
-}
-
-node = text / wrappednode
-
-plainnode = c:[a-z]+
-{
-	var s = "";
-	for(var i = 0;i<=t.length-1;i++){
-		s += c[i].toString();
-	}
-	return {"text":s}
+	return {"text":s};
 }
 
 
 wrappednode =
-
-startnode w:wrappednode endnode
-{
-	return w;
-}
-/
-startnode t:text endnode
-{
-	return {"text":t.text}
-}
-/
 emptynode
 {
-	return {"text":""}
+return {"text":""};
+}
+/
+startnode n:nodelist endnode
+{
+	return {"text":n.text};
 }
 
 
-startnode = '<' [a-zA-Z \"=\-\:;]+ '>'
+startnode = '<' [a-zA-Z0-9_ \"=\-\:;\(\),]+ '>'
 
 endnode = '</' [a-z]+ '>'
 
-emptynode = '<' [a-z]+ '/>'
+emptynode = '<br>' / startnode endnode /  '<' [a-zA-Z0-9_ \"=\-\:;\(\),]+ '/>'

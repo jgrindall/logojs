@@ -3,6 +3,7 @@ LG.WriteView = LG.AMenuView.extend({
 	
 	initialize:function(){
 		var _this = this;
+		this.error = {"show":false, "row":-1};
 		LG.AMenuView.prototype.initialize.call(this);
 		this.changedTextDeBounce = $.debounce( 500, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
@@ -28,21 +29,17 @@ LG.WriteView = LG.AMenuView.extend({
 		var fileModel = LG.fileCollection.selected;
 		this.setLogo(fileModel.get("logo"));
 	},
-	showErrorRow:function(msg, offset){
-		var i = 0, n = 0, info;
-		this.removeErrors();
-		info = LG.WriteView.getLogoInfo(this.getLogo());
-		for(i = 0; i <= info.blocks.length - 1;i++){
-			n += info.blocks[i].length;
-			if(n >= offset){
-				break;
-			}
-		}
-		if(i >= 1){
-			i -= 1;
-		}
-		var row = this.$("#logodiv").children()[i];
+	showErrorRow:function(expected, offset){
+		var s, okChars, i, row;
+		this.reset();
+		s = this.getLogo();
+		okChars = s.substr(0, offset);
+		i = LG.Utils.countCharsIn(okChars, '$');
+		row = this.$("#logodiv").children()[i];
+		this.error = {"show":true, "row":i};
 		$(row).css("background", "pink");
+		console.log("set error "+JSON.stringify(this.error));
+		this.$(".error").text("Error, expected: \""+expected[0].value+"\" check your code!").css("display", "block");
 	},
 	clear:function(){
 		this.setLogo("");
@@ -59,12 +56,13 @@ LG.WriteView = LG.AMenuView.extend({
 	getLogo:function(){
 		var html, decoded;
 		html = this.$("#logodiv").html();
+		html = html.replace(/&nbsp;/g, "");
+		html = html.replace(/<br>/g, "");
 		decoded = LG.WriteView.decodeFromHtml(html);
 		console.log("html is "+html+" decoded is "+decoded);
 		return decoded;
 	},
 	changedText:function(e){
-		return;
 		if(e.which === 186 || e.which === 13 || e.which === 32){
 			LG.fileCollection.selected.set({"logo":this.getLogo()});
 		}
@@ -72,19 +70,21 @@ LG.WriteView = LG.AMenuView.extend({
 			this.changedTextDeBounce();
 		}
 	},
-	removeErrors:function(e){
-		this.stopProp(e);
-		var c = this.$("#logodiv").children();
-		_.each(c, function(row, index){
-			$(row).css("background", "transparent");
-		});
+	reset:function(){
+		console.log("RESET "+JSON.stringify(this.error));
+		if(this.error.show){
+			var row = this.$("#logodiv").children()[this.error.row];
+			$(row).css("background", "none");
+			this.$(".error").css("display", "none");
+			this.error = {"show":false, "row":-1};
+		}
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"click":"removeErrors"
+			"mousedown":"reset"
 		} );
-		return {};
+		return obj;
 	}
 });
 
@@ -96,7 +96,7 @@ LG.WriteView.decodeFromHtml = function(html){
 	catch(e){
 		console.log("error parsing html "+e.message);
 	}
-	return s;
+	return s.text;
 };
 
 LG.WriteView.decodeToHtml = function(html){

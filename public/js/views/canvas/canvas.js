@@ -147,7 +147,7 @@ LG.CanvasView = Backbone.View.extend({
 		}
 		catch(e){
 			console.log("e: "+e+", message: "+e.message+", expected: "+e.expected+", found: "+e.found+", offset: "+e.offset+", line: "+e.line+", column: "+e.column);
-			this.showError(e.message,e.offset);
+			this.showError(e.expected,e.offset);
 		}
 		if(tree){
 			try{
