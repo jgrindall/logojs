@@ -140,10 +140,10 @@ LG.CanvasView = Backbone.View.extend({
 		this.output = new LG.output();
 		this.commandIndex = 0;
 		var logo = LG.fileCollection.selected.get("logo");
-		var logoString = LG.WriteView.getLogoInfo(logo).spacedString;
+		console.log("LOGO is "+logo);
 		var tree;
 		try {
-			tree = LG.Utils.logoparser.parse(logoString);
+			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
 			console.log("e: "+e+", message: "+e.message+", expected: "+e.expected+", found: "+e.found+", offset: "+e.offset+", line: "+e.line+", column: "+e.column);
