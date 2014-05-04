@@ -150,6 +150,7 @@
 				<file name="views/popups/filename.js"/>
 				
 				
+				<file name="views/write/htmlparser.js"/>	
 				<file name="views/write/base.js"/>	
 				<file name="views/write/write.js"/>	
 				<file name="views/write/writebuttons.js"/>	
