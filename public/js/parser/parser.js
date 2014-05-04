@@ -241,10 +241,8 @@ LG.Utils.logoparser = (function() {
         },
         peg$c82 = /^[ \t\r\n$]/,
         peg$c83 = { type: "class", value: "[ \\t\\r\\n$]", description: "[ \\t\\r\\n$]" },
-        peg$c84 = "&nbsp;",
-        peg$c85 = { type: "literal", value: "&nbsp;", description: "\"&nbsp;\"" },
-        peg$c86 = ";",
-        peg$c87 = { type: "literal", value: ";", description: "\";\"" },
+        peg$c84 = ";",
+        peg$c85 = { type: "literal", value: ";", description: "\";\"" },
 
         peg$currPos          = 0,
         peg$reportedPos      = 0,
@@ -2135,15 +2133,6 @@ LG.Utils.logoparser = (function() {
         s0 = peg$FAILED;
         if (peg$silentFails === 0) { peg$fail(peg$c83); }
       }
-      if (s0 === peg$FAILED) {
-        if (input.substr(peg$currPos, 6) === peg$c84) {
-          s0 = peg$c84;
-          peg$currPos += 6;
-        } else {
-          s0 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c85); }
-        }
-      }
 
       return s0;
     }
@@ -2160,11 +2149,11 @@ LG.Utils.logoparser = (function() {
       }
       if (s1 !== peg$FAILED) {
         if (input.charCodeAt(peg$currPos) === 59) {
-          s2 = peg$c86;
+          s2 = peg$c84;
           peg$currPos++;
         } else {
           s2 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c87); }
+          if (peg$silentFails === 0) { peg$fail(peg$c85); }
         }
         if (s2 !== peg$FAILED) {
           s3 = [];
