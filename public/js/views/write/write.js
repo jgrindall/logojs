@@ -67,9 +67,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
-		alert(s+"  "+this.logoDiv);
 		var html = LG.WriteView.decodeToHtml(s);
-		alert(html+"  "+this.logoDiv);
 		this.logoDiv.html(html);
 	},
 	getLogo:function(){
