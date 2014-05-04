@@ -30,7 +30,6 @@ LG.Utils.centreImage = function($img, options){
 	p = $img.parent();
 	w = p.width();
 	h = p.height();
-	console.log( $(this)+ " w,h  "+w+","+h);
 	if(w > h){
 		if(options && options.left){
 			$img.width(h).height(h).css("left", 0).css("right", "auto").css("top", 0);
@@ -45,6 +44,16 @@ LG.Utils.centreImage = function($img, options){
 	else{
 		$img.width(w).height(w).css("top", (h - w)/2).css("left", 0);
 	}
+};
+
+LG.Utils.countCharsIn = function(s, match){
+	var c = 0, i;
+	for(i = 0;i <= s.length-1;i++){
+		if(s.charAt(i) === match){
+			c++;
+		}
+	}
+	return c;
 };
 
 LG.Utils.centreImages = function($el, options){
