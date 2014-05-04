@@ -32,7 +32,7 @@ LG.HelpOverlayView = Backbone.View.extend({
 		this.copy();
 	},
 	copy:function(){
-		var s = "rpt 6$[$fd(100);rt(60);$]";
+		var s = "rpt 6[$  fd(100);rt(60);$]";
 		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 	},
 	next:function(){

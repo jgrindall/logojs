@@ -19,7 +19,9 @@ LG.AGalleryRowView = Backbone.View.extend({
 	},
 	render:function(){
 		var data = this.model.toJSON();
-		//data.logo = LG.Utils.truncate(data.logo, 20);
+		if(data.logo){
+			data.logo = data.logo.split(LG.WriteView.SEPARATOR).join("");
+		}
 		this.loadTemplate(  this.template, data , {replace:true} );
 		this.updateLayout();
 		return this;

@@ -31,15 +31,21 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		var fileModel = LG.fileCollection.selected;
-		this.setLogo(fileModel.get("logo"));
+		var logo, fileModel = LG.fileCollection.selected;
+		logo = fileModel.get("logo");
+		if(logo != this.logo);{
+			this.setLogo(logo);
+		}
 	},
 	showErrorRow:function(expected, offset){
 		var s, okChars, i, row;
 		s = this.getLogo();
+		if(!s){
+			return;
+		}
 		this.setLogo(s);
 		okChars = s.substr(0, offset);
-		i = LG.Utils.countCharsIn(okChars, '$');
+		i = LG.Utils.countCharsIn(okChars, LG.WriteView.SEPARATOR);
 		row = this.logoDiv.children()[i];
 		this.error = {"show":true, "row":i};
 		$(row).css("background-color", "#FFA07A");
@@ -64,7 +70,8 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	save:function(){
 		var data = {"logo":this.getLogo()};
-		LG.fileCollection.selected.set(data);
+		this.logo = data.logo;
+		LG.fileCollection.selected.set(data, {"silent":true});
 	},
 	setLogo:function(s){
 		var html = LG.WriteView.decodeToHtml(s);
@@ -74,13 +81,13 @@ LG.WriteView = LG.AMenuView.extend({
 		var html, decoded;
 		html = this.logoDiv.html();
 		html = html.replace(/&nbsp;/g, "");
-		html = html.replace(/<br>/g, "");
+		//html = html.replace(/<br>/g, "");
 		decoded = LG.WriteView.decodeFromHtml(html);
 		return decoded;
 	},
 	changedText:function(e){
 		if(e.which === 186 || e.which === 13 || e.which === 32){
-			LG.fileCollection.selected.set({"logo":this.getLogo()});
+			this.save();
 		}
 		else{
 			this.changedTextDeBounce();
@@ -103,6 +110,8 @@ LG.WriteView = LG.AMenuView.extend({
 	}
 });
 
+LG.WriteView.SEPARATOR = "$";
+
 LG.WriteView.decodeFromHtml = function(html){
 	var s = "";
 	try{
@@ -111,13 +120,24 @@ LG.WriteView.decodeFromHtml = function(html){
 	catch(e){
 		console.log("error parsing html "+e.message);
 	}
+	console.log("decodeFromHtml "+html+" -> "+JSON.stringify(s)+"   "+s);
 	return s.text;
 };
 
 LG.WriteView.decodeToHtml = function(html){
-	var nodes = html.split("$");
+	if(!html){
+		return null;
+	}
+	var nodes = html.split(LG.WriteView.SEPARATOR);
+	_.each(nodes, function(val, i){
+		if(val === ""){
+			nodes[i] = "<br/>";
+		}
+	});
+	console.log("nodes "+JSON.stringify(nodes));
 	var s = nodes.join("</div><div>");
 	s = "<div>"+s+"</div>";
+	console.log("decodeToHtml "+html+" -> "+JSON.stringify(s)+"   "+s);
 	return s;
 };
 
