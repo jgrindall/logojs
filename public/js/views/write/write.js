@@ -29,8 +29,9 @@ LG.WriteView = LG.AMenuView.extend({
 		this.setLogo(fileModel.get("logo"));
 	},
 	showErrorRow:function(msg, offset){
-		var i = 0, n = 0;
-		var info = LG.WriteView.getLogoInfo(this.getLogo());
+		var i = 0, n = 0, info;
+		this.removeErrors();
+		info = LG.WriteView.getLogoInfo(this.getLogo());
 		for(i = 0; i <= info.blocks.length - 1;i++){
 			n += info.blocks[i].length;
 			if(n >= offset){
@@ -52,11 +53,15 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.fileCollection.selected.set(data);
 	},
 	setLogo:function(s){
-		this.$("#logodiv").html(s);
+		var html = LG.WriteView.decodeToHtml(s);
+		this.$("#logodiv").html(html);
 	},
 	getLogo:function(){
-		var l = this.$("#logodiv").html();
-		return l;
+		var html, decoded;
+		html = this.$("#logodiv").html();
+		decoded = LG.WriteView.decodeFromHtml(html);
+		console.log("html is "+html+" decoded is "+decoded);
+		return decoded;
 	},
 	changedText:function(e){
 		return;
@@ -67,8 +72,7 @@ LG.WriteView = LG.AMenuView.extend({
 			this.changedTextDeBounce();
 		}
 	},
-	clickMe:function(e){
-		alert("click me");
+	removeErrors:function(e){
 		this.stopProp(e);
 		var c = this.$("#logodiv").children();
 		_.each(c, function(row, index){
@@ -78,26 +82,27 @@ LG.WriteView = LG.AMenuView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"click":"clickMe"
+			"click":"removeErrors"
 		} );
 		return {};
 	}
 });
 
-
-LG.WriteView.getLogoInfo = function(html){
-	console.log("html is "+html);
-	var $a = $("<div>"+html+"</div>");
-	var info = {"blocks":[ ]}, spacedString = "";
-	spacedString = html.split("<")[0];
-	info.blocks.push(  {"type":"block", "length":spacedString.length, "text":spacedString}  );
-	var c = $a.children("div");
-	c.each(function(){
-		var inside = $(this).text();
-		info.blocks.push({"type":"block", "length":inside.length, "text":inside});
-		spacedString += (inside + "\n");
-	});
-	info.spacedString = spacedString;
-	return info;
-	
+LG.WriteView.decodeFromHtml = function(html){
+	var s = "";
+	try{
+		s = LG.htmlParser.parse(html);
+	}
+	catch(e){
+		console.log("error parsing html "+e.message);
+	}
+	return s;
 };
+
+LG.WriteView.decodeToHtml = function(html){
+	var nodes = html.split("$");
+	var s = nodes.join("</div><div>");
+	s = "<div>"+s+"</div>";
+};
+
+
