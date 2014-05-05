@@ -13,7 +13,7 @@ return {"text":s.join("$")};
 }
 
 
-node = t:text
+node = t:logotext
 {
 return {"text":t.text};
 }
@@ -24,7 +24,7 @@ return {"text":w.text};
 }
 
 
-text = t:[a-z0-9\[\]\(\);\t\r\n\& ]+
+logotext = t:[a-z0-9\[\]\(\);\t\r\n\& ]+
 {
 	var s = "";
 	for(var i = 0;i<=t.length-1;i++){
@@ -33,6 +33,7 @@ text = t:[a-z0-9\[\]\(\);\t\r\n\& ]+
 	return {"text":s};
 }
 
+htmleltext = [a-zA-Z0-9_ \"=\-\:;\(\),]
 
 wrappednode =
 emptynode
@@ -46,8 +47,8 @@ startnode n:nodelist endnode
 }
 
 
-startnode = '<' [a-zA-Z0-9_ \"=\-\:;\(\),]+ '>'
+startnode = '<' htmleltext+ '>'
 
 endnode = '</' [a-z]+ '>'
 
-emptynode = '<br>' / startnode endnode /  '<' [a-zA-Z0-9_ \"=\-\:;\(\),]+ '/>'
+emptynode = '<br' htmleltext* '>' / startnode endnode /  '<' htmleltext+ '/>'
