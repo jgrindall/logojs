@@ -5,7 +5,7 @@ LG.Stack = function(){
 
 
 LG.Stack.prototype.push = function(n){
-	if(s.length < LG.Stack.MAX_STACK_SIZE){
+	if(this.s.length < LG.Stack.MAX_STACK_SIZE){
 		this.s.push(n);
 	}
 	else if(n > LG.Stack.MAX_FLOAT_SIZE){
@@ -17,7 +17,7 @@ LG.Stack.prototype.push = function(n){
 };
 
 LG.Stack.prototype.pop = function(){
-	if(s.length === 0){
+	if(this.s.length === 0){
 		throw new Error("Stack size empty");
 	}
 	else{
