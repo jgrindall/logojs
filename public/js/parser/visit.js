@@ -56,6 +56,12 @@ function visitbgstmt(node){
 	self.postMessage({ "type":"command", "name":"bg", "color":node.color });
 }
 
+function visitthickstmt(node){
+	visitchildren(node);
+	var thick = stack.pop();
+	self.postMessage({ "type":"command", "name":"thick", "amount":thick });
+}
+
 function visitcolorstmt(node){
 	self.postMessage({ "type":"command", "name":"color", "color":node.color });
 }
@@ -299,6 +305,9 @@ function visitNode(node){
 	}
 	else if(t=="number"){
 		visitnumber(node);
+	}
+	else if(t=="thickstmt"){
+		visitthickstmt(node);
 	}
 }
 

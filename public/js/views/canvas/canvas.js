@@ -9,8 +9,8 @@ LG.CanvasView = Backbone.View.extend({
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESET_CANVAS,			$.proxy(this.reset, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CAPTURE_IMAGE,		$.proxy(this.capture, this));
 		this.listenTo(LG.layoutModel,		"change",						$.proxy(this.onLayoutChanged, this));
-		this.listenTo(LG.graphicsModel,		"change:bg",					$.proxy(this.tick, this));
-		this.listenTo(LG.graphicsModel,		"change:inner",					$.proxy(this.tick, this));
+		this.listenTo(LG.graphicsModel,		"change:bg",					$.proxy(this.reset, this));
+		this.listenTo(LG.graphicsModel,		"change:inner",					$.proxy(this.reset, this));
 		this.listenTo(LG.canvasModel,		"change",						$.proxy(this.reset, this));
 	},
 	template:"tpl_canvas",
@@ -128,6 +128,9 @@ LG.CanvasView = Backbone.View.extend({
 			else if(data.name === "color"){
 				command = new LG.ColorCommand({"color":data.color});
 			}
+			else if(data.name === "thick"){
+				command = new LG.ThicknessCommand({"amount":data.amount});
+			}
 			this.output.add(command);
 			size = this.output.size();
 			if(size >= LG.output.MAX_SIZE){
@@ -155,7 +158,8 @@ LG.CanvasView = Backbone.View.extend({
 			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
-			this.showError(e.expected,e.offset);
+			console.log("Error "+JSON.stringify(e));
+			this.showError(e.expected, e.offset);
 			this.active = false;
 		}
 		if(tree){
@@ -179,10 +183,10 @@ LG.CanvasView = Backbone.View.extend({
 		setTimeout($.proxy(this.drawBatch, this), LG.output.TIMEOUT);
 	},
 	capture:function(){
-		var context, data, compositeOperation, tempCanvas, tempContext, img;
+		var context, data, tempCanvas, tempContext, img, x0, y0;
 		context = this.canvas.getContext("2d");
-		var x0 = Math.max(0, (this.canvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
-		var y0 = (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2;
+		x0 = Math.max(0, (this.canvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
+		y0 = (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2;
 		y0 = Math.max(0, y0 - LG.CanvasView.SNAPSHOT_HEIGHT/3);
 		data = context.getImageData(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
 		tempCanvas = document.createElement("canvas");

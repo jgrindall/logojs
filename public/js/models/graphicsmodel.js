@@ -25,34 +25,42 @@ LG.GraphicsModel = Backbone.Model.extend({
 
 LG.GraphicsModel.CLR0 = "#1abc9c";
 LG.GraphicsModel.CLR1 = "#2ecc71";
-LG.GraphicsModel.CLR2 = "#3498db";
+LG.GraphicsModel.CLR2 = "#2f88ca";
 LG.GraphicsModel.CLR3 = "#9b59b6";
 LG.GraphicsModel.CLR4 = "#34495e";
 LG.GraphicsModel.CLR5 = "#16a085";
 LG.GraphicsModel.CLR6 = "#27ae60";
-LG.GraphicsModel.CLR7 = "#2980b9";
-LG.GraphicsModel.CLR8 = "#8e44ad";
-LG.GraphicsModel.CLR9 = "#2c3e50";
-LG.GraphicsModel.CLR10 = "#f1c40f";
-LG.GraphicsModel.CLR11 = "#e67e22";
-LG.GraphicsModel.CLR12 = "#e74c3c";
-LG.GraphicsModel.CLR13 = "#ecf0f1";
-LG.GraphicsModel.CLR14 = "#95a5a6";
-LG.GraphicsModel.CLR15 = "#f39c12";
-LG.GraphicsModel.CLR16 = "#d35400";
-LG.GraphicsModel.CLR17 = "#c0392b";
-LG.GraphicsModel.CLR18 = "#bdc3c7";
-LG.GraphicsModel.CLR19 = "#7f8c8d";
+LG.GraphicsModel.CLR7 = "#f1c40f";
+LG.GraphicsModel.CLR8 = "#e67e22";
+LG.GraphicsModel.CLR9 = "#e74c3c";
+LG.GraphicsModel.CLR10 = "#ecf0f1";
+LG.GraphicsModel.CLR11 = "#95a5a6";
+LG.GraphicsModel.CLR12 = "#f39c12";
+LG.GraphicsModel.CLR13 = "#d35400";
+LG.GraphicsModel.CLR14 = "#c0392b";
+LG.GraphicsModel.CLR15 = "#bdc3c7";
+LG.GraphicsModel.CLR16 = "#6f7c7d";
+LG.GraphicsModel.CLR17 = "#ffffff";
+LG.GraphicsModel.CLR18 = "#000000";
 
 
+LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
+LG.GraphicsModel.BG		=	[4, 7, 10,  3,  7, 2,  10, 15, 4, 13, 8, 15, 11, 10, 13, 4, 15, 10, 14, 4,  10, 4, 10, 2,   2, 9, 10, 15, 2, 2,  3,  9, 10, 14, 7, 10, 8, 3, 18];
+LG.GraphicsModel.INNER	=	[9, 4, 1,  10,  2, 7,  3, 9, 15, 10, 4, 4,  4,  6,  4,  10, 3, 2, 7, 10,  0, 14, 7, 7, 10, 4, 9, 14,  4, 10, 10, 10, 7, 10, 2,  4,  10, 7, 3];
+LG.GraphicsModel.NAMES	=	["turquoise/turq", "green", "blue", "purple", "midnight", "darkkturqoise/dkturq/dkturquoise", "darkgreen/dkgreen", "yellow", "carrot/orange/org", "red", "snow", "gray/grey", "ltorange/lightorange/lightorg/ltorg", "dkorange/darkorg/dkorg/darkorange", "terracotta/dkred/darkred", "ltgray/ltgrey/lightgray/lightgrey", "darkgray/darkgrey/dkgrey/dkgray", "white", "black"];
 
-LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18, LG.GraphicsModel.CLR19];
-LG.GraphicsModel.BG		=	[9, 10, 13,  3,  10, 7,   13, 18, 9, 16, 11, 18, 14, 13, 16, 9, 18, 13, 17, 4,  13, 9, 13, 2,   7, 12, 13, 18, 2, 2,  8,  12, 13, 17, 10, 13, 11, 8, 13];
-LG.GraphicsModel.INNER	=	[12, 4, 1,  13,  7, 10,  8, 12, 18, 13, 9, 4,  4,  6,  9,  13, 3, 7, 10, 13,  0, 17, 10, 10, 13, 4, 12, 17,  4, 13, 13, 13, 10, 13, 2,  9,  13, 10, 3];
-
-
-
- 
+LG.GraphicsModel.getHex = function(color){
+	var r = "#ff0000";
+	_.each(LG.GraphicsModel.NAMES, function(s, i){
+		var clrs = s.split("/");
+		_.each(clrs, function(c, key){
+			if(c === color){
+				r = LG.GraphicsModel.CLRS[i];
+			}
+		});
+	});
+	return r;
+};
 
 
 

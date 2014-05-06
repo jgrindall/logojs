@@ -1,5 +1,6 @@
 
 
+
 start = sep* st:outsidestmt* sep*
 {
 	var obj={type:"start", children:[]};
@@ -57,9 +58,15 @@ sep* c:colorstmt sep*
 {
 	return c;
 }
-/sep* b:bgstmt sep*
+/
+sep* b:bgstmt sep*
 {
 	return b;
+}
+/
+sep* t:thickstmt sep*
+{
+	return t;
 }
 /
 sep* f5:callfnstmt sep*
@@ -74,39 +81,29 @@ return {"type":"penupstmt"};
 
 pendownstmt = sep* 'pendown' sep* '(' sep* ')' eoline
 {
-return {"type":"pendownstmt"};
+	return {"type":"pendownstmt"};
 }
 
 colorstmt = sep* 'color'  sep* '(' sep* c:color sep* ')' eoline
 {
-return {"type":"colorstmt", "color":c.text};
+	return {"type":"colorstmt", "color":c};
 }
 bgstmt = sep* 'bg'  sep* '(' sep* c:color sep* ')' eoline
 {
-return {"type":"bgstmt", "color":c.text};
+	return {"type":"bgstmt", "color":c};
 }
 
-color =
-'red'
+thickstmt = sep* ('thickness'/'thick')  sep* '(' sep* e:expression sep* ')' eoline
 {
-return {type:"color", "text":"red"};
-}
-/
-'green'
-{
-return {type:"color", "text":"green"};
-}
-/
-'blue'
-{
-return {type:"color", "text":"blue"};
+	return {"type":"thickstmt", "children":[e]};
 }
 
+color = 'turquoise'/ 'turq'/ 'green'/ 'blue'/ 'purple'/ 'midnight'/ 'darkkturqoise'/ 'dkturq'/ 'dkturquoise'/ 'darkgreen'/ 'dkgreen'/ 'yellow'/ 'carrot'/ 'orange'/ 'org'/ 'red'/ 'snow'/ 'gray'/ 'grey'/ 'ltorange'/ 'lightorange'/ 'lightorg'/ 'ltorg'/ 'dkorange'/ 'darkorg'/ 'dkorg'/ 'darkorange'/ 'terracotta'/ 'dkred'/ 'darkred'/ 'ltgray'/ 'ltgrey'/ 'lightgray'/ 'lightgrey'/ 'darkgray'/ 'darkgrey'/ 'dkgrey'/ 'dkgray'/ 'white'/ 'black'
 
 
 callfnstmt = sep* f:fnname sep* '(' sep* a:expressionlist sep* ')' eoline
 {
-return {type:"callfnstmt", name:f.name, args:a}
+	return {type:"callfnstmt", name:f.name, args:a};
 }
 
 
@@ -197,18 +194,18 @@ return {type:"csvarglist", children:v};
 
 csvexpressionlist = e:expressioncomma+
 {
-return {type:"csvexpressionlist", children:e};
+	return {type:"csvexpressionlist", children:e};
 }
 
 
 varnamecomma = sep* v:varname sep* ',' sep*
 {
-return {type:"varname", name:v.name};
+	return {type:"varname", name:v.name};
 }
 
 expressioncomma = sep* e:expression sep* ',' sep*
 {
-return e;
+	return e;
 }
 
 fnname = n:[a-z]*

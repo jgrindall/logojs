@@ -7,7 +7,6 @@ LG.Command.prototype.execute = function(context, position){
 	this.context = context;
 	this.graphics = this.context.graphics;
 	this.position = position;
-	this.startPosition = $.extend({}, position);
 };
 
 
@@ -38,18 +37,19 @@ LG.FdCommand.prototype.constructor = LG.FdCommand;
 
 LG.FdCommand.prototype.execute = function(context, position){
 	LG.ShapeCommand.prototype.execute.apply(this, arguments);
-	this.endPosition = {"theta":position.theta, "x":position.x + Math.cos(position.theta)*this.data.amount, "y":position.y + Math.sin(position.theta)*this.data.amount};
-	this.graphics.setStrokeStyle(position.thickness, "round", "round");
-	this.graphics.beginStroke(position.color);
+	var endX = this.position.x + Math.cos(this.position.theta)*this.data.amount;
+	var endY = this.position.y + Math.sin(this.position.theta)*this.data.amount;
+	this.graphics.setStrokeStyle(this.position.thickness, "round", "round");
+	this.graphics.beginStroke(this.position.color);
 	if(position.pen === "up"){
-		this.graphics.moveTo(this.endPosition.x, this.endPosition.y);
+		this.graphics.moveTo(endX, endY);
 	}
 	else{
-		this.graphics.moveTo(this.startPosition.x, this.startPosition.y);
-		this.graphics.lineTo(this.endPosition.x, this.endPosition.y);
+		this.graphics.moveTo(this.position.x, this.position.y);
+		this.graphics.lineTo(endX, endY);
 	}
-	this.position.x = this.endPosition.x;
-	this.position.y = this.endPosition.y;
+	this.position.x = endX;
+	this.position.y = endY;
 };
 
 
@@ -67,8 +67,8 @@ LG.RtCommand.prototype.constructor = LG.RtCommand;
 
 LG.RtCommand.prototype.execute = function(context, position){
 	LG.Command.prototype.execute.apply(this, arguments);
-	this.endPosition = {"theta": position.theta + this.data.amount*Math.PI/180, "x":position.x , "y":position.y };
-	this.position.theta = this.endPosition.theta;
+	var endPosition = {"theta": this.position.theta + this.data.amount*Math.PI/180, "x":this.position.x , "y":this.position.y };
+	this.position.theta = endPosition.theta;
 };
 
 LG.RtCommand.prototype.output = function(){
@@ -124,7 +124,8 @@ LG.BgCommand.prototype.constructor = LG.BgCommand;
 
 LG.BgCommand.prototype.execute = function(context, position){
 	LG.Command.prototype.execute.apply(this, arguments);
-	position.bg = "#00ff00";
+	var hex = LG.GraphicsModel.getHex(this.data.color);
+	position.bg = hex;
 };
 
 LG.BgCommand.prototype.output = function(){
@@ -140,14 +141,33 @@ LG.ColorCommand = function(data){
 };
 
 LG.ColorCommand.prototype = Object.create(LG.Command.prototype);
-LG.ColorCommand.prototype.constructor = LG.BgCommand;
+LG.ColorCommand.prototype.constructor = LG.ColorCommand;
 
 LG.ColorCommand.prototype.execute = function(context, position){
 	LG.Command.prototype.execute.apply(this, arguments);
-	position.color = "#00ffFF";
+	var hex = LG.GraphicsModel.getHex(this.data.color);
+	position.color = hex;
 };
 
 LG.ColorCommand.prototype.output = function(){
 	return "color " +this.data.color;
 };
 
+
+
+
+LG.ThicknessCommand = function(data){
+	LG.Command.call(this, data);
+};
+
+LG.ThicknessCommand.prototype = Object.create(LG.Command.prototype);
+LG.ThicknessCommand.prototype.constructor = LG.ThicknessCommand;
+
+LG.ThicknessCommand.prototype.execute = function(context, position){
+	LG.Command.prototype.execute.apply(this, arguments);
+	position.thickness = this.data.amount;
+};
+
+LG.ThicknessCommand.prototype.output = function(){
+	return "thick " +this.data.amount;
+};
