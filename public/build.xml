@@ -106,7 +106,7 @@
 				<file name="parser/output.js"/>
 				<file name="parser/commands.js"/>
 				<file name="models/base.js"/>		
-				
+				<file name="models/turtlemodel.js"/>
 				<file name="models/spinner.js"/>
 				<file name="models/filemodel.js"/>
 				
@@ -133,6 +133,8 @@
 				<file name="views/spinner/spinner.js"/>		
 								
 				<file name="views/easel/turtle.js"/>
+				<file name="views/easel/bg.js"/>
+				<file name="views/easel/commands.js"/>
 				<file name="views/activity/activity.js"/>	
 				<file name="views/activity/base.js"/>	
 				<file name="views/activity/activitybuttons.js"/>	

@@ -51,7 +51,7 @@ LG.WriteView = LG.AMenuView.extend({
 		$(row).css("background-color", "#FFA07A");
 		exp = expected[0].value;
 		if(exp === ";"){
-			msg = "Error, did you miss off a \";\"? Check your code!";
+			msg = "Error, did you miss off a semi-colon (\";\")?  Check your code!";
 		}
 		else{
 			msg = "Error, expected: \""+exp+"\" check your code!";
@@ -131,6 +131,10 @@ LG.WriteView.decodeFromHtml = function(html){
 	}
 	console.log("decodeFromHtml "+html+" -> "+JSON.stringify(s));
 	return s.text;
+};
+
+LG.WriteView.formatForGallery = function(logo){
+	return logo.split(LG.WriteView.SEPARATOR).join("\n");
 };
 
 LG.WriteView.decodeToHtml = function(html){

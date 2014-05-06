@@ -15,7 +15,6 @@ LG.Events.CLICK_STOP			=	"LG::clickStop";
 LG.Events.CLICK_NEW				=	"LG::clickNew";
 LG.Events.CAPTURE_IMAGE			=	"LG::captureImage";
 LG.Events.DRAW_FINISHED			=	"LG::drawFinished";
-LG.Events.COMMAND_FINISHED		=	"LG::commandFinished";
 LG.Events.TICK					=	"LG::commandTick";
 LG.Events.PREVIEW_FILE			=	"LG::previewFile";
 LG.Events.CLICK_DRAW			=   "LG::clickDraw";

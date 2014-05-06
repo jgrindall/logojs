@@ -44,6 +44,22 @@ function visitfdstmt(node){
 	self.postMessage({ "type":"command", "name":"fd", "amount":amount });
 }
 
+function visitpenupstmt(node){
+	self.postMessage({ "type":"command", "name":"penup" });
+}
+
+function visitpendownstmt(node){
+	self.postMessage({ "type":"command", "name":"pendown" });
+}
+
+function visitbgstmt(node){
+	self.postMessage({ "type":"command", "name":"bg", "color":node.color });
+}
+
+function visitcolorstmt(node){
+	self.postMessage({ "type":"command", "name":"color", "color":node.color });
+}
+
 function visitexpression(node){
 	var num  = 0;
 	visitchildren(node);
@@ -191,6 +207,12 @@ function visitNode(node){
 	else if(t=="insidestmt"){
 		visitinsidestmt(node);
 	}
+	else if(t=="penupstmt"){
+		visitpenupstmt(node);
+	}
+	else if(t=="pendownstmt"){
+		visitpendownstmt(node);
+	}
 	else if(t == "definefnstmt"){
 		visitdefinefnstmt(node);
 	}
@@ -247,6 +269,12 @@ function visitNode(node){
 	}
 	else if(t=="timesterm"){
 		visittimesterm(node);
+	}
+	else if(t=="bgstmt"){
+		visitbgstmt(node);
+	}
+	else if(t=="colorstmt"){
+		visitcolorstmt(node);
 	}
 	else if(t=="plusexpression"){
 		visitplusexpression(node);

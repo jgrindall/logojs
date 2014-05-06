@@ -2,21 +2,20 @@
 LG.CanvasView = Backbone.View.extend({
 	
 	initialize:function(){
-		this.model = new LG.CanvasModel();
-		LG.EventDispatcher.bind(LG.Events.COMMAND_FINISHED, $.proxy(this.nextCommand, this));
-		LG.EventDispatcher.bind(LG.Events.TICK, $.proxy(this.tick, this));
-		LG.EventDispatcher.bind(LG.Events.CLICK_DRAW, $.proxy(this.draw, this));
-		LG.EventDispatcher.bind(LG.Events.CLICK_STOP, $.proxy(this.stop, this));
-		LG.EventDispatcher.bind(LG.Events.RESIZE, $.proxy(this.onResize, this));
-		LG.EventDispatcher.bind(LG.Events.RESET_CANVAS, $.proxy(this.reset, this));
-		LG.EventDispatcher.bind(LG.Events.CAPTURE_IMAGE, $.proxy(this.capture, this));
-		this.listenTo(LG.layoutModel, "change", $.proxy(this.onLayoutChanged, this));
-		this.listenTo(this.model, "change", $.proxy(this.reset, this));
-		this.listenTo(LG.graphicsModel, "change:bg", $.proxy(this.drawBg, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.TICK,					$.proxy(this.tick, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_DRAW,			$.proxy(this.draw, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_STOP,			$.proxy(this.stop, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.RESIZE,				$.proxy(this.onResize, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.RESET_CANVAS,			$.proxy(this.reset, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.CAPTURE_IMAGE,		$.proxy(this.capture, this));
+		this.listenTo(LG.layoutModel,		"change",						$.proxy(this.onLayoutChanged, this));
+		this.listenTo(LG.graphicsModel,		"change:bg",					$.proxy(this.tick, this));
+		this.listenTo(LG.graphicsModel,		"change:inner",					$.proxy(this.tick, this));
+		this.listenTo(LG.canvasModel,		"change",						$.proxy(this.reset, this));
 	},
 	template:"tpl_canvas",
 	render:function(){
-		this.loadTemplate(this.template, this.model.toJSON(), {replace:true} );
+		this.loadTemplate(this.template, LG.canvasModel.toJSON(), {replace:true} );
 		return this;
 	},
 	events:function(){
@@ -36,7 +35,6 @@ LG.CanvasView = Backbone.View.extend({
 		}
 	},
 	clickMe:function(){
-		console.log("click "+this.active);
 		if(LG.layoutModel.get("show") == "write"){
 			if(this.active){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
@@ -51,14 +49,15 @@ LG.CanvasView = Backbone.View.extend({
 		w = $("body").width() - 230;
 		h = $("body").height();
 		this.$el.width(w).height(h);
-		this.model.set({"width":w, "height":h});
-		this.stop();
+		LG.canvasModel.set({"width":w, "height":h});
 	},
-	
 	afterAdded:function(){
+		this.canvas = document.getElementById("gamecanvas");
+		this.$canvas = $(this.canvas);
+		this.addChildren();
 		this.reset();
 	},
-	removeAll:function(){
+	removeAllChildren:function(){
 		if(this.container){
 			this.container.removeAllChildren();
 		}
@@ -71,41 +70,40 @@ LG.CanvasView = Backbone.View.extend({
 		this.container = null;
 		this.canvas = null;
 	},
-	drawBg:function(){
-		var w = this.model.get("width") ;
-		var h = this.model.get("height") ;
-		this.bg.graphics.beginFill(LG.graphicsModel.getBg()).drawRect(0, 0, w, h);
-		this.tick();
-	},
-	reset:function(){
-		var w = this.model.get("width") ;
-		var h = this.model.get("height") ;
-		this.active = false;
-		this.ended = false;
-		this.removeAll();
-		this.canvas = document.getElementById("gamecanvas");
-		$(this.canvas).attr("width", w).attr("height", h );
+	addChildren:function(){
 		this.stage = new createjs.Stage(this.canvas);
 		this.turtle = new LG.Easel.Turtle(10);
-		this.bg = new createjs.Shape();
-		this.commands = new createjs.Shape();
+		this.bg = new LG.Easel.Bg();
+		this.commands = new LG.Easel.Commands();
 		this.container = new createjs.Container();
 		this.container.addChild(this.bg);
 		this.container.addChild(this.commands);
 		this.container.addChild(this.turtle);
 		this.stage.addChild(this.container);
-		this.position = {theta:-Math.PI/2, x:w/2, y:h/2};
-		this.drawBg();
+	},
+	reset:function(){
+		this.stop();
+		var w = LG.canvasModel.get("width");
+		var h = LG.canvasModel.get("height");
+		this.$canvas.attr("width", w).attr("height", h);
+		this.position = {"theta":-Math.PI/2, x:w/2, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
+		this.commands.graphics.clear();
+		this.tick();
 	},
 	tick:function(){
 		if(this.turtle){
 			this.turtle.x = this.position.x;
 			this.turtle.y = this.position.y;
 			this.turtle.rotation = this.position.theta*180/Math.PI;
+			this.turtle.drawMe(this.position.color);
+		}
+		if(this.bg){
+			this.bg.drawMe(this.position.bg);
 		}
 		this.stage.update();
 	},
 	stop:function(){
+		this.ended = false;
 		this.active = false;
 	},
 	onMessage:function(msg){
@@ -113,10 +111,22 @@ LG.CanvasView = Backbone.View.extend({
 		//console.log("Worker said : " + JSON.stringify(msg.data));
 		if(data.type === "command"){
 			if(data.name === "fd"){
-				command = new LG.FdCommand(data.amount);
+				command = new LG.FdCommand({"amount":data.amount});
 			}
 			else if(data.name === "rt"){
-				command = new LG.RtCommand(data.amount);
+				command = new LG.RtCommand({"amount":data.amount});
+			}
+			else if(data.name === "penup"){
+				command = new LG.PenUpCommand();
+			}
+			else if(data.name === "pendown"){
+				command = new LG.PenDownCommand();
+			}
+			else if(data.name === "bg"){
+				command = new LG.BgCommand({"color":data.color});
+			}
+			else if(data.name === "color"){
+				command = new LG.ColorCommand({"color":data.color});
 			}
 			this.output.add(command);
 			size = this.output.size();
@@ -149,16 +159,15 @@ LG.CanvasView = Backbone.View.extend({
 			this.active = false;
 		}
 		if(tree){
+			console.log(JSON.stringify(tree));
 			try{
 				this.process(tree);
 			}
 			catch(e){
 				console.log("e: "+e);
-				// run time errors here!
 			}
 		}
-		// TODO put this in a worker too?? YES!
-		
+		// TODO put this in a worker?
 	},
 	showError:function(expected, offset){
 		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, offset);
@@ -200,6 +209,7 @@ LG.CanvasView = Backbone.View.extend({
 	finished:function(){
 		LG.Utils.growl("Finished!");
 		this.active = false;
+		this.ended = true;
 		this.trigger(LG.Events.DRAW_FINISHED);
 	},
 	drawBatch:function(){
@@ -210,7 +220,7 @@ LG.CanvasView = Backbone.View.extend({
 		for(i = 0; i <= LG.output.BATCH_SIZE - 1; i++){
 			var command = this.output.at(this.commandIndex);
 			if(command){
-				command.execute(this.commands, this.position, this.container);
+				command.execute(this.commands, this.position);
 				this.commandIndex++;
 			}
 		}
@@ -238,15 +248,3 @@ LG.CanvasModel = Backbone.Model.extend({
 	}
 });
 
-
-/**
-
-// usage:
-// instead of setInterval(render, 16) ....
-
-(function animloop(){
-  requestAnimFrame(animloop);
-  render();
-})();
-
-**/

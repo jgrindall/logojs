@@ -50,6 +50,7 @@ LG.Launcher.prototype.loadTemplates = function(){
 LG.Launcher.prototype.makeObjects = function(){
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
+	LG.canvasModel = new LG.CanvasModel();
 	LG.storage = LG.create.storage();
 	LG.sounds = new LG.Sounds();
 	LG.spinnerModel = new LG.SpinnerModel();

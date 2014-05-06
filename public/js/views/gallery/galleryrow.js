@@ -20,7 +20,7 @@ LG.AGalleryRowView = Backbone.View.extend({
 	render:function(){
 		var data = this.model.toJSON();
 		if(data.logo){
-			data.logo = data.logo.split(LG.WriteView.SEPARATOR).join("");
+			data.logo = LG.WriteView.formatForGallery(data.logo);
 		}
 		this.loadTemplate(  this.template, data , {replace:true} );
 		this.updateLayout();

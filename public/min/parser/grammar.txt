@@ -1,4 +1,5 @@
 
+
 start = sep* st:outsidestmt* sep*
 {
 	var obj={type:"start", children:[]};
@@ -42,10 +43,66 @@ sep* f4:makestmt sep*
 	return {type:"insidestmt", children:[f4]};
 }
 /
+sep* p:penupstmt sep*
+{
+	return p;
+}
+/
+sep* p:pendownstmt sep*
+{
+	return p;
+}
+/
+sep* c:colorstmt sep*
+{
+	return c;
+}
+/sep* b:bgstmt sep*
+{
+	return b;
+}
+/
 sep* f5:callfnstmt sep*
 {
-return {type:"insidestmt", children:[f5]};
+	return {type:"insidestmt", children:[f5]};
 }
+
+penupstmt = sep* 'penup' sep* '(' sep* ')' eoline
+{
+return {"type":"penupstmt"};
+}
+
+pendownstmt = sep* 'pendown' sep* '(' sep* ')' eoline
+{
+return {"type":"pendownstmt"};
+}
+
+colorstmt = sep* 'color'  sep* '(' sep* c:color sep* ')' eoline
+{
+return {"type":"colorstmt", "color":c.text};
+}
+bgstmt = sep* 'bg'  sep* '(' sep* c:color sep* ')' eoline
+{
+return {"type":"bgstmt", "color":c.text};
+}
+
+color =
+'red'
+{
+return {type:"color", "text":"red"};
+}
+/
+'green'
+{
+return {type:"color", "text":"green"};
+}
+/
+'blue'
+{
+return {type:"color", "text":"blue"};
+}
+
+
 
 callfnstmt = sep* f:fnname sep* '(' sep* a:expressionlist sep* ')' eoline
 {
@@ -84,7 +141,7 @@ makestmt = v:vardef sep* ':=' sep* e:expression eoline
 	return {type:"makestmt", children:[v,e]};
 }
 
-definefnstmt = 'proc' sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}'
+definefnstmt = 'proc' sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}' sep*
 {
          return {type:"definefnstmt", name:f.name, args:a, stmts:s};
 }
