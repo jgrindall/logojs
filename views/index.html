@@ -328,7 +328,7 @@
 		<script id="tpl_write" type="text/template">
 			
 			<div id="write" class="menularge">
-				<div id="logodiv" contenteditable="true"><div>rpt 6[</div><div>  fd(100);</div><div>  rt(60);</div><div>]</div></div>
+				<div id="logodiv" contenteditable="true"></div>
 				<div class="error"></div>
 			</div>
 			
@@ -786,7 +786,7 @@ drawSpiral(10);</pre>
 						<div>
 							<p>Welcome to Logotacular!</p>
 							<p>Logotacular is a simple programming app that lets you draw geometric shapes and patterns.</p>
-							<p>Try writing this in the right hand panel: fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);fd(100);rt(90);</p>
+							<p>Try writing this in the right hand panel: <br/>rpt 6[fd(100);rt(60);]</p>
 							
 							<button class="transparent button1 copy"><span>Copy it!</span></button>
 							<button class="transparent button0 next"><span>Next</span></button>
@@ -798,8 +798,8 @@ drawSpiral(10);</pre>
 					<div class="helpbox helpboxright">
 						<div>
 							<p>When you're ready, click anywhere on the left hand side to draw your Logo!</p>
-							<p style="margin-right:130px;">fd(100); moves forward 100 units, and rt(90); turns 90 degrees, so repeating that four times draws a square!</p>
-							<img style="position:absolute;bottom:50px;right:6px;" src="img/help/square.png"/>
+							<p style="margin-right:130px;">fd(100); moves forward 100 units, rt(60); turns 60 degrees right, so repeating that 6 times draws a hexagon!</p>
+							<img style="position:absolute;bottom:50px;right:6px;" src="img/help/demo.png"/>
 							<button class="transparent button1 draw"><span>Draw it!</span></button>
 							<button class="transparent button0 next"><span>Next</span></button>
 						</div>
