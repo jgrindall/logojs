@@ -1,9 +1,10 @@
 self.LG = {};
 
 importScripts("stack.js");
+importScripts("symtable.js");
 
-var stack = new LG.stack();
-var vars = {};
+var stack = new LG.Stack();
+var symTable = new LG.SymTable();
 
 self.addEventListener('message', function(msg) {
 	if(msg.data.type === "tree"){
@@ -22,7 +23,9 @@ function visitchildren(node){
 }
 
 function visitstart(node){
+	symTable.enterBlock();
 	visitchildren(node);
+	symTable.exitBlock();
 }
 
 function visitinsidestmt(node){
@@ -32,7 +35,7 @@ function visitmakestmt(node){
 	var ch = node.children;
 	var name = ch[0].name;
 	visitNode( ch[1] );
-	vars[name] = stack.pop();
+	symTable.add(name, stack.pop());
 }
 
 function visitfdstmt(node){
@@ -42,8 +45,8 @@ function visitfdstmt(node){
 }
 
 function visitexpression(node){
+	var num  = 0;
 	visitchildren(node);
-	var num = 0;
 	var l = node.children.length;
 	for(var i=0;i<l;i++){
 		num += stack.pop();
@@ -61,6 +64,20 @@ function visitmultexpression(node){
 	stack.push(num);
 }
 
+function visitdivterm(node){
+	visitchildren(node);
+	var num = stack.pop();
+	stack.push(1/num);
+}
+
+function visitrptstmt(node){
+	var ch = node.children;
+	visitNode( ch[0] );
+	var num = stack.pop();	
+	for(var i = 1;i<=num; i++){
+		visitNode(ch[1]);
+	}
+}
 
 function visitunaryexpression(node){
 	visitchildren(node);
@@ -86,7 +103,7 @@ function visittimesordivterms(node){
 	var l = ch.length;
 	// now there are 'l' values on the stack.
 	var num  = 1;
-	for(var i=0;i<l;i++){
+	for(var i = 0; i < l; i++){
 		num *= stack.pop();
 	}
 	stack.push(num);
@@ -104,12 +121,20 @@ function visitplusorminus(node){
 	visitchildren(node);
 }
 
+function visitoutsidefnlist(node){
+	visitchildren(node);
+}
+
+function visitinsidefnlist(node){
+	visitchildren(node);
+}
+
 function visitplusexpression(node){
 	visitchildren(node);
 }
 
 function visitvarname(node){
-	var num = vars[node.name];
+	var num = symTable.get(node.name);
 	if(!num){
 		throw new Error("not found "+node.name);
 	}
@@ -123,15 +148,54 @@ function visitminusexpression(node){
 	var num = stack.pop();
 	stack.push(-1*num);
 }
+function visitdefinefnstmt(node){
+	var name = node.name;
+	var argsNode = node.args;
+	var statementsNode = node.stmts;
+	symTable.addFunction(name, argsNode, statementsNode);
+}
+function visitcallfnstmt(node){
+	var name = node.name;
+	var f = symTable.getFunction(name);
+	if(f){
+		symTable.enterBlock();
+		visitchildren(node.args);
+		executeFunction(f);
+		symTable.exitBlock();
+	}
+	else{
+		//TODO - error
+	}
+}
+
+function executeFunction(f){
+	var i;
+	var vals = [ ];
+	var len = f.argsNode.children.length;
+	for(i = 0; i <= len - 1; i++){
+		vals.push(stack.pop());
+	}
+	for(i = 0; i <= len - 1; i++){
+		var argNode = f.argsNode.children[i];
+		var varname = argNode.name;
+		symTable.add(varname, vals[len - 1 - i]);
+	}
+	visitNode(f.statementsNode);
+}
 
 function visitNode(node){
 	var t = node.type;
-	//postMessage({"message":"worker received "+node.type+", "+JSON.stringify(node)});
 	if(t=="start"){
 		visitstart(node);
 	}
 	else if(t=="insidestmt"){
 		visitinsidestmt(node);
+	}
+	else if(t == "definefnstmt"){
+		visitdefinefnstmt(node);
+	}
+	else if(t == "callfnstmt"){
+		visitcallfnstmt(node);
 	}
 	else if(t=="fdstmt"){
 		visitfdstmt(node);
@@ -148,8 +212,11 @@ function visitNode(node){
 	else if(t=="expression"){
 		visitexpression(node);
 	}
-	else if(t=="insidefnlis"){
+	else if(t=="insidefnlist"){
 		visitinsidefnlist(node);
+	}
+	else if(t=="outsidefnlist"){
+		visitoutsidefnlist(node);
 	}
 	else if(t=="vardef"){
 		visitvardef(node);

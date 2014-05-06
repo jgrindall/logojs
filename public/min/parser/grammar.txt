@@ -1,0 +1,296 @@
+
+start = sep* st:outsidestmt* sep*
+{
+	var obj={type:"start", children:[]};
+	for(var i=0;i<=st.length-1;i++){
+		obj.children.push(st[i]);
+	}
+	return obj;
+}
+
+
+outsidestmt =
+
+insidestmt
+/
+definefnstmt
+
+
+
+insidestmt =
+
+sep* f1:fdstmt sep* 
+{
+	return {type:"insidestmt", children:[f1]};
+}
+
+/
+sep* f2:rtstmt sep*
+{
+	return {type:"insidestmt", children:[f2]};
+}
+
+/
+sep* f3:rptstmt sep*
+{
+	return {type:"insidestmt", children:[f3]};
+}
+
+/
+sep* f4:makestmt sep*
+{
+	return {type:"insidestmt", children:[f4]};
+}
+/
+sep* f5:callfnstmt sep*
+{
+return {type:"insidestmt", children:[f5]};
+}
+
+callfnstmt = sep* f:fnname sep* '(' sep* a:expressionlist sep* ')' eoline
+{
+return {type:"callfnstmt", name:f.name, args:a}
+}
+
+
+fdstmt  = 'fd' sep* '(' num:expression  ')' eoline 
+{
+	return {type:"fdstmt", children:[num]};
+}
+
+rtstmt  = 'rt' sep* '(' num:expression ')' eoline 
+{
+	return {type:"rtstmt", children:[num]};
+}
+
+rptstmt  = 'rpt' sep* num:expression sep* '[' sep* list:insidefnlist sep* ']' 
+{
+	return {type:"rptstmt", children:[num,list]};
+}
+
+insidefnlist = sep* l:insidestmt*
+{
+    var obj={};
+	obj.type="insidefnlist";
+	obj.children=[];
+	for(var i=0;i<=l.length-1;i++){
+		obj.children.push(l[i]);
+	}
+	return obj;
+}
+
+makestmt = v:vardef sep* ':=' sep* e:expression eoline
+{
+	return {type:"makestmt", children:[v,e]};
+}
+
+definefnstmt = 'proc' sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}'
+{
+         return {type:"definefnstmt", name:f.name, args:a, stmts:s};
+}
+
+
+vardef = n:[a-z]
+{
+	return {type:"vardef", name:n.toString()};
+} 
+
+
+expressionlist = 
+c:csvexpressionlist e:expression sep*
+{
+var allchildren = c.children;
+return {type:"expressionlist", children:allchildren.concat([e])};
+}
+/
+sep* e:expression sep*
+{
+return {type:"expressionlist", children:[e]};
+}
+/
+sep*
+{
+return {type:"expressionlist", children:[]};
+}
+
+
+arglist =
+c:csvarglist v:varname sep*
+{
+var allchildren = c.children;
+return {type:"arglist", children:allchildren.concat([v])};
+}
+/
+sep* v:varname sep*
+{
+return {type:"arglist", children:[v]};
+}
+/
+sep*
+{
+return {type:"arglist", children:[]};
+}
+
+
+
+csvarglist = v:varnamecomma+
+{
+return {type:"csvarglist", children:v};
+}
+
+csvexpressionlist = e:expressioncomma+
+{
+return {type:"csvexpressionlist", children:e};
+}
+
+
+varnamecomma = sep* v:varname sep* ',' sep*
+{
+return {type:"varname", name:v.name};
+}
+
+expressioncomma = sep* e:expression sep* ',' sep*
+{
+return e;
+}
+
+fnname = n:[a-z]*
+{
+	return {type:"fnname", name:n.toString()};
+} 
+
+
+expression = m:multexpression pm:plusorminus*
+{
+	var obj={};
+	obj.type="expression";
+	obj.children=[];
+	obj.children.push(m);
+	for(var i=0;i<=pm.length-1;i++){
+		obj.children.push(pm[i]);
+	}
+	return obj;
+}
+
+
+plusorminus =
+
+p:plusexpression
+{
+	return {type:"plusorminus", children:[p]};
+}
+/  m:minusexpression 
+{
+	return {type:"plusorminus", children:[m]};
+}
+
+
+multexpression = u:unaryexpression td:timesordivterms
+{
+	var obj={};
+	obj.type="multexpression";
+	obj.children=[];
+	obj.children.push(u);
+        if(td.children.length >= 1){
+	     obj.children.push(td);
+        }
+	return obj;
+}
+
+
+timesordivterms = t:timesordivterm*
+{
+	var obj={};
+	obj.type="timesordivterms";
+	obj.children=[];
+	for(var i=0;i<=t.length-1;i++){
+		obj.children.push(t[i]);
+	}
+	return obj;
+}
+
+
+timesordivterm = sep* t:timesterm sep*
+{
+	return {type:"timesordivterm", children:[t]};
+}
+/ d:divterm
+{
+	return {type:"timesordivterm", children:[d]};
+}
+
+
+plusexpression = '+' m:multexpression
+{
+	return {type:"plusexpression", children:[m]};
+}
+
+
+minusexpression = '-' m:multexpression
+{
+	return {type:"minusexpression", children:[m]};
+}
+
+
+unaryexpression = n:negate
+{
+	return {type:"unaryexpression", children:[n]};
+}
+/ num:numberexpression 
+{
+	return {type:"unaryexpression", children:[num]};
+}
+
+
+negate = sep* '-' sep* n:numberexpression
+{
+	return {type:"negate", children:[n]};
+}
+
+
+timesterm = sep* '*' sep* u:unaryexpression
+{
+	return {type:"timesterm", children:[u]};
+}
+
+
+divterm =  sep* '/' sep* u:unaryexpression
+{
+	return {type:"divterm", children:[u]};
+}
+
+
+numberexpression = sep* n:number sep*
+{
+	return {type:"numberexpression",children:[n]};
+}
+/ '(' e:expression ')'
+{
+	return {type:"numberexpression", children:[e]};
+}
+/ v:varname
+{
+	return {type:"numberexpression", children:[v]};
+}
+
+
+
+number = d:  ([0-9]+)
+{
+	var s = "";
+	var l = d.length;
+	for(var i=0;i<l;i++){
+		s+=d[i];
+	}
+	return {type:"number",value:parseInt(s, 10)};
+}
+
+
+varname = n:[a-z]
+{
+	return {type:"varname",name:n.toString()};
+}
+
+sep = [ \t\r\n$] 
+
+eoline = sep* ';' sep*
