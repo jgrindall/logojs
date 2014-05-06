@@ -50,8 +50,8 @@ LG.htmlParser = (function() {
         peg$c5 = function(w) {
         return {"text":w.text};
         },
-        peg$c6 = /^[a-z0-9[\]();\t\r\n& ]/,
-        peg$c7 = { type: "class", value: "[a-z0-9[\\]();\\t\\r\\n& ]", description: "[a-z0-9[\\]();\\t\\r\\n& ]" },
+        peg$c6 = /^[a-z0-9[\]();\t\r\n&{},\/*:=\-+ ]/,
+        peg$c7 = { type: "class", value: "[a-z0-9[\\]();\\t\\r\\n&{},\\/*:=\\-+ ]", description: "[a-z0-9[\\]();\\t\\r\\n&{},\\/*:=\\-+ ]" },
         peg$c8 = function(t) {
         	var s = "";
         	for(var i = 0;i<=t.length-1;i++){
@@ -59,8 +59,8 @@ LG.htmlParser = (function() {
         	}
         	return {"text":s};
         },
-        peg$c9 = /^[a-zA-Z0-9_ "=\-:;(),]/,
-        peg$c10 = { type: "class", value: "[a-zA-Z0-9_ \"=\\-:;(),]", description: "[a-zA-Z0-9_ \"=\\-:;(),]" },
+        peg$c9 = /^[a-zA-Z0-9_ "=\-:;(),!]/,
+        peg$c10 = { type: "class", value: "[a-zA-Z0-9_ \"=\\-:;(),!]", description: "[a-zA-Z0-9_ \"=\\-:;(),!]" },
         peg$c11 = function() {
         return {"text":""};
         },
