@@ -1,19 +1,34 @@
 
 LG.Stack = function(){
-	this.s = [];
+	this.s = [ ];
 };
 
 
 LG.Stack.prototype.push = function(n){
-	this.s.push(n);
+	if(s.length < LG.Stack.MAX_STACK_SIZE){
+		this.s.push(n);
+	}
+	else if(n > LG.Stack.MAX_FLOAT_SIZE){
+		throw new Error("Overflow");
+	}
+	else{
+		throw new Error("Stack size exceeded");
+	}
 };
 
 LG.Stack.prototype.pop = function(){
-	var r = this.s.pop();
-	return r;
+	if(s.length === 0){
+		throw new Error("Stack size empty");
+	}
+	else{
+		var r = this.s.pop();
+		return r;
+	}
 };
 
 LG.Stack.prototype.describe = function(){
 	return this.s.toString();
 };
 
+LG.Stack.MAX_STACK_SIZE = 256;
+LG.Stack.MAX_FLOAT_SIZE = 2000;

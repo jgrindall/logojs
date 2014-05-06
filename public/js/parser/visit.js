@@ -89,13 +89,19 @@ function visitmultexpression(node){
 function visitdivterm(node){
 	visitchildren(node);
 	var num = stack.pop();
-	stack.push(1/num);
+	if(num === 0){
+		throw new Error("Division by zero");
+	}
+	else{
+		stack.push(1/num);
+	}
 }
 
 function visitrptstmt(node){
 	var ch = node.children;
 	visitNode( ch[0] );
-	var num = stack.pop();	
+	var num = stack.pop();
+	alert("//TODO check if "+num+" is integer?");
 	for(var i = 1;i<=num; i++){
 		visitNode(ch[1]);
 	}
@@ -158,7 +164,7 @@ function visitplusexpression(node){
 function visitvarname(node){
 	var num = symTable.get(node.name);
 	if(!num){
-		throw new Error("not found "+node.name);
+		throw new Error("Variable not found "+node.name);
 	}
 	else{
 		stack.push(num);
@@ -186,21 +192,22 @@ function visitcallfnstmt(node){
 		symTable.exitBlock();
 	}
 	else{
-		//TODO - error
+		throw new Error("Function "+name+" not found");
 	}
 }
 
 function executeFunction(f){
-	var i;
-	var vals = [ ];
-	var len = f.argsNode.children.length;
+	var i, vals, len, argNode, varName;
+	vals = [ ];
+	len = f.argsNode.children.length;
 	for(i = 0; i <= len - 1; i++){
 		vals.push(stack.pop());
 	}
 	for(i = 0; i <= len - 1; i++){
-		var argNode = f.argsNode.children[i];
-		var varname = argNode.name;
-		symTable.add(varname, vals[len - 1 - i]);
+		argNode = f.argsNode.children[i];
+		// TODO - check it!
+		varName = argNode.name;
+		symTable.add(varName, vals[len - 1 - i]);
 	}
 	visitNode(f.statementsNode);
 }
