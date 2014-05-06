@@ -5,7 +5,7 @@ LG.WriteView = LG.AMenuView.extend({
 		var _this = this;
 		this.error = {"show":false, "row":-1};
 		LG.AMenuView.prototype.initialize.call(this);
-		this.changedTextDeBounce = $.debounce( 500, $.proxy(this.save, this));
+		this.changedTextDeBounce = $.debounce( 750, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
@@ -38,7 +38,7 @@ LG.WriteView = LG.AMenuView.extend({
 		}
 	},
 	showErrorRow:function(expected, offset){
-		var s, okChars, i, row;
+		var s, okChars, i, row, msg, exp;
 		s = this.getLogo();
 		if(!s){
 			return;
@@ -49,7 +49,14 @@ LG.WriteView = LG.AMenuView.extend({
 		row = this.logoDiv.children()[i];
 		this.error = {"show":true, "row":i};
 		$(row).css("background-color", "#FFA07A");
-		this.$(".error").text("Error, expected: \""+expected[0].value+"\" check your code!").addClass("show");
+		exp = expected[0].value;
+		if(exp === ";"){
+			msg = "Error, did you miss off a \";\"? Check your code!";
+		}
+		else{
+			msg = "Error, expected: \""+exp+"\" check your code!";
+		}
+		this.$(".error").text(msg).addClass("show");
 		this.scrollToChild(i);
 	},
 	scrollToChild:function(index){
@@ -122,7 +129,7 @@ LG.WriteView.decodeFromHtml = function(html){
 	catch(e){
 		console.log("error parsing html "+e.message);
 	}
-	console.log("decodeFromHtml "+html+" -> "+JSON.stringify(s)+"   "+s);
+	console.log("decodeFromHtml "+html+" -> "+JSON.stringify(s));
 	return s.text;
 };
 
