@@ -232,5 +232,23 @@ app.listen(port, function(){
 
 
 
+/*
+var path = require (' path ');
+
+module.exports = function (mongoose) {
+
+  //we Declare the circuit for Mongoose
+  var Schema = new mongoose. Schema ({
+    name: {type: String, required: true}
+  });
+
+  //we Initialize model with a file name in which it is
+  return mongoose.model (path.basename (module.filename.js '), Schema);
+};
+ 
+ // http://sysmagazine.com/posts/213931/
+ // http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/
+*/
+
   
 
