@@ -64,6 +64,12 @@ function visitmultexpression(node){
 	stack.push(num);
 }
 
+function visitdivterm(node){
+	visitchildren(node);
+	var num = stack.pop();
+	stack.push(1/num);
+}
+
 function visitrptstmt(node){
 	var ch = node.children;
 	visitNode( ch[0] );
@@ -151,10 +157,15 @@ function visitdefinefnstmt(node){
 function visitcallfnstmt(node){
 	var name = node.name;
 	var f = symTable.getFunction(name);
-	symTable.enterBlock();
-	visitchildren(node.args);
-	executeFunction(f);
-	symTable.exitBlock();
+	if(f){
+		symTable.enterBlock();
+		visitchildren(node.args);
+		executeFunction(f);
+		symTable.exitBlock();
+	}
+	else{
+		//TODO - error
+	}
 }
 
 function executeFunction(f){
