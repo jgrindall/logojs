@@ -16,6 +16,7 @@ LG.HelpOverlayView = Backbone.View.extend({
 	clickDraw:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
+		this.next();
 	},
 	clickNext:function(e){
 		this.stopProp(e);
@@ -30,6 +31,7 @@ LG.HelpOverlayView = Backbone.View.extend({
 		this.stopProp(e);
 		this.$("button.draw").css("display", "block");
 		this.copy();
+		this.next();
 	},
 	copy:function(){
 		var s = "rpt 6[$  fd(100);rt(60);$]";
