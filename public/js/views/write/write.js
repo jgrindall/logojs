@@ -12,6 +12,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.ERROR_ROW, $.proxy(this.showErrorRow, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.FORCE_LOGO, $.proxy(this.forceLogo, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.resize, this));
 	},
 	template:"tpl_write",
 	showName:"write",
@@ -20,8 +21,17 @@ LG.WriteView = LG.AMenuView.extend({
 		this.writeButtons = new LG.WriteButtonsView();
 		this.writeTop = new LG.WriteTopView();
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
-		this.logoDiv = this.$("#logodiv");
 		return this;
+	},
+	resize:function(){
+		this.redrawHandle();
+	},
+	afterAdded:function(){
+		this.$handle = this.$("#logoscrollhandle");
+		this.$scroller = this.$("#logoscroller");
+		this.$scrollbar = this.$("#logoscrollbar");
+		this.$logodiv = this.$("#logodiv");
+		this.redrawHandle();
 	},
 	forceLogo:function(s){
 		this.setLogo(s);
@@ -46,7 +56,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.setLogo(s);
 		okChars = s.substr(0, offset);
 		i = LG.Utils.countCharsIn(okChars, LG.WriteView.SEPARATOR);
-		row = this.logoDiv.children()[i];
+		row = this.$logodiv.children()[i];
 		this.error = {"show":true, "row":i};
 		$(row).css("background-color", "#FFA07A");
 		exp = expected[0].value;
@@ -57,19 +67,7 @@ LG.WriteView = LG.AMenuView.extend({
 			msg = "Error, expected: \""+exp+"\" check your code!";
 		}
 		this.$(".error").text(msg).addClass("show");
-		this.scrollToChild(i);
-	},
-	scrollToChild:function(index){
-		var h = 0, rows = this.logoDiv.children(), top = this.logoDiv.scrollTop();
-		for(var i = 0; i <= index - 1; i++){
-			h += $(rows[i]).height();
-		}
-		if(top > h && top < h + this.$().height()){
-			// already visible
-		}
-		else{
-			this.logoDiv.scrollTop(h);
-		}
+		//this.scrollToChild(i);
 	},
 	clear:function(){
 		this.setLogo("");
@@ -81,45 +79,106 @@ LG.WriteView = LG.AMenuView.extend({
 		this.stopListening(LG.fileCollection);
 		LG.fileCollection.selected.set(data);
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
+		this.redrawHandle();
 	},
 	setLogo:function(s){
+		console.log("setLogo");
 		var html = LG.WriteView.decodeToHtml(s);
-		this.logoDiv.html(html);
+		this.$logodiv.html(html);
+		this.redrawHandle();
+	},
+	redrawHandle:function(){
+		var h, availableHeight, ratio, top;
+		h = this.$logodiv.height();
+		availableHeight = this.$scrollbar.height();
+		ratio = h / availableHeight;
+		console.log(h+" / "+availableHeight);
+		if(ratio > 1){
+			this.$handle.height(availableHeight / ratio);
+		}
+		else{
+			this.$handle.height( 0 );
+		}
+		top = this.$logodiv.offset().top + parseInt(this.$logodiv.css("top"), 10) - LG.WriteView.TOP;
+		var percentScrolled = - top / (h - availableHeight);
+		this.$handle.css("top", percentScrolled * (availableHeight - this.$handle.height()));
+		console.log("top "+this.$logodiv.offset().top+", "+this.$logodiv.css("top") + " :   "+percentScrolled+"  -> "+top);
 	},
 	getLogo:function(){
 		var html, decoded;
-		html = this.logoDiv.html();
+		html = this.$logodiv.html();
 		html = html.replace(/&nbsp;/g, "");
-		//html = html.replace(/<br>/g, "");
 		decoded = LG.WriteView.decodeFromHtml(html);
 		return decoded;
 	},
 	changedText:function(e){
-		if(e.which === 186 || e.which === 13 || e.which === 32){
-			this.save();
-		}
-		else{
-			this.changedTextDeBounce();
-		}
+		this.changedTextDeBounce();
 	},
-	reset:function(){
+	resetError:function(){
+		console.log("reset error");
 		if(this.error.show){
-			var row = this.$("#logodiv").children()[this.error.row];
+			var row = this.$logodiv.children()[this.error.row];
 			$(row).css("background-color", "transparent").removeAttr("style");
 			this.$(".error").removeClass("show");
 			this.error = {"show":false, "row":-1};
 		}
 	},
+	checkScroll:function(e){
+		this.stopProp(e);
+		var h2, y0, y1, percent, top, dy;
+		dy = e.pageY - this.startY;
+		console.log("dy");
+		top = Math.max(0, dy + this.startTop);
+		top = Math.min(this.$scrollbar.height() - this.$handle.height(), top);
+		console.log(this.$scrollbar.height() +", "+ this.$handle.height()+" top "+top);
+		this.$handle.css("top", top);
+		this.updateScroll();
+	},
+	updateScroll:function(){
+		var left, top, availableHeight, h;
+		availableHeight = this.$scrollbar.height();
+		h = this.$handle.height();
+		left = this.$logodiv.offset().left;
+		top = parseInt(this.$handle.css("top"), 10);
+		var percentScrolled = top / (availableHeight - h);
+		// if top is zero then offset is zero
+		// if top is max (availableHeight - h) then top is -
+		var t = -percentScrolled * (this.$logodiv.height() - availableHeight);
+		console.log("top "+t+"    "+percentScrolled);
+		this.$logodiv.offset({ top: LG.WriteView.TOP, left: left});
+		this.$logodiv.css("top", t);
+	},
+	stopScroll:function(e){
+		console.log("stop "+this.scrolling);
+		if(this.scrolling){
+			$(document).off("mousemove");
+			$(document).off("mouseup");
+			this.scrolling = false;
+		}
+	},
+	startScroll:function(e){
+		this.stopProp(e);
+		this.scrolling = true;
+		this.startTop = parseInt(this.$handle.css("top"), 10);
+		this.offset = e.pageY - LG.WriteView.TOP - this.startTop - this.$handle.height()/2;
+		this.startY = e.pageY;
+		console.log("offset "+this.startTop+", "+this.offset);
+		$(document).on("mousemove", $.proxy(this.checkScroll, this));
+		$(document).on("mouseup", $.proxy(this.stopScroll, this));
+	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"mousedown":"reset"
+			"mousedown #logoscrollbar":"startScroll",
+			"mousedown":"resetError"
 		} );
 		return obj;
 	}
 });
 
 LG.WriteView.SEPARATOR = "$";
+
+LG.WriteView.TOP = 53;
 
 LG.WriteView.decodeFromHtml = function(html){
 	var s = "";
@@ -153,5 +212,9 @@ LG.WriteView.decodeToHtml = function(html){
 	console.log("decodeToHtml "+html+" -> "+JSON.stringify(s)+"   "+s);
 	return s;
 };
+
+
+
+
 
 
