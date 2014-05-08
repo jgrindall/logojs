@@ -101,7 +101,7 @@ function visitrptstmt(node){
 	var ch = node.children;
 	visitNode( ch[0] );
 	var num = stack.pop();
-	alert("//TODO check if "+num+" is integer?");
+	//TODO check if "+num+" is integer or null?
 	for(var i = 1;i<=num; i++){
 		visitNode(ch[1]);
 	}
