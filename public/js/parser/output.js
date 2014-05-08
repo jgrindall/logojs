@@ -26,4 +26,4 @@ LG.output.MAX_SIZE = 10000;
 
 LG.output.BATCH_SIZE = 50;
 
-LG.output.TIMEOUT = 150;
+LG.output.TIMEOUT = 50;
