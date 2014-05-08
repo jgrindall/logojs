@@ -328,7 +328,17 @@
 		<script id="tpl_write" type="text/template">
 			
 			<div id="write" class="menularge">
-				<div id="logodiv" contenteditable="true" spellcheck="false"></div>
+				
+				<textarea id="tarea" style="position:absolute;right:0;width:100px;top:50px;bottom:50px;background:yellow;overflow-y: scroll;resize: none;-webkit-overflow-scrolling: touch;"></textarea>
+				
+				
+				
+				<div id="logoscroller">
+					<div id="logodiv" contenteditable="true" capitalize="false" autosuggest="false" autoreplace="false" spellcheck="false"></div>
+				</div>
+				<div id="logoscrollbar">
+					<div id="logoscrollhandle"></div>
+				</div>
 				<div class="error"></div>
 			</div>
 			
