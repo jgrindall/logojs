@@ -28,7 +28,7 @@ LG.ALoginButtonView = LG.HeaderButton.extend({
 
 LG.WebLoginButtonView  = function(){
 	LG.ALoginButtonView.call(this);
-}
+};
 
 LG.WebLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
 
@@ -51,7 +51,7 @@ LG.WebLoginButtonView.prototype.getData = function(){
 
 LG.IPadLoginButtonView  = function(){
 	LG.ALoginButtonView.call(this);
-}
+};
 
 LG.IPadLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
 

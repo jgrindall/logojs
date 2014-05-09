@@ -53,7 +53,7 @@ LG.GallerySideView = Backbone.View.extend({
 	render:function(){
 		var model, logo;
 		logo = this.model.logo;
-		var model = _.extend({}, this.model, {"okColor":1, "logo":logo, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
+		model = _.extend({}, this.model, {"okColor":1, "logo":logo, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
 		this.loadTemplate(  this.template, model , {replace:true} );
 		this.updateLayout();
 		return this;

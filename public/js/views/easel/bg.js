@@ -3,7 +3,7 @@ window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Bg = function() {
 	this.initialize();
-}
+};
 
 LG.Easel.Bg.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Bg.prototype.constructor = LG.Easel.Bg;

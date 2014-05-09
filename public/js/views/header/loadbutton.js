@@ -27,7 +27,7 @@ LG.ALoadButtonView = LG.HeaderButton.extend({
 
 LG.WebLoadButtonView  = function(){
 	LG.ALoadButtonView.call(this);
-}
+};
 
 LG.WebLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
 
@@ -43,7 +43,7 @@ LG.WebLoadButtonView.prototype.getData = function(){
 
 LG.IPadLoadButtonView  = function(){
 	LG.ALoadButtonView.call(this);
-}
+};
 
 LG.IPadLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
 

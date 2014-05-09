@@ -3,7 +3,7 @@ LG.GalleryListView = Backbone.View.extend({
 	
 	initialize:function(options){
 		this.pages = [ ];
-		this.collection = options.collection
+		this.collection = options.collection;
 		this.showName = options.showName;
 		this.perPage = LG.GalleryListView.NUMY;
 		this.scrollPos = 0;

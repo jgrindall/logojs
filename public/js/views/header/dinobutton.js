@@ -23,7 +23,7 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 		var obj = Backbone.View.getTouch( {
 			"_click":"onClick"
 		});
-		return obj;L
+		return obj;
 	}
 });
 
