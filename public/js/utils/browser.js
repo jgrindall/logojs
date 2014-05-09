@@ -144,13 +144,15 @@ LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
 		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
-		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
+		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
+			LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
+		}
 	});
 	$(document).bind("touchmove", function(e) {
 		var currentY, allowScroll = true, dir, $target, containerHeight, textHeight, scrollTop, baseTop, atBase;
 		$target = $(e.target);
 		currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
-       dir = "down";
+        dir = "down";
 		if(currentY < LG.Browser.touchY){
 			dir = "up";
 		}
@@ -160,7 +162,11 @@ LG.Browser.configureScroll = function(){
 			scrollTop = $target.scrollTop();
 			baseTop = containerHeight * (1 - (containerHeight/textHeight));
 			atBase = (scrollTop >= baseTop);
-			if(dir === "up" && atBase){
+			console.log(textHeight+", "+containerHeight+", "+scrollTop+", "+atBase);
+			if(textHeight <= containerHeight){
+				allowScroll = false;
+			}
+			else if(dir === "up" && atBase){
 				allowScroll = false;
 			}
 			else if(dir === "down" && scrollTop <= 0){
