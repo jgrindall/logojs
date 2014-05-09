@@ -159,7 +159,7 @@ LG.CanvasView = Backbone.View.extend({
 		}
 		catch(e){
 			console.log("Error "+JSON.stringify(e));
-			this.showError(e.expected, e.offset);
+			this.showError(e.expected, e.line, e.offset);
 			this.active = false;
 		}
 		if(tree){
@@ -173,11 +173,11 @@ LG.CanvasView = Backbone.View.extend({
 		}
 		// TODO put this in a worker?
 	},
-	showError:function(expected, offset){
-		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, offset);
+	showError:function(expected, line, offset){
+		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, line, offset);
 	},
 	process:function(tree){
-		this.worker = new Worker("min/parser/visit.js");
+		this.worker = new Worker(LG.Config.PARSER_VISIT);
 		this.worker.onmessage = $.proxy(this.onMessage, this);
 		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
 		setTimeout($.proxy(this.drawBatch, this), LG.output.TIMEOUT);

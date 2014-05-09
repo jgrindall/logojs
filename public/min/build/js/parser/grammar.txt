@@ -79,21 +79,21 @@ penupstmt = sep* 'penup' sep* '(' sep* ')' eoline
 return {"type":"penupstmt"};
 }
 
-pendownstmt = sep* 'pendown' sep* '(' sep* ')' eoline
+pendownstmt = sep* ('pendown' / 'Pendown') sep* '(' sep* ')' eoline
 {
 	return {"type":"pendownstmt"};
 }
 
-colorstmt = sep* 'color'  sep* '(' sep* c:color sep* ')' eoline
+colorstmt = sep* ('color' / 'Color')  sep* '(' sep* c:color sep* ')' eoline
 {
 	return {"type":"colorstmt", "color":c};
 }
-bgstmt = sep* 'bg'  sep* '(' sep* c:color sep* ')' eoline
+bgstmt = sep* ('bg' / 'Bg')  sep* '(' sep* c:color sep* ')' eoline
 {
 	return {"type":"bgstmt", "color":c};
 }
 
-thickstmt = sep* ('thickness'/'thick')  sep* '(' sep* e:expression sep* ')' eoline
+thickstmt = sep* ('thickness'/'thick'/'Thick'/'Thickness')  sep* '(' sep* e:expression sep* ')' eoline
 {
 	return {"type":"thickstmt", "children":[e]};
 }
@@ -107,17 +107,17 @@ callfnstmt = sep* f:fnname sep* '(' sep* a:expressionlist sep* ')' eoline
 }
 
 
-fdstmt  = 'fd' sep* '(' num:expression  ')' eoline 
+fdstmt  = ('fd' / 'Fd' / 'FD') sep* '(' num:expression  ')' eoline 
 {
 	return {type:"fdstmt", children:[num]};
 }
 
-rtstmt  = 'rt' sep* '(' num:expression ')' eoline 
+rtstmt  = ('rt' / 'Rt' / 'RT') sep* '(' num:expression ')' eoline 
 {
 	return {type:"rtstmt", children:[num]};
 }
 
-rptstmt  = 'rpt' sep* num:expression sep* '[' sep* list:insidefnlist sep* ']' 
+rptstmt  = ('rpt' / 'Rpt' / 'RPT') sep* num:expression sep* '[' sep* list:insidefnlist sep* ']' 
 {
 	return {type:"rptstmt", children:[num,list]};
 }
@@ -138,7 +138,7 @@ makestmt = v:vardef sep* ':=' sep* e:expression eoline
 	return {type:"makestmt", children:[v,e]};
 }
 
-definefnstmt = 'proc' sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}' sep*
+definefnstmt = ('proc' / 'Proc') sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}' sep*
 {
          return {type:"definefnstmt", name:f.name, args:a, stmts:s};
 }

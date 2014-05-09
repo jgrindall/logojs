@@ -134,12 +134,47 @@ LG.BrowserDetect = {
 };
 
 
+LG.Browser = {};
 
-if(LG.Config.IS_TOUCH){
-	$(document).bind("touchmove",function(e) {
-		e.preventDefault();
+LG.Browser.touchY = 0;
+
+LG.Browser.textAreas = ["logodiv"];
+
+LG.Browser.configureScroll = function(){
+	$(document).bind("touchstart", function(e){
+		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+		LG.Browser.touchY = currentY;
 	});
-}
+	$(document).bind("touchmove", function(e) {
+		var currentY, allowScroll = true, dir, $target, containerHeight, textHeight, scrollTop, baseTop, atBase;
+		$target = $(e.target);
+		currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+       dir = "down";
+		if(currentY < LG.Browser.touchY){
+			dir = "up";
+		}
+		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
+			containerHeight = $target.height();
+			textHeight = $target[0].scrollHeight;
+			scrollTop = $target.scrollTop();
+			baseTop = containerHeight * (1 - (containerHeight/textHeight));
+			atBase = (scrollTop >= baseTop);
+			if(dir === "up" && atBase){
+				allowScroll = false;
+			}
+			else if(dir === "down" && scrollTop <= 0){
+				allowScroll = false;
+			}
+		}
+		else{
+			allowScroll = false;
+		}
+		if(!allowScroll){
+			e.preventDefault();
+		}
+		LG.Browser.touchY = currentY;
+	});
+};
 
 $.ajaxSetup({
 	// always go here if we get a 404 on the backend
@@ -151,9 +186,11 @@ $.ajaxSetup({
 	cache:false
 });
 
-
 LG.BrowserDetect.init();
 
+if(LG.Config.IS_TOUCH){
+	LG.Browser.configureScroll();
+}
 
 
 

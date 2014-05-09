@@ -46,6 +46,16 @@ LG.Utils.centreImage = function($img, options){
 	}
 };
 
+LG.Utils.isPG = function(){
+	var vars, protocolRegExp, protocol, navRegExp, nav;
+	varsExist = (window.cordova || window.PhoneGap || window.phonegap);
+	protocolRegExp = /^file:\/{3}[^\/]/i;
+	protocol = protocolRegExp.test(window.location.href);
+	navRegExp = /ios|iphone|ipod|ipad|android/i;
+	nav = navRegExp.test(navigator.userAgent);
+	return varsExist && protocol && nav;
+};
+
 LG.Utils.countCharsIn = function(s, match){
 	var c = 0, i;
 	for(i = 0;i <= s.length-1;i++){

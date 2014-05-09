@@ -2,42 +2,26 @@
 
 <project name="Logotacular" default="build"> 
 	
-	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 	
-	
-	<property file="build.properties">
-		
-	</property>
-	
-	
+	<property file="build.properties"></property>
 	
 	<target name="minjs" if="${min}">
 		<echo message="compressing js"/>
 		
 		<java jar="${yuijar}" fork="true" failonerror="true" >
-			<arg line='"min/main-min.js" -o "min/main-min.js"'/> 
+			<arg line='"min/build/main-min.js" -o "min/build/main-min.js"'/> 
 		</java>
-		
 		
 	</target>
 	
 	<target name="build" unless="built">
 		
 		<echo message="build"/>
-		<echo message="less is ${less}"> </echo>
-		<echo message="${built}"/>
 		
 		<echo message="deleting"/>
 		
-		<delete file="min/**.css"/>
-		<delete file="min/**.js"/>
-		<delete dir="min/parser"/>
-		<delete dir="min/images"/>
-		<delete dir="min/fonts"/>
-		<delete dir="min/font-awesome"/>
-		
-		
+		<delete dir="min/build"/>
 		
 		<echo message="linting"/>
 		
@@ -47,14 +31,13 @@
 		
 		<echo message="handle css"/>
 		
-		
 		<exec executable="node">
-			<arg line="${lessc} css/main.less -x --yui-compress min/main-min.css"/>
+			<arg line="${lessc} css/main.less -x --yui-compress min/build/css/main-min.css"/>
 		</exec>
 		
 		<echo message="concatening libs"/>
 		
-		<concat destfile="min/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+		<concat destfile="min/build/js/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="libs">
 				
 				<file name="jquery.min.js" />
@@ -73,12 +56,9 @@
 	
 		</concat>
 		
-		
-		
-		
 		<echo message="concatening js"/>
 		
-		<concat destfile="min/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+		<concat destfile="min/build/js/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="js">
 				
 				<!--  utils MUST come first -->
@@ -106,7 +86,7 @@
 				<file name="parser/output.js"/>
 				<file name="parser/commands.js"/>
 				<file name="models/base.js"/>		
-				<file name="models/turtlemodel.js"/>
+				
 				<file name="models/spinner.js"/>
 				<file name="models/filemodel.js"/>
 				
@@ -185,27 +165,56 @@
 		
 		<antcall target="minjs"/>
 		
-		<copy todir="min/font-awesome">
+		<copy todir="min/build/css/font-awesome">
 			<fileset dir="css/font-awesome"/>
 		</copy>
 		
-		<copy todir="min/images">
+		<copy todir="min/build/css/images">
 			<fileset dir="css/images"/>
 		</copy>
 		
-		<copy todir="min/fonts">
+		<copy todir="min/build/css/fonts">
 			<fileset dir="css/fonts"/>
 		</copy>
 		
-		<copy todir="min/parser">
+		<copy todir="min/build/js/parser">
 			<fileset dir="js/parser"/>
 		</copy>
 		
+		<copy overwrite="true" file="../index.html" todir="../views">
+			<filterset begintoken="_" endtoken="_">
+				<filter token="PHONEGAP" value=""/>
+			</filterset>
+		</copy>
 		
-		<property name="built" value="true"></property>
+		<antcall target="ios"/>
 		
 	</target>
 	
+	
+	
+	
+	
+	<target name="ios">
+		
+		<echo message="ios"/>
+		
+		<delete dir="../../logojs_pg/www/min"/>
+		<delete dir="../../logojs_pg/www/img"/>
+		
+		<copydir src="min/build" dest="../../logojs_pg/www/min/build" includes="**" >
+		</copydir>
+		
+		<copydir src="img" dest="../../logojs_pg/www/img" includes="**" >
+		</copydir>
+		
+		<copy overwrite="true" file="../index.html" todir="../../logojs_pg/www">
+			<filterset begintoken="_" endtoken="_">
+				<filter token="PHONEGAP" value="&lt;script src='cordova.js' type='text/javascript' charset='utf-8'&gt;&lt;/script&gt;&lt;script src='cordova_plugins.js' type='text/javascript' charset='utf-8' &gt;&lt;/script&gt;"/>
+			</filterset>
+		</copy>
+		
+	</target>
 	
 	
 	
