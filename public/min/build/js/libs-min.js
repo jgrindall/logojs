@@ -1105,7 +1105,6 @@ if (typeof JSON !== 'object') {
         };
     }
 }());
-
 // Underscore.js 1.4.4
 // ===================
 
@@ -2333,7 +2332,6 @@ if (typeof JSON !== 'object') {
   });
 
 }).call(this);
-
 //     Backbone.js 1.0.0
 
 //     (c) 2010-2013 Jeremy Ashkenas, DocumentCloud Inc.
@@ -3905,7 +3903,6 @@ if (typeof JSON !== 'object') {
   };
 
 }).call(this);
-
 /*
  * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/
  *
@@ -5919,7 +5916,6 @@ a.preventDefault&&a.preventDefault();for(var c=a.changedTouches,g=a.type,d=0,e=c
 m,!1);window.addEventListener("MSPointerCancel",m,!1);b.__touch.preventDefault&&(a.style.msTouchAction="none");b.__touch.activeIDs={}};c._IE_disable=function(b){var a=b.__touch.f;window.removeEventListener("MSPointerMove",a,!1);window.removeEventListener("MSPointerUp",a,!1);window.removeEventListener("MSPointerCancel",a,!1);b.canvas&&b.canvas.removeEventListener("MSPointerDown",a,!1)};c._IE_handleEvent=function(b,a){if(b){b.__touch.preventDefault&&a.preventDefault&&a.preventDefault();var c=a.type,
 g=a.pointerId,d=b.__touch.activeIDs;if("MSPointerDown"==c)a.srcElement==b.canvas&&(d[g]=!0,this._handleStart(b,g,a,a.pageX,a.pageY));else if(d[g])if("MSPointerMove"==c)this._handleMove(b,g,a,a.pageX,a.pageY);else if("MSPointerUp"==c||"MSPointerCancel"==c)delete d[g],this._handleEnd(b,g,a)}};c._handleStart=function(b,a,c,g,d){var e=b.__touch;if(e.multitouch||!e.count){var f=e.pointers;f[a]||(f[a]=!0,e.count++,b._handlePointerDown(a,c,g,d))}};c._handleMove=function(b,a,c,g,d){b.__touch.pointers[a]&&
 b._handlePointerMove(a,c,g,d)};c._handleEnd=function(b,a,c){var g=b.__touch,d=g.pointers;d[a]&&(g.count--,b._handlePointerUp(a,c,!0),delete d[a])};createjs.Touch=c})();(function(){var c=this.createjs=this.createjs||{},c=c.EaselJS=c.EaselJS||{};c.version="0.6.0";c.buildDate="Tue, 12 Feb 2013 21:12:22 GMT"})();
-
 /*
 * TweenJS
 * Visit http://createjs.com/ for documentation, updates and examples.
@@ -5959,7 +5955,6 @@ function(a,b){var h=2*Math.PI;return function(c){if(0==c||1==c)return c;var e=b/
 1);c.hasOwnProperty("start")||(c.start=h&&h.hasOwnProperty("end")&&h.path===a?h.end:0);if(c.hasOwnProperty("_segments")&&c._length)return c;h=a.length;if(6<=h&&0==(h-2)%4){c._segments=[];c._length=0;for(d=2;d<h;d+=4){for(var g=a[d-2],j=a[d-1],l=a[d+0],k=a[d+1],p=a[d+2],x=a[d+3],v=g,w=j,s,m,r=0,t=[],u=1;10>=u;u++){m=u/10;var q=1-m;s=q*q*g+2*q*m*l+m*m*p;m=q*q*j+2*q*m*k+m*m*x;r+=t[t.push(Math.sqrt((f=s-v)*f+(f=m-w)*f))-1];v=s;w=m}c._segments.push(r);c._segments.push(t);c._length+=r}}else throw"invalid 'path' data, please see documentation for valid paths";
 f=c.orient;c.orient=!1;b.calc(c,c.end,e);c.orient=f;return c};b.tween=function(a,d,h,c,e,f,g){e=e.guide;if(void 0==e||e===c.guide)return h;e.lastRatio!=f&&(b.calc(e,(e.end-e.start)*(g?e.end:f)+e.start,a.target),e.orient&&(a.target.rotation+=c.rotation||0),e.lastRatio=f);return!e.orient&&"rotation"==d?h:a.target[d]};b.calc=function(a,d,h){void 0==a._segments&&b.validate(a);void 0==h&&(h={x:0,y:0,rotation:0});var c=a._segments,e=a.path,f=a._length*d,g=c.length-2;for(d=0;f>c[d]&&d<g;)f-=c[d],d+=2;for(var c=
 c[d+1],j=0,g=c.length-1;f>c[j]&&j<g;)f-=c[j],j++;f=j/++g+f/(g*c[j]);d=2*d+2;g=1-f;h.x=g*g*e[d-2]+2*g*f*e[d+0]+f*f*e[d+2];h.y=g*g*e[d-1]+2*g*f*e[d+1]+f*f*e[d+3];a.orient&&(h.rotation=57.2957795*Math.atan2((e[d+1]-e[d-1])*g+(e[d+3]-e[d+1])*f,(e[d+0]-e[d-2])*g+(e[d+2]-e[d+0])*f));return h};createjs.MotionGuidePlugin=b})();(function(){var b=this.createjs=this.createjs||{},b=b.TweenJS=b.TweenJS||{};b.version="0.4.0";b.buildDate="Tue, 12 Feb 2013 21:09:02 GMT"})();
-
 /*
 * Filter
 * Visit http://createjs.com/ for documentation, updates and examples.
