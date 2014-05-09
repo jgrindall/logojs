@@ -144,6 +144,7 @@ LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
 		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 	});
 	$(document).bind("touchmove", function(e) {
 		var currentY, allowScroll = true, dir, $target, containerHeight, textHeight, scrollTop, baseTop, atBase;
