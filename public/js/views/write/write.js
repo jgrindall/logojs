@@ -45,7 +45,7 @@ LG.WriteView = LG.AMenuView.extend({
 	load:function(){
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		if(logo != this.logo);{
+		if(logo != this.logo){
 			this.setLogo(logo);
 		}
 	},
