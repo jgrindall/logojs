@@ -198,7 +198,6 @@ LG.Utils.requestAnimFrame = (function(){
 
 
 
-
 // global config constants
 
 LG.Config = {};
@@ -231,7 +230,6 @@ LG.Messages.WANT_TO_SAVE = "Do you want to save your current file?";
 LG.Messages.WANT_TO_DELETE = "Are you sure you want to delete this file?";
 LG.Messages.ERROR = "Error!";
 LG.Messages.ERROR_BODY = "An error has occured connecting to the internet. You cannot save or load files without an internet connection.";
-
 LG.ACreate = function(){
 	
 };
@@ -333,7 +331,6 @@ else if(LG.Config.FAKE_PHONEGAP){
 else {
 	LG.create = new LG.WebCreate();
 }
-
 
 
 
@@ -519,12 +516,15 @@ LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
 		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
+		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
+			LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
+		}
 	});
 	$(document).bind("touchmove", function(e) {
 		var currentY, allowScroll = true, dir, $target, containerHeight, textHeight, scrollTop, baseTop, atBase;
 		$target = $(e.target);
 		currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
-       dir = "down";
+        dir = "down";
 		if(currentY < LG.Browser.touchY){
 			dir = "up";
 		}
@@ -534,7 +534,11 @@ LG.Browser.configureScroll = function(){
 			scrollTop = $target.scrollTop();
 			baseTop = containerHeight * (1 - (containerHeight/textHeight));
 			atBase = (scrollTop >= baseTop);
-			if(dir === "up" && atBase){
+			console.log(textHeight+", "+containerHeight+", "+scrollTop+", "+atBase);
+			if(textHeight <= containerHeight){
+				allowScroll = false;
+			}
+			else if(dir === "up" && atBase){
 				allowScroll = false;
 			}
 			else if(dir === "down" && scrollTop <= 0){
@@ -566,7 +570,6 @@ LG.BrowserDetect.init();
 if(LG.Config.IS_TOUCH){
 	LG.Browser.configureScroll();
 }
-
 
 
 
@@ -879,7 +882,6 @@ LG.CookieStorage.prototype.remove = function(key, success){
 };
 
 
-
 // compile the templates using underscore for faster rendering
 
 LG.Templates = function() {
@@ -900,7 +902,6 @@ LG.Templates.prototype.getTemplate = function(id){
 };
 
 LG.templates = new LG.Templates();
-
 // play a sound effect (not used yet)
 
 LG.Sounds = function(){
@@ -948,7 +949,6 @@ LG.Sounds.prototype.playError = function(s){
 LG.Sounds.prototype.playClick = function(s){
 	this.sounds[1].play();
 };
-
 
 
 
@@ -1009,7 +1009,6 @@ LG.Router = Backbone.Router.extend({
 });
 
 
-
 LG.EventDispatcher =  _.extend(  {}, Backbone.Events);
 // global event dispatcher
 
@@ -1043,8 +1042,7 @@ LG.Events.HIDE_HELP_OVERLAY		=	"LG::hideHelpOverlay";
 LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
 LG.Events.ERROR_ROW				=	"LG::errorRow";
 LG.Events.FORCE_LOGO			=	"LG::forceLogo";
-
-
+LG.Events.RESET_ERROR			=	"LG::resetError";
 
 LG.Facebook = function(){
 	
@@ -1230,7 +1228,6 @@ LG.WebFacebook.prototype.getPic = function(options) {
 		options.fail();
 	}
 };
-
 
 
 LG.Utils.logoparser = (function() {
@@ -4923,7 +4920,6 @@ LG.ThicknessCommand.prototype.execute = function(context, position){
 LG.ThicknessCommand.prototype.output = function(){
 	return "thick " +this.data.amount;
 };
-
 // base view and utility methods
 
 Backbone.Model.prototype.output = function(){
@@ -4952,7 +4948,6 @@ Backbone.Collection.prototype.getByProperty = function(propName, propVal){
 	});
 	return selectedModel;
 };
-
 LG.SpinnerModel = Backbone.Model.extend({
 	defaults:{
 		"show":false,
@@ -5116,7 +5111,6 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 
 
 
-
 LG.ASpinnerCollection  = Backbone.Collection.extend({
 	initialize:function(data){
 		Backbone.Collection.prototype.initialize.call(this, data);
@@ -5132,7 +5126,6 @@ LG.ASpinnerCollection  = Backbone.Collection.extend({
 		Backbone.Collection.prototype.fetch.call(this, data);
 	}
 });
-
 
 LG.PageModel = Backbone.Model.extend({
 	defaults:{
@@ -5168,7 +5161,6 @@ LG.APaginatedCollection  = LG.ASpinnerCollection.extend({
 LG.APaginatedCollection.PER_PAGE = 24;
 
 
-
 LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 	initialize:function(){
 		LG.APaginatedCollection.prototype.initialize.call(this);
@@ -5189,7 +5181,6 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 		this.addNewModel();
 	}
 });
-
 
 
 
@@ -5387,7 +5378,6 @@ LG.AllFileCollection = LG.AFileCollection.extend({
 
 
 
-
 LG.FileOpener = function(){
 	_.extend(this, Backbone.Events);
 };
@@ -5466,7 +5456,6 @@ LG.FileOpener.prototype.openFromGallery = function(id){
 		this.openFile();
 	}
 };
-
 // extends Backbone.Model
 
 LG.GraphicsModel = Backbone.Model.extend({
@@ -5530,7 +5519,6 @@ LG.GraphicsModel.getHex = function(color){
 	});
 	return r;
 };
-
 
 
 
@@ -5650,7 +5638,6 @@ LG.IPadUserModel = LG.UserModel.extend({
 
 
 
-
 LG.LayoutModel = Backbone.Model.extend({
 	defaults: {
 		show:""
@@ -5659,7 +5646,6 @@ LG.LayoutModel = Backbone.Model.extend({
 		
 	}
 });
-
 
 
 
@@ -5873,7 +5859,6 @@ LG.TextButtonView = LG.HeaderButton.extend({
 	}
 });
 
-
 // go back to catalogue
 
 // extends LG.HeaderButton
@@ -5895,7 +5880,6 @@ LG.LogoButtonView = LG.HeaderButton.extend({
 	
 	}
 });
-
 
 // go back to catalogue
 
@@ -5927,7 +5911,7 @@ LG.ALoginButtonView = LG.HeaderButton.extend({
 
 LG.WebLoginButtonView  = function(){
 	LG.ALoginButtonView.call(this);
-}
+};
 
 LG.WebLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
 
@@ -5950,7 +5934,7 @@ LG.WebLoginButtonView.prototype.getData = function(){
 
 LG.IPadLoginButtonView  = function(){
 	LG.ALoginButtonView.call(this);
-}
+};
 
 LG.IPadLoginButtonView.prototype = Object.create(LG.ALoginButtonView.prototype);
 
@@ -5959,7 +5943,6 @@ LG.IPadLoginButtonView.prototype.constructor = LG.IPadLoginButtonView;
 LG.IPadLoginButtonView.prototype.getData = function(){
 	return {"label":"", "pic":null, "disabled":true};
 };
-
 
 
 
@@ -5986,7 +5969,6 @@ LG.GalleryButtonView = LG.HeaderButton.extend({
 		return obj;
 	}
 });
-
 
 // go back to catalogue
 
@@ -6027,7 +6009,6 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	
 	}
 });
-
 // go back to catalogue
 
 // extends LG.Headerbutton
@@ -6070,7 +6051,6 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	
 	}
 });
-
 // go back to catalogue
 
 // extends LG.Headerbutton
@@ -6100,7 +6080,7 @@ LG.ALoadButtonView = LG.HeaderButton.extend({
 
 LG.WebLoadButtonView  = function(){
 	LG.ALoadButtonView.call(this);
-}
+};
 
 LG.WebLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
 
@@ -6116,7 +6096,7 @@ LG.WebLoadButtonView.prototype.getData = function(){
 
 LG.IPadLoadButtonView  = function(){
 	LG.ALoadButtonView.call(this);
-}
+};
 
 LG.IPadLoadButtonView.prototype = Object.create(LG.ALoadButtonView.prototype);
 
@@ -6126,7 +6106,6 @@ LG.IPadLoadButtonView.prototype.getData = function(){
 	var loggedIn = LG.userModel.isConnected();
 	return {"disabled":!loggedIn};
 };
-
 
 
 
@@ -6160,7 +6139,6 @@ LG.FileButtonView = LG.HeaderButton.extend({
 	}
 });
 
-
 // go back to catalogue
 
 // extends LG.Headerbutton
@@ -6186,10 +6164,9 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 		var obj = Backbone.View.getTouch( {
 			"_click":"onClick"
 		});
-		return obj;L
+		return obj;
 	}
 });
-
 
 
 // an abstract spinner view for the big and small spinners
@@ -6226,12 +6203,78 @@ LG.SpinnerView = Backbone.View.extend({
 
 
 
+window.LG.Easel = window.LG.Easel || {};
+
+LG.Easel.Turtle = function(size) {
+	this.initialize(size);
+};
+
+LG.Easel.Turtle.prototype = Object.create(createjs.Shape.prototype);
+LG.Easel.Turtle.prototype.constructor = LG.Easel.Turtle;
+
+LG.Easel.Turtle.prototype.drawMe = function(clr) {
+	if(this.clr != clr){
+window.LG.Easel = window.LG.Easel || {};
+
+LG.Easel.Bg = function() {
+	this.initialize();
+};
+
+LG.Easel.Bg.prototype = Object.create(createjs.Shape.prototype);
+LG.Easel.Bg.prototype.constructor = LG.Easel.Bg;
+
+LG.Easel.Bg.prototype.drawMe = function(clr){
+	var g, w, h;
+	g = this.graphics;
+	w = LG.canvasModel.get("width");
+	h = LG.canvasModel.get("height");
+	g.clear();
+	g.beginFill(clr).drawRect(0, 0, w, h);
+};
+
+LG.Easel.Bg.prototype.initialize = function() {
+	createjs.Shape.prototype.initialize.call(this);
+};
+
+
+
+
+
+
+
+window.LG.Easel = window.LG.Easel || {};
+
+LG.Easel.Commands = function() {
+	this.initialize();
+};
+
+LG.Easel.Commands.prototype = Object.create(createjs.Shape.prototype);
+LG.Easel.Commands.prototype.constructor = LG.Easel.Commands;
+
+LG.Easel.Commands.prototype.drawMe = function(clr){
+	var g, w, h;
+	g = this.graphics;
+	w = LG.canvasModel.get("width");
+	h = LG.canvasModel.get("height");
+	g.clear();
+	g.beginFill(clr).drawRect(0, 0, w, h);
+};
+
+LG.Easel.Commands.prototype.initialize = function() {
+	createjs.Shape.prototype.initialize.call(this);
+};
+
+
+
+
+
+
 
 window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Turtle = function(size) {
 	this.initialize(size);
-}
+};
 
 LG.Easel.Turtle.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Turtle.prototype.constructor = LG.Easel.Turtle;
@@ -6260,11 +6303,32 @@ LG.Easel.Turtle.prototype.initialize = function(size) {
 
 
 
+		var g = this.graphics;
+		g.clear();
+		g.setStrokeStyle(0);
+		g.beginStroke(clr);
+		g.beginFill(clr);
+		g.moveTo(-this.size,-this.size);
+		g.lineTo(this.size,0);
+		g.lineTo(-this.size,this.size);
+		g.lineTo(-this.size,-this.size);
+		g.endFill();
+		this.clr = clr;
+	}
+};
+
+LG.Easel.Turtle.prototype.initialize = function(size) {
+	createjs.Shape.prototype.initialize.call(this);
+	this.size = size;
+	this.drawMe( LG.graphicsModel.getInner() );
+};
+
+
 window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Bg = function() {
 	this.initialize();
-}
+};
 
 LG.Easel.Bg.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Bg.prototype.constructor = LG.Easel.Bg;
@@ -6287,12 +6351,11 @@ LG.Easel.Bg.prototype.initialize = function() {
 
 
 
-
 window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Commands = function() {
 	this.initialize();
-}
+};
 
 LG.Easel.Commands.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Commands.prototype.constructor = LG.Easel.Commands;
@@ -6309,7 +6372,6 @@ LG.Easel.Commands.prototype.drawMe = function(clr){
 LG.Easel.Commands.prototype.initialize = function() {
 	createjs.Shape.prototype.initialize.call(this);
 };
-
 
 
 
@@ -6384,12 +6446,10 @@ LG.ActivityView = LG.AbstractPageView.extend({
 });
 
 
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.BaseButton = LG.Button.extend({
 	
 });
-
 
 
 // extends LG.AbstractPageView
@@ -6426,7 +6486,6 @@ LG.ActivityButtonsView = Backbone.View.extend({
 	}
 	
 });
-
 
 
 LG.CanvasView = Backbone.View.extend({
@@ -6682,7 +6741,6 @@ LG.CanvasModel = Backbone.Model.extend({
 	}
 });
 
-
 LG.AMenuView = Backbone.View.extend({	
 	initialize:function(){
 		var _this = this;
@@ -6715,7 +6773,6 @@ LG.AMenuView = Backbone.View.extend({
 LG.MenuButton = LG.Button.extend({
 	
 });
-
 
 
 LG.MenuView = LG.AMenuView.extend({
@@ -6768,7 +6825,7 @@ LG.MenuButtonsView = Backbone.View.extend({
 		this.helpButton 		= 	new LG.HelpButtonMenuView ();
 		this.loginButton 		= 	LG.create.loginButton();
 		this.logoButton			=	new LG.LogoButtonView ();
-		this.$el.append(this.helpButton.render().el).append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.loginButton.render().el)
+		this.$el.append(this.helpButton.render().el).append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.loginButton.render().el);
 		return this;
 	},
 	events:function(){
@@ -6782,7 +6839,6 @@ LG.MenuButtonsView = Backbone.View.extend({
 	}
 	
 });
-
 
 
 // extends LG.AbstractPageView
@@ -6816,7 +6872,6 @@ LG.MenuTopView = Backbone.View.extend({
 });
 
 
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.WriteButtonView = LG.MenuButton.extend({
 	template:"tpl_writebutton",
@@ -6838,7 +6893,6 @@ LG.WriteButtonView = LG.MenuButton.extend({
 
 
 
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.SettingsButtonView = LG.MenuButton.extend({
 	template:"tpl_settingsbutton",
@@ -6854,7 +6908,6 @@ LG.SettingsButtonView = LG.MenuButton.extend({
 	}
 	
 });
-
 
 
 LG.Popups = function(){
@@ -6933,7 +6986,6 @@ LG.APopUpView = LG.AMenuView.extend({
 });
 
 
-
 LG.AlertView = LG.APopUpView.extend({
 	showName:"alert",
 	initialize:function(data){
@@ -6973,7 +7025,6 @@ LG.AlertView = LG.APopUpView.extend({
 		
 	}
 });
-
 
 
 
@@ -7037,641 +7088,10 @@ LG.FileNameView = LG.APopUpView.extend({
 
 
 
-LG.htmlParser = (function() {
-  /*
-   * Generated by PEG.js 0.8.0.
-   *
-   * http://pegjs.majda.cz/
-   */
-
-  function peg$subclass(child, parent) {
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor();
-  }
-
-  function SyntaxError(message, expected, found, offset, line, column) {
-    this.message  = message;
-    this.expected = expected;
-    this.found    = found;
-    this.offset   = offset;
-    this.line     = line;
-    this.column   = column;
-
-    this.name     = "SyntaxError";
-  }
-
-  peg$subclass(SyntaxError, Error);
-
-  function parse(input) {
-    var options = arguments.length > 1 ? arguments[1] : {},
-
-        peg$FAILED = {},
-
-        peg$startRuleFunctions = { start: peg$parsestart },
-        peg$startRuleFunction  = peg$parsestart,
-
-        peg$c0 = function(n) {
-        return {"text":n.text};
-        },
-        peg$c1 = [],
-        peg$c2 = peg$FAILED,
-        peg$c3 = function(n) {
-        var s=[];
-        for(var i = 0;i<=n.length-1;i++){
-        s.push(n[i].text);
-        }
-        return {"text":s.join("$")};
-        },
-        peg$c4 = function(t) {
-        return {"text":t.text};
-        },
-        peg$c5 = function(w) {
-        return {"text":w.text};
-        },
-        peg$c6 = /^[a-z0-9[\]();\t\r\n&{},\/*:=\-+ ]/,
-        peg$c7 = { type: "class", value: "[a-z0-9[\\]();\\t\\r\\n&{},\\/*:=\\-+ ]", description: "[a-z0-9[\\]();\\t\\r\\n&{},\\/*:=\\-+ ]" },
-        peg$c8 = function(t) {
-        	var s = "";
-        	for(var i = 0;i<=t.length-1;i++){
-        		s += t[i].toString();
-        	}
-        	return {"text":s};
-        },
-        peg$c9 = /^[a-zA-Z0-9_ "=\-:;(),!]/,
-        peg$c10 = { type: "class", value: "[a-zA-Z0-9_ \"=\\-:;(),!]", description: "[a-zA-Z0-9_ \"=\\-:;(),!]" },
-        peg$c11 = function() {
-        return {"text":""};
-        },
-        peg$c12 = function(n) {
-        	return {"text":n.text};
-        },
-        peg$c13 = "<",
-        peg$c14 = { type: "literal", value: "<", description: "\"<\"" },
-        peg$c15 = ">",
-        peg$c16 = { type: "literal", value: ">", description: "\">\"" },
-        peg$c17 = "</",
-        peg$c18 = { type: "literal", value: "</", description: "\"</\"" },
-        peg$c19 = /^[a-z]/,
-        peg$c20 = { type: "class", value: "[a-z]", description: "[a-z]" },
-        peg$c21 = "<br",
-        peg$c22 = { type: "literal", value: "<br", description: "\"<br\"" },
-        peg$c23 = "/>",
-        peg$c24 = { type: "literal", value: "/>", description: "\"/>\"" },
-
-        peg$currPos          = 0,
-        peg$reportedPos      = 0,
-        peg$cachedPos        = 0,
-        peg$cachedPosDetails = { line: 1, column: 1, seenCR: false },
-        peg$maxFailPos       = 0,
-        peg$maxFailExpected  = [],
-        peg$silentFails      = 0,
-
-        peg$result;
-
-    if ("startRule" in options) {
-      if (!(options.startRule in peg$startRuleFunctions)) {
-        throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
-      }
-
-      peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
-    }
-
-    function text() {
-      return input.substring(peg$reportedPos, peg$currPos);
-    }
-
-    function offset() {
-      return peg$reportedPos;
-    }
-
-    function line() {
-      return peg$computePosDetails(peg$reportedPos).line;
-    }
-
-    function column() {
-      return peg$computePosDetails(peg$reportedPos).column;
-    }
-
-    function expected(description) {
-      throw peg$buildException(
-        null,
-        [{ type: "other", description: description }],
-        peg$reportedPos
-      );
-    }
-
-    function error(message) {
-      throw peg$buildException(message, null, peg$reportedPos);
-    }
-
-    function peg$computePosDetails(pos) {
-      function advance(details, startPos, endPos) {
-        var p, ch;
-
-        for (p = startPos; p < endPos; p++) {
-          ch = input.charAt(p);
-          if (ch === "\n") {
-            if (!details.seenCR) { details.line++; }
-            details.column = 1;
-            details.seenCR = false;
-          } else if (ch === "\r" || ch === "\u2028" || ch === "\u2029") {
-            details.line++;
-            details.column = 1;
-            details.seenCR = true;
-          } else {
-            details.column++;
-            details.seenCR = false;
-          }
-        }
-      }
-
-      if (peg$cachedPos !== pos) {
-        if (peg$cachedPos > pos) {
-          peg$cachedPos = 0;
-          peg$cachedPosDetails = { line: 1, column: 1, seenCR: false };
-        }
-        advance(peg$cachedPosDetails, peg$cachedPos, pos);
-        peg$cachedPos = pos;
-      }
-
-      return peg$cachedPosDetails;
-    }
-
-    function peg$fail(expected) {
-      if (peg$currPos < peg$maxFailPos) { return; }
-
-      if (peg$currPos > peg$maxFailPos) {
-        peg$maxFailPos = peg$currPos;
-        peg$maxFailExpected = [];
-      }
-
-      peg$maxFailExpected.push(expected);
-    }
-
-    function peg$buildException(message, expected, pos) {
-      function cleanupExpected(expected) {
-        var i = 1;
-
-        expected.sort(function(a, b) {
-          if (a.description < b.description) {
-            return -1;
-          } else if (a.description > b.description) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-
-        while (i < expected.length) {
-          if (expected[i - 1] === expected[i]) {
-            expected.splice(i, 1);
-          } else {
-            i++;
-          }
-        }
-      }
-
-      function buildMessage(expected, found) {
-        function stringEscape(s) {
-          function hex(ch) { return ch.charCodeAt(0).toString(16).toUpperCase(); }
-
-          return s
-            .replace(/\\/g,   '\\\\')
-            .replace(/"/g,    '\\"')
-            .replace(/\x08/g, '\\b')
-            .replace(/\t/g,   '\\t')
-            .replace(/\n/g,   '\\n')
-            .replace(/\f/g,   '\\f')
-            .replace(/\r/g,   '\\r')
-            .replace(/[\x00-\x07\x0B\x0E\x0F]/g, function(ch) { return '\\x0' + hex(ch); })
-            .replace(/[\x10-\x1F\x80-\xFF]/g,    function(ch) { return '\\x'  + hex(ch); })
-            .replace(/[\u0180-\u0FFF]/g,         function(ch) { return '\\u0' + hex(ch); })
-            .replace(/[\u1080-\uFFFF]/g,         function(ch) { return '\\u'  + hex(ch); });
-        }
-
-        var expectedDescs = new Array(expected.length),
-            expectedDesc, foundDesc, i;
-
-        for (i = 0; i < expected.length; i++) {
-          expectedDescs[i] = expected[i].description;
-        }
-
-        expectedDesc = expected.length > 1
-          ? expectedDescs.slice(0, -1).join(", ")
-              + " or "
-              + expectedDescs[expected.length - 1]
-          : expectedDescs[0];
-
-        foundDesc = found ? "\"" + stringEscape(found) + "\"" : "end of input";
-
-        return "Expected " + expectedDesc + " but " + foundDesc + " found.";
-      }
-
-      var posDetails = peg$computePosDetails(pos),
-          found      = pos < input.length ? input.charAt(pos) : null;
-
-      if (expected !== null) {
-        cleanupExpected(expected);
-      }
-
-      return new SyntaxError(
-        message !== null ? message : buildMessage(expected, found),
-        expected,
-        found,
-        pos,
-        posDetails.line,
-        posDetails.column
-      );
-    }
-
-    function peg$parsestart() {
-      var s0, s1;
-
-      s0 = peg$currPos;
-      s1 = peg$parsenodelist();
-      if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c0(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parsenodelist() {
-      var s0, s1, s2;
-
-      s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$parsenode();
-      if (s2 !== peg$FAILED) {
-        while (s2 !== peg$FAILED) {
-          s1.push(s2);
-          s2 = peg$parsenode();
-        }
-      } else {
-        s1 = peg$c2;
-      }
-      if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c3(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parsenode() {
-      var s0, s1;
-
-      s0 = peg$currPos;
-      s1 = peg$parselogotext();
-      if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c4(s1);
-      }
-      s0 = s1;
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        s1 = peg$parsewrappednode();
-        if (s1 !== peg$FAILED) {
-          peg$reportedPos = s0;
-          s1 = peg$c5(s1);
-        }
-        s0 = s1;
-      }
-
-      return s0;
-    }
-
-    function peg$parselogotext() {
-      var s0, s1, s2;
-
-      s0 = peg$currPos;
-      s1 = [];
-      if (peg$c6.test(input.charAt(peg$currPos))) {
-        s2 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s2 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c7); }
-      }
-      if (s2 !== peg$FAILED) {
-        while (s2 !== peg$FAILED) {
-          s1.push(s2);
-          if (peg$c6.test(input.charAt(peg$currPos))) {
-            s2 = input.charAt(peg$currPos);
-            peg$currPos++;
-          } else {
-            s2 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c7); }
-          }
-        }
-      } else {
-        s1 = peg$c2;
-      }
-      if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c8(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parsehtmleltext() {
-      var s0;
-
-      if (peg$c9.test(input.charAt(peg$currPos))) {
-        s0 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c10); }
-      }
-
-      return s0;
-    }
-
-    function peg$parsewrappednode() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      s1 = peg$parseemptynode();
-      if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c11();
-      }
-      s0 = s1;
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        s1 = peg$parsestartnode();
-        if (s1 !== peg$FAILED) {
-          s2 = peg$parsenodelist();
-          if (s2 !== peg$FAILED) {
-            s3 = peg$parseendnode();
-            if (s3 !== peg$FAILED) {
-              peg$reportedPos = s0;
-              s1 = peg$c12(s2);
-              s0 = s1;
-            } else {
-              peg$currPos = s0;
-              s0 = peg$c2;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$c2;
-        }
-      }
-
-      return s0;
-    }
-
-    function peg$parsestartnode() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      if (input.charCodeAt(peg$currPos) === 60) {
-        s1 = peg$c13;
-        peg$currPos++;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c14); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = [];
-        s3 = peg$parsehtmleltext();
-        if (s3 !== peg$FAILED) {
-          while (s3 !== peg$FAILED) {
-            s2.push(s3);
-            s3 = peg$parsehtmleltext();
-          }
-        } else {
-          s2 = peg$c2;
-        }
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 62) {
-            s3 = peg$c15;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c16); }
-          }
-          if (s3 !== peg$FAILED) {
-            s1 = [s1, s2, s3];
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$c2;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$c2;
-      }
-
-      return s0;
-    }
-
-    function peg$parseendnode() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 2) === peg$c17) {
-        s1 = peg$c17;
-        peg$currPos += 2;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c18); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = [];
-        if (peg$c19.test(input.charAt(peg$currPos))) {
-          s3 = input.charAt(peg$currPos);
-          peg$currPos++;
-        } else {
-          s3 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c20); }
-        }
-        if (s3 !== peg$FAILED) {
-          while (s3 !== peg$FAILED) {
-            s2.push(s3);
-            if (peg$c19.test(input.charAt(peg$currPos))) {
-              s3 = input.charAt(peg$currPos);
-              peg$currPos++;
-            } else {
-              s3 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c20); }
-            }
-          }
-        } else {
-          s2 = peg$c2;
-        }
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 62) {
-            s3 = peg$c15;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c16); }
-          }
-          if (s3 !== peg$FAILED) {
-            s1 = [s1, s2, s3];
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$c2;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$c2;
-      }
-
-      return s0;
-    }
-
-    function peg$parseemptynode() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 3) === peg$c21) {
-        s1 = peg$c21;
-        peg$currPos += 3;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c22); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = [];
-        s3 = peg$parsehtmleltext();
-        while (s3 !== peg$FAILED) {
-          s2.push(s3);
-          s3 = peg$parsehtmleltext();
-        }
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 62) {
-            s3 = peg$c15;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c16); }
-          }
-          if (s3 !== peg$FAILED) {
-            s1 = [s1, s2, s3];
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$c2;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$c2;
-      }
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        s1 = peg$parsestartnode();
-        if (s1 !== peg$FAILED) {
-          s2 = peg$parseendnode();
-          if (s2 !== peg$FAILED) {
-            s1 = [s1, s2];
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$c2;
-        }
-        if (s0 === peg$FAILED) {
-          s0 = peg$currPos;
-          if (input.charCodeAt(peg$currPos) === 60) {
-            s1 = peg$c13;
-            peg$currPos++;
-          } else {
-            s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c14); }
-          }
-          if (s1 !== peg$FAILED) {
-            s2 = [];
-            s3 = peg$parsehtmleltext();
-            if (s3 !== peg$FAILED) {
-              while (s3 !== peg$FAILED) {
-                s2.push(s3);
-                s3 = peg$parsehtmleltext();
-              }
-            } else {
-              s2 = peg$c2;
-            }
-            if (s2 !== peg$FAILED) {
-              if (input.substr(peg$currPos, 2) === peg$c23) {
-                s3 = peg$c23;
-                peg$currPos += 2;
-              } else {
-                s3 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c24); }
-              }
-              if (s3 !== peg$FAILED) {
-                s1 = [s1, s2, s3];
-                s0 = s1;
-              } else {
-                peg$currPos = s0;
-                s0 = peg$c2;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$c2;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$c2;
-          }
-        }
-      }
-
-      return s0;
-    }
-
-    peg$result = peg$startRuleFunction();
-
-    if (peg$result !== peg$FAILED && peg$currPos === input.length) {
-      return peg$result;
-    } else {
-      if (peg$result !== peg$FAILED && peg$currPos < input.length) {
-        peg$fail({ type: "end", description: "end of input" });
-      }
-
-      throw peg$buildException(null, peg$maxFailExpected, peg$maxFailPos);
-    }
-  }
-
-  return {
-    SyntaxError: SyntaxError,
-    parse:       parse
-  };
-})();
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.WriteButton = LG.Button.extend({
 	
 });
-
 
 
 LG.WriteView = LG.AMenuView.extend({
@@ -7688,6 +7108,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.ERROR_ROW, $.proxy(this.showErrorRow, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.FORCE_LOGO, $.proxy(this.forceLogo, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.resize, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.RESET_ERROR, $.proxy(this.resetError, this));
 	},
 	template:"tpl_write",
 	showName:"write",
@@ -7719,7 +7140,7 @@ LG.WriteView = LG.AMenuView.extend({
 	load:function(){
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		if(logo != this.logo);{
+		if(logo != this.logo){
 			this.setLogo(logo);
 		}
 	},
@@ -7789,7 +7210,6 @@ LG.WriteView.TOP = 53;
 
 
 
-
 // extends LG.AbstractPageView
 
 LG.WriteButtonsView = Backbone.View.extend({
@@ -7834,7 +7254,6 @@ LG.WriteButtonsView = Backbone.View.extend({
 });
 
 
-
 // extends LG.AbstractPageView
 
 LG.WriteTopView = Backbone.View.extend({
@@ -7873,7 +7292,6 @@ LG.WriteTopView = Backbone.View.extend({
 });
 
 
-
 LG.UndoRedoButton = LG.WriteButton.extend({
 	initialize:function(){
 		LG.WriteButton.prototype.initialize.call(this);
@@ -7909,7 +7327,6 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 
 
 
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.RedoButtonView = LG.UndoRedoButton.extend({
 	template:"tpl_redobutton",
@@ -7923,7 +7340,6 @@ LG.RedoButtonView = LG.UndoRedoButton.extend({
 	}
 	
 });
-
 
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
@@ -7941,7 +7357,6 @@ LG.TidyButtonView = LG.WriteButton.extend({
 	}
 	
 });
-
 
 
 
@@ -7976,7 +7391,6 @@ LG.ClearButtonView = LG.WriteButton.extend({
 	}
 	
 });
-
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.DeleteButtonView = LG.WriteButton.extend({
@@ -8029,7 +7443,6 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 		}
 	}	
 });
-
 
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
@@ -8088,7 +7501,6 @@ LG.NewButtonView = LG.WriteButton.extend({
 	}
 	
 });
-
 LG.HelpView = LG.AMenuView.extend({
 	template:"tpl_help",
 	showName:"help",
@@ -8141,7 +7553,6 @@ LG.HelpView = LG.AMenuView.extend({
 	}
 });
 
-
 LG.HelpOverlayView = Backbone.View.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
@@ -8178,7 +7589,7 @@ LG.HelpOverlayView = Backbone.View.extend({
 		this.next();
 	},
 	copy:function(){
-		var s = "rpt 6[$  fd(100);rt(60);$]";
+		var s = "rpt 6[\nfd(100);rt(60);\n]";
 		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 	},
 	next:function(){
@@ -8200,7 +7611,6 @@ LG.HelpOverlayView = Backbone.View.extend({
 });
 
 LG.HelpOverlayView.NUM_PAGES = 4;
-
 
 LG.AGalleryLRButtonView = LG.Button.extend({
 	initialize:function(){
@@ -8254,12 +7664,11 @@ LG.GalleryRightButtonView = LG.AGalleryLRButtonView.extend({
 
 
 
-
 LG.GalleryListView = Backbone.View.extend({
 	
 	initialize:function(options){
 		this.pages = [ ];
-		this.collection = options.collection
+		this.collection = options.collection;
 		this.showName = options.showName;
 		this.perPage = LG.GalleryListView.NUMY;
 		this.scrollPos = 0;
@@ -8421,7 +7830,6 @@ LG.GalleryPageView = Backbone.View.extend({
 
 
 
-
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.GalleryTopView = Backbone.View.extend({
 	template:"tpl_gallerytop",
@@ -8432,7 +7840,6 @@ LG.GalleryTopView = Backbone.View.extend({
 		return this;
 	}
 });
-
 
 
 
@@ -8490,7 +7897,7 @@ LG.GallerySideView = Backbone.View.extend({
 	render:function(){
 		var model, logo;
 		logo = this.model.logo;
-		var model = _.extend({}, this.model, {"okColor":1, "logo":logo, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
+		model = _.extend({}, this.model, {"okColor":1, "logo":logo, "noColor":1, "okLabel":"Open file", "noLabel":"Cancel"});
 		this.loadTemplate(  this.template, model , {replace:true} );
 		this.updateLayout();
 		return this;
@@ -8512,7 +7919,6 @@ LG.GallerySideView = Backbone.View.extend({
 		LG.fileOpener.openFromGallery(this.id);
 	}
 });
-
 
 
 
@@ -8551,7 +7957,6 @@ LG.GalleryRowView = LG.AGalleryRowView.extend({
 	},
 	template:"tpl_galleryrow"
 });
-
 
 LG.AGalleryView = LG.AMenuView.extend({
 	
@@ -8616,7 +8021,6 @@ LG.AGalleryView = LG.AMenuView.extend({
 	}
 });
 
-
 LG.GalleryView = LG.AGalleryView.extend({
 	initialize:function(options){
 		options.showName = this.showName;
@@ -8630,7 +8034,6 @@ LG.GalleryView = LG.AGalleryView.extend({
 	template:"tpl_gallery",
 	showName:"gallery"
 });
-
 
 
 LG.LoadView = LG.AGalleryView.extend({
@@ -8663,7 +8066,6 @@ LG.LoadRowView = LG.AGalleryRowView.extend({
 
 	
 	
-
 
 
 // this class handles the lauching of the app
@@ -8944,4 +8346,3 @@ LG.FakeIPadLauncher.prototype.check = function(){
 
 LG.launcher = LG.create.launcher();
 LG.launcher.bindEvents();
-

@@ -31,8 +31,8 @@
 		
 		<echo message="handle css"/>
 		
-		<exec executable="node">
-			<arg line="${lessc} css/main.less -x --yui-compress min/build/css/main-min.css"/>
+		<exec executable="lessc">
+			<arg line="css/main.less -x --yui-compress min/build/css/main-min.css"/>
 		</exec>
 		
 		<echo message="concatening libs"/>
@@ -132,7 +132,7 @@
 				<file name="views/popups/filename.js"/>
 				
 				
-				<file name="views/write/htmlparser.js"/>	
+					
 				<file name="views/write/base.js"/>	
 				<file name="views/write/write.js"/>	
 				<file name="views/write/writebuttons.js"/>	

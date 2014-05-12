@@ -3,7 +3,7 @@ window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Commands = function() {
 	this.initialize();
-}
+};
 
 LG.Easel.Commands.prototype = Object.create(createjs.Shape.prototype);
 LG.Easel.Commands.prototype.constructor = LG.Easel.Commands;
