@@ -1,6 +1,5 @@
 
 LG.WriteView = LG.AMenuView.extend({
-	
 	initialize:function(){
 		var _this = this;
 		this.error = {"show":false, "line":-1};
@@ -14,6 +13,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.FORCE_LOGO, $.proxy(this.forceLogo, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.resize, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.RESET_ERROR, $.proxy(this.resetError, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.TO_BAR, $.proxy(this.toBar, this));
 	},
 	template:"tpl_write",
 	showName:"write",
@@ -23,6 +23,9 @@ LG.WriteView = LG.AMenuView.extend({
 		this.writeTop = new LG.WriteTopView();
 		this.$el.append(this.writeButtons.render().$el).append(this.writeTop.render().$el);
 		return this;
+	},
+	toBar:function(){
+		this.$logodiv.blur();
 	},
 	resize:function(){
 		this.onScroll();
@@ -91,7 +94,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.changedTextDeBounce();
 	},
 	resetError:function(){
-		console.log("reset error");
 		if(this.error.show){
 			this.$(".error").removeClass("show");
 			this.error = {"show":false, "line":-1};
@@ -104,12 +106,43 @@ LG.WriteView = LG.AMenuView.extend({
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
 			"mousedown":"resetError"
-		} );
+		});
 		return obj;
 	}
 });
 
 LG.WriteView.TOP = 53;
+
+LG.TouchWriteView = LG.WriteView.extend({
+	initialize:function(){
+		LG.WriteView.prototype.initialize.call(this);
+	},
+	addShowList:function(){
+		var _this = this;
+		this.$logodiv.on('focus', function(){
+			_this.$logodiv.blur();
+		});
+	},
+	removeShowList:function(){
+		this.$logodiv.off('focus');
+	},
+	onShow:function(){
+		var _this = this;
+		this.addShowList();
+		setTimeout(function(){
+			_this.removeShowList();
+		}, 750);
+	},
+	onHide:function(){
+		this.removeShowList();
+	}
+});
+
+LG.NoTouchWriteView = LG.WriteView.extend({
+	initialize:function(){
+		LG.WriteView.prototype.initialize.call(this);
+	}
+});
 
 
 

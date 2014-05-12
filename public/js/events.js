@@ -33,3 +33,7 @@ LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
 LG.Events.ERROR_ROW				=	"LG::errorRow";
 LG.Events.FORCE_LOGO			=	"LG::forceLogo";
 LG.Events.RESET_ERROR			=	"LG::resetError";
+LG.Events.SHOW_CONTEXT_BUTTONS	=	"LG::showContextButtons";
+LG.Events.HIDE_CONTEXT_BUTTONS	=	"LG::hideContextButtons";
+LG.Events.INSERT				=	"LG::insert";
+LG.Events.TO_BAR				=	"LG::toBar";

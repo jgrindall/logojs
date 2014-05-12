@@ -1,0 +1,71 @@
+#mainmenu{
+	width:100%;
+	height:100%;
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+#mainmenubg {
+	width:100%;
+	height:100%;
+	background:#ddd;
+	opacity:0.6;
+	position: absolute;
+}
+
+#mainmenu .mmblock{
+	width:@mainmenusize;
+	height:@mainmenusize;
+	position:fixed;
+	background:transparent;
+	cursor:hand;
+	cursor:pointer;
+	.animate;
+}
+
+#mainmenu .mmblock .mminner{
+	position:absolute;
+	left:10%;
+	right:10%;
+	width:80%;
+	top:10%;
+	bottom:10%;
+	height:80%;
+	background:pink;
+}
+
+#mainmenu .mmblock.mm0{
+	left:50%;
+	top:-10%;
+	margin-left:-@mainmenusize;;
+	margin-top:-@mainmenusize;
+}
+#mainmenu .mmblock.mm1{
+	left:100%;
+	top:50%;
+	margin-top:-@mainmenusize;
+}
+#mainmenu .mmblock.mm2{
+	left:-10%;
+	top:50%;
+	margin-left:-@mainmenusize;
+}
+#mainmenu .mmblock.mm3{
+	left:50%;
+	top:110%;
+}
+
+
+#mainmenu.show .mmblock.mm0{
+	top:50%;
+}
+#mainmenu.show .mmblock.mm1{
+	left:50%;
+}
+#mainmenu.show .mmblock.mm2{
+	left:50%;
+}
+#mainmenu.show .mmblock.mm3{
+	top:50%;
+}

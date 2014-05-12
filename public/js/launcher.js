@@ -5,6 +5,7 @@
 
 LG.Launcher = function(){
 	_.extend(this, Backbone.Events);
+	this._launched = false;
 	this._domReady = false;
 	this._mobReady = false;
 	this._deviceReady = false;
@@ -27,10 +28,10 @@ LG.Launcher.prototype.onResize = $.debounce( 500, function(){
 LG.Launcher.prototype.domReady = function(){
 	this._domReady = true;
 	// there are two check methods, one for web and one for ipad
-	if(	this.check() ){
-		this._started = true;
+	if(	this.check() && !this._started){
 		// if we are ready, then start by loading the html templates
 		this.startLoad();
+		this._started = true;
 	}
 };
 
@@ -69,8 +70,8 @@ LG.Launcher.prototype.launch = function(){
 	}
 	else{
 		LG.router.navigate("write", {"trigger":true});
-		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
 	}
+	this._launched = true;
 };
 
 LG.Launcher.prototype.addActivity = function(){

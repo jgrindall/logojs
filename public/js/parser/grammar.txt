@@ -117,7 +117,7 @@ rtstmt  = ('rt' / 'Rt' / 'RT') sep* '(' num:expression ')' eoline
 	return {type:"rtstmt", children:[num]};
 }
 
-rptstmt  = ('rpt' / 'Rpt' / 'RPT') sep* num:expression sep* '[' sep* list:insidefnlist sep* ']' 
+rptstmt  = ('rpt' / 'Rpt' / 'RPT') sep* num:expression sep* list:insidefnlist sep* 'end' sep* 
 {
 	return {type:"rptstmt", children:[num,list]};
 }
@@ -138,7 +138,7 @@ makestmt = v:vardef sep* ':=' sep* e:expression eoline
 	return {type:"makestmt", children:[v,e]};
 }
 
-definefnstmt = ('proc' / 'Proc') sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* '{' s:insidefnlist '}' sep*
+definefnstmt = ('proc' / 'Proc') sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* s:insidefnlist 'end' sep*
 {
          return {type:"definefnstmt", name:f.name, args:a, stmts:s};
 }
@@ -316,7 +316,7 @@ divterm =  sep* '/' sep* u:unaryexpression
 
 numberexpression = sep* n:number sep*
 {
-	return {type:"numberexpression",children:[n]};
+	return {type:"numberexpression", children:[n]};
 }
 / '(' e:expression ')'
 {
@@ -347,4 +347,4 @@ varname = n:[a-z]
 
 sep = [ \t\r\n$] 
 
-eoline = sep* ';' sep*
+eoline = sep* 

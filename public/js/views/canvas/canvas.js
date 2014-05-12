@@ -35,7 +35,8 @@ LG.CanvasView = Backbone.View.extend({
 		}
 	},
 	clickMe:function(){
-		if(LG.layoutModel.get("show") == "write"){
+		var s = LG.layoutModel.get("show");
+		if(s === "write" || s === "writebar"){
 			if(this.active){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
 			}
@@ -46,61 +47,84 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onResize:function(){
 		var w, h;
-		w = $("body").width() - 230;
+		w = $("body").width() - 50;
 		h = $("body").height();
 		this.$el.width(w).height(h);
 		LG.canvasModel.set({"width":w, "height":h});
 	},
 	afterAdded:function(){
-		this.canvas = document.getElementById("gamecanvas");
-		this.$canvas = $(this.canvas);
+		this.turtlecanvas = document.getElementById("turtlecanvas");
+		this.bgcanvas = document.getElementById("bgcanvas");
+		this.commandscanvas = document.getElementById("commandscanvas");
+		this.$turtlecanvas = $(this.turtlecanvas);
+		this.$bgcanvas = $(this.bgcanvas);
+		this.$commandscanvas = $(this.commandscanvas);
 		this.addChildren();
 		this.reset();
 	},
 	removeAllChildren:function(){
-		if(this.container){
-			this.container.removeAllChildren();
-		}
-		if(this.stage){
-			this.stage.removeAllChildren();
-		}
-		this.stage = null;
-		this.bg = null;
-		this.turtle = null;
-		this.container = null;
-		this.canvas = null;
+		this.turtlestage.removeAllChildren();
+		this.commandsstage.removeAllChildren();
+		this.bgstage.removeAllChildren();
+		// clear up
+	},
+	makeStages:function(){
+		this.turtlestage = new createjs.Stage(this.turtlecanvas);
+		this.turtlestage.snapToPixelEnabled = true;
+		this.bgstage = new createjs.Stage(this.bgcanvas);
+		this.commandsstage = new createjs.Stage(this.commandscanvas);
+		this.commandsstage.snapToPixelEnabled = true;
+	},
+	makeTurtle:function(){
+		this.turtle = new LG.Easel.Turtle(10);
+		this.turtlecontainer = new createjs.Container();
+		this.turtlecontainer.addChild(this.turtle);
+		this.turtlestage.addChild(this.turtlecontainer);
+	},
+	makeBg:function(){
+		this.bg = new LG.Easel.Bg();
+		this.bgcontainer = new createjs.Container();
+		this.bmpcontainer = new createjs.Container();
+		this.bgcontainer.addChild(this.bg);
+		this.bgstage.addChild(this.bgcontainer);
+		this.bgstage.addChild(this.bmpcontainer);
+	},
+	makeCommands:function(){
+		this.commands = new LG.Easel.Commands();
+		this.commandscontainer = new createjs.Container();
+		this.commandscontainer.addChild(this.commands);
+		this.commandsstage.addChild(this.commandscontainer);
 	},
 	addChildren:function(){
-		this.stage = new createjs.Stage(this.canvas);
-		this.turtle = new LG.Easel.Turtle(10);
-		this.bg = new LG.Easel.Bg();
-		this.commands = new LG.Easel.Commands();
-		this.container = new createjs.Container();
-		this.container.addChild(this.bg);
-		this.container.addChild(this.commands);
-		this.container.addChild(this.turtle);
-		this.stage.addChild(this.container);
+		this.makeStages();
+		this.makeTurtle();
+		this.makeBg();
+		this.makeCommands();
+		this.reset();
 	},
 	reset:function(){
 		this.stop();
 		var w = LG.canvasModel.get("width");
 		var h = LG.canvasModel.get("height");
-		this.$canvas.attr("width", w).attr("height", h);
+		this.$(".easelcanvas").attr("width", w).attr("height", h);
 		this.position = {"theta":-Math.PI/2, x:w/2, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
 		this.commands.graphics.clear();
+		this.bmpcontainer.removeAllChildren();
 		this.tick();
 	},
 	tick:function(){
-		if(this.turtle){
+		if(this.turtle && this.position){
 			this.turtle.x = this.position.x;
 			this.turtle.y = this.position.y;
 			this.turtle.rotation = this.position.theta*180/Math.PI;
 			this.turtle.drawMe(this.position.color);
 		}
-		if(this.bg){
+		if(this.bg && this.position){
 			this.bg.drawMe(this.position.bg);
 		}
-		this.stage.update();
+		this.turtlestage.update();
+		this.bgstage.update();
+		this.commandsstage.update();
 	},
 	stop:function(){
 		this.ended = false;
@@ -146,10 +170,11 @@ LG.CanvasView = Backbone.View.extend({
 			this.ended = true;
 		}
 	},
-	draw:function(){	
+	draw:function(){
 		this.reset();
 		this.active = true;
 		this.ended = false;
+		this.bmpcontainer.removeAllChildren();
 		this.output = new LG.output();
 		this.commandIndex = 0;
 		var logo = LG.fileCollection.selected.get("logo");
@@ -163,7 +188,7 @@ LG.CanvasView = Backbone.View.extend({
 			this.active = false;
 		}
 		if(tree){
-			console.log(JSON.stringify(tree));
+			LG.EventDispatcher.trigger(LG.Events.TO_BAR);
 			try{
 				this.process(tree);
 			}
@@ -171,7 +196,6 @@ LG.CanvasView = Backbone.View.extend({
 				console.log("e: "+e);
 			}
 		}
-		// TODO put this in a worker?
 	},
 	showError:function(expected, line, offset){
 		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, line, offset);
@@ -180,13 +204,18 @@ LG.CanvasView = Backbone.View.extend({
 		this.worker = new Worker(LG.Config.PARSER_VISIT);
 		this.worker.onmessage = $.proxy(this.onMessage, this);
 		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
-		setTimeout($.proxy(this.drawBatch, this), LG.output.TIMEOUT);
+		var _this = this;
+		LG.spinnerModel.set({"show":true});
+		setTimeout(function(){
+			LG.spinnerModel.set({"show":false});
+			setTimeout($.proxy(_this.drawBatch, _this), LG.output.TIMEOUT);
+		}, 1000);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
-		context = this.canvas.getContext("2d");
-		x0 = Math.max(0, (this.canvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
-		y0 = (this.canvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2;
+		context = this.bgcanvas.getContext("2d");
+		x0 = Math.max(0, (this.bgcanvas.width - LG.CanvasView.SNAPSHOT_WIDTH)/2 );
+		y0 = (this.bgcanvas.height - LG.CanvasView.SNAPSHOT_HEIGHT)/2;
 		y0 = Math.max(0, y0 - LG.CanvasView.SNAPSHOT_HEIGHT/3);
 		data = context.getImageData(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
 		tempCanvas = document.createElement("canvas");
@@ -195,32 +224,27 @@ LG.CanvasView = Backbone.View.extend({
 		tempCanvas.height = LG.CanvasView.SNAPSHOT_HEIGHT;
 		tempContext.putImageData(data, 0, 0);
 		img = tempCanvas.toDataURL("image/png");
+		console.log("img"+img);
 		LG.imageModel.set({"img":img});
-		this.addRect(x0,y0);
-	},
-	addRect:function(x0, y0){
-		var _this = this;
-		var rect = new createjs.Shape();
-		rect.alpha = 0.25;
-		rect.graphics.beginFill("#eeeeee").drawRect(x0, y0, LG.CanvasView.SNAPSHOT_WIDTH, LG.CanvasView.SNAPSHOT_HEIGHT);
-		this.container.addChild(rect);
-		setTimeout(function(){
-			_this.container.removeChild(rect);
-			_this.tick();
-		}, 500);
-		this.tick();
 	},
 	finished:function(){
 		LG.Utils.growl("Finished!");
 		this.active = false;
 		this.ended = true;
+		this.flush();
 		this.trigger(LG.Events.DRAW_FINISHED);
+	},
+	flush:function(){
+		var flushbmp = new createjs.Bitmap(this.commandscanvas);
+		flushbmp.cache(0, 0, this.bgcanvas.width, this.bgcanvas.height);
+		this.bmpcontainer.addChild(flushbmp);
+		this.commands.graphics.clear();
+		this.tick();
+		console.log("flushed "+this.bmpcontainer.getNumChildren());
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;
-		if(!this.active){
-			clearInterval( this.drawInterval );
-		}
+		console.log("batch drawing "+LG.output.BATCH_SIZE+" out of "+this.output.size()+"  start at "+this.commandIndex);
 		for(i = 0; i <= LG.output.BATCH_SIZE - 1; i++){
 			var command = this.output.at(this.commandIndex);
 			if(command){
@@ -229,7 +253,10 @@ LG.CanvasView = Backbone.View.extend({
 			}
 		}
 		this.tick();
-		var done = (this.ended && (this.commandIndex >= this.output.size() - 1) );
+		if(this.commandIndex % LG.CanvasView.FLUSH_INTERVAL === 0){
+			this.flush();
+		}
+		var done = (!this.active || (this.ended && (this.commandIndex >= this.output.size() - 1) ));
 		if(done){
 			this.finished();
 		}
@@ -244,6 +271,7 @@ LG.CanvasView = Backbone.View.extend({
 
 LG.CanvasView.SNAPSHOT_WIDTH = 300;
 LG.CanvasView.SNAPSHOT_HEIGHT = 300;
+LG.CanvasView.FLUSH_INTERVAL = 5000;
 
 LG.CanvasModel = Backbone.Model.extend({
 	defaults:{

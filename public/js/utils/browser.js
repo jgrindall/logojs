@@ -162,7 +162,6 @@ LG.Browser.configureScroll = function(){
 			scrollTop = $target.scrollTop();
 			baseTop = containerHeight * (1 - (containerHeight/textHeight));
 			atBase = (scrollTop >= baseTop);
-			console.log(textHeight+", "+containerHeight+", "+scrollTop+", "+atBase);
 			if(textHeight <= containerHeight){
 				allowScroll = false;
 			}

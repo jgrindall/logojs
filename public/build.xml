@@ -134,6 +134,7 @@
 				
 					
 				<file name="views/write/base.js"/>	
+				<file name="views/write/contextbuttons.js"/>	
 				<file name="views/write/write.js"/>	
 				<file name="views/write/writebuttons.js"/>	
 				<file name="views/write/writetop.js"/>	
@@ -141,12 +142,13 @@
 				<file name="views/write/redobutton.js"/>	
 				<file name="views/write/tidybutton.js"/>	
 				<file name="views/write/clearbutton.js"/>	
-				
+				<file name="views/write/writebar.js"/>	
 				<file name="views/write/deletebutton.js"/>
 				<file name="views/write/newbutton.js"/>
 				
 				<file name="views/help/help.js"/>		
-				<file name="views/help/helpoverlay.js"/>		
+				<file name="views/help/helpoverlay.js"/>	
+				<file name="views/help/mainmenu.js"/>		
 				<file name="views/gallery/gallerybutton.js"/>
 
 				<file name="views/gallery/gallerylist.js"/>	

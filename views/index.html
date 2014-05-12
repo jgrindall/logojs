@@ -128,7 +128,34 @@
 			
 		</script>
 		
+		<script id="tpl_writebar" type="text/template">
+
+			
+			<div id = "writebar">
+				<i class="fa fa-chevron-left"></i>
+			</div>
+			
+		</script>
 		
+		<script id="tpl_mainmenu" type="text/template">
+		
+			<div id="mainmenu">
+				<div id="mainmenubg"></div>
+				<div class="mmblock mm0"><div class="mminner"></div></div>
+				<div class="mmblock mm1"><div class="mminner"></div></div>
+				<div class="mmblock mm2"><div class="mminner"></div></div>
+				<div class="mmblock mm3"><div class="mminner"></div></div>
+			</div>
+			
+		</script>
+		
+		<script id="tpl_contextbuttons" type="text/template">
+
+			<div id="contextbuttons">
+				
+			</div>
+			
+		</script>
 		
 		
 		<script id="tpl_writebutton" type="text/template">
@@ -259,7 +286,13 @@
 		
 		<script id="tpl_savebutton" type="text/template">
 
-			 <button id="savebutton" class="action button buttonsmall<% if(disabled){print(" disabled");}%>" >
+			 <button id="savebutton" class="action button buttonsmall
+			 
+			 	<% if(disabled){
+			 		print(" disabled");
+			 	}
+			 	%>"
+			 >
 			 
 				 <span>
 					Save
@@ -315,8 +348,16 @@
 		<script id="tpl_canvas" type="text/template">
 			
 			<div id="canvas" >
-				<canvas width="<%=width%>" height="<%=height%>" id="gamecanvas">
+				
+				<canvas width="<%=width%>" height="<%=height%>" class="easelcanvas" id="bgcanvas">
 				</canvas>
+				
+				<canvas width="<%=width%>" height="<%=height%>" class="easelcanvas" id="commandscanvas">
+				</canvas>
+				
+				<canvas width="<%=width%>" height="<%=height%>" class="easelcanvas" id="turtlecanvas">
+				</canvas>
+				
 				
 			</div>
 			
@@ -329,7 +370,7 @@
 				
 				<textarea editable="false" disabled="true" id="logonums"></textarea>
 				
-				<textarea resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+				<textarea placeholder="Write your Logo here..." resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 				
 				<div class="error"></div>
 				

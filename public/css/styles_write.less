@@ -24,6 +24,7 @@
 	right:0px;
 	overflow-y:scroll;
 	-webkit-overflow-scrolling: touch;
+	width: 350px;
 }
 
 #write #logonums{
@@ -32,6 +33,8 @@
 	width:40px;
 	word-wrap: normal;
 	overflow: hidden;
+	color: #999;
+	background: white;
 }
 
 #writebuttons{
@@ -64,12 +67,12 @@
 
 #write .error{
 	position: absolute;
-	bottom: 50px;
-	right: -250px;
-	width: 250px;
+	bottom: 53px;
+	right: -328px;
+	width: 328px;
 	height: 60px;
 	background: #28B62C;
-	font-size: 90%;
+	font-size: 100%;
 	box-sizing: border-box;
 	padding: 5px;
 	color: #fff;
@@ -97,4 +100,49 @@
 
 ::-webkit-scrollbar-corner {
     background: blue;
+}
+
+#writebar{
+    position:fixed;
+    width:60px;
+    background:#28B62C;
+    top:0;
+    bottom:0;
+    right:-65px;
+    color:white;
+    cursor:hand;
+    cursor:pointer;
+}
+#writebar.show{
+    right:0;
+}
+#writebar i{
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 20px;
+	font-size: 36px;
+}
+
+#contextbuttons{
+	position:fixed;
+	top:0;
+	left:0;
+	width:50px;
+	height:100px;
+	background:#28b62c;
+	display:none;
+	color:white;
+}
+
+#contextbuttons.show{
+	display:block;
+}
+
+#contextbuttons button.context{
+	width:50px;
+	min-width:50px;
+	padding: 0;
+	margin: 0;
+	height: 40px;
 }

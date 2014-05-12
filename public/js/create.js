@@ -2,6 +2,14 @@ LG.ACreate = function(){
 	
 };
 
+LG.ACreate.prototype.writeView = function(data){
+	if(LG.Config.IS_TOUCH){
+		return new LG.TouchWriteView(data);
+	}
+	else{
+		return new LG.NoTouchWriteView(data);
+	}
+};
 
 // web
 
