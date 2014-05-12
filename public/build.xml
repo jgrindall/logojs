@@ -2,6 +2,15 @@
 
 <project name="Logotacular" default="build"> 
 	
+	<condition property="is_windows">
+        <os family="windows"/>
+    </condition>
+	
+	<condition property="is_ios">
+        <os family="mac"/>
+    </condition>
+	
+	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 	
 	<property file="build.properties"></property>
@@ -13,6 +22,21 @@
 			<arg line='"min/build/main-min.js" -o "min/build/main-min.js"'/> 
 		</java>
 		
+	</target>
+	
+	<target name="lesswin" if="is_windows">
+	
+		<echo message="lesswin"/>
+		
+		<exec executable="cmd.exe">
+			<arg line="/c lessc 'css/main.less' -x 'min/build/css/main-min.css'"/>
+		</exec>
+	</target>
+	
+	<target name="lessios" if="is_ios">
+		<exec executable="lessc">
+			<arg line="css/main.less -x min/build/css/main-min.css"/>
+		</exec>
 	</target>
 	
 	<target name="build" unless="built">
@@ -31,9 +55,8 @@
 		
 		<echo message="handle css"/>
 		
-		<exec executable="lessc">
-			<arg line="css/main.less -x --yui-compress min/build/css/main-min.css"/>
-		</exec>
+		<antcall target="lesswin"/>
+		<antcall target="lessios"/>
 		
 		<echo message="concatening libs"/>
 		
