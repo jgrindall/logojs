@@ -22,5 +22,5 @@ LG.Config.PRODUCT_ID = "logojs";
 LG.baseUrl = "";
 
 if(LG.Config.PHONEGAP){
-	LG.baseUrl = "http://heroku.com";
+	LG.baseUrl = "http://cryptic-sea-4360.herokuapp.com";
 }
