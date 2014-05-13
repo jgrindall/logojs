@@ -5,7 +5,6 @@ LG.WriteTopView = Backbone.View.extend({
 	template:"tpl_writetop",
 	
 	initialize:function(){
-		_.bindAll(this);
 		this.render();
 	},
 	render:function(){
