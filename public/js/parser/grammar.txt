@@ -208,9 +208,9 @@ expressioncomma = sep* e:expression sep* ',' sep*
 	return e;
 }
 
-fnname = n:[a-z]*
+fnname = c0:([a-zA-Z])+ c1:[a-zA-Z0-9_]*
 {
-	return {type:"fnname", name:n.toString()};
+	return {type:"fnname", name:c0.toString()+c1.toString()};
 } 
 
 
@@ -329,22 +329,41 @@ numberexpression = sep* n:number sep*
 
 
 
-number = d:  ([0-9]+)
+number =
+'.' d: ([0-9]+)
 {
-	var s = "";
-	var l = d.length;
-	for(var i=0;i<l;i++){
+  	var s = "0.", i;
+  	for(i = 0; i <= d.length-1; i++){
 		s+=d[i];
-	}
-	return {type:"number",value:parseInt(s, 10)};
+  	}   
+  	return {type:"number",value:parseFloat(s, 10)  };  
 }
-
-
-varname = n:[a-z]
+/
+d1:([0-9]+) '.' d2: ([0-9]+)
 {
-	return {type:"varname",name:n.toString()};
+  	var s1 = "", s2 = "", i;
+  	for(i = 0; i<=d1.length-1;i++){
+    	s1+=d1[i];
+  	}   
+ 	for(i = 0; i<=d2.length-1;i++){
+    	s2+=d2[i];
+  	}   
+  return {type:"number",value:parseFloat(s1+'.'+s2, 10)  };  
+}
+/
+d: ([0-9]+)
+{
+	return {type:"number",value:parseInt(d.join(""), 10)};
+}
+ 
+
+
+
+varname = c0:([a-zA-Z])+ c1:[a-zA-Z0-9_]*
+{
+	return {type:"varname",name:c0.toString()+c1.toString()};
 }
 
-sep = [ \t\r\n$] 
+sep = [ \t\r\n] 
 
 eoline = sep* 

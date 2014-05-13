@@ -7,6 +7,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_STOP,			$.proxy(this.stop, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESIZE,				$.proxy(this.onResize, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESET_CANVAS,			$.proxy(this.reset, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.PAUSE,				$.proxy(this.pause, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CAPTURE_IMAGE,		$.proxy(this.capture, this));
 		this.listenTo(LG.layoutModel,		"change",						$.proxy(this.onLayoutChanged, this));
 		this.listenTo(LG.graphicsModel,		"change:bg",					$.proxy(this.reset, this));
@@ -23,6 +24,9 @@ LG.CanvasView = Backbone.View.extend({
 			"_click":"clickMe"
 		});
 		return obj;
+	},
+	pause:function(){
+		this.stop();
 	},
 	onLayoutChanged:function(){
 		var show = LG.layoutModel.get("show");
@@ -163,7 +167,7 @@ LG.CanvasView = Backbone.View.extend({
 			}
 		}
 		else if(data.type === "message"){
-			console.log("message "+data.message);
+			this.onError(data);
 		}
 		else if(data.type === "end"){
 			console.log("ended!");
@@ -200,16 +204,21 @@ LG.CanvasView = Backbone.View.extend({
 	showError:function(expected, line, offset){
 		LG.EventDispatcher.trigger(LG.Events.ERROR_ROW, expected, line, offset);
 	},
+	onError:function(obj){
+		this.stop();
+		LG.EventDispatcher.trigger(LG.Events.ERROR_RUNTIME, obj.message);
+	},
 	process:function(tree){
 		this.worker = new Worker(LG.Config.PARSER_VISIT);
 		this.worker.onmessage = $.proxy(this.onMessage, this);
+		this.worker.onerror = $.proxy(this.onError, this);
 		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
 		var _this = this;
 		LG.spinnerModel.set({"show":true});
 		setTimeout(function(){
 			LG.spinnerModel.set({"show":false});
 			setTimeout($.proxy(_this.drawBatch, _this), LG.output.TIMEOUT);
-		}, 1000);
+		}, 500);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
@@ -245,16 +254,19 @@ LG.CanvasView = Backbone.View.extend({
 	drawBatch:function(){
 		var size = this.output.size(), i;
 		console.log("batch drawing "+LG.output.BATCH_SIZE+" out of "+this.output.size()+"  start at "+this.commandIndex);
-		for(i = 0; i <= LG.output.BATCH_SIZE - 1; i++){
-			var command = this.output.at(this.commandIndex);
-			if(command){
-				command.execute(this.commands, this.position);
-				this.commandIndex++;
+		var max = Math.min(size - 1, LG.output.BATCH_SIZE - 1);
+		if(size >= 1){
+			for(i = 0; i <= max; i++){
+				var command = this.output.at(this.commandIndex);
+				if(command){
+					command.execute(this.commands, this.position);
+					this.commandIndex++;
+				}
 			}
-		}
-		this.tick();
-		if(this.commandIndex % LG.CanvasView.FLUSH_INTERVAL === 0){
-			this.flush();
+			this.tick();
+			if(this.commandIndex % LG.CanvasView.FLUSH_INTERVAL === 0){
+				this.flush();
+			}
 		}
 		var done = (!this.active || (this.ended && (this.commandIndex >= this.output.size() - 1) ));
 		if(done){

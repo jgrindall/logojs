@@ -90,7 +90,7 @@ function visitdivterm(node){
 	visitchildren(node);
 	var num = stack.pop();
 	if(num === 0){
-		throw new Error("Division by zero");
+		runTimeError("Division by zero");
 	}
 	else{
 		stack.push(1/num);
@@ -101,9 +101,13 @@ function visitrptstmt(node){
 	var ch = node.children;
 	visitNode( ch[0] );
 	var num = stack.pop();
-	//TODO check if "+num+" is integer or null?
-	for(var i = 1;i<=num; i++){
-		visitNode(ch[1]);
+	if(num === parseInt(num, 10)){
+		for(var i = 1;i<=num; i++){
+			visitNode(ch[1]);
+		}
+	}
+	else{
+		runTimeError(num+" is not a whole number of times to repeat");
 	}
 }
 
@@ -164,7 +168,7 @@ function visitplusexpression(node){
 function visitvarname(node){
 	var num = symTable.get(node.name);
 	if(!num){
-		throw new Error("Variable not found "+node.name);
+		runTimeError("Variable not found "+node.name);
 	}
 	else{
 		stack.push(num);
@@ -186,13 +190,20 @@ function visitcallfnstmt(node){
 	var name = node.name;
 	var f = symTable.getFunction(name);
 	if(f){
-		symTable.enterBlock();
-		visitchildren(node.args);
-		executeFunction(f);
-		symTable.exitBlock();
+		var numArgs = f.argsNode.children.length;
+		var numSupplied = node.args.children.length;
+		if(numArgs != numSupplied){
+			runTimeError("Function "+name+" not found");
+		}
+		else{
+			symTable.enterBlock();
+			visitchildren(node.args);
+			executeFunction(f);
+			symTable.exitBlock();
+		}
 	}
 	else{
-		throw new Error("Function "+name+" not found");
+		runTimeError("Function "+name+" not found");
 	}
 }
 
@@ -205,11 +216,15 @@ function executeFunction(f){
 	}
 	for(i = 0; i <= len - 1; i++){
 		argNode = f.argsNode.children[i];
-		// TODO - check it!
 		varName = argNode.name;
 		symTable.add(varName, vals[len - 1 - i]);
 	}
 	visitNode(f.statementsNode);
+}
+
+function runTimeError(msg){
+	throw new Error(msg);
+	self.postMessage({"type":"error", "message":msg });
 }
 
 function visitNode(node){

@@ -10,6 +10,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.ERROR_ROW, $.proxy(this.showErrorRow, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.ERROR_RUNTIME, $.proxy(this.showErrorRuntime, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.FORCE_LOGO, $.proxy(this.forceLogo, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.resize, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.RESET_ERROR, $.proxy(this.resetError, this));
@@ -52,6 +53,16 @@ LG.WriteView = LG.AMenuView.extend({
 			this.setLogo(logo);
 		}
 	},
+	showErrorRuntime:function(msg){
+		msg = msg.replace(/Uncaught Error: /g,"Error: ");
+		this.showErrorText(msg);
+		this.error = {"show":true, "line":0};
+		this.showErrorText(msg);
+	},
+	showErrorText:function(msg){
+		this.$(".error").text(msg).addClass("show");
+		LG.router.navigate("write", {"trigger":true});
+	},
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
 		exp = expected[0].value;
@@ -61,7 +72,7 @@ LG.WriteView = LG.AMenuView.extend({
 		else{
 			msg = "Error on line "+ line +", expected: \""+exp+"\". Check your code!";
 		}
-		this.$(".error").text(msg).addClass("show");
+		this.showErrorText(msg);
 	},
 	clear:function(){
 		this.setLogo("");
@@ -119,7 +130,9 @@ LG.TouchWriteView = LG.WriteView.extend({
 	},
 	addShowList:function(){
 		var _this = this;
+		console.log("add focus listener");
 		this.$logodiv.on('focus', function(){
+			console.log("focus -> blur");
 			_this.$logodiv.blur();
 		});
 	},
