@@ -22,8 +22,8 @@ LG.output.prototype.at = function(i){
 
 LG.output.MAX_SIZE_REACHED = "Exceeded output size";
 
-LG.output.MAX_SIZE = 10000;
+LG.output.MAX_SIZE = 100000;
 
-LG.output.BATCH_SIZE = 50;
+LG.output.BATCH_SIZE = 200;
 
-LG.output.TIMEOUT = 50;
+LG.output.TIMEOUT = 100;
