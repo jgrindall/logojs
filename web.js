@@ -73,6 +73,10 @@ app.get('/', function(req, res){
 	res.render("index.jade");
 });
 
+app.get('/app', function(req, res){
+	res.render("app.jade");
+});
+
 app.get('/files', function(req, res){
 	var perPage, numPages, query = {"active":true}, userId, sort;
 	perPage = req.param("perPage", 24);

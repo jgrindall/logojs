@@ -206,7 +206,7 @@
 			<fileset dir="js/parser"/>
 		</copy>
 		
-		<copy overwrite="true" file="../index.html" todir="../views">
+		<copy overwrite="true" file="../index.html" tofile="../views/app.html">
 			<filterset begintoken="_" endtoken="_">
 				<filter token="PHONEGAP" value=""/>
 			</filterset>
