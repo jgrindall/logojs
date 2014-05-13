@@ -229,6 +229,16 @@ LG.IPadLauncher.prototype.bindEvents = function(){
 	// also bind to extra PG events
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
+	document.addEventListener("resume", $.proxy(this.resume, this) , false);
+	document.addEventListener("pause", $.proxy(this.pause, this) , false);
+};
+
+LG.IPadLauncher.prototype.resume = function(){
+	LG.EventDispatcher.trigger(LG.Events.RESUME);
+};
+
+LG.IPadLauncher.prototype.pause = function(){
+	LG.EventDispatcher.trigger(LG.Events.PAUSE);
 };
 
 LG.IPadLauncher.prototype.deviceReady = function(){
