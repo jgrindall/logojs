@@ -10,6 +10,7 @@ LG.FileButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.TO_BAR);
 	},
 	getData:function(){
 		var name = null, saved = false, fileModel;
