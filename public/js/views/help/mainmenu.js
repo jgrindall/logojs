@@ -8,9 +8,14 @@ LG.MainMenuView = Backbone.View.extend({
 			"_click .mmblock.mm0":"clickBlock0",
 			"_click .mmblock.mm1":"clickBlock1",
 			"_click .mmblock.mm2":"clickBlock2",
-			"_click .mmblock.mm3":"clickBlock3"
+			"_click .mmblock.mm3":"clickBlock3",
+			"_click span.close":"clickClose"
 		} );
 		return obj;
+	},
+	clickClose:function(e){
+		this.stopProp(e);
+		this.close();
 	},
 	clickBlock0:function(e){
 		this.stopProp(e);
