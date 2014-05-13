@@ -214,8 +214,20 @@
 		
 		<antcall target="ios"/>
 		
+		<antcall target="phonegap"/>
+		
 	</target>
 	
+	
+	
+	<target name="phonegap" if="is_ios">
+	
+		<echo message="phonegap"/>
+		
+		<exec executable="phonegap" dir="../../logojs_pg">
+			<arg line="build ios"/>
+		</exec>
+	</target>
 	
 	
 	
