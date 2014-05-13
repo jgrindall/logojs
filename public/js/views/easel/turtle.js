@@ -2,8 +2,9 @@ window.LG.Easel = window.LG.Easel || {};
 
 LG.Easel.Turtle = function(size) {
 	this.initialize(size);
-	this.cache(-25, -25, 50, 50);
+	this.cache(-size, -size, 2*size, 2*size);
 	this.drawMe( LG.graphicsModel.getInner() );
+	this.snapToPixel = true;
 };
 
 LG.Easel.Turtle.prototype = Object.create(createjs.Shape.prototype);
