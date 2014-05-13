@@ -6,13 +6,8 @@
 @buttonheight:			53px;
 @mainmenusize:			250px;
 
-@tri_size_gallery:13px;
 @tri_size_help:20px;
 
-.rightmenugrey{
-	border-color:@greydark;
-	background-color:@grey;
-}
 
 .rightmenutransparent{
 	border-color:transparent;
@@ -24,12 +19,13 @@
 	top: 0;
 	height: 100%;
 	color:white;
-	.animate;
 	border:none;
+	.animate;
 }
 
 .menusmall, .menularge {
-	.rightmenugrey;
+	border-color:@menu;
+	background-color:@menubg;
 }
 
 .menusmall{

@@ -28,8 +28,8 @@
 	font-weight: bold;
 	color: white;
 	min-width:100px;
-	background-color: #158CBA;
-	border-color: #127BA3;
+	background-color: @bg0;
+	border-color: @border0;
 	.noselect;
 	.animate;
 }
@@ -44,21 +44,30 @@
 	min-width:55px !important; 
 }
 
+.clr0{
+	background-color:@bg0;
+	border-color:@border0;
+	border-bottom-color:@border0;
+}
 .clr1{
-	background-color:#28b62c;
-	border-color:#23a127;
+	background-color:@bg1;
+	border-color:@border1;
+	border-bottom-color:@border1;
 }
 .clr2{
-	background-color:#ff4136;
-	border-color:#ff291c;
+	background-color:@bg2;
+	border-color:@border2;
+	border-bottom-color:@border2;
 }
 .clr3{
-	background-color:#75caeb;
-	border-color:#5fc1e8;
+	background-color:@bg3;
+	border-color:@border3;
+	border-bottom-color:@border3;
 }
 .clr4{
-	background-color:#ff851b;
-	border-color:#ff7701;
+	background-color:@bg4;
+	border-color:@border4;
+	border-bottom-color:@border4;
 }
 
 .transparent{
@@ -82,6 +91,7 @@
 	text-align: left !important;
 	padding-left: 0px !important;
 	position: absolute;
+	width: 200px;
 }
 
 #filebutton span{
@@ -104,7 +114,7 @@
 	min-width:50px;
 	padding: 0;
 	margin: 0;
-	color:#158CBA;
+	color:@bg0;
 	float:left;
 }
 
