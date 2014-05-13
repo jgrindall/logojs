@@ -54,7 +54,7 @@ LG.WriteView = LG.AMenuView.extend({
 		}
 	},
 	showErrorRuntime:function(msg){
-		msg = msg.replace(/Uncaught Error: /g,"Error: ");
+		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
 		this.showErrorText(msg);
 		this.error = {"show":true, "line":0};
 		this.showErrorText(msg);
