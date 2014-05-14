@@ -5,24 +5,10 @@ LG.ActivityView = LG.AbstractPageView.extend({
 	template:"tpl_activity",
 	name:"activity",
 	initialize:function(){
-		this.listenTo(LG.EventDispatcher, LG.Events.SHOW_HELP_OVERLAY, 	$.proxy(this.showHelp, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.HIDE_HELP_OVERLAY, 	$.proxy(this.hideHelp, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.TO_BAR,				$.proxy(this.showBar, this));
-	},
-	showHelp:function(){
-		if(!this.helpOverlayView){
-			this.helpOverlayView = new LG.HelpOverlayView();	
-			this.$el.append(this.helpOverlayView.render().el);
-		}
 	},
 	showBar:function(){
 		LG.router.navigate("writebar", {"trigger":true});
-	},
-	hideHelp:function(){
-		if(this.helpOverlayView){
-			this.helpOverlayView.close();
-			this.helpOverlayView = null;
-		}
 	},
 	render:function(){
 		
@@ -51,6 +37,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.$el.append(this.contextButtonsView.render().el);
 		*/
 		
+		this.helpOverlayView = new LG.HelpOverlayView();	
+		this.$el.append(this.helpOverlayView.render().el);
+		
 		this.menuView = new LG.MenuView();
 		this.$el.append(this.menuView.render().el);
 		
@@ -59,7 +48,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		
 		this.mainMenuView = new LG.MainMenuView();	
 		this.$el.append(this.mainMenuView.render().el);
-		this.mainMenuView.afterAdded();
+		
+		this.examplesView = new LG.ExamplesView();	
+		this.$el.append(this.examplesView.render().el);
 		
 		return this;
 	},
