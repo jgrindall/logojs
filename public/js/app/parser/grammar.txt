@@ -280,7 +280,7 @@ plusexpression = '+' m:multexpression
 }
 
 
-minusexpression = '-' m:multexpression
+minusexpression = sep* '-' sep* m:multexpression
 {
 	return {type:"minusexpression", children:[m]};
 }
