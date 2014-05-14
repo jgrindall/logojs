@@ -201,7 +201,14 @@
 			<a href="#" id="filebutton" class="action button transparent" >
 				<span>
 					<i class="fa fa-save"></i>
-				<% if(name){print(name)}else{print("unsaved file")}%>
+				<%
+				if(name){
+					
+					print("<span class='curly'>&#8220;</span>"+name+"<span class='curly'>&#8221;</span>");
+				}
+				else{
+					print("unsaved file");
+				}%>
 				<% if(!saved){print("*");}%>
 				</span>
 			</a>
@@ -817,35 +824,106 @@ drawSpiral(10);</pre>
 			<div id="helpoverlay" >
 				
 				<div id="helpoverlaybg"></div>
-				<span class="close"><i class="fa fa-times"></i></span>
+				
 				<div id="helpoverlaycontent">
 					
 					<div class="language">
-						<div class="langinner clr3">
+						<p class="title">Basic commands</p>
+						<div class="langinner clr1">
+							
 							<table>
 								<tbody>
-									<tr><td>fd</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>rt</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>rpt</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>a:=</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>proc</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>penup()  / pendown()</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>thick</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>bg</td><td>fd(100)<br/>Move forward 100 units</td></tr>
-									<tr><td>color</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>fd</td><td>fd(100) - <span class="italic">Move forward 100 units</span></td></tr>
+									<tr><td>rt</td><td>rt(90) - <span class="italic">Turn right 90 degrees</span></td></tr>
+									<tr><td>penup()</td><td><span class="italic">Take the pen off the paper</span></td></tr>
+									<tr><td>pendown()</td><td><span class="italic">Put it back down</span></td></tr>
+									<tr><td>color</td><td>color(black) - <span class="italic">Set the pen color to black</span></td></tr>
+									<tr><td>bg</td><td>bg(red) - <span class="italic">Set the background color to red</span></td></tr>
+									<tr><td>thick</td><td>thick(5) - <span class="italic">Set the line thickness to 5 (between 1-10)</span></td></tr>
+									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic">Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 					
-					<div class="examples">
-						<div class="example">Ex1</div>
-						<div class="example">Ex2</div>
-						<div class="example">Ex3</div>
-						<div class="example">Ex4</div>
-						<div class="example">Ex5</div>
+					<div class="advanced">
+						<p class="title">Advanced commands</p>
+						<div class="langinner clr1">
+							
+							<table>
+								<tbody>
+									<tr><td>a:=</td><td>a:=10 - <span class="italic">Set the value of variable a to equal 10</span></td></tr>
+									<tr><td>
+									proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
+									<br/><span class="italic">Define a procedure called 'drawsquare', and then call it</span>
+									</td></tr>
+									<tr><td>
+									proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
+									<br/><span class="italic">Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
+									</td></tr>
+									
+								</tbody>
+							</table>
+						</div>
+						
 					</div>
 				</div>
+				<span class="close"><i class="fa fa-times"></i></span>
+			</div>
+		
+					
+		</script>
+		
+		<script id="tpl_examples" type="text/template">
+			
+			<div id="examples" >
+				
+				<div id=examplesbg"></div>
+				
+				<div id="examplescontent">
+					
+					<div class="language">
+						<p class="title">Basic commands</p>
+						<div class="langinner clr1">
+							
+							<table>
+								<tbody>
+									<tr><td>fd</td><td>fd(100) - <span class="italic">Move forward 100 units</span></td></tr>
+									<tr><td>rt</td><td>rt(90) - <span class="italic">Turn right 90 degrees</span></td></tr>
+									<tr><td>penup()</td><td><span class="italic">Take the pen off the paper</span></td></tr>
+									<tr><td>pendown()</td><td><span class="italic">Put it back down</span></td></tr>
+									<tr><td>color</td><td>color(black) - <span class="italic">Set the pen color to black</span></td></tr>
+									<tr><td>bg</td><td>bg(red) - <span class="italic">Set the background color to red</span></td></tr>
+									<tr><td>thick</td><td>thick(5) - <span class="italic">Set the line thickness to 5 (between 1-10)</span></td></tr>
+									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic">Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<div class="advanced">
+						<p class="title">Advanced commands</p>
+						<div class="langinner clr1">
+							
+							<table>
+								<tbody>
+									<tr><td>a:=</td><td>a:=10 - <span class="italic">Set the value of variable a to equal 10</span></td></tr>
+									<tr><td>
+									proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
+									<br/><span class="italic">Define a procedure called 'drawsquare', and then call it</span>
+									</td></tr>
+									<tr><td>
+									proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
+									<br/><span class="italic">Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
+									</td></tr>
+									
+								</tbody>
+							</table>
+						</div>
+						
+					</div>
+				</div>
+				<span class="close"><i class="fa fa-times"></i></span>
 			</div>
 		
 					

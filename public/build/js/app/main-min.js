@@ -215,7 +215,7 @@ LG.Config.IS_TOUCH = LG.Utils.isTouch();
 LG.Config.PARSER_VISIT = "js/app/parser/visit.js";
 
 // preload and compile the html using this list - should be faster
-LG.Config.TEMPLATES = ["tpl_mainmenu","tpl_contextbuttons","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
+LG.Config.TEMPLATES = ["tpl_examples","tpl_mainmenu","tpl_contextbuttons","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
 
 LG.Config.PRODUCT_ID = "logojs";
 
@@ -975,7 +975,10 @@ LG.Router = Backbone.Router.extend({
 		"filename"									:	"filename",
 		"alert"										:	"alert",
 		"help"										:	"help",
-		"menu"										:	"menu"
+		"menu"										:	"menu",
+		"helpoverlay"								:	"helpoverlay",
+		"mainmenu"									:	"mainmenu",
+		"examples"									:	"examples"
     },
 	initialize:function () {
 		
@@ -993,6 +996,9 @@ LG.Router = Backbone.Router.extend({
 		}
 		this.show("write");
 	},
+	examples:function(){
+		this.show("examples");
+	},
 	filename:function(){
 		this.show("filename");
 	},
@@ -1004,6 +1010,12 @@ LG.Router = Backbone.Router.extend({
 	},
 	help:function(){
 		this.show("help");
+	},
+	helpoverlay:function(){
+		this.show("helpoverlay");
+	},
+	mainmenu:function(){
+		this.show("mainmenu");
 	},
 	menu:function(){
 		this.show("menu");
@@ -1052,7 +1064,6 @@ LG.Events.ALERT_CANCEL			=	"LG::alertCancel";
 LG.Events.ALERT_NO				=	"LG::alertNo";
 LG.Events.DINO_CHANGED			=	"LG::dinoChanged";
 LG.Events.RESET_CANVAS			=	"LG::resetCanvas";
-LG.Events.HIDE_HELP_OVERLAY		=	"LG::hideHelpOverlay";
 LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
 LG.Events.ERROR_ROW				=	"LG::errorRow";
 LG.Events.ERROR_RUNTIME			=	"LG:errorRuntime";
@@ -6291,7 +6302,7 @@ LG.HelpButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
+		LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -6607,24 +6618,10 @@ LG.ActivityView = LG.AbstractPageView.extend({
 	template:"tpl_activity",
 	name:"activity",
 	initialize:function(){
-		this.listenTo(LG.EventDispatcher, LG.Events.SHOW_HELP_OVERLAY, 	$.proxy(this.showHelp, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.HIDE_HELP_OVERLAY, 	$.proxy(this.hideHelp, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.TO_BAR,				$.proxy(this.showBar, this));
-	},
-	showHelp:function(){
-		if(!this.helpOverlayView){
-			this.helpOverlayView = new LG.HelpOverlayView();	
-			this.$el.append(this.helpOverlayView.render().el);
-		}
 	},
 	showBar:function(){
 		LG.router.navigate("writebar", {"trigger":true});
-	},
-	hideHelp:function(){
-		if(this.helpOverlayView){
-			this.helpOverlayView.close();
-			this.helpOverlayView = null;
-		}
 	},
 	render:function(){
 		
@@ -6653,6 +6650,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.$el.append(this.contextButtonsView.render().el);
 		*/
 		
+		this.helpOverlayView = new LG.HelpOverlayView();	
+		this.$el.append(this.helpOverlayView.render().el);
+		
 		this.menuView = new LG.MenuView();
 		this.$el.append(this.menuView.render().el);
 		
@@ -6661,7 +6661,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		
 		this.mainMenuView = new LG.MainMenuView();	
 		this.$el.append(this.mainMenuView.render().el);
-		this.mainMenuView.afterAdded();
+		
+		this.examplesView = new LG.ExamplesView();	
+		this.$el.append(this.examplesView.render().el);
 		
 		return this;
 	},
@@ -7964,10 +7966,11 @@ LG.HelpView = LG.AMenuView.extend({
 	}
 });
 
-LG.HelpOverlayView = Backbone.View.extend({
+
+LG.HelpOverlayView = LG.AMenuView.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
-		
+		LG.AMenuView.prototype.initialize.call(this);
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -7975,42 +7978,42 @@ LG.HelpOverlayView = Backbone.View.extend({
 			"_click button.copy":"clickCopy",
 			"_click button.more":"clickMore",
 			"_click button.draw":"clickDraw",
+			"_click .close":"clickClose",
 			"_click":"clickMe"
 		} );
 		return obj;
 	},
+	showName:"helpoverlay",
 	clickDraw:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
-		this.next();
 	},
 	clickNext:function(e){
 		this.stopProp(e);
-		this.next();
 	},
 	clickMore:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
 		LG.router.navigate("help", {"trigger":true});
 	},
 	clickCopy:function(e){
 		this.stopProp(e);
-		this.$("button.draw").css("display", "block");
-		this.copy();
-		this.next();
+	},
+	clickClose:function(){
+		window.history.back();
 	},
 	copy:function(){
 		var s = "rpt 6[\nfd(100);rt(60);\n]";
 		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 	},
-	next:function(){
-		this.$el.removeClass("help"+this.page);
-		this.page = (this.page + 1) % LG.HelpOverlayView.NUM_PAGES;
-		this.$el.addClass("help"+this.page);
-	},
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
+	},
+	onShow:function(){
+	
+	},
+	onHide:function(){
+		
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
@@ -8021,13 +8024,75 @@ LG.HelpOverlayView = Backbone.View.extend({
 	}
 });
 
-LG.HelpOverlayView.NUM_PAGES = 4;
 
-LG.MainMenuView = Backbone.View.extend({
-	template:"tpl_mainmenu",
+
+
+LG.ExamplesView = LG.AMenuView.extend({
+	template:"tpl_examples",
 	initialize:function(){
+		LG.AMenuView.prototype.initialize.call(this);
+	},
+	events:function(){
+		var obj = Backbone.View.getTouch( {
+			"_click button.next":"clickNext",
+			"_click button.copy":"clickCopy",
+			"_click button.more":"clickMore",
+			"_click button.draw":"clickDraw",
+			"_click .close":"clickClose",
+			"_click":"clickMe"
+		} );
+		return obj;
+	},
+	showName:"examples",
+	clickDraw:function(e){
+		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
+	},
+	clickNext:function(e){
+		this.stopProp(e);
+	},
+	clickMore:function(e){
+		this.stopProp(e);
+		LG.router.navigate("help", {"trigger":true});
+	},
+	clickCopy:function(e){
+		this.stopProp(e);
+	},
+	clickClose:function(){
+		window.history.back();
+	},
+	copy:function(){
+		var s = "rpt 6[\nfd(100);rt(60);\n]";
+		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
+	},
+	clickMe:function(e){
+		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
+	},
+	onShow:function(){
+	
+	},
+	onHide:function(){
 		
 	},
+	render:function(){
+		this.loadTemplate(  this.template, {},  {replace:true}  );
+		return this;
+	},
+	beforeClose:function(){
+	
+	}
+});
+
+
+
+
+LG.MainMenuView = LG.AMenuView.extend({
+	template:"tpl_mainmenu",
+	initialize:function(){
+		LG.AMenuView.prototype.initialize.call(this);
+	},
+	showName:"mainmenu",
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click .mmblock.mm0":"clickBlock0",
@@ -8040,30 +8105,35 @@ LG.MainMenuView = Backbone.View.extend({
 	},
 	clickClose:function(e){
 		this.stopProp(e);
-		this.close();
+		LG.router.navigate("write", {"trigger":true});
 	},
 	clickBlock0:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
 	clickBlock1:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
-		this.close();
+		
 	},
 	clickBlock2:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
 	clickBlock3:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
-	afterAdded:function(){
+	onShow:function(){
 		var _this = this;
 		setTimeout(function(){
-			_this.$el.addClass("show");
+			_this.$el.addClass("move");
 		}, 1500);
+	},
+	onHide:function(){
+		this.$el.removeClass("move");
+	},
+	afterAdded:function(){
+		
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
@@ -8598,11 +8668,12 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	if(this.hash && this.hash.length >= 1 && this.hash!="write"){
+	var defaultHash = "mainmenu";
+	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		LG.router.navigate(this.hash, {"trigger":true});
 	}
 	else{
-		LG.router.navigate("write", {"trigger":true});
+		LG.router.navigate(defaultHash, {"trigger":true});
 	}
 	this._launched = true;
 };
