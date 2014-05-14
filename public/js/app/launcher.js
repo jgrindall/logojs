@@ -66,11 +66,12 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	if(this.hash && this.hash.length >= 1 && this.hash!="write"){
+	var defaultHash = "mainmenu";
+	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		LG.router.navigate(this.hash, {"trigger":true});
 	}
 	else{
-		LG.router.navigate("write", {"trigger":true});
+		LG.router.navigate(defaultHash, {"trigger":true});
 	}
 	this._launched = true;
 };
