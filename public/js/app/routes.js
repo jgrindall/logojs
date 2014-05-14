@@ -14,7 +14,10 @@ LG.Router = Backbone.Router.extend({
 		"filename"									:	"filename",
 		"alert"										:	"alert",
 		"help"										:	"help",
-		"menu"										:	"menu"
+		"menu"										:	"menu",
+		"helpoverlay"								:	"helpoverlay",
+		"mainmenu"									:	"mainmenu",
+		"examples"									:	"examples"
     },
 	initialize:function () {
 		
@@ -32,6 +35,9 @@ LG.Router = Backbone.Router.extend({
 		}
 		this.show("write");
 	},
+	examples:function(){
+		this.show("examples");
+	},
 	filename:function(){
 		this.show("filename");
 	},
@@ -43,6 +49,12 @@ LG.Router = Backbone.Router.extend({
 	},
 	help:function(){
 		this.show("help");
+	},
+	helpoverlay:function(){
+		this.show("helpoverlay");
+	},
+	mainmenu:function(){
+		this.show("mainmenu");
 	},
 	menu:function(){
 		this.show("menu");
