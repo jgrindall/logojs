@@ -62,6 +62,7 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.imageModel = new LG.ImageModel();
 	LG.allFilesCollection = new LG.AllFileCollection();
 	LG.spinnerView = new LG.SpinnerView({"model":LG.spinnerModel});
+	LG.sounds = new LG.Sounds();
 };
 
 LG.Launcher.prototype.launch = function(){
@@ -97,9 +98,15 @@ LG.Launcher.prototype.loadUserId = function(){
 	
 };
 
-LG.Launcher.prototype.storageLoaded = function(){
+LG.Launcher.prototype.soundsLoaded = function(){
 	this.loadUserId();
 	this.login();
+};
+
+
+
+LG.Launcher.prototype.storageLoaded = function(){
+	LG.sounds.load({"success":$.proxy(this.soundsLoaded, this)});
 };
 
 LG.Launcher.prototype.loadFiles = function(){

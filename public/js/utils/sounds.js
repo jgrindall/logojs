@@ -1,7 +1,7 @@
 // play a sound effect (not used yet)
 
 LG.Sounds = function(){
-	this.sfx = ["img/whooshup", "img/click", "img/error", "img/success"];
+	this.sfx = ["img/sfx/whooshup", "img/sfx/click", "img/sfx/error", "img/sfx/success"];
 	this.sounds = [];
 	this.loaded = 0;
 };

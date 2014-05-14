@@ -17,6 +17,7 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playSuccess();
 		LG.fileCollection.selected.incrementDino();
 	},
 	events:function(){
