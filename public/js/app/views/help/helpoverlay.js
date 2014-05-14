@@ -1,7 +1,8 @@
-LG.HelpOverlayView = Backbone.View.extend({
+
+LG.HelpOverlayView = LG.AMenuView.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
-		
+		LG.AMenuView.prototype.initialize.call(this);
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -9,42 +10,42 @@ LG.HelpOverlayView = Backbone.View.extend({
 			"_click button.copy":"clickCopy",
 			"_click button.more":"clickMore",
 			"_click button.draw":"clickDraw",
+			"_click .close":"clickClose",
 			"_click":"clickMe"
 		} );
 		return obj;
 	},
+	showName:"helpoverlay",
 	clickDraw:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
-		this.next();
 	},
 	clickNext:function(e){
 		this.stopProp(e);
-		this.next();
 	},
 	clickMore:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
 		LG.router.navigate("help", {"trigger":true});
 	},
 	clickCopy:function(e){
 		this.stopProp(e);
-		this.$("button.draw").css("display", "block");
-		this.copy();
-		this.next();
+	},
+	clickClose:function(){
+		window.history.back();
 	},
 	copy:function(){
 		var s = "rpt 6[\nfd(100);rt(60);\n]";
 		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 	},
-	next:function(){
-		this.$el.removeClass("help"+this.page);
-		this.page = (this.page + 1) % LG.HelpOverlayView.NUM_PAGES;
-		this.$el.addClass("help"+this.page);
-	},
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
+	},
+	onShow:function(){
+	
+	},
+	onHide:function(){
+		
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
@@ -55,5 +56,5 @@ LG.HelpOverlayView = Backbone.View.extend({
 	}
 });
 
-LG.HelpOverlayView.NUM_PAGES = 4;
+
 

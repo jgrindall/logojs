@@ -1,8 +1,10 @@
-LG.MainMenuView = Backbone.View.extend({
+
+LG.MainMenuView = LG.AMenuView.extend({
 	template:"tpl_mainmenu",
 	initialize:function(){
-		
+		LG.AMenuView.prototype.initialize.call(this);
 	},
+	showName:"mainmenu",
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click .mmblock.mm0":"clickBlock0",
@@ -15,30 +17,35 @@ LG.MainMenuView = Backbone.View.extend({
 	},
 	clickClose:function(e){
 		this.stopProp(e);
-		this.close();
+		LG.router.navigate("write", {"trigger":true});
 	},
 	clickBlock0:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
 	clickBlock1:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.SHOW_HELP_OVERLAY);
-		this.close();
+		
 	},
 	clickBlock2:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
 	clickBlock3:function(e){
 		this.stopProp(e);
-		this.close();
+		
 	},
-	afterAdded:function(){
+	onShow:function(){
 		var _this = this;
 		setTimeout(function(){
-			_this.$el.addClass("show");
+			_this.$el.addClass("move");
 		}, 1500);
+	},
+	onHide:function(){
+		this.$el.removeClass("move");
+	},
+	afterAdded:function(){
+		
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
