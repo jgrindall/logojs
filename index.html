@@ -12,8 +12,8 @@
 		<meta name="apple-mobile-web-app-status-bar-style"	content="black-translucent">
 		<meta http-equiv="X-UA-Compatible"					content="IE=Edge">
 		
-		<link rel="stylesheet" 						href="min/build/css/main-min.css">
-		<link rel="stylesheet" 						href="min/build/css/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" 						href="css/main-min.css">
+		<link rel="stylesheet" 						href="css/font-awesome/css/font-awesome.min.css">
 		
 		
 		
@@ -129,10 +129,10 @@
 			<div id="mainmenu">
 				<div id="mainmenubg"></div>
 				<span class="close"><i class="fa fa-times"></i></span>
-				<div class="mmblock mm0"><div class="mminner clr0"><span>Help</span><i class="fa fa-files-o"></i></div></div>
+				<div class="mmblock mm0"><div class="mminner clr0"><span>Help</span><i class="fa fa-question-circle"></i></div></div>
 				<div class="mmblock mm1"><div class="mminner clr2"><span>Gallery</span><i class="fa fa-files-o"></i></div></div>
-				<div class="mmblock mm2"><div class="mminner clr4"><span>My files</span><i class="fa fa-files-o"></i></div></div>
-				<div class="mmblock mm3"><div class="mminner clr1"><span>Examples</span><i class="fa fa-files-o"></i></div></div>
+				<div class="mmblock mm2"><div class="mminner clr4"><span>Your files</span><i class="fa fa-briefcase"></i></div></div>
+				<div class="mmblock mm3"><div class="mminner clr1"><span>Examples</span><i class="fa fa-lightbulb-o"></i></div></div>
 			</div>
 			
 		</script>
@@ -213,7 +213,7 @@
 		<script id="tpl_helpbutton" type="text/template">
 
 			<a href="#" id="helpbutton" class="action button buttonxsmall transparent" >
-				<i class="fa fa-question"></i>
+				<i class="fa fa-question-circle"></i>
 			</a>
 			
 		</script>
@@ -222,7 +222,7 @@
 			
 			<li>
 				<a href="#" id="helpbuttonmenu" class="action button clr0" >
-					<i class="fa fa-question"></i>
+					<i class="fa fa-question-circle"></i>
 					<span>Help</span>
 				</a>
 			</li>
@@ -263,7 +263,7 @@
 
 			 <li>
 				<button class="action button clr4<% if(disabled){print(" disabled");}%>">
-					<i class="fa fa-file"></i>
+					<i class="fa fa-briefcase"></i>
 					<span>Your files</span>
 				</button>
 			</li>
@@ -810,45 +810,52 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_helpoverlay" type="text/template">
 			
-			<div class="helpoverlay help0" >
-				<div class="helpbg" ></div>
+			<div id="helpoverlay" >
 				
-				<div class = "helpcontent helpcontent0">
-					<div class="helpbox helpboxleft">
-						<div>
-							<p>Welcome to Logotacular!</p>
-							<p>Logotacular is a simple programming app that lets you draw geometric shapes and patterns.</p>
-							<p>Try writing this in the right hand panel: <br/>rpt 6[fd(100);rt(60);]</p>
-							
-							<button class="transparent button1 copy"><span>Copy it!</span></button>
-							<button class="transparent button0 next"><span>Next</span></button>
-						</div>
-						<div class="triangle"></div>
-					</div>
-				</div>
-				<div class = "helpcontent helpcontent1">
-					<div class="helpbox helpboxright">
-						<div>
-							<p>When you're ready, click anywhere on the left hand side to draw your Logo!</p>
-							<p style="margin-right:130px;">fd(100); moves forward 100 units, rt(60); turns 60 degrees right, so repeating that 6 times draws a hexagon!</p>
-							<img style="position:absolute;bottom:50px;right:6px;" src="img/help/demo.png"/>
-							<button class="transparent button1 draw"><span>Draw it!</span></button>
-							<button class="transparent button0 next"><span>Next</span></button>
-						</div>
-						<div class="triangle"></div>
-					</div>
-				</div>
-				<div class = "helpcontent helpcontent2">
+				<div id="helpoverlaybg"></div>
+				<span class="close"><i class="fa fa-times"></i></span>
+				<div id="helpoverlaycontent">
 					
-					<div class="helpbox helpboxright">
-						<div>
-							
-							<p>You can save your work, and you can also open other people's work and see how they wrote their Logo to help you.</p>
-							<p>Enjoy using Logotacular!</p>
-							<button class="transparent button1 more"><span>More help</span></button>
-							<button class="transparent button0 close"><span>Close</span></button>
+					<div class="language">
+						<div class="lang">
+							<div class="box clr3">
+								<div class="boxleft">fd</div>
+								<div class="boxright">Move forward</div>
+							</div>
 						</div>
-						<div class="triangle"></div>
+						<div class="lang">
+							<div class="box clr3">
+								<div class="boxleft">rt</div>
+								<div class="boxright">Turn right</div>
+							</div>
+						</div>
+						<div class="lang">
+							<div class="box clr3">
+								<div class="boxleft">rpt</div>
+								<div class="boxright">Repeat the commands n times</div>
+							</div>
+						</div>
+						<div class="lang">
+							<div class="box clr3">
+								<div class="boxleft">a:=</div>
+								<div class="boxright">Set the variable a</div>
+							</div>
+						</div>
+						<div class="lang">
+							<div class="box clr3">
+								<div class="boxleft">proc</div>
+								<div class="boxright">Make a function called proc</div>
+							</div>
+						</div>
+					
+						
+					</div>
+					<div class="examples">
+						<div class="example">Ex1</div>
+						<div class="example">Ex2</div>
+						<div class="example">Ex3</div>
+						<div class="example">Ex4</div>
+						<div class="example">Ex5</div>
 					</div>
 				</div>
 			</div>
@@ -939,12 +946,12 @@ drawSpiral(10);</pre>
 		</script>
 		
 		<!-- include all the javascript libraries -->
-		<script src="min/build/js/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
+		<script src="js/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
 		
 		_PHONEGAP_
 		
 		<!-- the main javascript -->
-		<script src="min/build/js/main-min.js" 					type="text/javascript" charset="utf-8"></script>
+		<script src="js/main-min.js" 					type="text/javascript" charset="utf-8"></script>
 		
 	</body>
 	
