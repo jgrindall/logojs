@@ -1,7 +1,7 @@
 LG.HelpOverlayView = Backbone.View.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
-		this.page = 0;
+		
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
