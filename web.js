@@ -64,7 +64,7 @@ FileSchema = new mongoose.Schema({
 File = mongoose.model("File", FileSchema);
 
 app.configure(function(){
-	app.use(express.static(__dirname+"/public"));
+	app.use(express.static(__dirname+"/public/build"));
 	app.use(express.bodyParser());
 	mongoose.connect(mongoUri);
 });

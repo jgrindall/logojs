@@ -19,7 +19,7 @@
 		<echo message="compressing js"/>
 		
 		<java jar="${yuijar}" fork="true" failonerror="true" >
-			<arg line='"min/build/main-min.js" -o "min/build/main-min.js"'/> 
+			<arg line='"build/main-min.js" -o "build/main-min.js"'/> 
 		</java>
 		
 	</target>
@@ -29,13 +29,13 @@
 		<echo message="lesswin"/>
 		
 		<exec executable="cmd.exe">
-			<arg line="/c lessc 'css/main.less' -x 'min/build/css/main-min.css'"/>
+			<arg line="/c lessc 'css/main.less' -x 'build/css/main-min.css'"/>
 		</exec>
 	</target>
 	
 	<target name="lessios" if="is_ios">
 		<exec executable="lessc">
-			<arg line="css/main.less -x min/build/css/main-min.css"/>
+			<arg line="css/main.less -x build/css/main-min.css"/>
 		</exec>
 	</target>
 	
@@ -45,7 +45,9 @@
 		
 		<echo message="deleting"/>
 		
-		<delete dir="min/build"/>
+		<delete dir="min/build/css"/>
+		<delete dir="min/build/js"/>
+		<delete dir="min/build/img"/>
 		
 		<echo message="linting"/>
 		
@@ -60,7 +62,7 @@
 		
 		<echo message="concatening libs"/>
 		
-		<concat destfile="min/build/js/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+		<concat destfile="build/js/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="libs">
 				
 				<file name="jquery.min.js" />
@@ -70,6 +72,7 @@
 				<file name="underscore-1.4.4.js" /> 			
 				<file name="backbone-1.0.0.js" /> 
 				<file name="jquery.easing.js" />
+				<file name="howler.js" />
 				<file name="iscroll5.js" />
 				<file name="createjs/easeljs-0.6.0.min.js" /> 	
 				<file name="createjs/tweenjs-0.4.0.min.js" />
@@ -81,7 +84,7 @@
 		
 		<echo message="concatening js"/>
 		
-		<concat destfile="min/build/js/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+		<concat destfile="build/js/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="js">
 				
 				<!--  utils MUST come first -->
@@ -190,20 +193,24 @@
 		
 		<antcall target="minjs"/>
 		
-		<copy todir="min/build/css/font-awesome">
+		<copy todir="build/css/font-awesome">
 			<fileset dir="css/font-awesome"/>
 		</copy>
 		
-		<copy todir="min/build/css/images">
+		<copy todir="build/css/images">
 			<fileset dir="css/images"/>
 		</copy>
 		
-		<copy todir="min/build/css/fonts">
+		<copy todir="build/css/fonts">
 			<fileset dir="css/fonts"/>
 		</copy>
 		
-		<copy todir="min/build/js/parser">
+		<copy todir="build/js/parser">
 			<fileset dir="js/parser"/>
+		</copy>
+		
+		<copy todir="build/img">
+			<fileset dir="img"/>
 		</copy>
 		
 		<copy overwrite="true" file="../index.html" tofile="../views/app.html">
@@ -239,7 +246,7 @@
 		<delete dir="../../logojs_pg/www/min"/>
 		<delete dir="../../logojs_pg/www/img"/>
 		
-		<copydir src="min/build" dest="../../logojs_pg/www/min/build" includes="**" >
+		<copydir src="build" dest="../../logojs_pg/www/build" includes="**" >
 		</copydir>
 		
 		<copydir src="img" dest="../../logojs_pg/www/img" includes="**" >

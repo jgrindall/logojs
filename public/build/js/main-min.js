@@ -912,7 +912,7 @@ LG.templates = new LG.Templates();
 // play a sound effect (not used yet)
 
 LG.Sounds = function(){
-	this.sfx = ["img/whooshup", "img/click", "img/error", "img/success"];
+	this.sfx = ["img/sfx/whooshup", "img/sfx/click", "img/sfx/error", "img/sfx/success"];
 	this.sounds = [];
 	this.loaded = 0;
 };
@@ -6323,6 +6323,7 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playSuccess();
 		LG.fileCollection.selected.incrementDino();
 	},
 	events:function(){
@@ -7820,7 +7821,7 @@ LG.HelpView = LG.AMenuView.extend({
 LG.HelpOverlayView = Backbone.View.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
-		this.page = 0;
+		
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -8447,6 +8448,7 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.imageModel = new LG.ImageModel();
 	LG.allFilesCollection = new LG.AllFileCollection();
 	LG.spinnerView = new LG.SpinnerView({"model":LG.spinnerModel});
+	LG.sounds = new LG.Sounds();
 };
 
 LG.Launcher.prototype.launch = function(){
@@ -8482,9 +8484,15 @@ LG.Launcher.prototype.loadUserId = function(){
 	
 };
 
-LG.Launcher.prototype.storageLoaded = function(){
+LG.Launcher.prototype.soundsLoaded = function(){
 	this.loadUserId();
 	this.login();
+};
+
+
+
+LG.Launcher.prototype.storageLoaded = function(){
+	LG.sounds.load({"success":$.proxy(this.soundsLoaded, this)});
 };
 
 LG.Launcher.prototype.loadFiles = function(){
