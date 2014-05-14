@@ -213,7 +213,7 @@
 		<script id="tpl_helpbutton" type="text/template">
 
 			<a href="#" id="helpbutton" class="action button buttonxsmall transparent" >
-				<i class="fa fa-question-circle"></i>
+				<i class="fa fa-book"></i>
 			</a>
 			
 		</script>
@@ -703,8 +703,8 @@ drawSpiral(10);</pre>
 							<div class="logo">
 								<%= logo %>
 							</div>
-							
 						</div>
+						<span class="views"><i class="fa fa-eye"/>7</span>
 					</div>
 					
 					<div class="rightcontent">
@@ -789,8 +789,12 @@ drawSpiral(10);</pre>
 						<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
 					</div>
 					
+					<span class="views"><i class="fa fa-eye"/>7</span>
+					
 				</div>
-			
+				
+				
+				
 			</div>
 					
 		</script>
@@ -817,39 +821,23 @@ drawSpiral(10);</pre>
 				<div id="helpoverlaycontent">
 					
 					<div class="language">
-						<div class="lang">
-							<div class="box clr3">
-								<div class="boxleft">fd</div>
-								<div class="boxright">Move forward</div>
-							</div>
+						<div class="langinner clr3">
+							<table>
+								<tbody>
+									<tr><td>fd</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>rt</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>rpt</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>a:=</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>proc</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>penup()  / pendown()</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>thick</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>bg</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+									<tr><td>color</td><td>fd(100)<br/>Move forward 100 units</td></tr>
+								</tbody>
+							</table>
 						</div>
-						<div class="lang">
-							<div class="box clr3">
-								<div class="boxleft">rt</div>
-								<div class="boxright">Turn right</div>
-							</div>
-						</div>
-						<div class="lang">
-							<div class="box clr3">
-								<div class="boxleft">rpt</div>
-								<div class="boxright">Repeat the commands n times</div>
-							</div>
-						</div>
-						<div class="lang">
-							<div class="box clr3">
-								<div class="boxleft">a:=</div>
-								<div class="boxright">Set the variable a</div>
-							</div>
-						</div>
-						<div class="lang">
-							<div class="box clr3">
-								<div class="boxleft">proc</div>
-								<div class="boxright">Make a function called proc</div>
-							</div>
-						</div>
-					
-						
 					</div>
+					
 					<div class="examples">
 						<div class="example">Ex1</div>
 						<div class="example">Ex2</div>
