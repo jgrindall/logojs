@@ -107,7 +107,7 @@ function visitrptstmt(node){
 		}
 	}
 	else{
-		runTimeError(num+" is not a whole number of times to repeat");
+		runTimeError("'"+num+"' is not a whole number of times to repeat");
 	}
 }
 
@@ -168,7 +168,7 @@ function visitplusexpression(node){
 function visitvarname(node){
 	var num = symTable.get(node.name);
 	if(!num){
-		runTimeError("Variable not found "+node.name);
+		runTimeError("Variable '"+node.name+"' not found.");
 	}
 	else{
 		stack.push(num);
@@ -190,10 +190,13 @@ function visitcallfnstmt(node){
 	var name = node.name;
 	var f = symTable.getFunction(name);
 	if(f){
-		var numArgs = f.argsNode.children.length;
-		var numSupplied = node.args.children.length;
+		var numSupplied, numArgs = 0;
+		if(f.argsNode){
+			numArgs = f.argsNode.children.length;
+		}
+		numSupplied = node.args.children.length;
 		if(numArgs != numSupplied){
-			runTimeError("Function "+name+" not found");
+			runTimeError("Function '"+name+"' has "+numArgs+" arguments, but you sent "+numSupplied);
 		}
 		else{
 			symTable.enterBlock();
@@ -203,16 +206,18 @@ function visitcallfnstmt(node){
 		}
 	}
 	else{
-		runTimeError("Function "+name+" not found");
+		runTimeError("Function '"+name+"' not found");
 	}
 }
 
 function executeFunction(f){
 	var i, vals, len, argNode, varName;
 	vals = [ ];
-	len = f.argsNode.children.length;
-	for(i = 0; i <= len - 1; i++){
-		vals.push(stack.pop());
+	if(f.argsNode){
+		len = f.argsNode.children.length;
+		for(i = 0; i <= len - 1; i++){
+			vals.push(stack.pop());
+		}
 	}
 	for(i = 0; i <= len - 1; i++){
 		argNode = f.argsNode.children[i];

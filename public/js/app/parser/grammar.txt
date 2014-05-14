@@ -117,7 +117,7 @@ rtstmt  = ('rt' / 'Rt' / 'RT') sep* '(' num:expression ')' eoline
 	return {type:"rtstmt", children:[num]};
 }
 
-rptstmt  = ('rpt' / 'Rpt' / 'RPT') sep* num:expression sep* list:insidefnlist sep* 'end' sep* 
+rptstmt  = ('rpt' / 'Rpt' / 'RPT') sep* num:expression sep* list:insidefnlist sep* ('endrpt' / 'Endrpt') sep* 
 {
 	return {type:"rptstmt", children:[num,list]};
 }
@@ -138,9 +138,15 @@ makestmt = v:vardef sep* ':=' sep* e:expression eoline
 	return {type:"makestmt", children:[v,e]};
 }
 
-definefnstmt = ('proc' / 'Proc') sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* s:insidefnlist 'end' sep*
+definefnstmt =
+('proc' / 'Proc') sep+ f:fnname sep* '(' sep* a:arglist sep*')' sep* s:insidefnlist ('endproc' / 'Endproc') sep*
 {
          return {type:"definefnstmt", name:f.name, args:a, stmts:s};
+}
+/
+('proc' / 'Proc') sep+ f:fnname sep* s:insidefnlist ('endproc' / 'Endproc') sep*
+{
+         return {type:"definefnstmt", name:f.name, args:null, stmts:s};
 }
 
 
