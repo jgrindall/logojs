@@ -19,7 +19,7 @@
 		<echo message="compressing js"/>
 		
 		<java jar="${yuijar}" fork="true" failonerror="true" >
-			<arg line='"build/main-min.js" -o "build/main-min.js"'/> 
+			<arg line='"build/js/app/main-min.js" -o "build/js/app/main-min.js"'/> 
 		</java>
 		
 	</target>
@@ -29,13 +29,13 @@
 		<echo message="lesswin"/>
 		
 		<exec executable="cmd.exe">
-			<arg line="/c lessc 'css/main.less' -x 'build/css/main-min.css'"/>
+			<arg line="/c lessc 'css/app/main.less' -x 'build/css/app/main-min.css'"/>
 		</exec>
 	</target>
 	
 	<target name="lessios" if="is_ios">
 		<exec executable="lessc">
-			<arg line="css/main.less -x build/css/main-min.css"/>
+			<arg line="css/app/main.less -x build/css/app/main-min.css"/>
 		</exec>
 	</target>
 	
@@ -48,6 +48,7 @@
 		<delete dir="min/build/css"/>
 		<delete dir="min/build/js"/>
 		<delete dir="min/build/img"/>
+		
 		
 		<echo message="linting"/>
 		
@@ -62,7 +63,7 @@
 		
 		<echo message="concatening libs"/>
 		
-		<concat destfile="build/js/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+		<concat destfile="build/js/app/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="libs">
 				
 				<file name="jquery.min.js" />
@@ -84,8 +85,8 @@
 		
 		<echo message="concatening js"/>
 		
-		<concat destfile="build/js/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
-			<filelist dir="js">
+		<concat destfile="build/js/app/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+			<filelist dir="js/app">
 				
 				<!--  utils MUST come first -->
 				<!--  the rest must be loaded in order or dependence (superclasses first) bit of a pain...-->
@@ -193,20 +194,24 @@
 		
 		<antcall target="minjs"/>
 		
-		<copy todir="build/css/font-awesome">
-			<fileset dir="css/font-awesome"/>
+		<copy todir="build/css/web/">
+			<fileset dir="css/web"/>
 		</copy>
 		
-		<copy todir="build/css/images">
-			<fileset dir="css/images"/>
+		<copy todir="build/css/app/font-awesome">
+			<fileset dir="css/app/font-awesome"/>
 		</copy>
 		
-		<copy todir="build/css/fonts">
-			<fileset dir="css/fonts"/>
+		<copy todir="build/css/app/images">
+			<fileset dir="css/app/images"/>
 		</copy>
 		
-		<copy todir="build/js/parser">
-			<fileset dir="js/parser"/>
+		<copy todir="build/css/app/fonts">
+			<fileset dir="css/app/fonts"/>
+		</copy>
+		
+		<copy todir="build/js/app/parser">
+			<fileset dir="js/app/parser"/>
 		</copy>
 		
 		<copy todir="build/img">
