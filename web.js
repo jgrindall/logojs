@@ -23,7 +23,7 @@ saveImage = function(id, base64, options){
 			return;
 		}
 		else{
-			fs.writeFile("./public/thumbs/thumb_"+id+".png", base64, 'base64', function(err) {
+			fs.writeFile("./public/build/thumbs/thumb_"+id+".png", base64, 'base64', function(err) {
 				if(err){
 					console.log("writeFile "+err);
 					options.error(err);
