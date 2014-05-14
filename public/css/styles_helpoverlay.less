@@ -1,159 +1,81 @@
-.helpoverlay .helpbg{
+#helpoverlay{
 	width:100%;
 	height:100%;
-	background:#ddd;
-	opacity:0.6;
 	position: absolute;
+	top:0;
+	left:0;
 }
 
-.helpoverlay .helpbox > div:first-child{
-	position:absolute;
-	left:6px;
-	right:6px;
-	top:4px;
-	bottom:4px;
-}
-
-.helpoverlay .helpbox .triangle{
-	width:0px;
-	height:0px;
-	border-style:solid;
-	position: absolute;
-	bottom: -(@tri_size_help + 5);
-}
-
-.helpoverlay .helpboxleft .triangle{
-	border-width: (@tri_size_help + 5) (@tri_size_help + 5) 0 0;
-	left: -1px;
-	border-color:#ccc transparent transparent transparent;
-}
-
-.helpoverlay .helpboxright .triangle{
-	border-width: 0 (@tri_size_help + 5) (@tri_size_help + 5) 0;
-	right: -1px;
-	border-color:transparent #ccc transparent transparent;
-}
-
-.helpoverlay .helpbox p{
-	margin: 13px;
-	padding: 0;
-}
-
-.helpoverlay .helpbox{
-	position: absolute;
-	font-size: 133%;
-	bottom: 50px;
-	left: 50px;
-	background:white;
-	border-radius: 8px;
-	width: 480px;
-	height: 250px;
-	border: 1px solid #ccc;
-	border-bottom: 4px solid #ccc;
-	word-wrap:break-word;
-}
-
-.helpoverlay .helpboxleft{
-	border-bottom-left-radius:0px;
-}
-
-.helpoverlay .helpboxright{
-	border-bottom-right-radius:0px;
-}
-
-.helpbox:after{
-	content: "";
-	position: absolute;
-	left: 0px;
-	bottom: -(@tri_size_help);
-	display: block;
-	width: 0px;
-	height: 0px;
-	border-style: solid;
-	border-width: @tri_size_help @tri_size_help 0 0;
-	border-color: white transparent transparent transparent;
-}
-
-.helpboxright:after{
-	left: 100% !important;
-	margin-left: -(@tri_size_help) !important;
-	border-width: 0px @tri_size_help @tri_size_help 0px !important;
-	border-color: white white transparent transparent !important;
-}
-
-.helpbox button{
-	color: #111;
-	position: absolute;
-	padding: 12px;
-	bottom: 0;
+#helpoverlay span.close{
+	position:fixed;
+	top:0;
+	right:12px;
+	font-size:300%;
+	color:#333;
 	cursor:hand;
 	cursor:pointer;
 }
 
-.helpbox button.button0{
-	right: 0;
-}
-
-.helpbox button.button1{
-	right: 60px;
-}
-
-.helpoverlay button.draw{
-	display:none;
-}
-
-.helpoverlay .helpcontent{
-	height:450px;
-	width: 550px;
-	position:absolute;
-	bottom:-10px;
-	margin: 0;
-	padding: 0;
-	display:none;
-}
-
-.helpoverlay .helpcontent0{
-	left: 0px;
-}
-
-.helpoverlay .helpcontent1, .helpoverlay .helpcontent2{
-	right:0;
-}
-
-.helpoverlay .helpcontent1 .helpbox{
-	width:480px;
-}
-
-.helpoverlay .helpcontent0 .helpbox{
-	width:500px;
-}
-
-.helpoverlay.help0 .helpcontent0{
-	display:block;
-}
-
-.helpoverlay.help1 .helpcontent1{
-	display:block;
-}
-
-.helpoverlay.help2 .helpcontent2{
-	display:block;
-}
-
-.helpoverlay.help3 .helpcontent3{
-	display:block;
-}
-
-.helpoverlay .helpcontent img{
+#helpoverlay #helpoverlaybg {
+	width:100%;
+	height:100%;
+	background:@mainmenubg;
+	opacity:0.85;
 	position: absolute;
-	bottom: -10px;
 }
 
-.helpoverlay .helpcontent.helpcontent1 img, .helpoverlay .helpcontent.helpcontent2 img{
+#helpoverlay #helpoverlaycontent{
+	width:100%;
+	height:100%;
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+#helpoverlay #helpoverlaycontent .language{
+	width:50%;
+	position:absolute;
+	top:0;
+	left:0;
+	height:100%;
+}
+
+#helpoverlay #helpoverlaycontent .language .lang{
+	width:100%;
+	height:20%;
+}
+
+#helpoverlay #helpoverlaycontent .language .lang .box{
+	width:90%;
+	height:84%;
+	top:8%;
+	left:5%;
+	border-radius: 8px;
+	border-bottom-width: 4px;
+	border-bottom-style: solid;
+	color:white;
+	position:relative;
+}
+
+#helpoverlay #helpoverlaycontent .language .lang .box .boxleft{
+	display: block;
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	top: 50%;
+	margin-top: -30px;
+	font-size: 40px;
+}
+
+#helpoverlay #helpoverlaycontent .examples{
+	position:absolute;
+	top:0;
+	height:100%;
 	right:0;
+	width:49.9%;
 }
 
-.helpoverlay .helpboxright{
-	left:40px;
+#helpoverlay #helpoverlaycontent .examples .example{
+	width:100%;
+	height:20%;
 }
-
