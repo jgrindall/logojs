@@ -65,14 +65,23 @@
 
 			 <a href="#"  class="action button right transparent buttonxsmall" >
 				 <span>
-					<i class="fa fa fa-align-justify"></i>
+					<i class="fa fa-align-justify"></i>
 				 </span>
 			 </a>
 			 
 			
 		</script>
 		
-		
+		<script id="tpl_homebutton" type="text/template">
+
+			 <a href="#" id="homebutton" class="action button right transparent buttonxsmall" >
+				 <span>
+					<i class="fa fa-home"></i>
+				 </span>
+			 </a>
+			 
+			
+		</script>
 		
 		<script id="tpl_undobutton" type="text/template">
 
@@ -129,21 +138,16 @@
 			<div id="mainmenu">
 				<div id="mainmenubg"></div>
 				<span class="close"><i class="fa fa-times"></i></span>
-				<div class="mmblock mm0"><div class="mminner clr0"><span>Help</span><i class="fa fa-question-circle"></i></div></div>
-				<div class="mmblock mm1"><div class="mminner clr2"><span>Gallery</span><i class="fa fa-files-o"></i></div></div>
-				<div class="mmblock mm2"><div class="mminner clr4"><span>Your files</span><i class="fa fa-briefcase"></i></div></div>
-				<div class="mmblock mm3"><div class="mminner clr1"><span>Examples</span><i class="fa fa-lightbulb-o"></i></div></div>
+				<div class="mmblock mm3"><div class="mminner clr0"><span>Help</span><i class="fa fa-question-circle"></i></div></div>
+				<div class="mmblock mm5"><div class="mminner clr2"><span>Gallery</span><i class="fa fa-files-o"></i></div></div>
+				<div class="mmblock mm0"><div class="mminner clr4"><span>Your files</span><i class="fa fa-briefcase"></i></div></div>
+				<div class="mmblock mm2"><div class="mminner clr3"><span>Examples</span><i class="fa fa-lightbulb-o"></i></div></div>
+				<div class="mmblock mm4"><div class="mminner clr1"><span>Reference</span><i class="fa fa-book"></i></div></div>
+				<div class="mmblock mm1"><div class="mminner clr5"><span>Quickstart</span><i class="fa fa-chevron-right"></i></div></div>
 			</div>
 			
 		</script>
 		
-		<script id="tpl_contextbuttons" type="text/template">
-
-			<div id="contextbuttons">
-				
-			</div>
-			
-		</script>
 		
 		
 		<script id="tpl_writebutton" type="text/template">
@@ -248,6 +252,30 @@
 
 		</script>
 		
+		
+		<script id="tpl_examplesbutton" type="text/template">
+
+			  <li>
+				<button class="action button clr3">
+					<i class="fa fa-lightbulb-o"></i>
+					<span>Examples</span>
+				</button>
+			</li>
+			  
+
+		</script>
+		
+		<script id="tpl_refbutton" type="text/template">
+
+			  <li>
+				<button class="action button clr1">
+					<i class="fa fa-book"></i>
+					<span>Reference</span>
+				</button>
+			</li>
+			  
+
+		</script>
 		
 		
 		<script id="tpl_galleryleftbutton" type="text/template">
@@ -381,7 +409,7 @@
 				<div class="gallerytop menutop" >
 					<button id="cancelbutton" class="action button button1 right transparent">
 						<i class="fa fa-chevron-right"></i>
-						<span>Main menu</span>
+						<span>Back</span>
 					</button>
 				</div>
 				
@@ -751,7 +779,7 @@ drawSpiral(10);</pre>
 		<script id="tpl_cancelbutton" type="text/template">
 			<button id="cancelbutton" class="action button button1 right transparent">
 				<i class="fa fa-chevron-right"></i>
-				<span>Main menu</span>
+				<span>Back</span>
 			</button>
 		</script>
 		
@@ -786,7 +814,7 @@ drawSpiral(10);</pre>
 					</div>
 					
 					<% if(_id) { %>
-						<div class="imgcontainer">
+						<div class="imgcontainer"><div class="imginside">
 							<img class="centre" src="thumbs/thumb_<%= _id %>.png"/>
 						</div>
 					<% } %>
@@ -878,50 +906,17 @@ drawSpiral(10);</pre>
 			
 			<div id="examples" >
 				
-				<div id=examplesbg"></div>
+				<div id="examplesbg"></div>
 				
 				<div id="examplescontent">
-					
-					<div class="language">
-						<p class="title">Basic commands</p>
-						<div class="langinner clr1">
-							
-							<table>
-								<tbody>
-									<tr><td>fd</td><td>fd(100) - <span class="italic">Move forward 100 units</span></td></tr>
-									<tr><td>rt</td><td>rt(90) - <span class="italic">Turn right 90 degrees</span></td></tr>
-									<tr><td>penup()</td><td><span class="italic">Take the pen off the paper</span></td></tr>
-									<tr><td>pendown()</td><td><span class="italic">Put it back down</span></td></tr>
-									<tr><td>color</td><td>color(black) - <span class="italic">Set the pen color to black</span></td></tr>
-									<tr><td>bg</td><td>bg(red) - <span class="italic">Set the background color to red</span></td></tr>
-									<tr><td>thick</td><td>thick(5) - <span class="italic">Set the line thickness to 5 (between 1-10)</span></td></tr>
-									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic">Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					
-					<div class="advanced">
-						<p class="title">Advanced commands</p>
-						<div class="langinner clr1">
-							
-							<table>
-								<tbody>
-									<tr><td>a:=</td><td>a:=10 - <span class="italic">Set the value of variable a to equal 10</span></td></tr>
-									<tr><td>
-									proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
-									<br/><span class="italic">Define a procedure called 'drawsquare', and then call it</span>
-									</td></tr>
-									<tr><td>
-									proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
-									<br/><span class="italic">Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
-									</td></tr>
-									
-								</tbody>
-							</table>
-						</div>
-						
-					</div>
+					<div class="imgcontainer"><div class="imginside"><span>1</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>2</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>3</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>4</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>5</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>6</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>7</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><span>8</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
 				</div>
 				<span class="close"><i class="fa fa-times"></i></span>
 			</div>

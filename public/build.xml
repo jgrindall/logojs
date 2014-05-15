@@ -131,6 +131,8 @@
 				<file name="views/header/textbutton.js"/>
 				<file name="views/header/logobutton.js"/>
 				<file name="views/header/loginbutton.js"/>
+				<file name="views/header/examplesbutton.js"/>
+				<file name="views/header/refbutton.js"/>
 				<file name="views/header/gallerybutton.js"/>
 				<file name="views/header/helpbutton.js"/>
 				<file name="views/header/savebutton.js"/>
@@ -153,7 +155,7 @@
 				<file name="views/menu/menutop.js"/>				
 				<file name="views/menu/writebutton.js"/>	
 				<file name="views/menu/settingsbutton.js"/>	
-				
+				<file name="views/menu/homebutton.js"/>	
 				<file name="views/popups/base.js"/>
 				<file name="views/popups/alert.js"/>
 				<file name="views/popups/filename.js"/>
@@ -161,7 +163,6 @@
 				
 					
 				<file name="views/write/base.js"/>	
-				<file name="views/write/contextbuttons.js"/>	
 				<file name="views/write/write.js"/>	
 				<file name="views/write/writebuttons.js"/>	
 				<file name="views/write/writetop.js"/>	

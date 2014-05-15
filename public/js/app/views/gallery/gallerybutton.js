@@ -28,7 +28,7 @@ LG.CancelButtonView = LG.Button.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
-		LG.router.navigate("menu", {"trigger":true});
+		window.history.back();
 	}
 });
 

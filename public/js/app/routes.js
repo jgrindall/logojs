@@ -26,7 +26,6 @@ LG.Router = Backbone.Router.extend({
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
-		LG.EventDispatcher.trigger(LG.Events.HIDE_CONTEXT_BUTTONS);
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){

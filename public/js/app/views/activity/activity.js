@@ -32,11 +32,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.filenameView = new LG.FileNameView();
 		this.$el.append(this.filenameView.render().el);
 		
-		/*
-		this.contextButtonsView = new LG.ContextButtonsView();
-		this.$el.append(this.contextButtonsView.render().el);
-		*/
-		
 		this.helpOverlayView = new LG.HelpOverlayView();	
 		this.$el.append(this.helpOverlayView.render().el);
 		

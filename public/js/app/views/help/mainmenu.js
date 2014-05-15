@@ -11,6 +11,8 @@ LG.MainMenuView = LG.AMenuView.extend({
 			"_click .mmblock.mm1":"clickBlock1",
 			"_click .mmblock.mm2":"clickBlock2",
 			"_click .mmblock.mm3":"clickBlock3",
+			"_click .mmblock.mm4":"clickBlock4",
+			"_click .mmblock.mm5":"clickBlock5",
 			"_click span.close":"clickClose"
 		} );
 		return obj;
@@ -21,25 +23,33 @@ LG.MainMenuView = LG.AMenuView.extend({
 	},
 	clickBlock0:function(e){
 		this.stopProp(e);
-		
+		LG.router.navigate("load", {"trigger":true});
 	},
 	clickBlock1:function(e){
 		this.stopProp(e);
-		
+		LG.router.navigate("write", {"trigger":true});
 	},
 	clickBlock2:function(e){
 		this.stopProp(e);
-		
+		LG.router.navigate("examples", {"trigger":true});
 	},
 	clickBlock3:function(e){
 		this.stopProp(e);
-		
+		LG.router.navigate("help", {"trigger":true});
+	},
+	clickBlock4:function(e){
+		this.stopProp(e);
+		LG.router.navigate("helpoverlay", {"trigger":true});
+	},
+	clickBlock5:function(e){
+		this.stopProp(e);
+		LG.router.navigate("gallery", {"trigger":true});
 	},
 	onShow:function(){
 		var _this = this;
 		setTimeout(function(){
 			_this.$el.addClass("move");
-		}, 1500);
+		}, 500);
 	},
 	onHide:function(){
 		this.$el.removeClass("move");

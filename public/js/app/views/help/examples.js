@@ -3,6 +3,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 	template:"tpl_examples",
 	initialize:function(){
 		LG.AMenuView.prototype.initialize.call(this);
+		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.updateLayout, this));
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -42,19 +43,22 @@ LG.ExamplesView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
 	},
 	onShow:function(){
-	
+		this.updateLayout();
+	},
+	updateLayout : function() {
+		LG.Utils.centreImages(this.$el);
 	},
 	onHide:function(){
 		
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.updateLayout();
 		return this;
 	},
 	beforeClose:function(){
 	
 	}
 });
-
 
 

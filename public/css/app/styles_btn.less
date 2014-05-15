@@ -26,7 +26,7 @@
 	box-sizing:border-box;
 	border-width: 0 1px 4px 1px;
 	font-weight: bold;
-	color: white;
+	color: @buttontext;
 	min-width:100px;
 	background-color: @bg0;
 	border-color: @border0;
@@ -69,6 +69,11 @@
 	border-color:@border4;
 	border-bottom-color:@border4;
 }
+.clr5{
+	background-color:@bg5;
+	border-color:@border5;
+	border-bottom-color:@border5;
+}
 
 .transparent{
 	border:none !important;
@@ -91,7 +96,8 @@
 	text-align: left !important;
 	padding-left: 0px !important;
 	position: absolute;
-	width: 200px;
+	width: 172px;
+	padding-right:0;
 }
 
 #filebutton span{
@@ -140,7 +146,11 @@
 	right: 68px;
 	top: 3px;
 }
-
+.menutop #homebutton{
+	position: absolute;
+	right: 102px;
+	top: -1px;
+}
 .menutop #helpbutton i{
 	position: relative;
 	top: -4px;
@@ -149,7 +159,7 @@
 .menutop #dinobutton{
 	padding:0;
 	margin:0;
-	min-width: 60px;
+	min-width: 52px;
 }
 
 .right{
