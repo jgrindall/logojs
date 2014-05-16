@@ -8014,8 +8014,15 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 	onHide:function(){
 		
 	},
+	renderColors:function(){
+		var $colors = this.$("#colorsref");
+		_.each(LG.GraphicsModel.NAMES, function(name, i){
+			$colors.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+name+"</span></div>");
+		});
+	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.renderColors();
 		return this;
 	},
 	beforeClose:function(){
@@ -8086,7 +8093,7 @@ LG.ExamplesView.LOGO.push("fd(50) rt(45)\npenup() fd(50) rt(45) pendown()\nfd(50
 LG.ExamplesView.LOGO.push("bg(gray)\nthick(4) color(yellow) fd(30)\nthick(6) color(blue) fd(30)\nthick(8) color(orange) fd(30)\nthick(10) color(red) fd(30)");
 LG.ExamplesView.LOGO.push("bg(orange)\ncolor(white)\nn:=16\ns:=200\nrpt n\n    fd(s) rt(180 - 360/n)\nendrpt");
 LG.ExamplesView.LOGO.push("bg(blue)\ncolor(yellow)\nthick(10)\nn:=4\nproc drawsquare\n    rpt n\n        fd(100) rt(90)\n    endrpt\nendproc\nrpt 8\n    drawsquare()\n    rt(45)\nendrpt");
-LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(side) rt(360/n)\n    endrpt\nendproc\nrpt 10\n    drawpoly(25,a)\na:=a+4\nendrpt\n");
+LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(side) rt(360/n)\n    endrpt\nendproc\nrpt 10\n    drawpoly(25,a)\n    a:=a+4\nendrpt\n");
 
 
 
