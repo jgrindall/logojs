@@ -6678,7 +6678,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.helpView = new LG.HelpView();
 		this.$el.append(this.helpView.render().el);
 		
-		this.galleryView = new LG.GalleryView({"collection":LG.allFilesCollection});
+		this.galleryView = new LG.GalleryView({"collection":LG.allFilesCollection, "title":"Gallery"});
 		this.$el.append(this.galleryView.render().el);
 		
 		this.filenameView = new LG.FileNameView();
@@ -6690,7 +6690,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.menuView = new LG.MenuView();
 		this.$el.append(this.menuView.render().el);
 		
-		this.loadView = new LG.LoadView({"collection":LG.fileCollection});	
+		this.loadView = new LG.LoadView({"collection":LG.fileCollection, "title":"Your files"});	
 		this.$el.append(this.loadView.render().el);
 		
 		this.mainMenuView = new LG.MainMenuView();	
@@ -7648,9 +7648,9 @@ LG.WriteTopView = Backbone.View.extend({
 		this.fileButton = new LG.FileButtonView ( );
 		this.dinoButton = new LG.DinoButtonView ( );
 		this.settingsButton = new LG.SettingsButtonView ( );
-		this.homeButton = new LG.HomeButtonView ( );
-		this.helpButton = new LG.HelpButtonView ( );
-		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.settingsButton.render().el).append(this.helpButton.render().el).append(this.homeButton.render().el);
+		//this.homeButton = new LG.HomeButtonView ( );
+		//this.helpButton = new LG.HelpButtonView ( );
+		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.settingsButton.render().el);
 		return this;
 	},
 	events:function(){
@@ -7977,7 +7977,7 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 			"_click button.copy":"clickCopy",
 			"_click button.more":"clickMore",
 			"_click button.draw":"clickDraw",
-			"_click .close":"clickClose",
+			"_click #cancelbutton":"clickClose",
 			"_click":"clickMe"
 		} );
 		return obj;
@@ -8034,12 +8034,8 @@ LG.ExamplesView = LG.AMenuView.extend({
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click button.next":"clickNext",
-			"_click button.copy":"clickCopy",
-			"_click button.more":"clickMore",
-			"_click button.draw":"clickDraw",
-			"_click .close":"clickClose",
-			"_click":"clickMe"
+			"_click .imgcontainer":"clickEx",
+			"_click #cancelbutton":"clickClose"
 		} );
 		return obj;
 	},
@@ -8048,26 +8044,22 @@ LG.ExamplesView = LG.AMenuView.extend({
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
 	},
-	clickNext:function(e){
+	clickEx:function(e){
 		this.stopProp(e);
-	},
-	clickMore:function(e){
-		this.stopProp(e);
-		LG.router.navigate("help", {"trigger":true});
-	},
-	clickCopy:function(e){
-		this.stopProp(e);
+		var j = $(e.currentTarget).index();
+		var s = LG.ExamplesView.LOGO[j];
+		if(s){
+			LG.router.navigate("write", {"trigger":true});
+			LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
+			LG.Utils.growl("Click on the left panel to draw");
+		}
 	},
 	clickClose:function(){
 		window.history.back();
 	},
-	copy:function(){
-		var s = "rpt 6[\nfd(100);rt(60);\n]";
-		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
-	},
 	clickMe:function(e){
 		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
+		window.history.back();
 	},
 	onShow:function(){
 		this.updateLayout();
@@ -8079,7 +8071,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 		
 	},
 	render:function(){
-		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.loadTemplate(  this.template, {},  {"replace":true}  );
 		this.updateLayout();
 		return this;
 	},
@@ -8087,6 +8079,19 @@ LG.ExamplesView = LG.AMenuView.extend({
 	
 	}
 });
+
+LG.ExamplesView.LOGO = [ ];
+LG.ExamplesView.LOGO.push("fd(100) rt(90)\nfd(100) rt(90)\nfd(100) rt(90)\nfd(100) rt(90)");
+LG.ExamplesView.LOGO.push("fd(50) rt(45)\npenup() fd(50) rt(45) pendown()\nfd(50) rt(45)\npenup() fd(50) rt(45) pendown()\nfd(50) rt(45)\npenup() fd(50) rt(45) pendown()\nfd(50) rt(45) penup() fd(50) rt(45) pendown()");
+LG.ExamplesView.LOGO.push("bg(gray)\nthick(4) color(yellow) fd(30)\nthick(6) color(blue) fd(30)\nthick(8) color(orange) fd(30)\nthick(10) color(red) fd(30)");
+LG.ExamplesView.LOGO.push("bg(orange)\ncolor(white)\nn:=16\ns:=200\nrpt n\n    fd(s) rt(180 - 360/n)\nendrpt");
+LG.ExamplesView.LOGO.push("bg(blue)\ncolor(yellow)\nthick(10)\nn:=4\nproc drawsquare\n    rpt n\n        fd(100) rt(90)\n    endrpt\nendproc\nrpt 8\n    drawsquare()\n    rt(45)\nendrpt");
+LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(side) rt(360/n)\n    endrpt\nendproc\nrpt 10\n    drawpoly(25,a)\na:=a+4\nendrpt\n");
+
+
+
+
+
 
 
 
@@ -8377,9 +8382,12 @@ LG.GalleryPageView = Backbone.View.extend({
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.GalleryTopView = Backbone.View.extend({
+	initialize:function(options){
+		this.options = options;
+	},
 	template:"tpl_gallerytop",
 	render:function(){
-		this.loadTemplate(  this.template, {} , {replace:true} );
+		this.loadTemplate(  this.template, {"title":this.options.title} , {replace:true} );
 		this.cancelButton = new LG.CancelButtonView();
 		this.$el.append(this.cancelButton.render().$el);
 		return this;
@@ -8533,7 +8541,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 	},
 	addMenus:function(){
 		this.removeMenus();
-		this.galleryTop = new this.topView();
+		this.galleryTop = new this.topView({"title":this.options.title});
 		this.galleryList = new this.listView(this.options);
 		this.listenTo(this.galleryList, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
 		this.gallerySide = new this.sideView(this.options);

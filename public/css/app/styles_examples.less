@@ -2,18 +2,19 @@
 	width:100%;
 	height:100%;
 	position: absolute;
-	top:0;
+	top:-200%;
 	left:0;
-	display:none;
+	display:block;
 	font-size: 95%;
+	.animate;
 }
 
 #examples.show{
-	display:block;
+	top:0;
 }
 
 #examples span.close{
-	position:fixed;
+	position:absolute;
 	top:0;
 	right:12px;
 	font-size:300%;
@@ -22,28 +23,24 @@
 	cursor:pointer;
 }
 
-#examples #examplesbg {
-	width:100%;
-	height:100%;
-	background:@mainmenubg;
-	opacity:1;
-	position: absolute;
-}
-
 #examples #examplescontent{
-	right:40px;
+	right:0;
 	bottom:1px;
 	position: absolute;
-	top:20px;
+	top:@topheight + 4;
 	left:0;
+	bottom:0;
+	background: @mainmenubg;
 }
 
 #examples .imgcontainer{
 	height: 50%;
-	width: 25%;
+	width: 32.9%;
 	display:inline-block;
 	float:left;
 	position: relative;
+	cursor:hand;
+	cursor:pointer;
 }
 
 #examples .imginside{
@@ -59,7 +56,8 @@
 	top:5px;
 	left:10px;
 	color:bg3;
-	opacity:0.3;
-	font-size:50px;
+	opacity:0.25;
+	font-size:60px;
+	color:@bg3;
 	z-index:1;
 }

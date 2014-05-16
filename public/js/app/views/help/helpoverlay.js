@@ -10,7 +10,7 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 			"_click button.copy":"clickCopy",
 			"_click button.more":"clickMore",
 			"_click button.draw":"clickDraw",
-			"_click .close":"clickClose",
+			"_click #cancelbutton":"clickClose",
 			"_click":"clickMe"
 		} );
 		return obj;

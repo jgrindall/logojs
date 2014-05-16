@@ -26,7 +26,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.helpView = new LG.HelpView();
 		this.$el.append(this.helpView.render().el);
 		
-		this.galleryView = new LG.GalleryView({"collection":LG.allFilesCollection});
+		this.galleryView = new LG.GalleryView({"collection":LG.allFilesCollection, "title":"Gallery"});
 		this.$el.append(this.galleryView.render().el);
 		
 		this.filenameView = new LG.FileNameView();
@@ -38,7 +38,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.menuView = new LG.MenuView();
 		this.$el.append(this.menuView.render().el);
 		
-		this.loadView = new LG.LoadView({"collection":LG.fileCollection});	
+		this.loadView = new LG.LoadView({"collection":LG.fileCollection, "title":"Your files"});	
 		this.$el.append(this.loadView.render().el);
 		
 		this.mainMenuView = new LG.MainMenuView();	

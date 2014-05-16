@@ -29,7 +29,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 	},
 	addMenus:function(){
 		this.removeMenus();
-		this.galleryTop = new this.topView();
+		this.galleryTop = new this.topView({"title":this.options.title});
 		this.galleryList = new this.listView(this.options);
 		this.listenTo(this.galleryList, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
 		this.gallerySide = new this.sideView(this.options);

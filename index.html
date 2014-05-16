@@ -138,7 +138,7 @@
 			<div id="mainmenu">
 				<div id="mainmenubg"></div>
 				<span class="close"><i class="fa fa-times"></i></span>
-				<div class="mmblock mm3"><div class="mminner clr0"><span>Help</span><i class="fa fa-question-circle"></i></div></div>
+				<div class="mmblock mm3"><div class="mminner clr0"><span>About</span><i class="fa fa-question-circle"></i></div></div>
 				<div class="mmblock mm5"><div class="mminner clr2"><span>Gallery</span><i class="fa fa-files-o"></i></div></div>
 				<div class="mmblock mm0"><div class="mminner clr4"><span>Your files</span><i class="fa fa-briefcase"></i></div></div>
 				<div class="mmblock mm2"><div class="mminner clr3"><span>Examples</span><i class="fa fa-lightbulb-o"></i></div></div>
@@ -234,7 +234,7 @@
 			<li>
 				<a href="#" id="helpbuttonmenu" class="action button clr0" >
 					<i class="fa fa-question-circle"></i>
-					<span>Help</span>
+					<span>About</span>
 				</a>
 			</li>
 			
@@ -407,9 +407,10 @@
 			<div id="help" class="menuxlarge">
 				
 				<div class="gallerytop menutop" >
+					<span class="menutitle">About</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
-						<i class="fa fa-chevron-right"></i>
-						<span>Back</span>
+						<i class="fa fa-times"></i>
+						
 					</button>
 				</div>
 				
@@ -778,8 +779,7 @@ drawSpiral(10);</pre>
 		
 		<script id="tpl_cancelbutton" type="text/template">
 			<button id="cancelbutton" class="action button button1 right transparent">
-				<i class="fa fa-chevron-right"></i>
-				<span>Back</span>
+				<i class="fa fa-times"></i>
 			</button>
 		</script>
 		
@@ -839,7 +839,7 @@ drawSpiral(10);</pre>
 		<script id="tpl_gallerytop" type="text/template">
 			
 			<div class="gallerytop menutop" >
-				
+				<span class="menutitle"><%= title%></span>
 			</div>
 		
 					
@@ -853,6 +853,13 @@ drawSpiral(10);</pre>
 				
 				<div id="helpoverlaybg"></div>
 				
+				<div class="menutop">
+						<span class="menutitle">Reference</span>
+						<button id="cancelbutton" class="action button button1 right transparent">
+							<i class="fa fa-times"></i>
+						</button>
+					</div>
+				
 				<div id="helpoverlaycontent">
 					
 					<div class="language">
@@ -861,14 +868,14 @@ drawSpiral(10);</pre>
 							
 							<table>
 								<tbody>
-									<tr><td>fd</td><td>fd(100) - <span class="italic">Move forward 100 units</span></td></tr>
-									<tr><td>rt</td><td>rt(90) - <span class="italic">Turn right 90 degrees</span></td></tr>
-									<tr><td>penup()</td><td><span class="italic">Take the pen off the paper</span></td></tr>
-									<tr><td>pendown()</td><td><span class="italic">Put it back down</span></td></tr>
-									<tr><td>color</td><td>color(black) - <span class="italic">Set the pen color to black</span></td></tr>
-									<tr><td>bg</td><td>bg(red) - <span class="italic">Set the background color to red</span></td></tr>
-									<tr><td>thick</td><td>thick(5) - <span class="italic">Set the line thickness to 5 (between 1-10)</span></td></tr>
-									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic">Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
+									<tr><td>fd</td><td>fd(100)<span class="italic"> - Move forward 100 units</span></td></tr>
+									<tr><td>rt</td><td>rt(90)<span class="italic"> - Turn right 90 degrees</span></td></tr>
+									<tr><td>penup</td><td>penup()<span class="italic"> - Take the pen off the paper</span></td></tr>
+									<tr><td>pendown</td><td>pendown()<span class="italic"> - Put it back down</span></td></tr>
+									<tr><td>color</td><td>color(black)<span class="italic"> - Set the pen color to black</span></td></tr>
+									<tr><td>bg</td><td>bg(red)<span class="italic"> - Set the background color to red</span></td></tr>
+									<tr><td>thick</td><td>thick(5)<span class="italic"> - Set the line thickness to 5 (between 1-10)</span></td></tr>
+									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic"> - Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
 								</tbody>
 							</table>
 						</div>
@@ -880,14 +887,14 @@ drawSpiral(10);</pre>
 							
 							<table>
 								<tbody>
-									<tr><td>a:=</td><td>a:=10 - <span class="italic">Set the value of variable a to equal 10</span></td></tr>
+									<tr><td>a:=</td><td>a:=10 - <span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
 									<tr><td>
 									proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
-									<br/><span class="italic">Define a procedure called 'drawsquare', and then call it</span>
+									<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>
 									</td></tr>
 									<tr><td>
 									proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
-									<br/><span class="italic">Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
+									<br/><span class="italic"> - Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
 									</td></tr>
 									
 								</tbody>
@@ -896,7 +903,7 @@ drawSpiral(10);</pre>
 						
 					</div>
 				</div>
-				<span class="close"><i class="fa fa-times"></i></span>
+				
 			</div>
 		
 					
@@ -906,19 +913,26 @@ drawSpiral(10);</pre>
 			
 			<div id="examples" >
 				
+				<div class="menutop">
+					<span class="menutitle">Examples</span>
+					<button id="cancelbutton" class="action button button1 right transparent">
+						<i class="fa fa-times"></i>
+					
+					</button>
+				</div>
+				
 				<div id="examplesbg"></div>
 				
 				<div id="examplescontent">
-					<div class="imgcontainer"><div class="imginside"><span>1</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>2</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>3</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>4</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>5</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>6</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>7</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
-					<div class="imgcontainer"><div class="imginside"><span>8</span><img class="centre" src="thumbs/thumb_53738e5886692c4f01b2e10f.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex1.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex2.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex3.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex4.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex5.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex6.png"/></div></div>
+					
 				</div>
-				<span class="close"><i class="fa fa-times"></i></span>
+				
 			</div>
 		
 					
