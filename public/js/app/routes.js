@@ -16,7 +16,6 @@ LG.Router = Backbone.Router.extend({
 		"help"										:	"help",
 		"menu"										:	"menu",
 		"helpoverlay"								:	"helpoverlay",
-		"mainmenu"									:	"mainmenu",
 		"examples"									:	"examples"
     },
 	initialize:function () {
@@ -29,9 +28,11 @@ LG.Router = Backbone.Router.extend({
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){
+		alert('write');
 		if(id){
 			LG.fileOpener.open(id);
 		}
+		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
 		this.show("write");
 	},
 	examples:function(){
@@ -51,9 +52,6 @@ LG.Router = Backbone.Router.extend({
 	},
 	helpoverlay:function(){
 		this.show("helpoverlay");
-	},
-	mainmenu:function(){
-		this.show("mainmenu");
 	},
 	menu:function(){
 		this.show("menu");

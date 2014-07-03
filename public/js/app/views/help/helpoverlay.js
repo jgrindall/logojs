@@ -48,9 +48,14 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		
 	},
 	renderColors:function(){
-		var $colors = this.$("#colorsref");
-		_.each(LG.GraphicsModel.NAMES, function(name, i){
-			$colors.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+name+"</span></div>");
+		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName;
+		_.each(LG.GraphicsModel.NAMES1, function(name, i){
+			displayName = name.replace(/\//g, "<br/>");
+			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+displayName+"</span></div>");
+		});
+		_.each(LG.GraphicsModel.NAMES2, function(name, i){
+			displayName = name.replace(/\//g, "<br/>");
+			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname'>"+displayName+"</span></div>");
 		});
 	},
 	render:function(){

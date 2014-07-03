@@ -17,7 +17,7 @@ LG.MenuButtonsView = Backbone.View.extend({
 		this.helpButton 		= 	new LG.HelpButtonMenuView ();
 		this.loginButton 		= 	LG.create.loginButton();
 		this.logoButton			=	new LG.LogoButtonView ();
-		this.$el.append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.examplesButton.render().el).append(this.refButton.render().el).append(this.loginButton.render().el).append(this.helpButton.render().el);
+		this.$el.append(this.helpButton.render().el).append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.examplesButton.render().el).append(this.refButton.render().el).append(this.loginButton.render().el);
 		return this;
 	},
 	events:function(){

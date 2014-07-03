@@ -12,7 +12,7 @@ LG.HelpView = LG.AMenuView.extend({
 		return obj;
 	},
 	clickCancel:function(){
-		window.history.back();
+		LG.router.navigate("write", {"trigger":true});
 	},
 	updateLayout : function() {
 		if(this.wrapper && this.scroller && this.myScroll){

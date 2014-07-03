@@ -66,7 +66,7 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "mainmenu";
+	var defaultHash = "help";
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		LG.router.navigate(this.hash, {"trigger":true});
 	}

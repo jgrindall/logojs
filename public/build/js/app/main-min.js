@@ -215,7 +215,7 @@ LG.Config.IS_TOUCH = LG.Utils.isTouch();
 LG.Config.PARSER_VISIT = "js/app/parser/visit.js";
 
 // preload and compile the html using this list - should be faster
-LG.Config.TEMPLATES = ["tpl_homebutton","tpl_examplesbutton", "tpl_refbutton", "tpl_examples","tpl_mainmenu","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
+LG.Config.TEMPLATES = ["tpl_homebutton","tpl_examplesbutton", "tpl_refbutton", "tpl_examples","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
 
 LG.Config.PRODUCT_ID = "logojs";
 
@@ -977,7 +977,6 @@ LG.Router = Backbone.Router.extend({
 		"help"										:	"help",
 		"menu"										:	"menu",
 		"helpoverlay"								:	"helpoverlay",
-		"mainmenu"									:	"mainmenu",
 		"examples"									:	"examples"
     },
 	initialize:function () {
@@ -990,9 +989,11 @@ LG.Router = Backbone.Router.extend({
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){
+		alert('write');
 		if(id){
 			LG.fileOpener.open(id);
 		}
+		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
 		this.show("write");
 	},
 	examples:function(){
@@ -1012,9 +1013,6 @@ LG.Router = Backbone.Router.extend({
 	},
 	helpoverlay:function(){
 		this.show("helpoverlay");
-	},
-	mainmenu:function(){
-		this.show("mainmenu");
 	},
 	menu:function(){
 		this.show("menu");
@@ -5823,7 +5821,9 @@ LG.GraphicsModel.CLR18 = "#000000";
 LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
 LG.GraphicsModel.BG		=	[4, 7, 10,  3,  7, 2,  10, 15, 4, 13, 8, 15, 11, 10, 13, 4, 15, 10, 14, 4,  10, 4, 10, 2,   2, 9, 10, 15, 2, 2,  3,  9, 10, 14, 7, 10, 8, 3, 18];
 LG.GraphicsModel.INNER	=	[9, 4, 1,  10,  2, 7,  3, 9, 15, 10, 4, 4,  4,  6,  4,  10, 3, 2, 7, 10,  0, 14, 7, 7, 10, 4, 9, 14,  4, 10, 10, 10, 7, 10, 2,  4,  10, 7, 3];
-LG.GraphicsModel.NAMES	=	["turquoise/turq", "green", "blue", "purple", "midnight", "darkkturqoise/dkturq/dkturquoise", "darkgreen/dkgreen", "yellow", "carrot/orange/org", "red", "snow", "gray/grey", "ltorange/lightorange/lightorg/ltorg", "dkorange/darkorg/dkorg/darkorange", "terracotta/dkred/darkred", "ltgray/ltgrey/lightgray/lightgrey", "darkgray/darkgrey/dkgrey/dkgray", "white", "black"];
+LG.GraphicsModel.NAMES1	=	["turquoise/turq", "green", "blue", "purple", "midnight", "darkkturqoise/dkturq/dkturquoise", "darkgreen/dkgreen", "yellow", "carrot/orange/org", "red"];
+LG.GraphicsModel.NAMES2	=	["snow", "gray/grey", "ltorange/lightorange/lightorg/ltorg", "dkorange/darkorg/dkorg/darkorange", "terracotta/dkred/darkred", "ltgray/ltgrey/lightgray/lightgrey", "darkgray/darkgrey/dkgrey/dkgray", "white", "black"];
+LG.GraphicsModel.NAMES =	LG.GraphicsModel.NAMES1.concat(LG.GraphicsModel.NAMES2);
 
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
@@ -6693,9 +6693,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.loadView = new LG.LoadView({"collection":LG.fileCollection, "title":"Your files"});	
 		this.$el.append(this.loadView.render().el);
 		
-		this.mainMenuView = new LG.MainMenuView();	
-		this.$el.append(this.mainMenuView.render().el);
-		
 		this.examplesView = new LG.ExamplesView();	
 		this.$el.append(this.examplesView.render().el);
 		
@@ -7142,7 +7139,7 @@ LG.MenuButtonsView = Backbone.View.extend({
 		this.helpButton 		= 	new LG.HelpButtonMenuView ();
 		this.loginButton 		= 	LG.create.loginButton();
 		this.logoButton			=	new LG.LogoButtonView ();
-		this.$el.append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.examplesButton.render().el).append(this.refButton.render().el).append(this.loginButton.render().el).append(this.helpButton.render().el);
+		this.$el.append(this.helpButton.render().el).append(this.loadButton.render().el).append(this.galleryButton.render().el).append(this.examplesButton.render().el).append(this.refButton.render().el).append(this.loginButton.render().el);
 		return this;
 	},
 	events:function(){
@@ -7927,7 +7924,7 @@ LG.HelpView = LG.AMenuView.extend({
 		return obj;
 	},
 	clickCancel:function(){
-		window.history.back();
+		LG.router.navigate("write", {"trigger":true});
 	},
 	updateLayout : function() {
 		if(this.wrapper && this.scroller && this.myScroll){
@@ -8015,9 +8012,14 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		
 	},
 	renderColors:function(){
-		var $colors = this.$("#colorsref");
-		_.each(LG.GraphicsModel.NAMES, function(name, i){
-			$colors.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+name+"</span></div>");
+		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName;
+		_.each(LG.GraphicsModel.NAMES1, function(name, i){
+			displayName = name.replace(/\//g, "<br/>");
+			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+displayName+"</span></div>");
+		});
+		_.each(LG.GraphicsModel.NAMES2, function(name, i){
+			displayName = name.replace(/\//g, "<br/>");
+			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname'>"+displayName+"</span></div>");
 		});
 	},
 	render:function(){
@@ -8100,74 +8102,6 @@ LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(s
 
 
 
-
-
-LG.MainMenuView = LG.AMenuView.extend({
-	template:"tpl_mainmenu",
-	initialize:function(){
-		LG.AMenuView.prototype.initialize.call(this);
-	},
-	showName:"mainmenu",
-	events:function(){
-		var obj = Backbone.View.getTouch( {
-			"_click .mmblock.mm0":"clickBlock0",
-			"_click .mmblock.mm1":"clickBlock1",
-			"_click .mmblock.mm2":"clickBlock2",
-			"_click .mmblock.mm3":"clickBlock3",
-			"_click .mmblock.mm4":"clickBlock4",
-			"_click .mmblock.mm5":"clickBlock5",
-			"_click span.close":"clickClose"
-		} );
-		return obj;
-	},
-	clickClose:function(e){
-		this.stopProp(e);
-		LG.router.navigate("write", {"trigger":true});
-	},
-	clickBlock0:function(e){
-		this.stopProp(e);
-		LG.router.navigate("load", {"trigger":true});
-	},
-	clickBlock1:function(e){
-		this.stopProp(e);
-		LG.router.navigate("write", {"trigger":true});
-	},
-	clickBlock2:function(e){
-		this.stopProp(e);
-		LG.router.navigate("examples", {"trigger":true});
-	},
-	clickBlock3:function(e){
-		this.stopProp(e);
-		LG.router.navigate("help", {"trigger":true});
-	},
-	clickBlock4:function(e){
-		this.stopProp(e);
-		LG.router.navigate("helpoverlay", {"trigger":true});
-	},
-	clickBlock5:function(e){
-		this.stopProp(e);
-		LG.router.navigate("gallery", {"trigger":true});
-	},
-	onShow:function(){
-		var _this = this;
-		setTimeout(function(){
-			_this.$el.addClass("move");
-		}, 500);
-	},
-	onHide:function(){
-		this.$el.removeClass("move");
-	},
-	afterAdded:function(){
-		
-	},
-	render:function(){
-		this.loadTemplate(  this.template, {},  {replace:true}  );
-		return this;
-	},
-	beforeClose:function(){
-	
-	}
-});
 
 LG.AGalleryLRButtonView = LG.Button.extend({
 	initialize:function(){
@@ -8696,7 +8630,7 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "mainmenu";
+	var defaultHash = "help";
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		LG.router.navigate(this.hash, {"trigger":true});
 	}
