@@ -16,7 +16,7 @@
 	border: 1px solid transparent;
 	white-space: nowrap;
 	padding: 15px;
-	font-size: 14px;
+	font-size: @fontsizesmall;
 	line-height: 1.4;
 	border-radius: 4px;
 	-webkit-user-select: none;
@@ -35,7 +35,7 @@
 }
 
 .buttonsmall{
-	height:43px;
+	height:37px;
 	min-width:80px !important; 
 }
 
@@ -86,18 +86,23 @@
 	color:@buttontextdisabled !important;
 }
 
+.button i.fa-lightbulb-o{
+	margin-right: 10px;
+}
+
 .button i{
-	font-size:175%;
+	font-size:@fontsizevlarge;
+	position: relative;
+	top: -8px;
 }
 
 #cancelbutton i{
-	font-size:275%;
+	font-size:@fontsizevvlarge;
 	position: relative;
 	top: -9px;
 }
 
 #filebutton{
-	font-size:20px !important;
 	padding-top: 9px;
 	text-align: left !important;
 	padding-left: 0px !important;
@@ -202,6 +207,8 @@
 }
 
 .menutop .button.right.transparent span{
-	margin-right: 10px;
-	font-size:15px;
+	margin-right: 5px;
+	font-size:@fontsizenormal;
+	position:relative;
+	top:-1px;
 }

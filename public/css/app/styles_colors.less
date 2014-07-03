@@ -1,21 +1,26 @@
 @filebg:				#fff;
 @menubg:				#fff;
 
-@menu:					#28B62C;
-@menuborder:			#23a127;
+@darken:4%;
 
-@bg0				:	#158CBA;
-@border0			:	#127BA3;
+@menu:					#64b743;
+@menuborder:			darken(@menu, @darken);
+
+@buttonclr:				#2f8fb3;
+@buttonborder:			darken(@buttonclr, @darken);
+
+@bg0				:	@buttonclr;
+@border0			:	@buttonborder;
 @bg1				:	@menu;
 @border1			:	@menuborder;
-@bg2				:	#ff4136;
-@border2			:	#ff291c;
-@bg3				:	#9b59b6;
-@border3			:	darken(@bg3, 10%);
-@bg4				:	#ff851b;
-@border4			:	#ff7701;
-@bg5				:	#777;
-@border5			:	#444;
+@bg2				:	@buttonclr;
+@border2			:	@buttonborder;
+@bg3				:	@buttonclr;
+@border3			:	@buttonborder;
+@bg4				:	@buttonclr;
+@border4			:	@buttonborder;
+@bg5				:	@buttonclr;
+@border5			:	@buttonborder;
 
 @textbg				:	#eee;
 @mainmenubg			:	#eee;

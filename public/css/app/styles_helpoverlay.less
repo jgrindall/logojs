@@ -5,7 +5,7 @@
 	top:-200%;
 	left:0;
 	display:block;
-	font-size: 95%;
+	font-size: @fontsizenormal;
 	.animate;
 }
 
@@ -57,42 +57,66 @@
 
 #helpoverlay table td{
 	padding:5px;
-	border-bottom: 1px dashed #28c63c;
 	padding-bottom:10px;
 }
 
 #helpoverlay table td:first-child{
-	font-size:133%;
+	font-size:@fontsizelarge;
 	font-weight: bold;
 	padding-right: 20px;
 }
 
 #helpoverlay #helpoverlaycontent p.title{
-	font-size:133%;
+	font-size:@fontsizenormal;
 	margin: 0;
 	margin-bottom:5px;
-	color: @border1;
+	color: @border2;
 	margin-right: 35px;
 	margin-top: 5px;
 	text-align: center;
 }
-
-#helpoverlay .italic{
-	color:@lightgreen;
+#helpoverlay .language table td, #helpoverlay .advanced table td{
+	font-size:@fontsizesmall;
 }
 
-#helpoverlay #colorsref{
+#helpoverlay .language table td{
+	border-bottom: 1px dashed @border0;
+}
+
+#helpoverlay .advanced table td{
+	border-bottom: 1px dashed @border3;
+}
+#helpoverlay .language .italic{
+	color:lighten(@bg0, 30%);
+}
+#helpoverlay .advanced .italic{
+	color:lighten(@bg3, 30%);
+}
+
+#helpoverlay div.colorsref{
 	position:absolute;
 	bottom:0;
 	left:0;
 	width:100%;
-	height:50px;
+	height:30px;
 }
 
-#helpoverlay #colorsref .colorblock{
-	width:5.26%;
+#helpoverlay div#colorsref1{
+	bottom:30px;	
+}
+
+#helpoverlay div.colorsref .colorblock{
+	width:10%;
 	height:100%;
 	display:inline-block;
 	float:left;
 	color:white;
+}
+
+#helpoverlay div.colorsref .colorblock .colorname{
+	font-size: @fontsizevsmall;
+	width: 100%;
+	text-align: center;
+	display: block;
+	margin-top: 10px;
 }

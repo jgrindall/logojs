@@ -1,5 +1,8 @@
 #menu ul{
 	padding:5%;
+	position: absolute;
+	top: @topheight;
+	width:100%;
 }
 
 #menu ul .iconimg{
@@ -23,12 +26,10 @@
 }
 
 #menubuttons .button span{
-	position: absolute;
-	width: 100%;
-	left: 0;
-	right: 0;
+	position: relative;
+	left: 20px;
 	text-align: center;
-	top: 18px;
+	top: -12px;
 }
 
 #menubuttons .button.disabled{
@@ -60,8 +61,9 @@
 }
 
 .menutitle{
-	font-size: 22px;
+	font-size: @fontsizesmall;
 	color:white;
+	font-weight:bold;
 	position: relative;
 	top: 11px;
 	left: 9px;
