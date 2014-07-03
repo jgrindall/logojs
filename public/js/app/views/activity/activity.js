@@ -41,9 +41,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.loadView = new LG.LoadView({"collection":LG.fileCollection, "title":"Your files"});	
 		this.$el.append(this.loadView.render().el);
 		
-		this.mainMenuView = new LG.MainMenuView();	
-		this.$el.append(this.mainMenuView.render().el);
-		
 		this.examplesView = new LG.ExamplesView();	
 		this.$el.append(this.examplesView.render().el);
 		
