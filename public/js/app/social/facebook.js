@@ -16,7 +16,7 @@ LG.Facebook.GRAPH_ME_STATUS_UPDATE		=	"https://graph.facebook.com/me/feed";
 LG.Facebook.FQL							=	"https://graph.facebook.com/fql";
 LG.Facebook.GET_FRIENDS_FBQL 			=	"SELECT uid, name FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY rand()";
 LG.Facebook.SMFH_LINK_URL 				=	"http://www.logotacular.com/logojs/build/web";
-LG.Facebook.SECONDS_TO_WAIT 			= 	20;
+LG.Facebook.SECONDS_TO_WAIT 			= 	8;
 
 LG.Facebook.INIT_OBJ = {status : false, cookie : true, xfbml : false, kidDirectedSite:true, appId : LG.Facebook.APP_ID,	channelUrl : LG.Facebook.CHANNEL_URL};
 
@@ -112,7 +112,9 @@ LG.WebFacebook.prototype.load = function(options){
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
+		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
+			console.log("response "+JSON.stringify(response));
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
