@@ -111,7 +111,7 @@ LG.CanvasView = Backbone.View.extend({
 		var w = LG.canvasModel.get("width");
 		var h = LG.canvasModel.get("height");
 		this.$(".easelcanvas").attr("width", w).attr("height", h);
-		this.position = {"theta":-Math.PI/2, x:w/2, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
+		this.position = {"theta":-Math.PI/2, x:w/2 - 100, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
 		this.commands.graphics.clear();
 		this.bmpcontainer.removeAllChildren();
 		this.tick();
