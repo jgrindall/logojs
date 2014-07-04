@@ -64,7 +64,7 @@ LG.Router = Backbone.Router.extend({
 	openErrorPage:function(callbacks){
 		if(LG.launcher._launched){
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data, callbacks);
+			LG.popups.openPopup(data);
 		}
 	}
 });
