@@ -177,7 +177,7 @@
 				<file name="views/help/help.js"/>		
 				<file name="views/help/helpoverlay.js"/>	
 				<file name="views/help/examples.js"/>	
-				<file name="views/help/mainmenu.js"/>		
+						
 				<file name="views/gallery/gallerybutton.js"/>
 
 				<file name="views/gallery/gallerylist.js"/>	
