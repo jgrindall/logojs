@@ -60,6 +60,9 @@ LG.ExamplesView.LOGO.push("bg(gray)\nthick(4) color(yellow) fd(30)\nthick(6) col
 LG.ExamplesView.LOGO.push("bg(orange)\ncolor(white)\nn:=16\ns:=200\nrpt n\n    fd(s) rt(180 - 360/n)\nendrpt");
 LG.ExamplesView.LOGO.push("bg(blue)\ncolor(yellow)\nthick(10)\nn:=4\nproc drawsquare\n    rpt n\n        fd(100) rt(90)\n    endrpt\nendproc\nrpt 8\n    drawsquare()\n    rt(45)\nendrpt");
 LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(side) rt(360/n)\n    endrpt\nendproc\nrpt 10\n    drawpoly(25,a)\n    a:=a+4\nendrpt\n");
+LG.ExamplesView.LOGO.push("bg(blue) color(white)\nrpt 90 fd(1)rt(1) endrpt\nrt(270)\nrpt 180 fd(1)rt(1) endrpt\nrt(270)\nrpt 90 fd(1)rt(1) endrpt");
+LG.ExamplesView.LOGO.push("a:=10\nrpt 120\n  fd(15) rt(a)\n  a:=a*1.02\nendrpt");
+
 
 
 
