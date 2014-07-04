@@ -12,9 +12,8 @@ LG.WriteTopView = Backbone.View.extend({
 		this.fileButton = new LG.FileButtonView ( );
 		this.dinoButton = new LG.DinoButtonView ( );
 		this.settingsButton = new LG.SettingsButtonView ( );
-		//this.homeButton = new LG.HomeButtonView ( );
-		//this.helpButton = new LG.HelpButtonView ( );
-		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.settingsButton.render().el);
+		this.helpButton = new LG.HelpButtonView ( );
+		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.helpButton.render().el).append(this.settingsButton.render().el);
 		return this;
 	},
 	events:function(){
@@ -27,8 +26,12 @@ LG.WriteTopView = Backbone.View.extend({
 		if(this.settingsButton){
 			this.settingsButton.close();
 		}
+		if(this.helpButton){
+			this.helpButton.close();
+		}
 		this.fileButton = null;
 		this.settingsButton = null;
+		this.helpButton = null;
 	},
 	afterAdded:function(){
 		
