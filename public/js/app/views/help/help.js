@@ -19,7 +19,6 @@ LG.HelpView = LG.AMenuView.extend({
 			var wrapperWidth = this.wrapper.width(), wrapperHeight = this.wrapper.height();
 			this.$(".helpcontainer").width(wrapperWidth - 1).height(wrapperHeight - 1);
 			this.scroller.css('width',  this.$(".helpcontainer").length * wrapperWidth + 1);
-			console.log("wrapperWidth "+wrapperWidth + "  " + this.$(".helpcontainer").length);
 			this.myScroll.refresh();
 		}
 		LG.Utils.centreImages(this.$el);
