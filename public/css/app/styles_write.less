@@ -1,6 +1,7 @@
 #write{
 	background:@textbg;
 }
+
 #textcontainer{
 	width:100%;
 	height:100%;
@@ -8,12 +9,12 @@
 
 #write #logodiv, #write #logonums{
 	position:absolute;
-	top:@bottomheight + 3;
+	top:@bottomheight + 8;
 	bottom:@bottomheight;
 	font-size:@fontsizenormal;
 	background:@textbg;
 	color:#111;
-	font-family:Roboto, Tahoma, Arial, Helvetica, sans-serif;
+	font-family:Arial, Helvetica, sans-serif !important;
 	resize:none;
 	border-radius:0;
 	border:none;
@@ -57,6 +58,10 @@
 	left:0;
 	right:0;
 	height:@bottomheight;
+}
+
+#writetop .button i.fa-align-justify{
+	top:-3px;
 }
 
 #writebuttons #savebutton, #writebuttons #newbutton{
