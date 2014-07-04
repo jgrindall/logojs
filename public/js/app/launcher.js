@@ -49,13 +49,14 @@ LG.Launcher.prototype.loadTemplates = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
+	console.log("make objects");
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
 	LG.canvasModel = new LG.CanvasModel();
 	LG.storage = LG.create.storage();
 	LG.sounds = new LG.Sounds();
 	LG.spinnerModel = new LG.SpinnerModel();
-	LG.userModel = new LG.UserModel();
+	LG.userModel = LG.create.userModel();
 	LG.layoutModel = new LG.LayoutModel();
 	LG.fileCollection = new LG.FileCollection();
 	LG.graphicsModel = new LG.GraphicsModel();

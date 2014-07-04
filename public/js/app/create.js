@@ -44,6 +44,10 @@ LG.WebCreate.prototype.loginButton = function(){
 	return new LG.WebLoginButtonView();
 };
 
+LG.WebCreate.prototype.userModel = function(){
+	return new LG.WebUserModel();
+};
+
 
 // ipad
 
@@ -71,6 +75,11 @@ LG.IPadCreate.prototype.loginButton = function(){
 	return new LG.IPadLoginButtonView();
 };
 
+LG.IPadCreate.prototype.userModel = function(){
+	return new LG.IPadUserModel();
+};
+
+
 
 // fake ipad
 
@@ -95,6 +104,10 @@ LG.FakeIPadCreate.prototype.launcher = function(){
 
 LG.FakeIPadCreate.prototype.loginButton = function(){
 	return LG.IPadCreate.prototype.loginButton.call(this, arguments);
+};
+
+LG.FakeIPadCreate.prototype.userModel = function(){
+	return new LG.WebUserModel();
 };
 
 // make 
