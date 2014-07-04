@@ -1,4 +1,4 @@
-LG.UserModel = Backbone.Model.extend({
+LG.AUserModel = Backbone.Model.extend({
 	defaults: {
 		"name":null,
 		"userId":null,
@@ -35,7 +35,7 @@ LG.UserModel = Backbone.Model.extend({
 
 // web
 
-LG.WebUserModel = LG.UserModel.extend({
+LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
 		var users = ["100","200","300"], user;
 		if(LG.facebook){
@@ -44,7 +44,8 @@ LG.WebUserModel = LG.UserModel.extend({
 					alert("ok");
 				},
 				"fail":function(){
-					alert("fail");
+					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data);
 				}
 			});
 		}
@@ -61,7 +62,8 @@ LG.WebUserModel = LG.UserModel.extend({
 					alert("ok");
 				},
 				"fail":function(){
-					alert("fail");
+					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data);
 				}
 			});
 		}
@@ -101,7 +103,7 @@ LG.WebUserModel = LG.UserModel.extend({
 
 //ipad
 
-LG.IPadUserModel = LG.UserModel.extend({
+LG.IPadUserModel = LG.AUserModel.extend({
 	login:function(){
 		
 	},
