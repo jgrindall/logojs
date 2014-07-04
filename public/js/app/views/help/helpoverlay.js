@@ -48,14 +48,24 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		
 	},
 	renderColors:function(){
-		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName;
+		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName, dark, darkString;
 		_.each(LG.GraphicsModel.NAMES1, function(name, i){
 			displayName = name.replace(/\//g, "<br/>");
-			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+displayName+"</span></div>");
+			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i) >= 0);
+			darkString = "";
+			if(dark){
+				darkString = " colornamedark";
+			}
+			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
 		});
 		_.each(LG.GraphicsModel.NAMES2, function(name, i){
 			displayName = name.replace(/\//g, "<br/>");
-			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname'>"+displayName+"</span></div>");
+			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i + LG.GraphicsModel.NAMES1.length) >= 0);
+			darkString = "";
+			if(dark){
+				darkString = " colornamedark";
+			}
+			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
 		});
 	},
 	render:function(){
