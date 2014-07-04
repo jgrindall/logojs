@@ -33,7 +33,6 @@ LG.Utils.centreImage = function($img, options){
 	}
 	w = p.width();
 	h = p.height();
-	console.log("centring: "+$img +" "+$img.attr("src")+"  "+JSON.stringify(options)+" "+w+", "+h);
 	if(w > h){
 		if(options && options.left){
 			$img.width(h).height(h).css("left", 0).css("right", "auto").css("top", 0);
@@ -71,9 +70,7 @@ LG.Utils.countCharsIn = function(s, match){
 };
 
 LG.Utils.centreImages = function($el, options){
-	console.log("centre images "+$el);
 	$("img.centre", $el).each(function(){
-		console.log("centre images "+this+"  "+$(this));
 		var $img = $(this);
 		$(this).load(function(){
 			LG.Utils.centreImage($img, options);
@@ -100,7 +97,7 @@ LG.Utils.writeNum = 0;
 LG.Utils.writeGrowl = function(){
 	var now = (new Date()).getTime();
 	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || LG.Utils.writeNum <= 5){
+	if(diff > 20000 || LG.Utils.writeNum <= 4){
 		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
 	}
 	LG.Utils.writeTimeStamp = now;
