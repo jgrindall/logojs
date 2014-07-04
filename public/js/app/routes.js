@@ -5,7 +5,7 @@
 LG.Router = Backbone.Router.extend({
 	
     routes:{
-		""											:	"write",
+		""											:	"help",
 		"write"										:	"write",
 		"writebar"									:	"writebar",
 		"write/:id"									:	"write",
@@ -28,11 +28,10 @@ LG.Router = Backbone.Router.extend({
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){
-		alert('write');
 		if(id){
 			LG.fileOpener.open(id);
 		}
-		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
+		LG.Utils.writeGrowl();
 		this.show("write");
 	},
 	examples:function(){
