@@ -335,7 +335,7 @@
 					
 							
 					<% if(name){ %>
-						name
+						<span><%=name %>(Logout)</span>
 					<% } else { %>
 						<i class="fa fa-sign-in"></i>
 						<span><%=label%></span>
@@ -496,32 +496,30 @@
 								
 								<div class="helpcontent">
 							
-									<div class="helpcontentleftlarge">
-									<h3>
-										How to write a program
-									</h3>
+									<div class="helpcontentleft">
 									
-									<p>
+										<h3>
+											How to write a program
+										</h3>
+									
+										<p>
 							
 							
 							
-										The most basic commands in Logo that control the graphical turtle are the 'go forward' command (written variously as FORWARD, forward, FD or fd), and the 'turn right' command (RIGHT, RT, rt).
+											The most basic commands in Logo that control the graphical turtle are the 'go forward' command and the 'turn right' command.
 						
-										Logotacular uses the 'fd' and 'rt' variants of these commands, and like many other programming languages, each statement is terminated by a semicolon, for example:
-									</p>
-									<p class="code">
-										<pre>fd(100)
-rt(100)</pre>
-									</p>
-									<p>
-										This tells the turtle to go forward 100 units (in whatever direction it is facing), and then to turn on the spot 90 degrees clockwise.
-									</p>
-									<p>
+										
+										</p>
+									
+										<p>
+											For example, fd(100) tells the turtle to go forward 100 units (in whatever direction it is facing), and rt(90) tells it turn on the spot 90 degrees clockwise.
+										</p>
+										<p>
 
-										One of the first Logo programs that a pupil would typically be exposed to would be to draw a square using:
-									</p>
-									<p class="code">
-										<pre>fd(100)
+											One of the first Logo programs that a pupil would typically be exposed to would be to draw a square using:
+										</p>
+										<p class="code">
+											<pre>fd(100)
 rt(90)
 fd(100)
 rt(90)
@@ -530,79 +528,160 @@ rt(90)
 fd(100)
 rt(90)</pre>
 							
-									</p>
+										</p>
+							
+									</div>
+							
+									<div class="helpcontentright">
+										<img class="centre" src="img/help/Untitled.gif"/>
+									</div>
 							
 								</div>
-							
-								<div class="helpcontentrightsmall">
-								</div>
-							
 							</div>
 							
 							
 							<div class='helpcontainer'>
-							<div class="helpcontent">
 							
-							<div class="helpcontentleftlarge">
+								<div class="helpcontent">
 							
+									<div class="helpcontentleft">
+										
+										<h3>
+											Drawing with colors
+										</h3>
+										
 							
-							<p>
+										<p>
+penup	penup() - Take the pen off the paper
+pendown	pendown() - Put it back down
+color	color(black) - Set the pen color to black
+bg	bg(red) - Set the background color to red
+thick
+											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
 
-								Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
-
-								So, our 'draw square' program could be written as :
-							</p>
-							<p class="code">
-								<pre>rpt 4[
+											So, our 'draw square' program could be written as :
+										</p>
+										
+										<p class="code">
+											<pre>rpt 4[
   fd(100)
   rt(90)
 ]</pre>
 
-							</p>
-							<p>
+										</p>
+										<p>
 
-								Can you work out what the following code will draw?
-							</p>
-							<p class="code">
-								<pre>rpt 5[
+											Can you work out what the following code will draw?
+										</p>
+										<p class="code">
+											<pre>rpt 5[
   fd(100)
   rt(72)
 ]</pre>
 								
-															</p>
+										</p>
+							
+									</div>
+							
+									<div class="helpcontentright">
+										<img class="centre" src="img/help/Untitled.gif"/>
+									</div>
+							
+								</div>
 							
 							</div>
-							<div class="helpcontentrightsmall">
+							
+							
+							<div class='helpcontainer'>
+							
+								<div class="helpcontent">
+							
+									<div class="helpcontentleft">
+										
+										<h3>
+											Variables and loops
+										</h3>
+										
+							
+										<p>
+
+											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
+
+											So, our 'draw square' program could be written as :
+										</p>
+										
+										<p class="code">
+											<pre>rpt 4[
+  fd(100)
+  rt(90)
+]</pre>
+
+										</p>
+										<p>
+
+											Can you work out what the following code will draw?
+										</p>
+										<p class="code">
+											<pre>rpt 5[
+  fd(100)
+  rt(72)
+]</pre>
+								
+										</p>
+										
+										
+										<p>
+
+											Can you work out how to draw the animation on the right?
+										</p>
+										
+									</div>
+							
+									<div class="helpcontentright">
+										<img class="centre" src="img/help/Untitled.gif"/>
+									</div>
+							
+								</div>
+							
 							</div>
 							
 							
 							
 							<div class='helpcontainer'>
-							<div class="helpcontent">
-							<p>
+								
+								<div class="helpcontent">
+									
+									<div class="helpcontentleftlarge">
+									
+										<h3>
+											Procedures and functions
+										</h3>
+									
+										<p>
 
-								Advanced
-								For children, a function or procedure is often thought of as telling the turtle the meaning of a new word.
-							</p>
-							<p>
+										
+											A function or procedure is often thought of as telling the turtle the meaning of a new word.
+										</p>
+										<p>
 
-								We could rewrite our 'draw square' program once more:
-							</p>
-							<p class="code">
-								<pre>proc drawSquare(){
+											We could rewrite our 'draw square' program once more:
+										</p>
+										<p class="code">
+											<pre>proc drawSquare(){
   rpt 4[
 	fd(100)
 	rt(90)
   ]
 }
 drawSquare()</pre>
-							</p>
-							<p>
+										</p>
+										<p>
 
-								Recursion can also be used in Logo - for example the following program defines a procedure called drawSpiral which repeatedly calls itself, increasing the value of dist each time, with the result that an increasing series of line segments is drawn, forming a spiral:
-							</p>
-							<p class="code">
-								<pre>
+											Recursion can also be used in Logo - for example the following program defines a procedure which repeatedly calls itself, increasing the value of dist each time, with the result that an increasing series of line segments is drawn, forming a spiral:
+										</p>
+									
+										<p class="code">
+											<pre>
 proc drawSpiral(dist){
   fd(dist)
   rt(90)
@@ -610,81 +689,112 @@ proc drawSpiral(dist){
 }
 drawSpiral(10)</pre>
 								
-															</p>
-							<p>
-
-
-								To find out about all the Logo commands you can use, see the 
-								Quick reference»
-							</p>
-							<p>
-
-
-								Features of Logotacular
-								Large set of Logo commands to explore concepts from geometry and programming
-								Use your Facebook id to log in to Logotacular - no need to register or use an extra password
-								Save and load your Logo files so that users can see your creations and so that you can access them anywhere
-								Export your Logo designs to Facebook
-								Download the offline version to use on your desktop PC/Mac
+										</p>
+									
+									
+									</div>
 								
-							</p>
-							</div>
-						</div>
-						
-						
-						
-						
-						<div class='helpcontainer'>
-							<div class="helpcontent">
-							
-							<h3>
-							What is Logotacular?
 								
-							</h3>
+								
+									<div class="helpcontentrightsmall">
+										<div class="helpblock2">
+											<img src="img/help/help2.png" class="centre"/>
+										</div>
+									
+										<div class="helpblock2">
+											<img src="img/help/help3.png" class="centre"/>
+										</div>
+									</div>
+								
+						
+								</div>
 							
-							<p>
-								Logotacular is a one-man project developed by myself (John Grindall). It is based on my MSc dissertation at the University of Westminster, London, UK called 'A Logo programming environment for Lego Mindstorms robots.'
-							</p>
-							<p>
-								Whereas that project was written in the Java programming language and intended to run on a Lego™ Mindstorms robot, Logotacular is a web-based application.
-							</p>
-							<p>
-								I developed the application primarily to learn some new technologies, but because I enjoyed messing around with Logo myself and found it interesting!
-							</p>
-							<p>
-
-								Technologies
-								The primary technologies used are:
-							</p>
-							<p>
-								The most important bit (and the one you can't see!) is the main Logo interpreter which parses and interprets your program. It is written in a combination of Java, using ANTLR, and Actionscript 3
-								The main application itself is written in Actionscript 3, using Flex 3 and the RobotLegs framework
-								The web sections of the application use HTML, CSS, jQuery and Javascript
-								The back-end uses mySQL, PHP and the CodeIgniter PHP framework.
-								Facebook connect is implemented using ideas from Danny Herran
-								The offline version of Logotacular was created using Adobe AIR.
-
-							</p>
-							<p>
-								Links
-								Many different versions of Logo are available, using many different dialects of the language. For more information you might like to look at the following pages:
-
-								Wikipedia: Logo programming language
-								MathsNet online Logo interpreter
-								Math and programming website - another online Logo interpreter
-								Another excellent online Logo application - written in JavaScript with a large Logo vocabulary
-								Microworlds - Links, examples, worksheets
-								MSWLogo - downloadable Logo application for Microsoft Windows™
-							
-							</p>
 							</div>
+							
+							
+							<div class='helpcontainer'>
+								
+								<div class="helpcontent">
+								
+									<h3>
+										How to use Logotacular
+									</h3>
+									
+									<p>
+
+
+										To find out about all the Logo commands you can use, see the 
+										Quick reference»
+									</p>
+									<p>
+
+
+										Features of Logotacular
+										Large set of Logo commands to explore concepts from geometry and programming
+										Use your Facebook id to log in to Logotacular - no need to register or use an extra password
+										Save and load your Logo files so that users can see your creations and so that you can access them anywhere
+										Export your Logo designs to Facebook
+										Download the offline version to use on your desktop PC/Mac
+								
+									</p>
+								</div>
+						
+						
+							</div>
+							
+							<div class='helpcontainer'>
+								
+								<div class="helpcontent">
+							
+									<h3>
+									What is Logotacular?
+								
+									</h3>
+							
+									<p>
+										Logotacular is a one-man project developed by myself (John Grindall). It is based on my MSc dissertation at the University of Westminster, London, UK called 'A Logo programming environment for Lego Mindstorms robots.'
+									</p>
+									<p>
+										Whereas that project was written in the Java programming language and intended to run on a Lego™ Mindstorms robot, Logotacular is a web-based application.
+									</p>
+									<p>
+										I developed the application primarily to learn some new technologies, but because I enjoyed messing around with Logo myself and found it interesting!
+									</p>
+									<p>
+
+										Technologies
+										The primary technologies used are:
+									</p>
+									<p>
+										The most important bit (and the one you can't see!) is the main Logo interpreter which parses and interprets your program. It is written in a combination of Java, using ANTLR, and Actionscript 3
+										The main application itself is written in Actionscript 3, using Flex 3 and the RobotLegs framework
+										The web sections of the application use HTML, CSS, jQuery and Javascript
+										The back-end uses mySQL, PHP and the CodeIgniter PHP framework.
+										Facebook connect is implemented using ideas from Danny Herran
+										The offline version of Logotacular was created using Adobe AIR.
+
+									</p>
+									<p>
+										Links
+										Many different versions of Logo are available, using many different dialects of the language. For more information you might like to look at the following pages:
+
+										Wikipedia: Logo programming language
+										MathsNet online Logo interpreter
+										Math and programming website - another online Logo interpreter
+										Another excellent online Logo application - written in JavaScript with a large Logo vocabulary
+										Microworlds - Links, examples, worksheets
+										MSWLogo - downloadable Logo application for Microsoft Windows™
+							
+									</p>
+							
+								</div>
+						
+							</div>
+						
 						</div>
-						
-						
-						
-						
-					</div>
 				
+					</div>
+			
 				</div>
 			
 			</div>
@@ -954,12 +1064,15 @@ drawSpiral(10)</pre>
 				<div id="examplesbg"></div>
 				
 				<div id="examplescontent">
+				
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex1.png"/></div></div>
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex2.png"/></div></div>
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex3.png"/></div></div>
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex4.png"/></div></div>
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex5.png"/></div></div>
 					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex6.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex7.png"/></div></div>
+					<div class="imgcontainer"><div class="imginside"><img class="centre" src="img/help/ex8.png"/></div></div>
 					
 				</div>
 				
@@ -1041,24 +1154,29 @@ drawSpiral(10)</pre>
 	
 	<body>
 		<div id="fb-root"></div>
-		<div id="container"></div>
 		
-		<script>
+		<div id="container">
+		
+			<div id="spinnerbox"></div>
+		
+		</div>
 			
+		<script>
+		
 			// this is a global namespace for all objects in this app.
 			window.LG = {};
-			
-		</script>
 		
+		</script>
+	
 		<!-- include all the javascript libraries -->
 		<script src="js/app/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
-		
+	
 		_PHONEGAP_
-		
+	
 		<!-- the main javascript -->
 		<script src="js/app/main-min.js" 					type="text/javascript" charset="utf-8"></script>
-		
-	</body>
+	
+</body>
 	
 	
 </html>

@@ -33,7 +33,6 @@ LG.Utils.centreImage = function($img, options){
 	}
 	w = p.width();
 	h = p.height();
-	console.log("centring: "+$img +" "+$img.attr("src")+"  "+JSON.stringify(options)+" "+w+", "+h);
 	if(w > h){
 		if(options && options.left){
 			$img.width(h).height(h).css("left", 0).css("right", "auto").css("top", 0);
@@ -71,9 +70,7 @@ LG.Utils.countCharsIn = function(s, match){
 };
 
 LG.Utils.centreImages = function($el, options){
-	console.log("centre images "+$el);
 	$("img.centre", $el).each(function(){
-		console.log("centre images "+this+"  "+$(this));
 		var $img = $(this);
 		$(this).load(function(){
 			LG.Utils.centreImage($img, options);
@@ -100,7 +97,7 @@ LG.Utils.writeNum = 0;
 LG.Utils.writeGrowl = function(){
 	var now = (new Date()).getTime();
 	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || LG.Utils.writeNum <= 5){
+	if(diff > 20000 || LG.Utils.writeNum <= 4){
 		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
 	}
 	LG.Utils.writeTimeStamp = now;
@@ -297,6 +294,10 @@ LG.WebCreate.prototype.loginButton = function(){
 	return new LG.WebLoginButtonView();
 };
 
+LG.WebCreate.prototype.userModel = function(){
+	return new LG.WebUserModel();
+};
+
 
 // ipad
 
@@ -324,6 +325,11 @@ LG.IPadCreate.prototype.loginButton = function(){
 	return new LG.IPadLoginButtonView();
 };
 
+LG.IPadCreate.prototype.userModel = function(){
+	return new LG.IPadUserModel();
+};
+
+
 
 // fake ipad
 
@@ -348,6 +354,10 @@ LG.FakeIPadCreate.prototype.launcher = function(){
 
 LG.FakeIPadCreate.prototype.loginButton = function(){
 	return LG.IPadCreate.prototype.loginButton.call(this, arguments);
+};
+
+LG.FakeIPadCreate.prototype.userModel = function(){
+	return new LG.WebUserModel();
 };
 
 // make 
@@ -1046,7 +1056,7 @@ LG.Router = Backbone.Router.extend({
 	openErrorPage:function(callbacks){
 		if(LG.launcher._launched){
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data, callbacks);
+			LG.popups.openPopup(data);
 		}
 	}
 });
@@ -1108,7 +1118,7 @@ LG.Facebook.GRAPH_ME_STATUS_UPDATE		=	"https://graph.facebook.com/me/feed";
 LG.Facebook.FQL							=	"https://graph.facebook.com/fql";
 LG.Facebook.GET_FRIENDS_FBQL 			=	"SELECT uid, name FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY rand()";
 LG.Facebook.SMFH_LINK_URL 				=	"http://www.logotacular.com/logojs/build/web";
-LG.Facebook.SECONDS_TO_WAIT 			= 	20;
+LG.Facebook.SECONDS_TO_WAIT 			= 	8;
 
 LG.Facebook.INIT_OBJ = {status : false, cookie : true, xfbml : false, kidDirectedSite:true, appId : LG.Facebook.APP_ID,	channelUrl : LG.Facebook.CHANNEL_URL};
 
@@ -1204,7 +1214,9 @@ LG.WebFacebook.prototype.load = function(options){
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
+		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
+			console.log("response "+JSON.stringify(response));
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
@@ -5836,15 +5848,15 @@ LG.GraphicsModel.CLR15 = "#bdc3c7";
 LG.GraphicsModel.CLR16 = "#6f7c7d";
 LG.GraphicsModel.CLR17 = "#ffffff";
 LG.GraphicsModel.CLR18 = "#000000";
+LG.GraphicsModel.CLR19 = "#ee00ee";
 
-
-LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
+LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18, LG.GraphicsModel.CLR19];
 LG.GraphicsModel.BG		=	[4, 7, 10,  3,  7, 2,  10, 15, 4, 13, 8, 15, 11, 10, 13, 4, 15, 10, 14, 4,  10, 4, 10, 2,   2, 9, 10, 15, 2, 2,  3,  9, 10, 14, 7, 10, 8, 3, 18];
 LG.GraphicsModel.INNER	=	[9, 4, 1,  10,  2, 7,  3, 9, 15, 10, 4, 4,  4,  6,  4,  10, 3, 2, 7, 10,  0, 14, 7, 7, 10, 4, 9, 14,  4, 10, 10, 10, 7, 10, 2,  4,  10, 7, 3];
-LG.GraphicsModel.NAMES1	=	["turquoise/turq", "green", "blue", "purple", "midnight", "darkkturqoise/dkturq/dkturquoise", "darkgreen/dkgreen", "yellow", "carrot/orange/org", "red"];
-LG.GraphicsModel.NAMES2	=	["snow", "gray/grey", "ltorange/lightorange/lightorg/ltorg", "dkorange/darkorg/dkorg/darkorange", "terracotta/dkred/darkred", "ltgray/ltgrey/lightgray/lightgrey", "darkgray/darkgrey/dkgrey/dkgray", "white", "black"];
+LG.GraphicsModel.NAMES1	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org", "red"];
+LG.GraphicsModel.NAMES2	=	["snow", "gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black", "pink"];
 LG.GraphicsModel.NAMES =	LG.GraphicsModel.NAMES1.concat(LG.GraphicsModel.NAMES2);
-
+LG.GraphicsModel.DARKTEXT =	[7, 10, 15, 17];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
 	_.each(LG.GraphicsModel.NAMES, function(s, i){
@@ -5861,7 +5873,7 @@ LG.GraphicsModel.getHex = function(color){
 
 
 
-LG.UserModel = Backbone.Model.extend({
+LG.AUserModel = Backbone.Model.extend({
 	defaults: {
 		"name":null,
 		"userId":null,
@@ -5898,7 +5910,7 @@ LG.UserModel = Backbone.Model.extend({
 
 // web
 
-LG.WebUserModel = LG.UserModel.extend({
+LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
 		var users = ["100","200","300"], user;
 		if(LG.facebook){
@@ -5907,7 +5919,8 @@ LG.WebUserModel = LG.UserModel.extend({
 					alert("ok");
 				},
 				"fail":function(){
-					alert("fail");
+					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data);
 				}
 			});
 		}
@@ -5924,7 +5937,8 @@ LG.WebUserModel = LG.UserModel.extend({
 					alert("ok");
 				},
 				"fail":function(){
-					alert("fail");
+					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data);
 				}
 			});
 		}
@@ -5964,7 +5978,7 @@ LG.WebUserModel = LG.UserModel.extend({
 
 //ipad
 
-LG.IPadUserModel = LG.UserModel.extend({
+LG.IPadUserModel = LG.AUserModel.extend({
 	login:function(){
 		
 	},
@@ -6892,7 +6906,7 @@ LG.CanvasView = Backbone.View.extend({
 		var w = LG.canvasModel.get("width");
 		var h = LG.canvasModel.get("height");
 		this.$(".easelcanvas").attr("width", w).attr("height", h);
-		this.position = {"theta":-Math.PI/2, x:w/2, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
+		this.position = {"theta":-Math.PI/2, x:w/2 - 100, y:h/2, "pen":"down", "bg":LG.graphicsModel.getBg(), "color":LG.graphicsModel.getInner(), "thickness":5};
 		this.commands.graphics.clear();
 		this.bmpcontainer.removeAllChildren();
 		this.tick();
@@ -7665,9 +7679,8 @@ LG.WriteTopView = Backbone.View.extend({
 		this.fileButton = new LG.FileButtonView ( );
 		this.dinoButton = new LG.DinoButtonView ( );
 		this.settingsButton = new LG.SettingsButtonView ( );
-		//this.homeButton = new LG.HomeButtonView ( );
-		//this.helpButton = new LG.HelpButtonView ( );
-		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.settingsButton.render().el);
+		this.helpButton = new LG.HelpButtonView ( );
+		this.$el.append(this.dinoButton.render().el).append(this.fileButton.render().el).append(this.helpButton.render().el).append(this.settingsButton.render().el);
 		return this;
 	},
 	events:function(){
@@ -7680,8 +7693,12 @@ LG.WriteTopView = Backbone.View.extend({
 		if(this.settingsButton){
 			this.settingsButton.close();
 		}
+		if(this.helpButton){
+			this.helpButton.close();
+		}
 		this.fileButton = null;
 		this.settingsButton = null;
+		this.helpButton = null;
 	},
 	afterAdded:function(){
 		
@@ -8031,14 +8048,24 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		
 	},
 	renderColors:function(){
-		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName;
+		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName, dark, darkString;
 		_.each(LG.GraphicsModel.NAMES1, function(name, i){
 			displayName = name.replace(/\//g, "<br/>");
-			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname'>"+displayName+"</span></div>");
+			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i) >= 0);
+			darkString = "";
+			if(dark){
+				darkString = " colornamedark";
+			}
+			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
 		});
 		_.each(LG.GraphicsModel.NAMES2, function(name, i){
 			displayName = name.replace(/\//g, "<br/>");
-			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname'>"+displayName+"</span></div>");
+			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i + LG.GraphicsModel.NAMES1.length) >= 0);
+			darkString = "";
+			if(dark){
+				darkString = " colornamedark";
+			}
+			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
 		});
 	},
 	render:function(){
@@ -8115,6 +8142,9 @@ LG.ExamplesView.LOGO.push("bg(gray)\nthick(4) color(yellow) fd(30)\nthick(6) col
 LG.ExamplesView.LOGO.push("bg(orange)\ncolor(white)\nn:=16\ns:=200\nrpt n\n    fd(s) rt(180 - 360/n)\nendrpt");
 LG.ExamplesView.LOGO.push("bg(blue)\ncolor(yellow)\nthick(10)\nn:=4\nproc drawsquare\n    rpt n\n        fd(100) rt(90)\n    endrpt\nendproc\nrpt 8\n    drawsquare()\n    rt(45)\nendrpt");
 LG.ExamplesView.LOGO.push("a:=5\nproc drawpoly(side, n)\n    rpt n\n        fd(side) rt(360/n)\n    endrpt\nendproc\nrpt 10\n    drawpoly(25,a)\n    a:=a+4\nendrpt\n");
+LG.ExamplesView.LOGO.push("bg(blue) color(white)\nrpt 90 fd(1)rt(1) endrpt\nrt(270)\nrpt 180 fd(1)rt(1) endrpt\nrt(270)\nrpt 90 fd(1)rt(1) endrpt");
+LG.ExamplesView.LOGO.push("a:=10\nrpt 120\n  fd(15) rt(a)\n  a:=a*1.02\nendrpt");
+
 
 
 
@@ -8632,13 +8662,14 @@ LG.Launcher.prototype.loadTemplates = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
+	console.log("make objects");
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
 	LG.canvasModel = new LG.CanvasModel();
 	LG.storage = LG.create.storage();
 	LG.sounds = new LG.Sounds();
 	LG.spinnerModel = new LG.SpinnerModel();
-	LG.userModel = new LG.UserModel();
+	LG.userModel = LG.create.userModel();
 	LG.layoutModel = new LG.LayoutModel();
 	LG.fileCollection = new LG.FileCollection();
 	LG.graphicsModel = new LG.GraphicsModel();
