@@ -28,8 +28,12 @@ LG.Utils.shuffleArray = function(array) {
 LG.Utils.centreImage = function($img, options){
 	var p, w, h;
 	p = $img.parent();
+	if(!p || !$img){
+		return;
+	}
 	w = p.width();
 	h = p.height();
+	console.log("centring: "+$img +" "+$img.attr("src")+"  "+JSON.stringify(options)+" "+w+", "+h);
 	if(w > h){
 		if(options && options.left){
 			$img.width(h).height(h).css("left", 0).css("right", "auto").css("top", 0);
@@ -67,11 +71,14 @@ LG.Utils.countCharsIn = function(s, match){
 };
 
 LG.Utils.centreImages = function($el, options){
+	console.log("centre images "+$el);
 	$("img.centre", $el).each(function(){
+		console.log("centre images "+this+"  "+$(this));
+		var $img = $(this);
 		$(this).load(function(){
-			LG.Utils.centreImage($(this), options);
+			LG.Utils.centreImage($img, options);
 		});
-		LG.Utils.centreImage($(this), options);
+		LG.Utils.centreImage($img, options);
 	});
 };
 
@@ -84,6 +91,20 @@ LG.Utils.getUuid = function(){
 		s += az.charAt(index);
 	}
 	return s;
+};
+
+LG.Utils.writeTimeStamp = (new Date()).getTime();
+
+LG.Utils.writeNum = 0;
+
+LG.Utils.writeGrowl = function(){
+	var now = (new Date()).getTime();
+	var diff = now - LG.Utils.writeTimeStamp; 
+	if(diff > 20000 || LG.Utils.writeNum <= 5){
+		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
+	}
+	LG.Utils.writeTimeStamp = now;
+	LG.Utils.writeNum++;
 };
 
 LG.Utils.growl = function(msg){
@@ -208,7 +229,7 @@ LG.Config.DEBUG = true;
 // this variable is replaced by the ant build script
 LG.Config.PHONEGAP = LG.Utils.isPG();
 
-LG.Config.FAKE_PHONEGAP = true;
+//LG.Config.FAKE_PHONEGAP = true;
 
 LG.Config.IS_TOUCH = LG.Utils.isTouch();
 
@@ -966,7 +987,7 @@ LG.Sounds.prototype.playClick = function(s){
 LG.Router = Backbone.Router.extend({
 	
     routes:{
-		""											:	"write",
+		""											:	"help",
 		"write"										:	"write",
 		"writebar"									:	"writebar",
 		"write/:id"									:	"write",
@@ -989,11 +1010,10 @@ LG.Router = Backbone.Router.extend({
 		LG.layoutModel.set({"show":s});
 	},
 	write:function(id){
-		alert('write');
 		if(id){
 			LG.fileOpener.open(id);
 		}
-		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
+		LG.Utils.writeGrowl();
 		this.show("write");
 	},
 	examples:function(){
@@ -7931,7 +7951,6 @@ LG.HelpView = LG.AMenuView.extend({
 			var wrapperWidth = this.wrapper.width(), wrapperHeight = this.wrapper.height();
 			this.$(".helpcontainer").width(wrapperWidth - 1).height(wrapperHeight - 1);
 			this.scroller.css('width',  this.$(".helpcontainer").length * wrapperWidth + 1);
-			console.log("wrapperWidth "+wrapperWidth + "  " + this.$(".helpcontainer").length);
 			this.myScroll.refresh();
 		}
 		LG.Utils.centreImages(this.$el);
