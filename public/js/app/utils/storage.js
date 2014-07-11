@@ -140,7 +140,7 @@ LG.WebStorage.prototype.remove = function(key, success){
 LG.IPadStorage = function(){
 	//based on https://github.com/phonegap/phonegap-plugins/blob/master/iPhone/Keychain/KeychainPlugin-Host/www/index.html
 	LG.AbstractStorage.call(this);
-	this.store = cordova.require("cordova/plugin/keychain");
+	this.store = new Keychain();
 	this.servicename = "com.heymath.smfh"+LG.Config.PRODUCT_ID;
 };
 

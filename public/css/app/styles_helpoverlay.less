@@ -70,7 +70,7 @@
 	font-size:@fontsizesmall;
 	margin: 0;
 	margin-bottom:5px;
-	color: @border2;
+	color: @border0;
 	margin-right: 35px;
 	margin-top: 5px;
 	text-align: center;
@@ -79,18 +79,11 @@
 	font-size:@fontsizesmall;
 }
 
-#helpoverlay .language table td{
+#helpoverlay .language table td, #helpoverlay .advanced table td{
 	border-bottom: 1px dashed @border0;
 }
-
-#helpoverlay .advanced table td{
-	border-bottom: 1px dashed @border3;
-}
-#helpoverlay .language .italic{
+#helpoverlay .language .italic, #helpoverlay .advanced .italic{
 	color:lighten(@bg0, 30%);
-}
-#helpoverlay .advanced .italic{
-	color:lighten(@bg3, 30%);
 }
 
 #helpoverlay div.colorsref{
@@ -106,7 +99,7 @@
 }
 
 #helpoverlay div.colorsref .colorblock{
-	width:10%;
+	width:11%;
 	height:100%;
 	display:inline-block;
 	float:left;

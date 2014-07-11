@@ -144,6 +144,7 @@ LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
 		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
+		$target = $(e.target);
 		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
 			LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		}
@@ -182,8 +183,12 @@ LG.Browser.configureScroll = function(){
 	});
 };
 
+LG.Browser.AUTH = "Basic " + btoa("logoUserName" + ":" + "logoPassword");
+
 $.ajaxSetup({
-	// always go here if we get a 404 on the backend
+	headers: {
+		'Authorization': LG.Browser.AUTH
+	},
 	statusCode: {
 		404: function(){
 			

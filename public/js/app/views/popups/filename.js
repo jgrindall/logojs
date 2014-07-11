@@ -43,6 +43,7 @@ LG.FileNameView = LG.APopUpView.extend({
 			options = {
 				"success":function(id){
 					LG.router.navigate("write/"+id, {"trigger":true});
+					LG.Utils.growl("File saved");
 				},
 				"error":function(){
 					

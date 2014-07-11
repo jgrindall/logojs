@@ -233,7 +233,6 @@ LG.CanvasView = Backbone.View.extend({
 		tempCanvas.height = LG.CanvasView.SNAPSHOT_HEIGHT;
 		tempContext.putImageData(data, 0, 0);
 		img = tempCanvas.toDataURL("image/png");
-		console.log("img"+img);
 		LG.imageModel.set({"img":img});
 	},
 	finished:function(){

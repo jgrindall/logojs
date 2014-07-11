@@ -9,6 +9,7 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 	this.alertView = new LG.AlertView(data);
 	$("#activity").append(this.alertView.render().el);
 	LG.router.navigate("alert", {"trigger":true});
+	console.log("open " + JSON.stringify(data) + "   "+JSON.stringify(callbacks));
 	LG.EventDispatcher.on(LG.Events.ALERT_OK, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_OK);
 		if(_.isFunction(callbacks.ok)){

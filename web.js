@@ -1,4 +1,4 @@
-var express, app, port, exec, fs, mkdirp, mongoose, File, FileSchema, saveImage, mongoUri;
+var express, app, port, exec, fs, mkdirp, mongoose, File, FileSchema, saveImage, mongoUri, AWS, s3Explorer, auth;
 
 express = require("express");
 app = express();
@@ -7,33 +7,30 @@ exec = require('child_process').exec;
 fs = require('fs');
 mkdirp = require('mkdirp');
 mongoose = require('mongoose');
-
+AWS = require('aws-sdk'); 
+AWS.config.loadFromPath('./aws.json');
+s3Explorer = new AWS.S3(); 
+auth = express.basicAuth('logoUserName', 'logoPassword');
 var DEFAULT_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
 var MAX_FILES = 500;
 
 mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/logotacular'; 
 
-console.log(mongoUri);
-
 saveImage = function(id, base64, options){
-	mkdirp('./public/thumbs', function(err) { 
-		if(err){
-			console.log('makeThumbs error: ' + err);
-			options.error(err);
-			return;
+	var body = new Buffer(base64, 'base64');
+	var params = {
+		Bucket: 'com.jgrindall.logojspgthumbs',
+		Key: 'thumb_'+id+'.png',
+		Body: body
+	};
+	s3Explorer.putObject(params, function (error, response) {
+		if (error) {
+			console.log("aws error "+error);
+			options.error("Error uploading data: " + error);
 		}
-		else{
-			fs.writeFile("./public/build/thumbs/thumb_"+id+".png", base64, 'base64', function(err) {
-				if(err){
-					console.log("writeFile "+err);
-					options.error(err);
-					return;
-				}
-				else{
-					options.success();
-					return;
-				}
-			});
+		else {
+			console.log("aws ok");
+			options.success();
 		}
 	});
 };
@@ -54,6 +51,7 @@ FileSchema = new mongoose.Schema({
 	"name"		:	{"type":String},
 	"userId"	:	{"type":String},
 	"logo"		:	{"type":String},
+	"img"		:	{"type":String},
 	"active"	:	{"type":Boolean},
 	"dino"		:	{"type":Number},
 	"modified"	:	{"type":Date, default:Date.now},
@@ -77,7 +75,7 @@ app.get('/app', function(req, res){
 	res.render("app.jade");
 });
 
-app.get('/files', function(req, res){
+app.get('/files', auth, function(req, res){
 	var perPage, numPages, query = {"active":true}, userId, sort;
 	perPage = req.param("perPage", 24);
 	numPages = req.param("numPages", 1);
@@ -108,7 +106,7 @@ app.get('/files', function(req, res){
 	});
 });
 
-app.delete('/files/:_id', function(req, res){
+app.delete('/files/:_id', auth, function(req, res){
 	console.log("delete");
 	// TO DO - check userid!
 	var _id, logo, img, base64, date;
@@ -126,7 +124,7 @@ app.delete('/files/:_id', function(req, res){
 	});
 });
 
-app.put('/files/:_id', function(req, res){
+app.put('/files/:_id', auth, function(req, res){
 	console.log("put");
 	var _id, logo, img, base64, dino;
 	_id = req.params._id;
@@ -135,7 +133,7 @@ app.put('/files/:_id', function(req, res){
 	dino = req.param("dino", 0);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
 	console.log("updating "+_id+" with "+logo);
-	File.update({"_id":_id, "active":true}, {"logo":logo, "dino":dino, "modified":new Date()}, function(err, doc){
+	File.update({"_id":_id, "active":true}, {"logo":logo, "dino":dino, "img":img, "modified":new Date()}, function(err, doc){
 		if(err){
 			console.log('make file error: ' + err);
 			res.send(400);
@@ -158,7 +156,7 @@ app.put('/files/:_id', function(req, res){
 	});
 });
 
-app.post('/files', function(req, res){
+app.post('/files', auth, function(req, res){
 	console.log("posting...");
 	var name, userId, logo, img, base64, model, dino;
 	name = req.param("name", null);
@@ -170,7 +168,7 @@ app.post('/files', function(req, res){
 	dino = req.param("dino", 0);
 	img = req.param("img", DEFAULT_IMAGE);
 	base64 = img.replace(/^data:image\/png;base64,/,"");
-	model = {"name": name, "userId": userId, "logo":logo, "active":true, "dino":dino, "modified":new Date()};
+	model = {"name": name, "userId": userId, "logo":logo, "active":true, "img":img, "dino":dino, "modified":new Date()};
 	console.log('make file model: ' + JSON.stringify(model));
 	new File(model).save(function(err, doc){
 		if(err){
@@ -221,11 +219,11 @@ var logFile = function(param, req, res){
 	}
 };
 
-app.post('/view', function(req, res){
+app.post('/view', auth, function(req, res){
 	logFile("views", req, res);
 });
 
-app.post('/vote', function(req, res){
+app.post('/vote', auth, function(req, res){
 	logFile("votes", req, res);
 });
 

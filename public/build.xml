@@ -100,6 +100,8 @@
 				<file name="utils/implementations.js"/>
 				<file name="utils/browser.js"/>
 				<file name="utils/network.js"/>
+				<file name="utils/filesystem.js"/>
+				
 				<file name="utils/storage.js"/>
 			
 				<file name="utils/templates.js"/> 	
@@ -253,7 +255,7 @@
 		<delete dir="../../logojs_pg/www/min"/>
 		<delete dir="../../logojs_pg/www/img"/>
 		
-		<copydir src="build" dest="../../logojs_pg/www/build" includes="**" >
+		<copydir src="build" dest="../../logojs_pg/www/" includes="**" >
 		</copydir>
 		
 		<copydir src="img" dest="../../logojs_pg/www/img" includes="**" >

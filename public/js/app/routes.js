@@ -5,7 +5,7 @@
 LG.Router = Backbone.Router.extend({
 	
     routes:{
-		""											:	"help",
+		""											:	"empty",
 		"write"										:	"write",
 		"writebar"									:	"writebar",
 		"write/:id"									:	"write",
@@ -21,11 +21,16 @@ LG.Router = Backbone.Router.extend({
 	initialize:function () {
 		
     },
+    empty:function(){
+    	
+    },
 	show:function(s){
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
-		LG.layoutModel.set({"show":s});
+		if(s != LG.layoutModel.get("show")){
+			LG.layoutModel.set({"show":s});
+		}
 	},
 	write:function(id){
 		if(id){

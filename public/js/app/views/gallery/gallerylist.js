@@ -29,9 +29,12 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
+		console.log("add files using "+this.collection+"  "+this.collection.length);
 		models = this.collection.filter(function(model){
+			console.log("model is "+model.output());
 			return !model.isNew();
 		});
+		console.log("mnodels "+models.length);
 		numPages = Math.ceil(models.length / this.perPage);
 		this.removeAllPages();
 		this.pages = [ ];
@@ -60,7 +63,7 @@ LG.GalleryListView = Backbone.View.extend({
 		}
 	},
 	onShow:function(){
-		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
+		this.listenTo(this.collection, "add sync reset", _.debounce($.proxy(this.addFiles, this)), 500);
 		this.collection.load({
 			"error":function(){
 				LG.router.openErrorPage({"cancel":function(){

@@ -26,6 +26,9 @@ LG.AUserModel = Backbone.Model.extend({
 			this.login();
 		}
 	},
+	alertOk:function(){
+		window.history.back();
+	},
 	isConnected:function(){
 		return (this.get("loggedIn") !== false);
 	}
@@ -37,33 +40,36 @@ LG.AUserModel = Backbone.Model.extend({
 
 LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
-		var users = ["100","200","300"], user;
+		var _this = this;
 		if(LG.facebook){
 			LG.facebook.login({
 				"success":function(){
-					alert("ok");
+					var data = {"message":"Success", "body":"You are logged in! Now you can load and save your files.", "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-					LG.popups.openPopup(data);
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
 		else{
-			user = users[Math.floor(Math.random()*100) % users.length];
-			alert("you are "+user);
-			this.set({"loggedIn":"facebook", "userId":user, "name":"n"+user});
+			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
 		}
 	},
 	logout:function(){
+		var _this = this;
 		if(LG.facebook){
 			LG.facebook.logout({
 				"success":function(){
-					alert("ok");
+					console.log("success  " + _this+"  "+_this.alertOk+"  "+$.proxy(_this.alertOk, _this));
+					var data = {"message":"Log out", "body":"Thanks, you are now logged out", "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-					LG.popups.openPopup(data);
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}

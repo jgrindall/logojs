@@ -145,12 +145,41 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		LG.Utils.growl("Error: "+response.error);
 	},
 	synced:function(e){
-		console.log("syncved");
 		this.dirty = false;
 		this.trigger("change");
+	},
+	isNew:function(){
+		var id = this.get("_id");
+		if(id){
+			return false;
+		}
+		return true;
 	}
 });
 
 
 
-
+LG.IPadFileModel = LG.FileModel.extend({
+	save:function(data, options){
+		console.log("saving model "+JSON.stringify(this)+"  "+data+"  "+options);
+		console.log("1  "+$.proxy(this.saveSuccess, this, options));
+		console.log("2  "+$.proxy(this.saveFail, this, options));
+		var callbacks = {"success":$.proxy(this.saveSuccess, this, options), "fail":$.proxy(this.saveFail, this, options)};
+		console.log("callbacks "+JSON.stringify(callbacks));
+		console.log("callbacks "+callbacks);
+		console.log("a "+callbacks.success);
+		console.log("b "+callbacks.fail);
+		var id = ( this.get("_id") || LG.Utils.getUuid() );
+		this.set({"_id":id});
+		LG.fileSystem.saveFile(this, callbacks);
+    },
+    saveSuccess:function(options){
+    	console.log("saveSuccess!!! yay");
+    	var id = this.get("_id");
+    	var response = {"_id":id};
+   		options.success(this, response);
+    },
+    saveFail:function(options){
+    	options.error();
+    }
+});

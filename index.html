@@ -17,6 +17,12 @@
 		
 		
 		
+		<script>
+			window.onerror = function(message, url, linenumber) {
+				alert('JavaScript error: ' + message + ' on line ' + linenumber + ' for ' + url);
+			}
+		</script>
+		
 		<!-- There follows all the template files in html in no particular order-->
 		
 		<script id="tpl_menubuttons" type="text/template">
@@ -229,7 +235,7 @@
 		<script id="tpl_gallerybutton" type="text/template">
 
 			  <li>
-				<button class="action button clr2">
+				<button class="action button clr0">
 					<i class="fa fa-files-o"></i>
 					<span>Gallery</span>
 				</button>
@@ -242,7 +248,7 @@
 		<script id="tpl_examplesbutton" type="text/template">
 
 			  <li>
-				<button class="action button clr3">
+				<button class="action button clr0">
 					<i class="fa fa-lightbulb-o"></i>
 					<span>Examples</span>
 				</button>
@@ -254,7 +260,7 @@
 		<script id="tpl_refbutton" type="text/template">
 
 			  <li>
-				<button class="action button clr2">
+				<button class="action button clr0">
 					<i class="fa fa-book"></i>
 					<span>Quick reference</span>
 				</button>
@@ -439,7 +445,7 @@
 									
 									</div>
 								
-									<div class="helpcontentright">
+									<div class="helpcontentright" style="background: #37485f;">
 									
 										<img src="img/help/help1.png" class="centre"/>
 										
@@ -552,39 +558,31 @@ rt(90)</pre>
 										
 							
 										<p>
-penup	penup() - Take the pen off the paper
-pendown	pendown() - Put it back down
-color	color(black) - Set the pen color to black
-bg	bg(red) - Set the background color to red
-thick
-											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
+You can change the drawing color of the lines, as well as the background color of the page by using the following commands:
 
-											So, our 'draw square' program could be written as :
 										</p>
 										
 										<p class="code">
-											<pre>rpt 4[
-  fd(100)
-  rt(90)
-]</pre>
+											<pre>bg(red)
+color(green)</pre>
 
 										</p>
 										<p>
 
-											Can you work out what the following code will draw?
+											You can change the thickness of the lines drawn (from 1 to 10), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
 										</p>
 										<p class="code">
-											<pre>rpt 5[
-  fd(100)
-  rt(72)
-]</pre>
+											<pre>thick(7)
+fd(50) penup() fd(50) pendown()
+fd(50) penup() fd(50) pendown()
+fd(50)</pre>
 								
 										</p>
 							
 									</div>
 							
 									<div class="helpcontentright">
-										<img class="centre" src="img/help/Untitled.gif"/>
+										<img class="centre" src="img/help/help4.png"/>
 									</div>
 							
 								</div>
@@ -605,16 +603,16 @@ thick
 							
 										<p>
 
-											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands within a pair of square brackets a specific number of times.
+											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
 
 											So, our 'draw square' program could be written as :
 										</p>
 										
 										<p class="code">
-											<pre>rpt 4[
+											<pre>rpt 4
   fd(100)
   rt(90)
-]</pre>
+endrpt</pre>
 
 										</p>
 										<p>
@@ -622,23 +620,23 @@ thick
 											Can you work out what the following code will draw?
 										</p>
 										<p class="code">
-											<pre>rpt 5[
+											<pre>rpt 5
   fd(100)
   rt(72)
-]</pre>
+endrpt</pre>
 								
 										</p>
 										
 										
 										<p>
 
-											Can you work out how to draw the animation on the right?
+											Can you work out how to draw the image on the right?
 										</p>
 										
 									</div>
 							
 									<div class="helpcontentright">
-										<img class="centre" src="img/help/Untitled.gif"/>
+										<img class="centre" src="img/help/help5.png"/>
 									</div>
 							
 								</div>
@@ -661,32 +659,28 @@ thick
 
 										
 											A function or procedure is often thought of as telling the turtle the meaning of a new word.
-										</p>
-										<p>
-
-											We could rewrite our 'draw square' program once more:
+										We could rewrite our 'draw square' program once more:
 										</p>
 										<p class="code">
-											<pre>proc drawSquare(){
-  rpt 4[
-	fd(100)
-	rt(90)
-  ]
-}
+											<pre>proc drawSquare
+  rpt 4
+    fd(100)
+    rt(90)
+  endrpt
+endproc
 drawSquare()</pre>
 										</p>
 										<p>
 
-											Recursion can also be used in Logo - for example the following program defines a procedure which repeatedly calls itself, increasing the value of dist each time, with the result that an increasing series of line segments is drawn, forming a spiral:
+											Recursion can also be used in Logo - for example the following program defines a procedure which accepts one variabel called 'dist' and repeatedly calls itself, increasing the value of 'dist' each time, with the result that an increasing series of line segments is drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
 										</p>
 									
 										<p class="code">
-											<pre>
-proc drawSpiral(dist){
+											<pre>proc drawSpiral(dist)
   fd(dist)
   rt(90)
   drawSpiral(dist+5)
-}
+endproc
 drawSpiral(10)</pre>
 								
 										</p>
@@ -698,11 +692,11 @@ drawSpiral(10)</pre>
 								
 									<div class="helpcontentrightsmall">
 										<div class="helpblock2">
-											<img src="img/help/help2.png" class="centre"/>
+											<img src="img/help/help7.png" class="centre"/>
 										</div>
 									
 										<div class="helpblock2">
-											<img src="img/help/help3.png" class="centre"/>
+											<img src="img/help/help6.png" class="centre"/>
 										</div>
 									</div>
 								
@@ -879,7 +873,8 @@ drawSpiral(10)</pre>
 					</div>
 					
 					<div class="rightcontent">
-						<img class="centre" src="thumbs/thumb_<%= _id %>.png"/>
+						<img class="centre" src="http://s3.amazonaws.com/com.jgrindall.logojspgthumbs/thumb_<%= _id %>.png"/>
+						<img class="centre" src="<%= img %>"/>
 					</div>
 					
 				</div>
@@ -950,7 +945,7 @@ drawSpiral(10)</pre>
 					
 					<% if(_id) { %>
 						<div class="imgcontainer"><div class="imginside">
-							<img class="centre" src="thumbs/thumb_<%= _id %>.png"/>
+							<img class="centre" src="http://s3.amazonaws.com/com.jgrindall.logojspgthumbs/thumb_<%= _id %>.png"/>
 						</div>
 					<% } %>
 					
@@ -1018,7 +1013,7 @@ drawSpiral(10)</pre>
 					
 					<div class="advanced">
 						<p class="title">Advanced commands</p>
-						<div class="langinner clr3">
+						<div class="langinner clr0">
 							
 							<table>
 								<tbody>
@@ -1153,6 +1148,7 @@ drawSpiral(10)</pre>
 	
 	
 	<body>
+	
 		<div id="fb-root"></div>
 		
 		<div id="container">
@@ -1167,16 +1163,16 @@ drawSpiral(10)</pre>
 			window.LG = {};
 		
 		</script>
-	
+		
 		<!-- include all the javascript libraries -->
 		<script src="js/app/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
-	
+		
 		_PHONEGAP_
-	
+				
 		<!-- the main javascript -->
 		<script src="js/app/main-min.js" 					type="text/javascript" charset="utf-8"></script>
-	
-</body>
+		
+	</body>
 	
 	
 </html>

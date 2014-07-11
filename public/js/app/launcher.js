@@ -7,8 +7,6 @@ LG.Launcher = function(){
 	_.extend(this, Backbone.Events);
 	this._launched = false;
 	this._domReady = false;
-	this._mobReady = false;
-	this._deviceReady = false;
 	this._started = false;
 	this.fbComplete = false;
 	this.hash = null;
@@ -36,9 +34,7 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
-	var _this = this;
 	this.loadTemplates();
-	this.bindEvents();
 	this.makeObjects();
 	this.loadStorage();
 };
@@ -49,7 +45,6 @@ LG.Launcher.prototype.loadTemplates = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
-	console.log("make objects");
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
 	LG.canvasModel = new LG.CanvasModel();
@@ -58,7 +53,7 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = LG.create.userModel();
 	LG.layoutModel = new LG.LayoutModel();
-	LG.fileCollection = new LG.FileCollection();
+	LG.fileCollection = LG.create.fileCollection();
 	LG.graphicsModel = new LG.GraphicsModel();
 	LG.imageModel = new LG.ImageModel();
 	LG.allFilesCollection = new LG.AllFileCollection();
@@ -215,6 +210,8 @@ LG.WebLauncher.prototype.check = function(){
 
 LG.IPadLauncher = function(){
 	LG.Launcher.apply(this, arguments);
+	this._deviceReady = false;
+	this._fileResolved = false;
 };
 
 LG.IPadLauncher.prototype = Object.create(LG.Launcher.prototype);
@@ -227,6 +224,7 @@ LG.IPadLauncher.prototype.login = function(){
 };
 
 LG.IPadLauncher.prototype.loadUserId = function(){
+	//alert("userid");
 	var userId = LG.storage.loadCached("userId");
 	if(!userId){
 		userId = LG.Utils.getUuid();
@@ -234,8 +232,19 @@ LG.IPadLauncher.prototype.loadUserId = function(){
 	LG.userModel.set({"userId":userId});
 };
 
+LG.IPadLauncher.prototype.fileSystemOk = function(){
+	this._fileResolved = true;
+	if(	this.check() ){
+		this._started = true;
+		this.startLoad();
+	}
+};
+
+LG.IPadLauncher.prototype.fileSystemFail = function(){
+	alert("file system fail");	
+};
+
 LG.IPadLauncher.prototype.bindEvents = function(){
-	// also bind to extra PG events
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
 	document.addEventListener("resume", $.proxy(this.resume, this) , false);
@@ -252,18 +261,12 @@ LG.IPadLauncher.prototype.pause = function(){
 
 LG.IPadLauncher.prototype.deviceReady = function(){
 	this._deviceReady = true;
-	if(	this.check() ){
-		this._started = true;
-		this.startLoad();
-	}
+	LG.fileSystem.init({"success":$.proxy(this.fileSystemOk, this), "fail":$.proxy(this.fileSystemFail, this)} );
 };
 
 LG.IPadLauncher.prototype.check = function(){
-	// check is different for PG
-	return (!this._started && this._domReady  && this._deviceReady);
+	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
-
-
 
 // fake ipad
 
@@ -289,8 +292,6 @@ LG.FakeIPadLauncher.prototype.bindEvents = function(){
 LG.FakeIPadLauncher.prototype.check = function(){
 	return LG.WebLauncher.prototype.check.call(this);
 };
-
-
 
 // make
 

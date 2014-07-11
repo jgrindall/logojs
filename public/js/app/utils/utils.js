@@ -49,14 +49,18 @@ LG.Utils.centreImage = function($img, options){
 	}
 };
 
-LG.Utils.isPG = function(){
+LG.Utils.getPG = function(){
 	var vars, protocolRegExp, protocol, navRegExp, nav;
 	varsExist = (window.cordova || window.PhoneGap || window.phonegap);
 	protocolRegExp = /^file:\/{3}[^\/]/i;
 	protocol = protocolRegExp.test(window.location.href);
-	navRegExp = /ios|iphone|ipod|ipad|android/i;
-	nav = navRegExp.test(navigator.userAgent);
-	return varsExist && protocol && nav;
+	var ispg = varsExist && protocol;
+	if(ispg){
+		return "ios";
+	}
+	else{
+		return false;
+	}
 };
 
 LG.Utils.countCharsIn = function(s, match){
@@ -97,11 +101,11 @@ LG.Utils.writeNum = 0;
 LG.Utils.writeGrowl = function(){
 	var now = (new Date()).getTime();
 	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || LG.Utils.writeNum <= 4){
+	if(diff > 20000 || (diff > 5000 && LG.Utils.writeNum <= 3)){
 		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
+		LG.Utils.writeNum++;
 	}
 	LG.Utils.writeTimeStamp = now;
-	LG.Utils.writeNum++;
 };
 
 LG.Utils.growl = function(msg){

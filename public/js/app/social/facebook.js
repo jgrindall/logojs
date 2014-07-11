@@ -59,7 +59,6 @@ LG.WebFacebook.prototype.init = function(options){
 		}
 	};
 	try{
-		console.log("add script");
 		$("#fb-root").append("<script src='"+LG.Facebook.SRC+"' type='text/javascript' async='true' id='"+LG.Facebook.ID+"'></script>");
 		this.startListenToLoad(options);
 	}
@@ -114,7 +113,6 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
 		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
-			console.log("response "+JSON.stringify(response));
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}

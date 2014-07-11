@@ -36,6 +36,10 @@ LG.WebCreate.prototype.storage = function(){
 	}
 };
 
+LG.WebCreate.prototype.fileCollection = function(){
+	return new LG.FileCollection();
+};
+
 LG.WebCreate.prototype.launcher = function(){
 	return new LG.WebLauncher();
 };
@@ -79,7 +83,9 @@ LG.IPadCreate.prototype.userModel = function(){
 	return new LG.IPadUserModel();
 };
 
-
+LG.IPadCreate.prototype.fileCollection = function(){
+	return new LG.IPadFileCollection();
+};
 
 // fake ipad
 
@@ -106,11 +112,18 @@ LG.FakeIPadCreate.prototype.loginButton = function(){
 	return LG.IPadCreate.prototype.loginButton.call(this, arguments);
 };
 
+LG.FakeIPadCreate.prototype.fileCollection = function(){
+	return LG.WebCreate.prototype.fileCollection.call(this, arguments);
+};
+
 LG.FakeIPadCreate.prototype.userModel = function(){
 	return new LG.WebUserModel();
 };
 
 // make 
+
+//alert("config "+LG.Config.PHONEGAP);
+
 if(LG.Config.PHONEGAP === "ios"){
 	LG.create = new LG.IPadCreate();
 }

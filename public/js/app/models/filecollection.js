@@ -137,6 +137,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	saveCurrentFile:function(options){
+		console.log(">>>>>>>>>  save current file");
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		var data = {"img":LG.imageModel.get("img"),"logo":LG.fileCollection.selected.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
@@ -157,13 +158,16 @@ LG.FileCollection = LG.AFileCollection.extend({
 		return error;
 	},
 	saveFileAs:function(name, callback){
+		console.log("saveFileAs "+name+"  "+callback);
 		var _this = this, model, data, options;
-		model = new this.model();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
+		model = new this.model(data);
 		options = {
-			"success":function(model, response, options){
+			"success":function(model, response){
+				console.log("success called "+model+",   "+response+"  "+response._id);
 				model.set({"_id":response._id});
+				model.set({"id":response._id});
 				_this.add(model);
 				callback.success(response._id);
 			},
@@ -177,6 +181,23 @@ LG.FileCollection = LG.AFileCollection.extend({
 	}
 });
 
+
+
+LG.IPadFileCollection = LG.FileCollection.extend({
+	model:LG.IPadFileModel,
+	fetch:function(){
+		LG.fileSystem.readFiles({"success":$.proxy(this.readSuccess, this), "fail":$.proxy(this.readFail, this)});
+	},
+	readSuccess:function(entries) {
+		if(entries){
+    		this.reset(entries);
+    	}
+    	console.log("reset! "+this.length);
+	},
+	readFail:function(error) {
+   		alert("Failed to list directory contents: " + error.code);
+	}
+});
 
 LG.AllFileCollection = LG.AFileCollection.extend({
 	name:"all",

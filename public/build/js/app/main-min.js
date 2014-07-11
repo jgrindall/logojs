@@ -49,14 +49,18 @@ LG.Utils.centreImage = function($img, options){
 	}
 };
 
-LG.Utils.isPG = function(){
+LG.Utils.getPG = function(){
 	var vars, protocolRegExp, protocol, navRegExp, nav;
 	varsExist = (window.cordova || window.PhoneGap || window.phonegap);
 	protocolRegExp = /^file:\/{3}[^\/]/i;
 	protocol = protocolRegExp.test(window.location.href);
-	navRegExp = /ios|iphone|ipod|ipad|android/i;
-	nav = navRegExp.test(navigator.userAgent);
-	return varsExist && protocol && nav;
+	var ispg = varsExist && protocol;
+	if(ispg){
+		return "ios";
+	}
+	else{
+		return false;
+	}
 };
 
 LG.Utils.countCharsIn = function(s, match){
@@ -97,11 +101,11 @@ LG.Utils.writeNum = 0;
 LG.Utils.writeGrowl = function(){
 	var now = (new Date()).getTime();
 	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || LG.Utils.writeNum <= 4){
+	if(diff > 20000 || (diff > 5000 && LG.Utils.writeNum <= 3)){
 		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
+		LG.Utils.writeNum++;
 	}
 	LG.Utils.writeTimeStamp = now;
-	LG.Utils.writeNum++;
 };
 
 LG.Utils.growl = function(msg){
@@ -224,7 +228,7 @@ LG.Config = {};
 LG.Config.DEBUG = true;
 
 // this variable is replaced by the ant build script
-LG.Config.PHONEGAP = LG.Utils.isPG();
+LG.Config.PHONEGAP = LG.Utils.getPG();
 
 //LG.Config.FAKE_PHONEGAP = true;
 
@@ -240,7 +244,8 @@ LG.Config.PRODUCT_ID = "logojs";
 LG.baseUrl = "";
 
 if(LG.Config.PHONEGAP){
-	LG.baseUrl = "http://cryptic-sea-4360.herokuapp.com";
+	//LG.baseUrl = "http://cryptic-sea-4360.herokuapp.com";
+	LG.baseUrl = "http://localhost:5000";
 }
 
 LG.Messages = {};
@@ -286,6 +291,10 @@ LG.WebCreate.prototype.storage = function(){
 	}
 };
 
+LG.WebCreate.prototype.fileCollection = function(){
+	return new LG.FileCollection();
+};
+
 LG.WebCreate.prototype.launcher = function(){
 	return new LG.WebLauncher();
 };
@@ -329,7 +338,9 @@ LG.IPadCreate.prototype.userModel = function(){
 	return new LG.IPadUserModel();
 };
 
-
+LG.IPadCreate.prototype.fileCollection = function(){
+	return new LG.IPadFileCollection();
+};
 
 // fake ipad
 
@@ -356,11 +367,18 @@ LG.FakeIPadCreate.prototype.loginButton = function(){
 	return LG.IPadCreate.prototype.loginButton.call(this, arguments);
 };
 
+LG.FakeIPadCreate.prototype.fileCollection = function(){
+	return LG.WebCreate.prototype.fileCollection.call(this, arguments);
+};
+
 LG.FakeIPadCreate.prototype.userModel = function(){
 	return new LG.WebUserModel();
 };
 
 // make 
+
+//alert("config "+LG.Config.PHONEGAP);
+
 if(LG.Config.PHONEGAP === "ios"){
 	LG.create = new LG.IPadCreate();
 }
@@ -555,6 +573,7 @@ LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
 		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
+		$target = $(e.target);
 		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
 			LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		}
@@ -593,8 +612,12 @@ LG.Browser.configureScroll = function(){
 	});
 };
 
+LG.Browser.AUTH = "Basic " + btoa("logoUserName" + ":" + "logoPassword");
+
 $.ajaxSetup({
-	// always go here if we get a 404 on the backend
+	headers: {
+		'Authorization': LG.Browser.AUTH
+	},
 	statusCode: {
 		404: function(){
 			
@@ -616,6 +639,160 @@ if(LG.Config.IS_TOUCH){
 LG.Network = {};
 
 LG.Network.FACEBOOK = false;
+LG.Network.FILESYSTEM = false;
+LG.Network.FILE_ENTRY = false;
+
+LG.FileSystem = function(){
+	this.reader = false;
+	this.reading = false;
+	this.filesFolder = false;
+	this.options = false;
+	this.fileContents = false;
+};
+
+LG.FileSystem.prototype.gotFileSaveEntry = function(model, options, fileEntry){
+	fileEntry.createWriter($.proxy(this.onMakeWriterSuccess, this, model, options), $.proxy(this.onMakeWriterFail, this));		
+};
+
+LG.FileSystem.prototype.failFileSaveEntry = function(options, error){
+	options.fail();
+};
+
+LG.FileSystem.prototype.onMakeWriterSuccess = function(model, options, writer) {
+	writer.write(JSON.stringify(model));
+    writer.abort();
+    console.log("WRITTEN");
+    options.success();
+};
+
+LG.FileSystem.prototype.saveFile = function(model, options){
+	var filename = "file_"+model.get("name")+".txt";
+	console.log("saveFile model "+filename+"  "+JSON.stringify(model));
+	console.log("options "+JSON.stringify(options));
+	this.filesFolder.getFile(filename, {create: true}, $.proxy(this.gotFileSaveEntry, this, model, options), $.proxy(this.failFileSaveEntry, this, options));
+};
+
+LG.FileSystem.prototype.readFiles = function(options){
+	this.options = options;
+	if(!this.filesFolder || this.reading){
+		options.fail();
+	}
+	else{
+		this.reading = true;
+		this.fileReader = new FileReader();
+		this.fileReader.onloadend = $.proxy(this.fileIsRead, this);
+		this.fileReader.onerror = $.proxy(this.fileIsReadError, this);
+		var success = $.proxy(this.readSuccess, this);
+		var fail = $.proxy(this.readFail, this);
+		var reader = this.filesFolder.createReader();
+		reader.readEntries(success, fail);
+	}
+};
+
+LG.FileSystem.prototype.fileIsRead = function(e){
+	var obj = $.parseJSON(e.target.result);
+	if(obj.name && obj.logo && obj.userId){
+		this.fileContents[this.numLoaded] = obj;
+	}
+	else{
+		this.fileContents[this.numLoaded] = null;
+	}
+    this.readNext();
+};
+
+LG.FileSystem.prototype.fileIsReadError = function(){
+	this.fileContents[this.numLoaded] = null;
+    this.readNext();
+};
+
+LG.FileSystem.prototype.readFileSuccess = function(file){
+	this.fileReader.readAsText(file);
+};
+
+LG.FileSystem.prototype.readFileFail = function(){
+	this.reading = false;
+	this.options.success(this.fileContents);
+};
+
+LG.FileSystem.prototype.readNext = function() {
+	this.numLoaded++;
+	if(this.numLoaded == this.numToLoad){
+		this.reading = false;
+		this.options.success(this.fileContents);
+	}
+	else{
+		var entry = this.entries[this.numLoaded];
+		var success = $.proxy(this.readFileSuccess, this);
+		var fail = $.proxy(this.readFileFail, this);
+		entry.file(success, fail);
+	}
+};
+
+LG.FileSystem.prototype.readSuccess = function(entries) {
+	this.fileContents = [];
+	this.entries = entries;
+	this.numToLoad = entries.length;
+	this.numLoaded = -1;
+	this.readNext();
+};
+
+LG.FileSystem.prototype.readFail = function(error) {
+   	this.options.fail(error);
+};
+
+LG.FileSystem.prototype.init = function(options){
+	this.options = options;
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, $.proxy(this.onFileSystemSuccess, this), $.proxy(this.onFileSystemFail, this));
+};
+
+LG.FileSystem.prototype.onFileSystemSuccess = function(fs){
+	window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory, $.proxy(this.onFileResolveSuccess, this), $.proxy(this.onFileResolveFail, this));
+};
+
+LG.FileSystem.prototype.onFileSystemFail = function(error){
+	this.options.fail();
+};
+
+LG.FileSystem.prototype.onFileResolveSuccess = function(dir){
+	var directoryReader = dir.createReader();
+	directoryReader.readEntries($.proxy(this.readAppStorageDirSuccess, this), $.proxy(this.readAppStorageDirFail, this));
+};
+
+LG.FileSystem.prototype.onFileResolveFail = function(error){
+	this.options.fail();
+};
+
+LG.FileSystem.prototype.onMakeDirectorySuccess = function(filesFolder){
+	this.filesFolder = filesFolder;
+	this.options.success();
+};
+
+LG.FileSystem.prototype.onMakeDirectoryFail = function(){
+	this.options.fail();
+};
+
+LG.FileSystem.prototype.readAppStorageDirSuccess = function(entries) {
+	var entry;
+	for (var i = 0; i < entries.length; i++) {
+		if(entries[i].name === "Library"){
+			entry = entries[i];
+			break;
+		}
+	}
+	if(entry){
+		entry.getDirectory("files", {create: true, exclusive: false}, $.proxy(this.onMakeDirectorySuccess, this), $.proxy(this.onMakeDirectoryFail, this)); 
+	}
+	else{
+		this.options.fail();
+	}
+};
+
+LG.FileSystem.prototype.readAppStorageDirFail = function(error) {
+   	this.options.fail();
+};
+
+LG.fileSystem = new LG.FileSystem();
+
 // storage
 // on the web, use the localStorage
 // on the iPad, use the secure keychain
@@ -758,7 +935,7 @@ LG.WebStorage.prototype.remove = function(key, success){
 LG.IPadStorage = function(){
 	//based on https://github.com/phonegap/phonegap-plugins/blob/master/iPhone/Keychain/KeychainPlugin-Host/www/index.html
 	LG.AbstractStorage.call(this);
-	this.store = cordova.require("cordova/plugin/keychain");
+	this.store = new Keychain();
 	this.servicename = "com.heymath.smfh"+LG.Config.PRODUCT_ID;
 };
 
@@ -997,7 +1174,7 @@ LG.Sounds.prototype.playClick = function(s){
 LG.Router = Backbone.Router.extend({
 	
     routes:{
-		""											:	"help",
+		""											:	"empty",
 		"write"										:	"write",
 		"writebar"									:	"writebar",
 		"write/:id"									:	"write",
@@ -1013,11 +1190,16 @@ LG.Router = Backbone.Router.extend({
 	initialize:function () {
 		
     },
+    empty:function(){
+    	
+    },
 	show:function(s){
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
-		LG.layoutModel.set({"show":s});
+		if(s != LG.layoutModel.get("show")){
+			LG.layoutModel.set({"show":s});
+		}
 	},
 	write:function(id){
 		if(id){
@@ -1161,7 +1343,6 @@ LG.WebFacebook.prototype.init = function(options){
 		}
 	};
 	try{
-		console.log("add script");
 		$("#fb-root").append("<script src='"+LG.Facebook.SRC+"' type='text/javascript' async='true' id='"+LG.Facebook.ID+"'></script>");
 		this.startListenToLoad(options);
 	}
@@ -1216,7 +1397,6 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
 		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
-			console.log("response "+JSON.stringify(response));
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
@@ -5449,15 +5629,44 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		LG.Utils.growl("Error: "+response.error);
 	},
 	synced:function(e){
-		console.log("syncved");
 		this.dirty = false;
 		this.trigger("change");
+	},
+	isNew:function(){
+		var id = this.get("_id");
+		if(id){
+			return false;
+		}
+		return true;
 	}
 });
 
 
 
-
+LG.IPadFileModel = LG.FileModel.extend({
+	save:function(data, options){
+		console.log("saving model "+JSON.stringify(this)+"  "+data+"  "+options);
+		console.log("1  "+$.proxy(this.saveSuccess, this, options));
+		console.log("2  "+$.proxy(this.saveFail, this, options));
+		var callbacks = {"success":$.proxy(this.saveSuccess, this, options), "fail":$.proxy(this.saveFail, this, options)};
+		console.log("callbacks "+JSON.stringify(callbacks));
+		console.log("callbacks "+callbacks);
+		console.log("a "+callbacks.success);
+		console.log("b "+callbacks.fail);
+		var id = ( this.get("_id") || LG.Utils.getUuid() );
+		this.set({"_id":id});
+		LG.fileSystem.saveFile(this, callbacks);
+    },
+    saveSuccess:function(options){
+    	console.log("saveSuccess!!! yay");
+    	var id = this.get("_id");
+    	var response = {"_id":id};
+   		options.success(this, response);
+    },
+    saveFail:function(options){
+    	options.error();
+    }
+});
 
 LG.ASpinnerCollection  = Backbone.Collection.extend({
 	initialize:function(data){
@@ -5669,6 +5878,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	saveCurrentFile:function(options){
+		console.log(">>>>>>>>>  save current file");
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		var data = {"img":LG.imageModel.get("img"),"logo":LG.fileCollection.selected.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
@@ -5689,13 +5899,16 @@ LG.FileCollection = LG.AFileCollection.extend({
 		return error;
 	},
 	saveFileAs:function(name, callback){
+		console.log("saveFileAs "+name+"  "+callback);
 		var _this = this, model, data, options;
-		model = new this.model();
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
+		model = new this.model(data);
 		options = {
-			"success":function(model, response, options){
+			"success":function(model, response){
+				console.log("success called "+model+",   "+response+"  "+response._id);
 				model.set({"_id":response._id});
+				model.set({"id":response._id});
 				_this.add(model);
 				callback.success(response._id);
 			},
@@ -5709,6 +5922,23 @@ LG.FileCollection = LG.AFileCollection.extend({
 	}
 });
 
+
+
+LG.IPadFileCollection = LG.FileCollection.extend({
+	model:LG.IPadFileModel,
+	fetch:function(){
+		LG.fileSystem.readFiles({"success":$.proxy(this.readSuccess, this), "fail":$.proxy(this.readFail, this)});
+	},
+	readSuccess:function(entries) {
+		if(entries){
+    		this.reset(entries);
+    	}
+    	console.log("reset! "+this.length);
+	},
+	readFail:function(error) {
+   		alert("Failed to list directory contents: " + error.code);
+	}
+});
 
 LG.AllFileCollection = LG.AFileCollection.extend({
 	name:"all",
@@ -5839,24 +6069,22 @@ LG.GraphicsModel.CLR6 = "#27ae60";
 LG.GraphicsModel.CLR7 = "#f1c40f";
 LG.GraphicsModel.CLR8 = "#e67e22";
 LG.GraphicsModel.CLR9 = "#e74c3c";
-LG.GraphicsModel.CLR10 = "#ecf0f1";
-LG.GraphicsModel.CLR11 = "#95a5a6";
-LG.GraphicsModel.CLR12 = "#f39c12";
-LG.GraphicsModel.CLR13 = "#d35400";
-LG.GraphicsModel.CLR14 = "#c0392b";
-LG.GraphicsModel.CLR15 = "#bdc3c7";
-LG.GraphicsModel.CLR16 = "#6f7c7d";
-LG.GraphicsModel.CLR17 = "#ffffff";
-LG.GraphicsModel.CLR18 = "#000000";
-LG.GraphicsModel.CLR19 = "#ee00ee";
+LG.GraphicsModel.CLR10 = "#95a5a6";
+LG.GraphicsModel.CLR11 = "#f39c12";
+LG.GraphicsModel.CLR12 = "#d35400";
+LG.GraphicsModel.CLR13 = "#c0392b";
+LG.GraphicsModel.CLR14 = "#bdc3c7";
+LG.GraphicsModel.CLR15 = "#6f7c7d";
+LG.GraphicsModel.CLR16 = "#ffffff";
+LG.GraphicsModel.CLR17 = "#000000";
 
-LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18, LG.GraphicsModel.CLR19];
-LG.GraphicsModel.BG		=	[4, 7, 10,  3,  7, 2,  10, 15, 4, 13, 8, 15, 11, 10, 13, 4, 15, 10, 14, 4,  10, 4, 10, 2,   2, 9, 10, 15, 2, 2,  3,  9, 10, 14, 7, 10, 8, 3, 18];
-LG.GraphicsModel.INNER	=	[9, 4, 1,  10,  2, 7,  3, 9, 15, 10, 4, 4,  4,  6,  4,  10, 3, 2, 7, 10,  0, 14, 7, 7, 10, 4, 9, 14,  4, 10, 10, 10, 7, 10, 2,  4,  10, 7, 3];
-LG.GraphicsModel.NAMES1	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org", "red"];
-LG.GraphicsModel.NAMES2	=	["snow", "gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black", "pink"];
+LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
+LG.GraphicsModel.BG		=	[4, 7, 16,  3,  7, 2,  16, 14, 4, 12, 8, 15, 10, 16, 12, 4, 14, 16, 13, 4,  16, 4, 16, 2,   2, 9, 16, 14, 2, 2,  3,  9, 16, 13, 7, 16, 8, 3, 17];
+LG.GraphicsModel.INNER	=	[9, 4, 1,  16,  2, 7,  3, 9, 14, 16, 4, 4,  4,  6,  4,  16, 3, 2, 7, 16,  0, 13, 7, 7, 16, 4, 9, 13,  4, 16, 16, 16, 7, 16, 2,  4,  16, 7, 3];
+LG.GraphicsModel.NAMES1	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org"];
+LG.GraphicsModel.NAMES2	=	["red","gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black"];
 LG.GraphicsModel.NAMES =	LG.GraphicsModel.NAMES1.concat(LG.GraphicsModel.NAMES2);
-LG.GraphicsModel.DARKTEXT =	[7, 10, 15, 17];
+LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
 	_.each(LG.GraphicsModel.NAMES, function(s, i){
@@ -5901,6 +6129,9 @@ LG.AUserModel = Backbone.Model.extend({
 			this.login();
 		}
 	},
+	alertOk:function(){
+		window.history.back();
+	},
 	isConnected:function(){
 		return (this.get("loggedIn") !== false);
 	}
@@ -5912,33 +6143,36 @@ LG.AUserModel = Backbone.Model.extend({
 
 LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
-		var users = ["100","200","300"], user;
+		var _this = this;
 		if(LG.facebook){
 			LG.facebook.login({
 				"success":function(){
-					alert("ok");
+					var data = {"message":"Success", "body":"You are logged in! Now you can load and save your files.", "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-					LG.popups.openPopup(data);
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
 		else{
-			user = users[Math.floor(Math.random()*100) % users.length];
-			alert("you are "+user);
-			this.set({"loggedIn":"facebook", "userId":user, "name":"n"+user});
+			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
 		}
 	},
 	logout:function(){
+		var _this = this;
 		if(LG.facebook){
 			LG.facebook.logout({
 				"success":function(){
-					alert("ok");
+					console.log("success  " + _this+"  "+_this.alertOk+"  "+$.proxy(_this.alertOk, _this));
+					var data = {"message":"Log out", "body":"Thanks, you are now logged out", "cancelColor":1, "cancelLabel":"Ok"};
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-					LG.popups.openPopup(data);
+					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
@@ -6393,6 +6627,7 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		console.log("help2");
 		LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){
@@ -7028,7 +7263,6 @@ LG.CanvasView = Backbone.View.extend({
 		tempCanvas.height = LG.CanvasView.SNAPSHOT_HEIGHT;
 		tempContext.putImageData(data, 0, 0);
 		img = tempCanvas.toDataURL("image/png");
-		console.log("img"+img);
 		LG.imageModel.set({"img":img});
 	},
 	finished:function(){
@@ -7096,6 +7330,7 @@ LG.AMenuView = Backbone.View.extend({
 	onLayoutChanged:function(){
 		var showName = LG.layoutModel.get("show");
 		if(showName === this.showName){
+			this.onBeforeShow();
 			this.$el.addClass("show");
 			this.onShow();
 		}
@@ -7103,6 +7338,9 @@ LG.AMenuView = Backbone.View.extend({
 			this.$el.removeClass("show");
 			this.onHide();
 		}
+	},
+	onBeforeShow:function(){
+		
 	},
 	onShow:function(){
 	
@@ -7287,6 +7525,7 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 	this.alertView = new LG.AlertView(data);
 	$("#activity").append(this.alertView.render().el);
 	LG.router.navigate("alert", {"trigger":true});
+	console.log("open " + JSON.stringify(data) + "   "+JSON.stringify(callbacks));
 	LG.EventDispatcher.on(LG.Events.ALERT_OK, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_OK);
 		if(_.isFunction(callbacks.ok)){
@@ -7437,6 +7676,7 @@ LG.FileNameView = LG.APopUpView.extend({
 			options = {
 				"success":function(id){
 					LG.router.navigate("write/"+id, {"trigger":true});
+					LG.Utils.growl("File saved");
 				},
 				"error":function(){
 					
@@ -7591,20 +7831,22 @@ LG.TouchWriteView = LG.WriteView.extend({
 	},
 	addShowList:function(){
 		var _this = this;
-		console.log("add focus listener");
 		this.$logodiv.on('focus', function(){
-			console.log("focus -> blur");
 			_this.$logodiv.blur();
 		});
 	},
 	removeShowList:function(){
 		this.$logodiv.off('focus');
 	},
+	onBeforeShow:function(){
+		this.$logodiv.attr("disabled", "disabled");
+	},
 	onShow:function(){
 		var _this = this;
 		this.addShowList();
 		setTimeout(function(){
 			_this.removeShowList();
+			_this.$logodiv.removeAttr("disabled");
 		}, 750);
 	},
 	onHide:function(){
@@ -8234,9 +8476,12 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
+		console.log("add files using "+this.collection+"  "+this.collection.length);
 		models = this.collection.filter(function(model){
+			console.log("model is "+model.output());
 			return !model.isNew();
 		});
+		console.log("mnodels "+models.length);
 		numPages = Math.ceil(models.length / this.perPage);
 		this.removeAllPages();
 		this.pages = [ ];
@@ -8265,7 +8510,7 @@ LG.GalleryListView = Backbone.View.extend({
 		}
 	},
 	onShow:function(){
-		this.listenTo(this.collection, "add sync", _.debounce($.proxy(this.addFiles, this)), 500);
+		this.listenTo(this.collection, "add sync reset", _.debounce($.proxy(this.addFiles, this)), 500);
 		this.collection.load({
 			"error":function(){
 				LG.router.openErrorPage({"cancel":function(){
@@ -8485,6 +8730,7 @@ LG.AGalleryRowView = Backbone.View.extend({
 	},
 	render:function(){
 		var data = this.model.toJSON();
+		alert("model "+JSON.stringify(data).substr(0,100));
 		this.loadTemplate(  this.template, data , {replace:true} );
 		this.updateLayout();
 		return this;
@@ -8533,6 +8779,7 @@ LG.AGalleryView = LG.AMenuView.extend({
 		this.removeMenus();
 		this.galleryTop = new this.topView({"title":this.options.title});
 		this.galleryList = new this.listView(this.options);
+		console.log("made list "+this.options+" "+this.options.collection);
 		this.listenTo(this.galleryList, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
 		this.gallerySide = new this.sideView(this.options);
 		this.$el.prepend(this.galleryTop.render().$el);
@@ -8620,8 +8867,6 @@ LG.Launcher = function(){
 	_.extend(this, Backbone.Events);
 	this._launched = false;
 	this._domReady = false;
-	this._mobReady = false;
-	this._deviceReady = false;
 	this._started = false;
 	this.fbComplete = false;
 	this.hash = null;
@@ -8649,9 +8894,7 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
-	var _this = this;
 	this.loadTemplates();
-	this.bindEvents();
 	this.makeObjects();
 	this.loadStorage();
 };
@@ -8662,7 +8905,6 @@ LG.Launcher.prototype.loadTemplates = function(){
 };
 
 LG.Launcher.prototype.makeObjects = function(){
-	console.log("make objects");
 	LG.fileOpener = new LG.FileOpener();
 	LG.router = new LG.Router();
 	LG.canvasModel = new LG.CanvasModel();
@@ -8671,7 +8913,7 @@ LG.Launcher.prototype.makeObjects = function(){
 	LG.spinnerModel = new LG.SpinnerModel();
 	LG.userModel = LG.create.userModel();
 	LG.layoutModel = new LG.LayoutModel();
-	LG.fileCollection = new LG.FileCollection();
+	LG.fileCollection = LG.create.fileCollection();
 	LG.graphicsModel = new LG.GraphicsModel();
 	LG.imageModel = new LG.ImageModel();
 	LG.allFilesCollection = new LG.AllFileCollection();
@@ -8828,6 +9070,8 @@ LG.WebLauncher.prototype.check = function(){
 
 LG.IPadLauncher = function(){
 	LG.Launcher.apply(this, arguments);
+	this._deviceReady = false;
+	this._fileResolved = false;
 };
 
 LG.IPadLauncher.prototype = Object.create(LG.Launcher.prototype);
@@ -8840,6 +9084,7 @@ LG.IPadLauncher.prototype.login = function(){
 };
 
 LG.IPadLauncher.prototype.loadUserId = function(){
+	//alert("userid");
 	var userId = LG.storage.loadCached("userId");
 	if(!userId){
 		userId = LG.Utils.getUuid();
@@ -8847,8 +9092,19 @@ LG.IPadLauncher.prototype.loadUserId = function(){
 	LG.userModel.set({"userId":userId});
 };
 
+LG.IPadLauncher.prototype.fileSystemOk = function(){
+	this._fileResolved = true;
+	if(	this.check() ){
+		this._started = true;
+		this.startLoad();
+	}
+};
+
+LG.IPadLauncher.prototype.fileSystemFail = function(){
+	alert("file system fail");	
+};
+
 LG.IPadLauncher.prototype.bindEvents = function(){
-	// also bind to extra PG events
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
 	document.addEventListener("resume", $.proxy(this.resume, this) , false);
@@ -8865,18 +9121,12 @@ LG.IPadLauncher.prototype.pause = function(){
 
 LG.IPadLauncher.prototype.deviceReady = function(){
 	this._deviceReady = true;
-	if(	this.check() ){
-		this._started = true;
-		this.startLoad();
-	}
+	LG.fileSystem.init({"success":$.proxy(this.fileSystemOk, this), "fail":$.proxy(this.fileSystemFail, this)} );
 };
 
 LG.IPadLauncher.prototype.check = function(){
-	// check is different for PG
-	return (!this._started && this._domReady  && this._deviceReady);
+	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
-
-
 
 // fake ipad
 
@@ -8902,8 +9152,6 @@ LG.FakeIPadLauncher.prototype.bindEvents = function(){
 LG.FakeIPadLauncher.prototype.check = function(){
 	return LG.WebLauncher.prototype.check.call(this);
 };
-
-
 
 // make
 

@@ -130,20 +130,22 @@ LG.TouchWriteView = LG.WriteView.extend({
 	},
 	addShowList:function(){
 		var _this = this;
-		console.log("add focus listener");
 		this.$logodiv.on('focus', function(){
-			console.log("focus -> blur");
 			_this.$logodiv.blur();
 		});
 	},
 	removeShowList:function(){
 		this.$logodiv.off('focus');
 	},
+	onBeforeShow:function(){
+		this.$logodiv.attr("disabled", "disabled");
+	},
 	onShow:function(){
 		var _this = this;
 		this.addShowList();
 		setTimeout(function(){
 			_this.removeShowList();
+			_this.$logodiv.removeAttr("disabled");
 		}, 750);
 	},
 	onHide:function(){

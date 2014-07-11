@@ -6,7 +6,7 @@ LG.Config = {};
 LG.Config.DEBUG = true;
 
 // this variable is replaced by the ant build script
-LG.Config.PHONEGAP = LG.Utils.isPG();
+LG.Config.PHONEGAP = LG.Utils.getPG();
 
 //LG.Config.FAKE_PHONEGAP = true;
 
@@ -22,5 +22,6 @@ LG.Config.PRODUCT_ID = "logojs";
 LG.baseUrl = "";
 
 if(LG.Config.PHONEGAP){
-	LG.baseUrl = "http://cryptic-sea-4360.herokuapp.com";
+	//LG.baseUrl = "http://cryptic-sea-4360.herokuapp.com";
+	LG.baseUrl = "http://localhost:5000";
 }

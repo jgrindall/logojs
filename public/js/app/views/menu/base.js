@@ -7,6 +7,7 @@ LG.AMenuView = Backbone.View.extend({
 	onLayoutChanged:function(){
 		var showName = LG.layoutModel.get("show");
 		if(showName === this.showName){
+			this.onBeforeShow();
 			this.$el.addClass("show");
 			this.onShow();
 		}
@@ -14,6 +15,9 @@ LG.AMenuView = Backbone.View.extend({
 			this.$el.removeClass("show");
 			this.onHide();
 		}
+	},
+	onBeforeShow:function(){
+		
 	},
 	onShow:function(){
 	
