@@ -126,6 +126,9 @@ LG.FileCollection = LG.AFileCollection.extend({
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();
+			},
+			"fail":function(){
+				alert("error deleting");
 			}
 		};
 		if(this.selected.isNew()){

@@ -67,7 +67,7 @@ LG.FileOpener.prototype.openFromGallery = function(id){
 	if(LG.userModel.isConnected()){
 		if(!LG.fileCollection.selected.isSaved()){
 			options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-			LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
+			LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
 			this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 		}
 		else{

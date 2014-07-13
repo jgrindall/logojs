@@ -7,11 +7,41 @@ LG.FileSystem = function(){
 	this.fileContents = false;
 };
 
+LG.FileSystem.prototype.deleteFile = function(model, options){
+	//alert("delete");
+	var filename = "file_"+model.get("name")+".txt";
+	console.log("deleteFile model "+filename+"  "+JSON.stringify(model));
+	console.log("options "+JSON.stringify(options));
+	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
+};
+
+LG.FileSystem.prototype.gotFileDeleteEntry = function(model, options, fileEntry){
+	console.log("gotFileDeleteEntry");
+	fileEntry.remove($.proxy(this.onFileDeleteSuccess, this, options), $.proxy(this.onFileDeleteError, this, options));
+};
+
+LG.FileSystem.prototype.onFileDeleteSuccess = function(options){
+	console.log("onFileDeleteSuccess");
+	options.success();
+};
+
+LG.FileSystem.prototype.onFileDeleteError = function(options){
+	options.error();
+};
+
+LG.FileSystem.prototype.failFileDeleteEntry = function(options, error){
+	options.fail();
+};
+
 LG.FileSystem.prototype.gotFileSaveEntry = function(model, options, fileEntry){
 	fileEntry.createWriter($.proxy(this.onMakeWriterSuccess, this, model, options), $.proxy(this.onMakeWriterFail, this));		
 };
 
 LG.FileSystem.prototype.failFileSaveEntry = function(options, error){
+	options.fail();
+};
+
+LG.FileSystem.prototype.onMakeWriterFail = function(options, error) {
 	options.fail();
 };
 

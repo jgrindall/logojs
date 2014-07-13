@@ -22,9 +22,10 @@ LG.Router = Backbone.Router.extend({
 		
     },
     empty:function(){
-    	
+    	console.log("empty");
     },
 	show:function(s){
+		console.log("show "+s);
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
@@ -66,10 +67,14 @@ LG.Router = Backbone.Router.extend({
 	gallery:function(){
 		this.show("gallery");
 	},
+	alertOk:function(){
+		LG.router.navigate("menu", {"trigger":true});
+	},
 	openErrorPage:function(callbacks){
 		if(LG.launcher._launched){
+			console.log("1 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data);
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(this.alertOk, this) });
 		}
 	}
 });

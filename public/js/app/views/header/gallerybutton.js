@@ -19,3 +19,14 @@ LG.GalleryButtonView = LG.HeaderButton.extend({
 	}
 });
 
+LG.WebGalleryButton = LG.GalleryButtonView.extend({
+	getData:function(){
+		return {"disabled":false};
+	}
+});
+
+LG.IPadGalleryButton = LG.GalleryButtonView.extend({
+	getData:function(){
+		return {"disabled":true};
+	}
+});

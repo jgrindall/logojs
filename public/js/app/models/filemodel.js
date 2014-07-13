@@ -173,6 +173,19 @@ LG.IPadFileModel = LG.FileModel.extend({
 		this.set({"_id":id});
 		LG.fileSystem.saveFile(this, callbacks);
     },
+    destroy:function(options){
+    	//alert("deleting model");
+    	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
+    	LG.fileSystem.deleteFile(this, callbacks);
+    },
+    deleteSuccess:function(options){
+    	console.log("deleteSuccess");
+    	options.success();
+    },
+    deleteFail:function(options){
+    	console.log("deleteFail");
+    	options.fail();
+    },
     saveSuccess:function(options){
     	console.log("saveSuccess!!! yay");
     	var id = this.get("_id");

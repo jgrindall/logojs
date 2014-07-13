@@ -34,9 +34,13 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
+	console.log("sL1");
 	this.loadTemplates();
+	console.log("sL2");
 	this.makeObjects();
+	console.log("sL3");
 	this.loadStorage();
+	console.log("sL4");
 };
 
 LG.Launcher.prototype.loadTemplates = function(){
@@ -96,6 +100,7 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.soundsLoaded = function(){
+	console.log("soundsLoaded");
 	this.loadUserId();
 	this.login();
 };
@@ -107,17 +112,8 @@ LG.Launcher.prototype.storageLoaded = function(){
 };
 
 LG.Launcher.prototype.loadFiles = function(){
-	var _this = this;
-	LG.allFilesCollection.load({
-		"error":function(){
-			LG.router.openErrorPage({"cancel":function(){
-				_this.allFilesLoaded();
-			}});
-		},
-		"success":function(){
-			_this.allFilesLoaded();
-		}
-	});
+	this.allFilesLoaded();
+	// don't need to load them
 };
 
 LG.Launcher.prototype.onLoggedIn = function(){
@@ -144,10 +140,6 @@ LG.WebLauncher.prototype.constructor = LG.WebLauncher;
 
 LG.WebLauncher.prototype.social = function(options){
 	var url, img, _this = this;
-	if(LG.Config.PHONEGAP){
-		options.success();
-		return;
-	}
 	url = "https://facebook.com/favicon.ico";
 	img = $("<img src='"+url+"'/>");
 	img.on("load", function(){
@@ -194,7 +186,7 @@ LG.WebLauncher.prototype.socialChecked = function(){
 	}
 };
 
-LG.WebLauncher.prototype.login = function(options){
+LG.WebLauncher.prototype.login = function(){
 	this.social({"success":$.proxy(this.socialChecked, this)} );
 };
 
@@ -220,11 +212,11 @@ LG.IPadLauncher.prototype.constructor = LG.IPadLauncher;
 LG.IPadLauncher.prototype.login = function(){
 	// just log them in automatically
 	LG.userModel.set({"loggedIn":true});
+	console.log("onloggedin");
 	this.onLoggedIn();
 };
 
 LG.IPadLauncher.prototype.loadUserId = function(){
-	//alert("userid");
 	var userId = LG.storage.loadCached("userId");
 	if(!userId){
 		userId = LG.Utils.getUuid();
@@ -265,6 +257,7 @@ LG.IPadLauncher.prototype.deviceReady = function(){
 };
 
 LG.IPadLauncher.prototype.check = function(){
+	console.log("check "+this._started +"  "+ this._domReady  +"  "+ this._deviceReady +"  "+ this._fileResolved);
 	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
 

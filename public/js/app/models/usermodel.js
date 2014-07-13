@@ -44,16 +44,18 @@ LG.WebUserModel = LG.AUserModel.extend({
 		if(LG.facebook){
 			LG.facebook.login({
 				"success":function(){
-					var data = {"message":"Success", "body":"You are logged in! Now you can load and save your files.", "cancelColor":1, "cancelLabel":"Ok"};
+					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_IN, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
+					console.log("2 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
 		else{
+			console.log("3 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
 		}
@@ -64,10 +66,11 @@ LG.WebUserModel = LG.AUserModel.extend({
 			LG.facebook.logout({
 				"success":function(){
 					console.log("success  " + _this+"  "+_this.alertOk+"  "+$.proxy(_this.alertOk, _this));
-					var data = {"message":"Log out", "body":"Thanks, you are now logged out", "cancelColor":1, "cancelLabel":"Ok"};
+					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_OUT, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
+					console.log("4 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}

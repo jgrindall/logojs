@@ -10,7 +10,7 @@ LG.MenuButtonsView = Backbone.View.extend({
 	},
 	render:function(){
 		this.loadTemplate(  this.template, { }, {replace:true}  );
-		this.galleryButton 		= 	new LG.GalleryButtonView();
+		this.galleryButton 		= 	LG.create.galleryButton();
 		this.examplesButton 	= 	new LG.ExamplesButtonView();
 		this.refButton 			= 	new LG.RefButtonView();
 		this.loadButton 		= 	LG.create.loadButton();

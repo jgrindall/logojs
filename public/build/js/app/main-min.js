@@ -250,9 +250,12 @@ if(LG.Config.PHONEGAP){
 
 LG.Messages = {};
 LG.Messages.WANT_TO_SAVE = "Do you want to save your current file?";
+LG.Messages.SURE = "Are you sure?";
 LG.Messages.WANT_TO_DELETE = "Are you sure you want to delete this file?";
 LG.Messages.ERROR = "Error!";
 LG.Messages.ERROR_BODY = "An error has occured connecting to the internet. You cannot save or load files without an internet connection.";
+LG.Messages.SUCCESS = "Success";
+LG.Messages.LOGGED_IN = "You are now logged in";
 LG.ACreate = function(){
 	
 };
@@ -289,6 +292,10 @@ LG.WebCreate.prototype.storage = function(){
 	else{
 		return new LG.NoSupportStorage();
 	}
+};
+
+LG.WebCreate.prototype.galleryButton = function(){
+	return new LG.WebGalleryButton();
 };
 
 LG.WebCreate.prototype.fileCollection = function(){
@@ -342,6 +349,10 @@ LG.IPadCreate.prototype.fileCollection = function(){
 	return new LG.IPadFileCollection();
 };
 
+LG.IPadCreate.prototype.galleryButton = function(){
+	return new LG.IPadGalleryButton();
+};
+
 // fake ipad
 
 LG.FakeIPadCreate = function(){
@@ -373,6 +384,10 @@ LG.FakeIPadCreate.prototype.fileCollection = function(){
 
 LG.FakeIPadCreate.prototype.userModel = function(){
 	return new LG.WebUserModel();
+};
+
+LG.FakeIPadCreate.prototype.galleryButton = function(){
+	return new LG.IPadGalleryButton();
 };
 
 // make 
@@ -650,11 +665,41 @@ LG.FileSystem = function(){
 	this.fileContents = false;
 };
 
+LG.FileSystem.prototype.deleteFile = function(model, options){
+	alert("delete");
+	var filename = "file_"+model.get("name")+".txt";
+	console.log("deleteFile model "+filename+"  "+JSON.stringify(model));
+	console.log("options "+JSON.stringify(options));
+	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
+};
+
+LG.FileSystem.prototype.gotFileDeleteEntry = function(model, options, fileEntry){
+	console.log("gotFileDeleteEntry");
+	fileEntry.remove($.proxy(this.onFileDeleteSuccess, this, options), $.proxy(this.onFileDeleteError, this, options));
+};
+
+LG.FileSystem.prototype.onFileDeleteSuccess = function(options){
+	console.log("onFileDeleteSuccess");
+	options.success();
+};
+
+LG.FileSystem.prototype.onFileDeleteError = function(options){
+	options.error();
+};
+
+LG.FileSystem.prototype.failFileDeleteEntry = function(options, error){
+	options.fail();
+};
+
 LG.FileSystem.prototype.gotFileSaveEntry = function(model, options, fileEntry){
 	fileEntry.createWriter($.proxy(this.onMakeWriterSuccess, this, model, options), $.proxy(this.onMakeWriterFail, this));		
 };
 
 LG.FileSystem.prototype.failFileSaveEntry = function(options, error){
+	options.fail();
+};
+
+LG.FileSystem.prototype.onMakeWriterFail = function(options, error) {
 	options.fail();
 };
 
@@ -1191,9 +1236,10 @@ LG.Router = Backbone.Router.extend({
 		
     },
     empty:function(){
-    	
+    	console.log("empty");
     },
 	show:function(s){
+		console.log("show "+s);
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
@@ -1235,10 +1281,14 @@ LG.Router = Backbone.Router.extend({
 	gallery:function(){
 		this.show("gallery");
 	},
+	alertOk:function(){
+		LG.router.navigate("menu", {"trigger":true});
+	},
 	openErrorPage:function(callbacks){
 		if(LG.launcher._launched){
+			console.log("1 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data);
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(this.alertOk, this) });
 		}
 	}
 });
@@ -5657,6 +5707,19 @@ LG.IPadFileModel = LG.FileModel.extend({
 		this.set({"_id":id});
 		LG.fileSystem.saveFile(this, callbacks);
     },
+    destroy:function(options){
+    	alert("deleting model");
+    	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
+    	LG.fileSystem.deleteFile(this, callbacks);
+    },
+    deleteSuccess:function(options){
+    	console.log("deleteSuccess");
+    	options.success();
+    },
+    deleteFail:function(options){
+    	console.log("deleteFail");
+    	options.fail();
+    },
     saveSuccess:function(options){
     	console.log("saveSuccess!!! yay");
     	var id = this.get("_id");
@@ -5867,6 +5930,9 @@ LG.FileCollection = LG.AFileCollection.extend({
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();
+			},
+			"fail":function(){
+				alert("error deleting");
 			}
 		};
 		if(this.selected.isNew()){
@@ -6023,7 +6089,7 @@ LG.FileOpener.prototype.openFromGallery = function(id){
 	if(LG.userModel.isConnected()){
 		if(!LG.fileCollection.selected.isSaved()){
 			options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
-			LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
+			LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
 			this.listenTo(LG.fileCollection, "sync", $.proxy(this.modelSynced, this));
 		}
 		else{
@@ -6147,16 +6213,18 @@ LG.WebUserModel = LG.AUserModel.extend({
 		if(LG.facebook){
 			LG.facebook.login({
 				"success":function(){
-					var data = {"message":"Success", "body":"You are logged in! Now you can load and save your files.", "cancelColor":1, "cancelLabel":"Ok"};
+					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_IN, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
+					console.log("2 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
 		else{
+			console.log("3 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
 		}
@@ -6167,10 +6235,11 @@ LG.WebUserModel = LG.AUserModel.extend({
 			LG.facebook.logout({
 				"success":function(){
 					console.log("success  " + _this+"  "+_this.alertOk+"  "+$.proxy(_this.alertOk, _this));
-					var data = {"message":"Log out", "body":"Thanks, you are now logged out", "cancelColor":1, "cancelLabel":"Ok"};
+					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_OUT, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
+					console.log("4 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
@@ -6403,7 +6472,8 @@ LG.Button = Backbone.View.extend({
 		var defaultData, data;
 		defaultData = { show: this.getShow(), disabled: this.getDisabled() };
 		data = _.extend(defaultData, this.getData());
-		this.loadTemplate(  this.template, data , {replace:true} );
+		//console.log(this+" button :  "+this.template+"   "+JSON.stringify(data));
+		this.loadTemplate(this.template, data , {replace:true} );
 		return this;
 	},
 	disableButton:function(data){
@@ -6598,6 +6668,17 @@ LG.GalleryButtonView = LG.HeaderButton.extend({
 	}
 });
 
+LG.WebGalleryButton = LG.GalleryButtonView.extend({
+	getData:function(){
+		return {"disabled":false};
+	}
+});
+
+LG.IPadGalleryButton = LG.GalleryButtonView.extend({
+	getData:function(){
+		return {"disabled":true};
+	}
+});
 // go back to catalogue
 
 // extends LG.HeaderButton
@@ -7404,7 +7485,7 @@ LG.MenuButtonsView = Backbone.View.extend({
 	},
 	render:function(){
 		this.loadTemplate(  this.template, { }, {replace:true}  );
-		this.galleryButton 		= 	new LG.GalleryButtonView();
+		this.galleryButton 		= 	LG.create.galleryButton();
 		this.examplesButton 	= 	new LG.ExamplesButtonView();
 		this.refButton 			= 	new LG.RefButtonView();
 		this.loadButton 		= 	LG.create.loadButton();
@@ -8126,7 +8207,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 		var model = LG.fileCollection.selected;
 		if(LG.userModel.isConnected()){
 			if(!model.isNew()){
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_DELETE, "okColor":2, "noColor":1, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				LG.popups.openPopup({"message":LG.Messages.SURE, "body":LG.Messages.WANT_TO_DELETE, "okColor":2, "noColor":1, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 			}
 		}
 	}	
@@ -8179,7 +8260,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 		else{
 			if(!fileModel.isSaved()){
 				// unsaved
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE,  "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 			}
 			else{
 				// dump the old file, make a new one
@@ -8730,7 +8811,7 @@ LG.AGalleryRowView = Backbone.View.extend({
 	},
 	render:function(){
 		var data = this.model.toJSON();
-		alert("model "+JSON.stringify(data).substr(0,100));
+		console.log("model "+JSON.stringify(data).substr(0,100));
 		this.loadTemplate(  this.template, data , {replace:true} );
 		this.updateLayout();
 		return this;
@@ -8894,9 +8975,13 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
+	console.log("sL1");
 	this.loadTemplates();
+	console.log("sL2");
 	this.makeObjects();
+	console.log("sL3");
 	this.loadStorage();
+	console.log("sL4");
 };
 
 LG.Launcher.prototype.loadTemplates = function(){
@@ -8956,6 +9041,7 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.soundsLoaded = function(){
+	console.log("soundsLoaded");
 	this.loadUserId();
 	this.login();
 };
@@ -8967,17 +9053,8 @@ LG.Launcher.prototype.storageLoaded = function(){
 };
 
 LG.Launcher.prototype.loadFiles = function(){
-	var _this = this;
-	LG.allFilesCollection.load({
-		"error":function(){
-			LG.router.openErrorPage({"cancel":function(){
-				_this.allFilesLoaded();
-			}});
-		},
-		"success":function(){
-			_this.allFilesLoaded();
-		}
-	});
+	this.allFilesLoaded();
+	// don't need to load them
 };
 
 LG.Launcher.prototype.onLoggedIn = function(){
@@ -9004,10 +9081,6 @@ LG.WebLauncher.prototype.constructor = LG.WebLauncher;
 
 LG.WebLauncher.prototype.social = function(options){
 	var url, img, _this = this;
-	if(LG.Config.PHONEGAP){
-		options.success();
-		return;
-	}
 	url = "https://facebook.com/favicon.ico";
 	img = $("<img src='"+url+"'/>");
 	img.on("load", function(){
@@ -9054,7 +9127,7 @@ LG.WebLauncher.prototype.socialChecked = function(){
 	}
 };
 
-LG.WebLauncher.prototype.login = function(options){
+LG.WebLauncher.prototype.login = function(){
 	this.social({"success":$.proxy(this.socialChecked, this)} );
 };
 
@@ -9080,11 +9153,12 @@ LG.IPadLauncher.prototype.constructor = LG.IPadLauncher;
 LG.IPadLauncher.prototype.login = function(){
 	// just log them in automatically
 	LG.userModel.set({"loggedIn":true});
+	console.log("onloggedin");
 	this.onLoggedIn();
 };
 
 LG.IPadLauncher.prototype.loadUserId = function(){
-	//alert("userid");
+	alert("userid");
 	var userId = LG.storage.loadCached("userId");
 	if(!userId){
 		userId = LG.Utils.getUuid();
@@ -9125,6 +9199,7 @@ LG.IPadLauncher.prototype.deviceReady = function(){
 };
 
 LG.IPadLauncher.prototype.check = function(){
+	console.log("check "+this._started +"  "+ this._domReady  +"  "+ this._deviceReady +"  "+ this._fileResolved);
 	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
 
