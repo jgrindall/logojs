@@ -170,7 +170,6 @@ LG.CanvasView = Backbone.View.extend({
 			this.onError(data);
 		}
 		else if(data.type === "end"){
-			console.log("ended!");
 			this.ended = true;
 		}
 	},
@@ -252,7 +251,6 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;
-		console.log("batch drawing "+LG.output.BATCH_SIZE+" out of "+this.output.size()+"  start at "+this.commandIndex);
 		var max = Math.min(size - 1, LG.output.BATCH_SIZE - 1);
 		if(size >= 1){
 			for(i = 0; i <= max; i++){

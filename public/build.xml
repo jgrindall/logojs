@@ -78,6 +78,8 @@
 				<file name="createjs/easeljs-0.6.0.min.js" /> 	
 				<file name="createjs/tweenjs-0.4.0.min.js" />
 				<file name="createjs/filters/Filter.js" /> 	
+				<file name="hammer.js" /> 	
+				<file name="jquery.specialevent.hammer.js" /> 	
 				
 			</filelist>
 	
@@ -150,6 +152,7 @@
 				<file name="views/activity/base.js"/>	
 				<file name="views/activity/activitybuttons.js"/>	
 				<file name="views/canvas/canvas.js"/>	
+				<file name="views/canvas/writegrowl.js"/>	
 				
 				<file name="views/menu/base.js"/>	
 				<file name="views/menu/menu.js"/>	

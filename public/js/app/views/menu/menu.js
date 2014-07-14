@@ -14,6 +14,7 @@ LG.MenuView = LG.AMenuView.extend({
 		return this;
 	},
 	swipeMe:function(e){
+		alert("swipe");
 		this.stopProp(e);
 		if(e.gesture.direction === "right"){
 			LG.router.navigate("write", {"trigger":true});

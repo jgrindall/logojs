@@ -94,24 +94,12 @@ LG.Utils.getUuid = function(){
 	return s;
 };
 
-LG.Utils.writeTimeStamp = (new Date()).getTime();
-
-LG.Utils.writeNum = 0;
-
 LG.Utils.writeGrowl = function(){
-	var now = (new Date()).getTime();
-	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || (diff > 5000 && LG.Utils.writeNum <= 3)){
-		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
-		LG.Utils.writeNum++;
-	}
-	LG.Utils.writeTimeStamp = now;
+	LG.EventDispatcher.trigger(LG.Events.WRITE_GROWL);
 };
 
 LG.Utils.growl = function(msg){
 	// open a little popup message
-	// close all if there are any
-	//LG.Utils.closeGrowls();
 	var data = {
 		"afterOpen": function() {
 			var g = this;
@@ -124,7 +112,8 @@ LG.Utils.growl = function(msg){
 			$(this).off("click");
 		},
 		"closeTemplate":"",
-		"position":"bottom-left"
+		"position":"top-left",
+		"life":1500
 	
 	};
 	$.jGrowl(msg, data);
@@ -230,14 +219,14 @@ LG.Config.DEBUG = true;
 // this variable is replaced by the ant build script
 LG.Config.PHONEGAP = LG.Utils.getPG();
 
-//LG.Config.FAKE_PHONEGAP = true;
+LG.Config.FAKE_PHONEGAP = true;
 
 LG.Config.IS_TOUCH = LG.Utils.isTouch();
 
 LG.Config.PARSER_VISIT = "js/app/parser/visit.js";
 
 // preload and compile the html using this list - should be faster
-LG.Config.TEMPLATES = ["tpl_homebutton","tpl_examplesbutton", "tpl_refbutton", "tpl_examples","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
+LG.Config.TEMPLATES = ["tpl_writegrowl", "tpl_homebutton","tpl_examplesbutton", "tpl_refbutton", "tpl_examples","tpl_writebar","tpl_galleryside","tpl_helpoverlay","tpl_dinobutton","tpl_spinner","tpl_gallerypage","tpl_helpbuttonmenu","tpl_help","tpl_newbutton","tpl_deletebutton","tpl_writetop","tpl_menutop","tpl_writebutton","tpl_settingsbutton","tpl_cancelbutton","tpl_menubuttons","tpl_menu","tpl_loadrow","tpl_load","tpl_gallerylist","tpl_gallerybottom","tpl_gallerytop","tpl_galleryleftbutton","tpl_galleryrightbutton","tpl_loadbutton","tpl_galleryrow","tpl_gallery","tpl_filename","tpl_alert","tpl_savebutton","tpl_helpbutton","tpl_tidybutton","tpl_clearbutton","tpl_gallerybutton", "tpl_logobutton", "tpl_loginbutton","tpl_filebutton","tpl_textbutton","tpl_undobutton","tpl_redobutton","tpl_startbutton","tpl_pausebutton","tpl_stopbutton","tpl_header","tpl_write","tpl_writebuttons","tpl_canvas","tpl_activitybuttons","tpl_activity"];
 
 LG.Config.PRODUCT_ID = "logojs";
 
@@ -256,6 +245,7 @@ LG.Messages.ERROR = "Error!";
 LG.Messages.ERROR_BODY = "An error has occured connecting to the internet. You cannot save or load files without an internet connection.";
 LG.Messages.SUCCESS = "Success";
 LG.Messages.LOGGED_IN = "You are now logged in";
+LG.Messages.WRITE = "Write your code and then tap anywhere to draw";
 LG.ACreate = function(){
 	
 };
@@ -666,20 +656,16 @@ LG.FileSystem = function(){
 };
 
 LG.FileSystem.prototype.deleteFile = function(model, options){
-	alert("delete");
+	//alert("delete");
 	var filename = "file_"+model.get("name")+".txt";
-	console.log("deleteFile model "+filename+"  "+JSON.stringify(model));
-	console.log("options "+JSON.stringify(options));
 	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
 };
 
 LG.FileSystem.prototype.gotFileDeleteEntry = function(model, options, fileEntry){
-	console.log("gotFileDeleteEntry");
 	fileEntry.remove($.proxy(this.onFileDeleteSuccess, this, options), $.proxy(this.onFileDeleteError, this, options));
 };
 
 LG.FileSystem.prototype.onFileDeleteSuccess = function(options){
-	console.log("onFileDeleteSuccess");
 	options.success();
 };
 
@@ -706,14 +692,11 @@ LG.FileSystem.prototype.onMakeWriterFail = function(options, error) {
 LG.FileSystem.prototype.onMakeWriterSuccess = function(model, options, writer) {
 	writer.write(JSON.stringify(model));
     writer.abort();
-    console.log("WRITTEN");
     options.success();
 };
 
 LG.FileSystem.prototype.saveFile = function(model, options){
 	var filename = "file_"+model.get("name")+".txt";
-	console.log("saveFile model "+filename+"  "+JSON.stringify(model));
-	console.log("options "+JSON.stringify(options));
 	this.filesFolder.getFile(filename, {create: true}, $.proxy(this.gotFileSaveEntry, this, model, options), $.proxy(this.failFileSaveEntry, this, options));
 };
 
@@ -735,14 +718,20 @@ LG.FileSystem.prototype.readFiles = function(options){
 };
 
 LG.FileSystem.prototype.fileIsRead = function(e){
-	var obj = $.parseJSON(e.target.result);
-	if(obj.name && obj.logo && obj.userId){
-		this.fileContents[this.numLoaded] = obj;
-	}
-	else{
-		this.fileContents[this.numLoaded] = null;
-	}
-    this.readNext();
+	try{
+		var obj = $.parseJSON(e.target.result);
+		if(obj.name && obj.logo && obj.userId){
+			this.fileContents[this.numLoaded] = obj;
+		}
+		else{
+			this.fileContents[this.numLoaded] = null;
+		}
+    	this.readNext();
+    }
+    catch(e){
+    	console.log("parse failed");
+    	this.options.fail();
+    }
 };
 
 LG.FileSystem.prototype.fileIsReadError = function(){
@@ -1236,10 +1225,9 @@ LG.Router = Backbone.Router.extend({
 		
     },
     empty:function(){
-    	console.log("empty");
+    	
     },
 	show:function(s){
-		console.log("show "+s);
 		if( s != "alert"){
 			LG.popups.closePopup();
 		}
@@ -1286,7 +1274,6 @@ LG.Router = Backbone.Router.extend({
 	},
 	openErrorPage:function(callbacks){
 		if(LG.launcher._launched){
-			console.log("1 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(this.alertOk, this) });
 		}
@@ -1332,6 +1319,7 @@ LG.Events.INSERT				=	"LG::insert";
 LG.Events.TO_BAR				=	"LG::toBar";
 LG.Events.RESUME				=	"LG::pause";
 LG.Events.PAUSE					=	"LG::resume";
+LG.Events.WRITE_GROWL			=	"LG::writeGrowl";
 
 LG.Facebook = function(){
 	
@@ -1410,7 +1398,6 @@ LG.WebFacebook.prototype.startListenToLoad = function(options){
 };
 
 LG.WebFacebook.prototype.checkScriptLoaded = function(options){
-	console.log("check! "+this.numWait+"  "+window.FB);
 	if(window.FB){
 		clearInterval(this.checkLoadInterval);
 	}
@@ -1445,7 +1432,6 @@ LG.WebFacebook.prototype.load = function(options){
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
-		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
@@ -5544,26 +5530,16 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 	initialize: function(){
 		this.restart();
 		this.editing = false;
-		this.listenTo(this, this.getWatchString(), $.proxy(this.modelChanged, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
-	},
-	getWatchString:function(){
-		var i, s = [ ];
-		for(i = 0;i <= this.watchString.length - 1;i++){
-			s.push ("change:"+this.watchString[i]);
-		}
-		return s.join(" ");
+		this.listenTo(this, "change:logo change:dino", $.proxy(this.modelChanged, this));
 	},
 	restart:function(options){
 		this.history = [  { "logo":null, "dino":0 }  ];
 		this.pointer = 0;
 	},
 	getValues : function(){
-		var i, obj = {};
-		for(i = 0;i <= this.watchString.length - 1;i++){
-			obj[this.watchString[i]] = this.get(this.watchString[i]);
-		}
+		var obj = {};
+		obj["logo"] = this.get("logo");
+		obj["dino"] = this.get("dino");
 		return obj;
 	},
 	modelChanged:function(){
@@ -5609,6 +5585,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
+		alert("undo "+this.id+"  "+this._id+"  "+this.output()+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -5616,12 +5593,13 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
+		alert("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
 		this.pointer = this.pointer + 1;
 		this.reload();
-	}	
+	}
 });
 
 LG.UndoRedoFileModel.MAX_HISTORY = 20;
@@ -5635,7 +5613,6 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		img:null,
 		dino:0
 	},
-	watchString:["logo","dino"],
 	idAttribute: "_id", 
 	urlRoot:function(){
 		return LG.baseUrl + "/files";
@@ -5695,38 +5672,32 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 
 LG.IPadFileModel = LG.FileModel.extend({
 	save:function(data, options){
-		console.log("saving model "+JSON.stringify(this)+"  "+data+"  "+options);
-		console.log("1  "+$.proxy(this.saveSuccess, this, options));
-		console.log("2  "+$.proxy(this.saveFail, this, options));
 		var callbacks = {"success":$.proxy(this.saveSuccess, this, options), "fail":$.proxy(this.saveFail, this, options)};
-		console.log("callbacks "+JSON.stringify(callbacks));
-		console.log("callbacks "+callbacks);
-		console.log("a "+callbacks.success);
-		console.log("b "+callbacks.fail);
 		var id = ( this.get("_id") || LG.Utils.getUuid() );
-		this.set({"_id":id});
+		this.set(_.extend(data, {"_id":id}));
 		LG.fileSystem.saveFile(this, callbacks);
     },
     destroy:function(options){
-    	alert("deleting model");
+    	console.log("ipad destroy");
     	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
     	LG.fileSystem.deleteFile(this, callbacks);
     },
     deleteSuccess:function(options){
-    	console.log("deleteSuccess");
     	options.success();
     },
     deleteFail:function(options){
-    	console.log("deleteFail");
     	options.fail();
     },
     saveSuccess:function(options){
-    	console.log("saveSuccess!!! yay");
     	var id = this.get("_id");
     	var response = {"_id":id};
-   		options.success(this, response);
+    	this.set({"dirty":false});
+    	options.success(this, response);
+    	this.trigger("change");
+    	this.trigger("sync");
     },
     saveFail:function(options){
+    	console.log("saveFail");
     	options.error();
     }
 });
@@ -5788,7 +5759,9 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 	},
 	addNewModel:function(options){
 		if(options && options.force){
-			this.remove(this.selected);
+			if(this.selected){
+				this.remove(this.selected);
+			}
 			this.selected = null;
 		}
 		if(!this.selected){
@@ -5843,6 +5816,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
+	},
+	undo:function(){
+		this.selected.undo();
+	},
+	redo:function(){
+		this.selected.redo();
 	},
 	getData:function(){
 		var data = LG.AFileCollection.prototype.getData.call(this);
@@ -5856,7 +5837,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			dino = this.selected.get("dino");
 			this.load({
 				"success":function(){
-				// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+					// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){
@@ -5913,7 +5894,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	loadById:function(id){
 		var selectedModel;
 		if(this.selected.get("_id") === id){
-			LG.Utils.growl("File already open");
+			//LG.Utils.growl("File already open");
 		}
 		else{
 			selectedModel = this.getByProperty("_id", id);
@@ -5924,27 +5905,26 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		var _this = this;
-		var options = {
+		console.log("deleteCurrentFile");
+		var _this = this, options;
+		options = {
 			"success":function(){
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();
 			},
 			"fail":function(){
-				alert("error deleting");
+				//alert("error deleting");
 			}
 		};
 		if(this.selected.isNew()){
 			this.selected.set({"logo":null});
 		}
 		else{
-			var m = this.selected;
 			this.selected.destroy(options);
 		}
 	},
 	saveCurrentFile:function(options){
-		console.log(">>>>>>>>>  save current file");
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		var data = {"img":LG.imageModel.get("img"),"logo":LG.fileCollection.selected.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
@@ -5965,26 +5945,22 @@ LG.FileCollection = LG.AFileCollection.extend({
 		return error;
 	},
 	saveFileAs:function(name, callback){
-		console.log("saveFileAs "+name+"  "+callback);
 		var _this = this, model, data, options;
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
-		model = new this.model(data);
+		this.selected.set(data);
 		options = {
 			"success":function(model, response){
-				console.log("success called "+model+",   "+response+"  "+response._id);
 				model.set({"_id":response._id});
 				model.set({"id":response._id});
 				_this.add(model);
 				callback.success(response._id);
 			},
 			"error":function(){
-				LG.router.openErrorPage({"cancel":function(){
-					LG.router.navigate("write", {"trigger":true});
-				}});
+				callback.error();
 			}
 		};
-		model.save(data, options);
+		this.selected.save(data, options);
 	}
 });
 
@@ -5998,11 +5974,11 @@ LG.IPadFileCollection = LG.FileCollection.extend({
 	readSuccess:function(entries) {
 		if(entries){
     		this.reset(entries);
+    		this.trigger("sync");
     	}
-    	console.log("reset! "+this.length);
 	},
 	readFail:function(error) {
-   		alert("Failed to list directory contents: " + error.code);
+   		//alert("Failed to list directory contents: " + error.code);
 	}
 });
 
@@ -6027,27 +6003,24 @@ LG.FileOpener = function(){
 };
 
 LG.FileOpener.prototype.open = function(id){
+	console.log("open "+id);
 	var oldModel, oldModelYours, yours = false, userId;
 	oldModel = LG.allFilesCollection.getByProperty("_id", id);
 	oldModelYours = LG.fileCollection.getByProperty("_id", id);
 	if(!oldModel && !oldModelYours){
 		// doesn't exist at all!
-		console.log("error opening file");
 		return;
 	}
 	if(!LG.userModel.isConnected()){
 		// not logged in at all
-		console.log("open others");
 		LG.fileCollection.openOthers(oldModel.toJSON());
 	}
 	else{
 		userId = LG.userModel.get("userId");
 		if(oldModelYours && oldModelYours.get("userId") === userId){
-			console.log("yours");
 			LG.fileCollection.loadById(id);
 		}
 		else{
-			console.log("not yours");
 			LG.fileCollection.openOthers(oldModel.toJSON());
 		}
 	}
@@ -6217,14 +6190,12 @@ LG.WebUserModel = LG.AUserModel.extend({
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
-					console.log("2 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
 			});
 		}
 		else{
-			console.log("3 a");
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
 		}
@@ -6234,12 +6205,10 @@ LG.WebUserModel = LG.AUserModel.extend({
 		if(LG.facebook){
 			LG.facebook.logout({
 				"success":function(){
-					console.log("success  " + _this+"  "+_this.alertOk+"  "+$.proxy(_this.alertOk, _this));
 					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_OUT, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				},
 				"fail":function(){
-					console.log("4 a");
 					var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
 					LG.popups.openPopup(data, {"ok":$.proxy(_this.alertOk, _this), "cancel":$.proxy(_this.alertOk, _this) });
 				}
@@ -6287,6 +6256,9 @@ LG.IPadUserModel = LG.AUserModel.extend({
 	},
 	logout:function(){
 		
+	},
+	isConnected:function(){
+		return true;
 	}
 });
 
@@ -6472,7 +6444,6 @@ LG.Button = Backbone.View.extend({
 		var defaultData, data;
 		defaultData = { show: this.getShow(), disabled: this.getDisabled() };
 		data = _.extend(defaultData, this.getData());
-		//console.log(this+" button :  "+this.template+"   "+JSON.stringify(data));
 		this.loadTemplate(this.template, data , {replace:true} );
 		return this;
 	},
@@ -6708,7 +6679,6 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		console.log("help2");
 		LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){
@@ -6727,7 +6697,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	template:"tpl_savebutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "add sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "add sync change reset", $.proxy(this.rerender, this));
 		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	onClick:function(e){
@@ -6736,6 +6706,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 		if(data.loggedIn && !data.disabled){
 			LG.fileCollection.save({
 				"success":function(){
+					LG.sounds.playSuccess();
 					LG.Utils.growl("File saved");
 				}
 			});
@@ -6869,7 +6840,7 @@ LG.DinoButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		LG.sounds.playSuccess();
+		LG.sounds.playClick();
 		LG.fileCollection.selected.incrementDino();
 	},
 	events:function(){
@@ -7045,6 +7016,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		
 		this.examplesView = new LG.ExamplesView();	
 		this.$el.append(this.examplesView.render().el);
+		
+		this.writeGrowlView = new LG.WriteGrowlView();	
+		this.$el.append(this.writeGrowlView.render().el);
 		
 		return this;
 	},
@@ -7281,7 +7255,6 @@ LG.CanvasView = Backbone.View.extend({
 			this.onError(data);
 		}
 		else if(data.type === "end"){
-			console.log("ended!");
 			this.ended = true;
 		}
 	},
@@ -7363,7 +7336,6 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;
-		console.log("batch drawing "+LG.output.BATCH_SIZE+" out of "+this.output.size()+"  start at "+this.commandIndex);
 		var max = Math.min(size - 1, LG.output.BATCH_SIZE - 1);
 		if(size >= 1){
 			for(i = 0; i <= max; i++){
@@ -7402,6 +7374,49 @@ LG.CanvasModel = Backbone.Model.extend({
 	}
 });
 
+
+// extends LG.AbstractPageView
+
+LG.WriteGrowlView = Backbone.View.extend({
+	template:"tpl_writegrowl",
+	
+	initialize:function(){
+		this.render();
+		this.listenTo(LG.EventDispatcher, LG.Events.WRITE_GROWL, $.proxy(this.show, this));
+	},
+	render:function(){
+		this.loadTemplate(  this.template, {"message":LG.Messages.WRITE}, {replace:true}  );
+		return this;
+	},
+	show:function(){
+		var now = (new Date()).getTime(), _this = this, diff;
+		diff = now - LG.WriteGrowlView.writeTimeStamp; 
+		if(diff > 20000 || (diff > 5000 && LG.WriteGrowlView.writeNum <= 3)){
+			this.$el.addClass("show");
+			setTimeout(function(){
+				_this.$el.removeClass("show");
+			}, 5000);
+			LG.WriteGrowlView.writeNum++;
+		}
+		LG.WriteGrowlView.writeTimeStamp = now;
+	},
+	events:function(){
+		
+	},
+	beforeClose:function(){
+		
+	},
+	afterAdded:function(){
+		
+	}
+	
+});
+
+LG.WriteGrowlView.writeTimeStamp = (new Date()).getTime();
+LG.WriteGrowlView.writeNum = 0;
+
+	
+	
 LG.AMenuView = Backbone.View.extend({	
 	initialize:function(){
 		var _this = this;
@@ -7455,6 +7470,7 @@ LG.MenuView = LG.AMenuView.extend({
 		return this;
 	},
 	swipeMe:function(e){
+		alert("swipe");
 		this.stopProp(e);
 		if(e.gesture.direction === "right"){
 			LG.router.navigate("write", {"trigger":true});
@@ -7606,7 +7622,6 @@ LG.Popups.prototype.openPopup = function(data, callbacks){
 	this.alertView = new LG.AlertView(data);
 	$("#activity").append(this.alertView.render().el);
 	LG.router.navigate("alert", {"trigger":true});
-	console.log("open " + JSON.stringify(data) + "   "+JSON.stringify(callbacks));
 	LG.EventDispatcher.on(LG.Events.ALERT_OK, function(){
 		LG.EventDispatcher.off(LG.Events.ALERT_OK);
 		if(_.isFunction(callbacks.ok)){
@@ -7687,7 +7702,8 @@ LG.AlertView = LG.APopUpView.extend({
 		var obj = Backbone.View.getTouch( {
 			"_click a#cancelbutton":"clickCancel",
 			"_click a#okbutton":"clickOk",
-			"_click a#nobutton":"clickNo"
+			"_click a#nobutton":"clickNo",
+			"_click #closebutton":"clickCancel"
 		});
 		return obj;
 	},
@@ -7731,7 +7747,8 @@ LG.FileNameView = LG.APopUpView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click a#cancelbutton":"clickCancel",
-			"_click a#okbutton":"clickOk"
+			"_click a#okbutton":"clickOk",
+			"_click #closebutton":"clickClose"
 		});
 		return obj;
 	},
@@ -7757,14 +7774,21 @@ LG.FileNameView = LG.APopUpView.extend({
 			options = {
 				"success":function(id){
 					LG.router.navigate("write/"+id, {"trigger":true});
+					LG.sounds.playSuccess();
 					LG.Utils.growl("File saved");
 				},
 				"error":function(){
-					
+					LG.router.openErrorPage({"cancel":function(){
+						LG.router.navigate("write", {"trigger":true});
+					}});
 				}
 			};
 			LG.fileCollection.saveFileAs(name, options);
 		}
+	},
+	clickClose:function(e){
+		this.stopProp(e);
+		window.history.back();
 	},
 	clickCancel:function(e){
 		this.stopProp(e);
@@ -7829,11 +7853,12 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
+		console.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		if(logo != this.logo){
+		//if(logo != this.logo){
 			this.setLogo(logo);
-		}
+		//}
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
@@ -7928,7 +7953,7 @@ LG.TouchWriteView = LG.WriteView.extend({
 		setTimeout(function(){
 			_this.removeShowList();
 			_this.$logodiv.removeAttr("disabled");
-		}, 750);
+		}, 1000);
 	},
 	onHide:function(){
 		this.removeShowList();
@@ -8551,18 +8576,16 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	clickItem:function(e){
 		this.stopProp(e);
+		//TODO - this.scrolling etc
 		var idToOpen = $(e.currentTarget).data("id");
 		this.myScroll.scrollTo(0, 0); // TODO fix this!!
 		this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
-		console.log("add files using "+this.collection+"  "+this.collection.length);
 		models = this.collection.filter(function(model){
-			console.log("model is "+model.output());
 			return !model.isNew();
 		});
-		console.log("mnodels "+models.length);
 		numPages = Math.ceil(models.length / this.perPage);
 		this.removeAllPages();
 		this.pages = [ ];
@@ -8811,7 +8834,6 @@ LG.AGalleryRowView = Backbone.View.extend({
 	},
 	render:function(){
 		var data = this.model.toJSON();
-		console.log("model "+JSON.stringify(data).substr(0,100));
 		this.loadTemplate(  this.template, data , {replace:true} );
 		this.updateLayout();
 		return this;
@@ -8860,7 +8882,6 @@ LG.AGalleryView = LG.AMenuView.extend({
 		this.removeMenus();
 		this.galleryTop = new this.topView({"title":this.options.title});
 		this.galleryList = new this.listView(this.options);
-		console.log("made list "+this.options+" "+this.options.collection);
 		this.listenTo(this.galleryList, LG.Events.PREVIEW_FILE, $.proxy(this.preview, this));
 		this.gallerySide = new this.sideView(this.options);
 		this.$el.prepend(this.galleryTop.render().$el);
@@ -8975,13 +8996,9 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
-	console.log("sL1");
 	this.loadTemplates();
-	console.log("sL2");
 	this.makeObjects();
-	console.log("sL3");
 	this.loadStorage();
-	console.log("sL4");
 };
 
 LG.Launcher.prototype.loadTemplates = function(){
@@ -9041,7 +9058,6 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.soundsLoaded = function(){
-	console.log("soundsLoaded");
 	this.loadUserId();
 	this.login();
 };
@@ -9153,12 +9169,10 @@ LG.IPadLauncher.prototype.constructor = LG.IPadLauncher;
 LG.IPadLauncher.prototype.login = function(){
 	// just log them in automatically
 	LG.userModel.set({"loggedIn":true});
-	console.log("onloggedin");
 	this.onLoggedIn();
 };
 
 LG.IPadLauncher.prototype.loadUserId = function(){
-	alert("userid");
 	var userId = LG.storage.loadCached("userId");
 	if(!userId){
 		userId = LG.Utils.getUuid();
@@ -9175,7 +9189,7 @@ LG.IPadLauncher.prototype.fileSystemOk = function(){
 };
 
 LG.IPadLauncher.prototype.fileSystemFail = function(){
-	alert("file system fail");	
+	//alert("file system fail");	
 };
 
 LG.IPadLauncher.prototype.bindEvents = function(){
@@ -9199,7 +9213,6 @@ LG.IPadLauncher.prototype.deviceReady = function(){
 };
 
 LG.IPadLauncher.prototype.check = function(){
-	console.log("check "+this._started +"  "+ this._domReady  +"  "+ this._deviceReady +"  "+ this._fileResolved);
 	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
 

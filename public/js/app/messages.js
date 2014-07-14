@@ -7,3 +7,4 @@ LG.Messages.ERROR = "Error!";
 LG.Messages.ERROR_BODY = "An error has occured connecting to the internet. You cannot save or load files without an internet connection.";
 LG.Messages.SUCCESS = "Success";
 LG.Messages.LOGGED_IN = "You are now logged in";
+LG.Messages.WRITE = "Write your code and then tap anywhere to draw";

@@ -6,7 +6,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	template:"tpl_savebutton",
 	initialize:function(){
 		LG.HeaderButton.prototype.initialize.call(this);
-		this.listenTo(LG.fileCollection, "add sync change", $.proxy(this.rerender, this));
+		this.listenTo(LG.fileCollection, "add sync change reset", $.proxy(this.rerender, this));
 		this.listenTo(LG.userModel, "change", $.proxy(this.rerender, this));
 	},
 	onClick:function(e){
@@ -15,6 +15,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 		if(data.loggedIn && !data.disabled){
 			LG.fileCollection.save({
 				"success":function(){
+					LG.sounds.playSuccess();
 					LG.Utils.growl("File saved");
 				}
 			});

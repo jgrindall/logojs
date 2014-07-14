@@ -10,26 +10,16 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 	initialize: function(){
 		this.restart();
 		this.editing = false;
-		this.listenTo(this, this.getWatchString(), $.proxy(this.modelChanged, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
-		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
-	},
-	getWatchString:function(){
-		var i, s = [ ];
-		for(i = 0;i <= this.watchString.length - 1;i++){
-			s.push ("change:"+this.watchString[i]);
-		}
-		return s.join(" ");
+		this.listenTo(this, "change:logo change:dino", $.proxy(this.modelChanged, this));
 	},
 	restart:function(options){
 		this.history = [  { "logo":null, "dino":0 }  ];
 		this.pointer = 0;
 	},
 	getValues : function(){
-		var i, obj = {};
-		for(i = 0;i <= this.watchString.length - 1;i++){
-			obj[this.watchString[i]] = this.get(this.watchString[i]);
-		}
+		var obj = {};
+		obj["logo"] = this.get("logo");
+		obj["dino"] = this.get("dino");
 		return obj;
 	},
 	modelChanged:function(){
@@ -75,6 +65,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
+		alert("undo "+this.id+"  "+this._id+"  "+this.output()+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -82,12 +73,13 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
+		alert("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
 		this.pointer = this.pointer + 1;
 		this.reload();
-	}	
+	}
 });
 
 LG.UndoRedoFileModel.MAX_HISTORY = 20;
@@ -101,7 +93,6 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		img:null,
 		dino:0
 	},
-	watchString:["logo","dino"],
 	idAttribute: "_id", 
 	urlRoot:function(){
 		return LG.baseUrl + "/files";
@@ -161,38 +152,32 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 
 LG.IPadFileModel = LG.FileModel.extend({
 	save:function(data, options){
-		console.log("saving model "+JSON.stringify(this)+"  "+data+"  "+options);
-		console.log("1  "+$.proxy(this.saveSuccess, this, options));
-		console.log("2  "+$.proxy(this.saveFail, this, options));
 		var callbacks = {"success":$.proxy(this.saveSuccess, this, options), "fail":$.proxy(this.saveFail, this, options)};
-		console.log("callbacks "+JSON.stringify(callbacks));
-		console.log("callbacks "+callbacks);
-		console.log("a "+callbacks.success);
-		console.log("b "+callbacks.fail);
 		var id = ( this.get("_id") || LG.Utils.getUuid() );
-		this.set({"_id":id});
+		this.set(_.extend(data, {"_id":id}));
 		LG.fileSystem.saveFile(this, callbacks);
     },
     destroy:function(options){
-    	//alert("deleting model");
+    	console.log("ipad destroy");
     	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
     	LG.fileSystem.deleteFile(this, callbacks);
     },
     deleteSuccess:function(options){
-    	console.log("deleteSuccess");
     	options.success();
     },
     deleteFail:function(options){
-    	console.log("deleteFail");
     	options.fail();
     },
     saveSuccess:function(options){
-    	console.log("saveSuccess!!! yay");
     	var id = this.get("_id");
     	var response = {"_id":id};
-   		options.success(this, response);
+    	this.set({"dirty":false});
+    	options.success(this, response);
+    	this.trigger("change");
+    	this.trigger("sync");
     },
     saveFail:function(options){
+    	console.log("saveFail");
     	options.error();
     }
 });

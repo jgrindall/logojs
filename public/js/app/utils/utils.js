@@ -94,24 +94,12 @@ LG.Utils.getUuid = function(){
 	return s;
 };
 
-LG.Utils.writeTimeStamp = (new Date()).getTime();
-
-LG.Utils.writeNum = 0;
-
 LG.Utils.writeGrowl = function(){
-	var now = (new Date()).getTime();
-	var diff = now - LG.Utils.writeTimeStamp; 
-	if(diff > 20000 || (diff > 5000 && LG.Utils.writeNum <= 3)){
-		LG.Utils.growl("Write your Logo and then click anywhere on the left to draw");
-		LG.Utils.writeNum++;
-	}
-	LG.Utils.writeTimeStamp = now;
+	LG.EventDispatcher.trigger(LG.Events.WRITE_GROWL);
 };
 
 LG.Utils.growl = function(msg){
 	// open a little popup message
-	// close all if there are any
-	//LG.Utils.closeGrowls();
 	var data = {
 		"afterOpen": function() {
 			var g = this;
@@ -124,7 +112,8 @@ LG.Utils.growl = function(msg){
 			$(this).off("click");
 		},
 		"closeTemplate":"",
-		"position":"bottom-left"
+		"position":"top-left",
+		"life":1500
 	
 	};
 	$.jGrowl(msg, data);

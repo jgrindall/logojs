@@ -200,7 +200,7 @@
 				<%
 				if(name){
 					
-					print("<span class='curly'>&#8220;</span>"+name+"<span class='curly'>&#8221;</span>");
+					print(name);
 				}
 				else{
 					print("unsaved file");
@@ -359,7 +359,17 @@
 			<div id="header"></div>
 			  
 		</script>
-
+		
+		<script id="tpl_writegrowl" type="text/template">
+			
+			<div id="writegrowl" >
+				
+				<p><%= message%></p>
+				
+			</div>
+			
+		</script>
+		
 		<script id="tpl_canvas" type="text/template">
 			
 			<div id="canvas" >
@@ -672,7 +682,10 @@ drawSquare()</pre>
 										</p>
 										<p>
 
-											Recursion can also be used in Logo - for example the following program defines a procedure which accepts one variabel called 'dist' and repeatedly calls itself, increasing the value of 'dist' each time, with the result that an increasing series of line segments is drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
+											Recursion can also be used in Logo - for example the following program defines a procedure
+											which accepts one variable called 'dist' and repeatedly calls itself, increasing the
+											value of 'dist' each time, with the result that an increasing series of line segments is 
+											drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
 										</p>
 									
 										<p class="code">
@@ -812,6 +825,9 @@ drawSpiral(10)</pre>
 				
 				<div class="menutop">
 					<p><%= message %></p>
+					<button id="closebutton" class="action button button1 right transparent">
+						<i class="fa fa-times"></i>
+					</button>
 				</div>
 				<p class="errorbody"><%= body %></p>
 				<div class="alertbuttons
@@ -864,12 +880,12 @@ drawSpiral(10)</pre>
 				
 					<div class="leftcontent">
 						<div class="speech">
-							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
+							<span class="title"><%= name %></span>
 							<div class="logo">
 								<%= logo %>
 							</div>
 						</div>
-						<span class="views"><i class="fa fa-eye"/>7</span>
+						<span style="display:none;" class="views"><i class="fa fa-eye"/>7</span>
 					</div>
 					
 					<div class="rightcontent">
@@ -926,7 +942,7 @@ drawSpiral(10)</pre>
 					
 					<div class="gallerytop menutop" >
 						<p class="title">
-							<span class="title"><span class="curly">&#8220;</span><%= name %><span class="curly">&#8221;</span></span>
+							<span class="title"><%= name %></span>
 						</p>
 						
 						<button id="cancelbuttontop" class="action button button1 right transparent">
@@ -954,7 +970,7 @@ drawSpiral(10)</pre>
 						<a href="#" id="cancelbutton" class="action button button2" ><span>Cancel</span></a>
 					</div>
 					
-					<span class="views"><i class="fa fa-eye"/>7</span>
+					<span class="views" style="display:none;"><i class="fa fa-eye"/>7</span>
 					
 				</div>
 				
@@ -1118,9 +1134,14 @@ drawSpiral(10)</pre>
 			<div id="filename" class="menularge">
 				<div class="menutop">
 					<p>Please choose a filename</p>
+					
+					<button id="closebutton" class="action button button1 right transparent">
+						<i class="fa fa-times"></i>
+					</button>
+					
 				</div>
 				
-				<input type="text" id="filenametext" value="" placeholder="your filename"></input>
+				<input type="text" id="filenametext" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="your filename"></input>
 				<p class="error">Error <%=error %></p>
 				<div class="alertbuttons alertbuttons2">
 					<a href="#" id="okbutton" class="action button button0" ><span>Ok</span></a>

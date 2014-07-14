@@ -47,11 +47,12 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
+		console.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		if(logo != this.logo){
+		//if(logo != this.logo){
 			this.setLogo(logo);
-		}
+		//}
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
@@ -146,7 +147,7 @@ LG.TouchWriteView = LG.WriteView.extend({
 		setTimeout(function(){
 			_this.removeShowList();
 			_this.$logodiv.removeAttr("disabled");
-		}, 750);
+		}, 1000);
 	},
 	onHide:function(){
 		this.removeShowList();

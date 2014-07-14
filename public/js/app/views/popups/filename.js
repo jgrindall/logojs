@@ -17,7 +17,8 @@ LG.FileNameView = LG.APopUpView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_click a#cancelbutton":"clickCancel",
-			"_click a#okbutton":"clickOk"
+			"_click a#okbutton":"clickOk",
+			"_click #closebutton":"clickClose"
 		});
 		return obj;
 	},
@@ -43,14 +44,21 @@ LG.FileNameView = LG.APopUpView.extend({
 			options = {
 				"success":function(id){
 					LG.router.navigate("write/"+id, {"trigger":true});
+					LG.sounds.playSuccess();
 					LG.Utils.growl("File saved");
 				},
 				"error":function(){
-					
+					LG.router.openErrorPage({"cancel":function(){
+						LG.router.navigate("write", {"trigger":true});
+					}});
 				}
 			};
 			LG.fileCollection.saveFileAs(name, options);
 		}
+	},
+	clickClose:function(e){
+		this.stopProp(e);
+		window.history.back();
 	},
 	clickCancel:function(e){
 		this.stopProp(e);

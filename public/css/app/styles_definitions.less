@@ -9,12 +9,13 @@
 @tri_size_help:20px;
 
 @fontsizevsmall:80%;
-@fontsizesmall:100%;
-@fontsizenormal:100%;
-@fontsizehelp:90%;
+@fontsizesmall:110%;
+@fontsizenormal:110%;
+@fontsizehelp:110%;
+@fontsizewrite:120%;
 @fontsizelarge:140%;
 @fontsizevlarge:175%;
-@fontsizevvlarge:230%;
+@fontsizevvlarge:210%;
 
 .rightmenutransparent{
 	border-color:transparent;
@@ -27,6 +28,7 @@
 	height: 100%;
 	color:white;
 	border:none;
+	.shadow;
 	.animate;
 }
 
@@ -35,14 +37,20 @@
 	background-color:@menubg;
 }
 
+.shadow{
+	-moz-box-shadow: #000 15px 15px 30px 15px !important;
+	box-shadow: #000 15px 15px 30px 15px !important;
+	-webkit-box-shadow: #000 15px 15px 30px 15px !important;
+}
+
 .menusmall{
 	width:@leftsmallwidth;
-	right: -@leftsmallwidth;
+	right: -@leftsmallwidth - 30;
 }
 
 .menularge{
 	width:@leftlargewidth;
-	right: -@leftlargewidth;
+	right: -@leftlargewidth - 30;
 }
 
 .menusmall.show, .menularge.show{
@@ -51,7 +59,7 @@
 
 .menuxlarge{
 	width:100%;
-	right: -100%;
+	right: -120%;
 	.rightmenutransparent;
 }
 

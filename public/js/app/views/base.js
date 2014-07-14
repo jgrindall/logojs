@@ -166,7 +166,6 @@ LG.Button = Backbone.View.extend({
 		var defaultData, data;
 		defaultData = { show: this.getShow(), disabled: this.getDisabled() };
 		data = _.extend(defaultData, this.getData());
-		//console.log(this+" button :  "+this.template+"   "+JSON.stringify(data));
 		this.loadTemplate(this.template, data , {replace:true} );
 		return this;
 	},

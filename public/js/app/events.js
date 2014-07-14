@@ -37,3 +37,4 @@ LG.Events.INSERT				=	"LG::insert";
 LG.Events.TO_BAR				=	"LG::toBar";
 LG.Events.RESUME				=	"LG::pause";
 LG.Events.PAUSE					=	"LG::resume";
+LG.Events.WRITE_GROWL			=	"LG::writeGrowl";

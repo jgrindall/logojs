@@ -7,7 +7,9 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 	},
 	addNewModel:function(options){
 		if(options && options.force){
-			this.remove(this.selected);
+			if(this.selected){
+				this.remove(this.selected);
+			}
 			this.selected = null;
 		}
 		if(!this.selected){

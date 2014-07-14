@@ -39,6 +39,14 @@ LG.FileCollection = LG.AFileCollection.extend({
 	initialize:function(){
 		LG.AFileCollection.prototype.initialize.call(this);
 		this.listenTo(LG.userModel, "change:loggedIn", $.proxy(this.onLoginChanged, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_UNDO, $.proxy(this.undo, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_REDO, $.proxy(this.redo, this));
+	},
+	undo:function(){
+		this.selected.undo();
+	},
+	redo:function(){
+		this.selected.redo();
 	},
 	getData:function(){
 		var data = LG.AFileCollection.prototype.getData.call(this);
@@ -52,7 +60,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			dino = this.selected.get("dino");
 			this.load({
 				"success":function(){
-				// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+					// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){
@@ -109,7 +117,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	loadById:function(id){
 		var selectedModel;
 		if(this.selected.get("_id") === id){
-			LG.Utils.growl("File already open");
+			//LG.Utils.growl("File already open");
 		}
 		else{
 			selectedModel = this.getByProperty("_id", id);
@@ -120,27 +128,26 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		var _this = this;
-		var options = {
+		console.log("deleteCurrentFile");
+		var _this = this, options;
+		options = {
 			"success":function(){
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();
 			},
 			"fail":function(){
-				alert("error deleting");
+				//alert("error deleting");
 			}
 		};
 		if(this.selected.isNew()){
 			this.selected.set({"logo":null});
 		}
 		else{
-			var m = this.selected;
 			this.selected.destroy(options);
 		}
 	},
 	saveCurrentFile:function(options){
-		console.log(">>>>>>>>>  save current file");
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		var data = {"img":LG.imageModel.get("img"),"logo":LG.fileCollection.selected.get("logo"),"userId":LG.userModel.get("userId")};
 		LG.Utils.log("save "+JSON.stringify(data));
@@ -161,26 +168,22 @@ LG.FileCollection = LG.AFileCollection.extend({
 		return error;
 	},
 	saveFileAs:function(name, callback){
-		console.log("saveFileAs "+name+"  "+callback);
 		var _this = this, model, data, options;
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
 		data = {"dino":LG.fileCollection.selected.get("dino"), "name":name, "logo":LG.fileCollection.selected.get("logo"), "img":LG.imageModel.get("img"), "userId":LG.userModel.get("userId")};
-		model = new this.model(data);
+		this.selected.set(data);
 		options = {
 			"success":function(model, response){
-				console.log("success called "+model+",   "+response+"  "+response._id);
 				model.set({"_id":response._id});
 				model.set({"id":response._id});
 				_this.add(model);
 				callback.success(response._id);
 			},
 			"error":function(){
-				LG.router.openErrorPage({"cancel":function(){
-					LG.router.navigate("write", {"trigger":true});
-				}});
+				callback.error();
 			}
 		};
-		model.save(data, options);
+		this.selected.save(data, options);
 	}
 });
 
@@ -194,11 +197,11 @@ LG.IPadFileCollection = LG.FileCollection.extend({
 	readSuccess:function(entries) {
 		if(entries){
     		this.reset(entries);
+    		this.trigger("sync");
     	}
-    	console.log("reset! "+this.length);
 	},
 	readFail:function(error) {
-   		alert("Failed to list directory contents: " + error.code);
+   		//alert("Failed to list directory contents: " + error.code);
 	}
 });
 

@@ -27,7 +27,6 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
-		console.log("help2");
 		LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){

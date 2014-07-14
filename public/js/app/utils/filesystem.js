@@ -10,18 +10,14 @@ LG.FileSystem = function(){
 LG.FileSystem.prototype.deleteFile = function(model, options){
 	//alert("delete");
 	var filename = "file_"+model.get("name")+".txt";
-	console.log("deleteFile model "+filename+"  "+JSON.stringify(model));
-	console.log("options "+JSON.stringify(options));
 	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
 };
 
 LG.FileSystem.prototype.gotFileDeleteEntry = function(model, options, fileEntry){
-	console.log("gotFileDeleteEntry");
 	fileEntry.remove($.proxy(this.onFileDeleteSuccess, this, options), $.proxy(this.onFileDeleteError, this, options));
 };
 
 LG.FileSystem.prototype.onFileDeleteSuccess = function(options){
-	console.log("onFileDeleteSuccess");
 	options.success();
 };
 
@@ -48,14 +44,11 @@ LG.FileSystem.prototype.onMakeWriterFail = function(options, error) {
 LG.FileSystem.prototype.onMakeWriterSuccess = function(model, options, writer) {
 	writer.write(JSON.stringify(model));
     writer.abort();
-    console.log("WRITTEN");
     options.success();
 };
 
 LG.FileSystem.prototype.saveFile = function(model, options){
 	var filename = "file_"+model.get("name")+".txt";
-	console.log("saveFile model "+filename+"  "+JSON.stringify(model));
-	console.log("options "+JSON.stringify(options));
 	this.filesFolder.getFile(filename, {create: true}, $.proxy(this.gotFileSaveEntry, this, model, options), $.proxy(this.failFileSaveEntry, this, options));
 };
 
@@ -77,14 +70,20 @@ LG.FileSystem.prototype.readFiles = function(options){
 };
 
 LG.FileSystem.prototype.fileIsRead = function(e){
-	var obj = $.parseJSON(e.target.result);
-	if(obj.name && obj.logo && obj.userId){
-		this.fileContents[this.numLoaded] = obj;
-	}
-	else{
-		this.fileContents[this.numLoaded] = null;
-	}
-    this.readNext();
+	try{
+		var obj = $.parseJSON(e.target.result);
+		if(obj.name && obj.logo && obj.userId){
+			this.fileContents[this.numLoaded] = obj;
+		}
+		else{
+			this.fileContents[this.numLoaded] = null;
+		}
+    	this.readNext();
+    }
+    catch(e){
+    	console.log("parse failed");
+    	this.options.fail();
+    }
 };
 
 LG.FileSystem.prototype.fileIsReadError = function(){

@@ -34,13 +34,9 @@ LG.Launcher.prototype.domReady = function(){
 };
 
 LG.Launcher.prototype.startLoad = function(){
-	console.log("sL1");
 	this.loadTemplates();
-	console.log("sL2");
 	this.makeObjects();
-	console.log("sL3");
 	this.loadStorage();
-	console.log("sL4");
 };
 
 LG.Launcher.prototype.loadTemplates = function(){
@@ -100,7 +96,6 @@ LG.Launcher.prototype.loadUserId = function(){
 };
 
 LG.Launcher.prototype.soundsLoaded = function(){
-	console.log("soundsLoaded");
 	this.loadUserId();
 	this.login();
 };
@@ -212,7 +207,6 @@ LG.IPadLauncher.prototype.constructor = LG.IPadLauncher;
 LG.IPadLauncher.prototype.login = function(){
 	// just log them in automatically
 	LG.userModel.set({"loggedIn":true});
-	console.log("onloggedin");
 	this.onLoggedIn();
 };
 
@@ -233,7 +227,7 @@ LG.IPadLauncher.prototype.fileSystemOk = function(){
 };
 
 LG.IPadLauncher.prototype.fileSystemFail = function(){
-	alert("file system fail");	
+	//alert("file system fail");	
 };
 
 LG.IPadLauncher.prototype.bindEvents = function(){
@@ -257,7 +251,6 @@ LG.IPadLauncher.prototype.deviceReady = function(){
 };
 
 LG.IPadLauncher.prototype.check = function(){
-	console.log("check "+this._started +"  "+ this._domReady  +"  "+ this._deviceReady +"  "+ this._fileResolved);
 	return (!this._started && this._domReady  && this._deviceReady && this._fileResolved);
 };
 

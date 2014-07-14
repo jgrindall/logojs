@@ -23,18 +23,16 @@ LG.GalleryListView = Backbone.View.extend({
 	},
 	clickItem:function(e){
 		this.stopProp(e);
+		//TODO - this.scrolling etc
 		var idToOpen = $(e.currentTarget).data("id");
 		this.myScroll.scrollTo(0, 0); // TODO fix this!!
 		this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
-		console.log("add files using "+this.collection+"  "+this.collection.length);
 		models = this.collection.filter(function(model){
-			console.log("model is "+model.output());
 			return !model.isNew();
 		});
-		console.log("mnodels "+models.length);
 		numPages = Math.ceil(models.length / this.perPage);
 		this.removeAllPages();
 		this.pages = [ ];

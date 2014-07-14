@@ -76,7 +76,6 @@ LG.WebFacebook.prototype.startListenToLoad = function(options){
 };
 
 LG.WebFacebook.prototype.checkScriptLoaded = function(options){
-	console.log("check! "+this.numWait+"  "+window.FB);
 	if(window.FB){
 		clearInterval(this.checkLoadInterval);
 	}
@@ -111,7 +110,6 @@ LG.WebFacebook.prototype.load = function(options){
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
 	try{
-		console.log("get status "+LG.userModel);
 		FB.getLoginStatus(function(response) {
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
