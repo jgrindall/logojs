@@ -5,7 +5,7 @@ LG.FileOpener = function(){
 };
 
 LG.FileOpener.prototype.open = function(id){
-	console.log("open "+id);
+	LG.Utils.log("open "+id);
 	var oldModel, oldModelYours, yours = false, userId;
 	oldModel = LG.allFilesCollection.getByProperty("_id", id);
 	oldModelYours = LG.fileCollection.getByProperty("_id", id);

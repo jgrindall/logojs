@@ -136,7 +136,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onMessage:function(msg){
 		var data = msg.data, command, size;
-		//console.log("Worker said : " + JSON.stringify(msg.data));
+		//LG.Utils.log("Worker said : " + JSON.stringify(msg.data));
 		if(data.type === "command"){
 			if(data.name === "fd"){
 				command = new LG.FdCommand({"amount":data.amount});
@@ -186,7 +186,7 @@ LG.CanvasView = Backbone.View.extend({
 			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
-			console.log("Error "+JSON.stringify(e));
+			LG.Utils.log("Error "+JSON.stringify(e));
 			this.showError(e.expected, e.line, e.offset);
 			this.active = false;
 		}
@@ -196,7 +196,7 @@ LG.CanvasView = Backbone.View.extend({
 				this.process(tree);
 			}
 			catch(e){
-				console.log("e: "+e);
+				LG.Utils.log("e: "+e);
 			}
 		}
 	},
@@ -248,7 +248,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.bmpcontainer.addChild(flushbmp);
 		this.commands.graphics.clear();
 		this.tick();
-		console.log("flushed "+this.bmpcontainer.getNumChildren());
+		LG.Utils.log("flushed "+this.bmpcontainer.getNumChildren());
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;

@@ -81,7 +81,7 @@ LG.FileSystem.prototype.fileIsRead = function(e){
     	this.readNext();
     }
     catch(e){
-    	console.log("parse failed");
+    	LG.Utils.log("parse failed");
     	this.options.fail();
     }
 };

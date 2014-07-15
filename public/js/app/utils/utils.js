@@ -191,7 +191,6 @@ LG.Utils.find = function(list, attrName, match){
 	return found;
 };
 
-
 LG.Utils.log = function(s){
 	if(window.console){
 		console.log("DEBUG> "+s+"\n");

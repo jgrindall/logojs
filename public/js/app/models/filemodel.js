@@ -68,7 +68,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
-		console.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
+		LG.Utils.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -76,7 +76,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		console.log("redo "+this.canRedo()+"  "+this.pointer);
+		LG.Utils.log("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
@@ -161,7 +161,7 @@ LG.IPadFileModel = LG.FileModel.extend({
 		LG.fileSystem.saveFile(this, callbacks);
     },
     destroy:function(options){
-    	console.log("ipad destroy");
+    	LG.Utils.log("ipad destroy");
     	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
     	LG.fileSystem.deleteFile(this, callbacks);
     },
@@ -180,7 +180,7 @@ LG.IPadFileModel = LG.FileModel.extend({
     	this.trigger("sync");
     },
     saveFail:function(options){
-    	console.log("saveFail");
+    	LG.Utils.log("saveFail");
     	options.error();
     }
 });

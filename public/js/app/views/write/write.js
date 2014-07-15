@@ -59,7 +59,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		console.log("LOAD");
+		LG.Utils.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
 		//if(logo != this.logo){
@@ -96,7 +96,15 @@ LG.WriteView = LG.AMenuView.extend({
 		this.setLogo("");
 		this.changedTextDeBounce();
 	},
+	clean:function(){
+		var logo = this.getLogo();
+		console.log("replace   "+logo+"  "+LG.WriteView.ALLOWED);
+		logo = logo.replace(new RegExp("[^"+LG.WriteView.ALLOWED+"]", 'g'), '');
+		console.log(" gives "+logo);
+		this.setLogo(logo);
+	},
 	save:function(){
+		this.clean();
 		var data = {"logo":this.getLogo()};
 		this.logo = data.logo;
 		this.stopListening(LG.fileCollection);
@@ -141,6 +149,8 @@ LG.WriteView = LG.AMenuView.extend({
 });
 
 LG.WriteView.TOP = 53;
+
+LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/-";
 
 LG.TouchWriteView = LG.WriteView.extend({
 	initialize:function(){

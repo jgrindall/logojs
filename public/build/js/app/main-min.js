@@ -191,7 +191,6 @@ LG.Utils.find = function(list, attrName, match){
 	return found;
 };
 
-
 LG.Utils.log = function(s){
 	if(window.console){
 		console.log("DEBUG> "+s+"\n");
@@ -729,7 +728,7 @@ LG.FileSystem.prototype.fileIsRead = function(e){
     	this.readNext();
     }
     catch(e){
-    	console.log("parse failed");
+    	LG.Utils.log("parse failed");
     	this.options.fail();
     }
 };
@@ -5590,7 +5589,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
-		console.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
+		LG.Utils.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -5598,7 +5597,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		console.log("redo "+this.canRedo()+"  "+this.pointer);
+		LG.Utils.log("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
@@ -5683,7 +5682,7 @@ LG.IPadFileModel = LG.FileModel.extend({
 		LG.fileSystem.saveFile(this, callbacks);
     },
     destroy:function(options){
-    	console.log("ipad destroy");
+    	LG.Utils.log("ipad destroy");
     	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
     	LG.fileSystem.deleteFile(this, callbacks);
     },
@@ -5702,7 +5701,7 @@ LG.IPadFileModel = LG.FileModel.extend({
     	this.trigger("sync");
     },
     saveFail:function(options){
-    	console.log("saveFail");
+    	LG.Utils.log("saveFail");
     	options.error();
     }
 });
@@ -5842,7 +5841,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			dino = this.selected.get("dino");
 			this.load({
 				"success":function(){
-					// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+					// TODO LG.Utils.log("logo was " + logo+" & "+dino+", do I need to load it again?");
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){
@@ -5907,7 +5906,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		console.log("deleteCurrentFile");
+		LG.Utils.log("deleteCurrentFile");
 		var _this = this, options;
 		options = {
 			"success":function(){
@@ -6006,7 +6005,7 @@ LG.FileOpener = function(){
 };
 
 LG.FileOpener.prototype.open = function(id){
-	console.log("open "+id);
+	LG.Utils.log("open "+id);
 	var oldModel, oldModelYours, yours = false, userId;
 	oldModel = LG.allFilesCollection.getByProperty("_id", id);
 	oldModelYours = LG.fileCollection.getByProperty("_id", id);
@@ -7235,7 +7234,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onMessage:function(msg){
 		var data = msg.data, command, size;
-		//console.log("Worker said : " + JSON.stringify(msg.data));
+		//LG.Utils.log("Worker said : " + JSON.stringify(msg.data));
 		if(data.type === "command"){
 			if(data.name === "fd"){
 				command = new LG.FdCommand({"amount":data.amount});
@@ -7285,7 +7284,7 @@ LG.CanvasView = Backbone.View.extend({
 			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
-			console.log("Error "+JSON.stringify(e));
+			LG.Utils.log("Error "+JSON.stringify(e));
 			this.showError(e.expected, e.line, e.offset);
 			this.active = false;
 		}
@@ -7295,7 +7294,7 @@ LG.CanvasView = Backbone.View.extend({
 				this.process(tree);
 			}
 			catch(e){
-				console.log("e: "+e);
+				LG.Utils.log("e: "+e);
 			}
 		}
 	},
@@ -7347,7 +7346,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.bmpcontainer.addChild(flushbmp);
 		this.commands.graphics.clear();
 		this.tick();
-		console.log("flushed "+this.bmpcontainer.getNumChildren());
+		LG.Utils.log("flushed "+this.bmpcontainer.getNumChildren());
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;
@@ -7890,7 +7889,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		console.log("LOAD");
+		LG.Utils.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
 		//if(logo != this.logo){
@@ -7927,7 +7926,15 @@ LG.WriteView = LG.AMenuView.extend({
 		this.setLogo("");
 		this.changedTextDeBounce();
 	},
+	clean:function(){
+		var logo = this.getLogo();
+		console.log("replace   "+logo+"  "+LG.WriteView.ALLOWED);
+		logo = logo.replace(new RegExp("[^"+LG.WriteView.ALLOWED+"]", 'g'), '');
+		console.log(" gives "+logo);
+		this.setLogo(logo);
+	},
 	save:function(){
+		this.clean();
 		var data = {"logo":this.getLogo()};
 		this.logo = data.logo;
 		this.stopListening(LG.fileCollection);
@@ -7972,6 +7979,8 @@ LG.WriteView = LG.AMenuView.extend({
 });
 
 LG.WriteView.TOP = 53;
+
+LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/-";
 
 LG.TouchWriteView = LG.WriteView.extend({
 	initialize:function(){
@@ -8456,7 +8465,7 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		return this;
 	},
 	initScroll:function(){
-		console.log("init scroll");
+		LG.Utils.log("init scroll");
 		var _this = this;
 		this.myScroll = new IScroll("#refwrapper", {snap:".helpcontainer", scrollbars:true, scrollX:true, scrollY:false, interactiveScrollbars:true, momentum:false});
 		this.updateLayout();
@@ -8626,14 +8635,14 @@ LG.GalleryListView = Backbone.View.extend({
 	clickItemDown:function(e){
 		//this.stopProp(e);
 		this.time = (new Date()).getTime();
-		console.log("click down "+this.scrolling+"  "+this.time);
+		LG.Utils.log("click down "+this.scrolling+"  "+this.time);
 	},
 	clickItemUp:function(e){
 		//this.stopProp(e);
 		var timeNow, diff;
 		timeNow = (new Date()).getTime();
 		diff = (timeNow - this.time);
-		console.log("click up "+diff);
+		LG.Utils.log("click up "+diff);
 		if(diff < 120){
 			LG.sounds.playClick();
 			var idToOpen = $(e.currentTarget).data("id");
@@ -8720,7 +8729,7 @@ LG.GalleryListView = Backbone.View.extend({
 		}
 	},
 	scrollStart:function(){
-		console.log("start");
+		LG.Utils.log("start");
 	},
 	scrollEnd:function(){
 		var wrapperWidth = this.wrapper.width(), w, p, _this = this;

@@ -25,14 +25,14 @@ LG.GalleryListView = Backbone.View.extend({
 	clickItemDown:function(e){
 		//this.stopProp(e);
 		this.time = (new Date()).getTime();
-		console.log("click down "+this.scrolling+"  "+this.time);
+		LG.Utils.log("click down "+this.scrolling+"  "+this.time);
 	},
 	clickItemUp:function(e){
 		//this.stopProp(e);
 		var timeNow, diff;
 		timeNow = (new Date()).getTime();
 		diff = (timeNow - this.time);
-		console.log("click up "+diff);
+		LG.Utils.log("click up "+diff);
 		if(diff < 120){
 			LG.sounds.playClick();
 			var idToOpen = $(e.currentTarget).data("id");
@@ -119,7 +119,7 @@ LG.GalleryListView = Backbone.View.extend({
 		}
 	},
 	scrollStart:function(){
-		console.log("start");
+		LG.Utils.log("start");
 	},
 	scrollEnd:function(){
 		var wrapperWidth = this.wrapper.width(), w, p, _this = this;

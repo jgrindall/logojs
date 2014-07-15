@@ -60,7 +60,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			dino = this.selected.get("dino");
 			this.load({
 				"success":function(){
-					// TODO console.log("logo was " + logo+" & "+dino+", do I need to load it again?");
+					// TODO LG.Utils.log("logo was " + logo+" & "+dino+", do I need to load it again?");
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){
@@ -125,7 +125,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		console.log("deleteCurrentFile");
+		LG.Utils.log("deleteCurrentFile");
 		var _this = this, options;
 		options = {
 			"success":function(){
