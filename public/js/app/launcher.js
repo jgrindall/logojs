@@ -230,7 +230,7 @@ LG.IPadLauncher.prototype.fileSystemOk = function(){
 };
 
 LG.IPadLauncher.prototype.fileSystemFail = function(){
-	//alert("file system fail");	
+	
 };
 
 LG.IPadLauncher.prototype.keyboardShowHandler = function(){

@@ -135,7 +135,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 				callback.success();
 			},
 			"fail":function(){
-				//alert("error deleting");
+				callback.fail();
 			}
 		};
 		if(this.selected.isNew()){
@@ -199,7 +199,7 @@ LG.IPadFileCollection = LG.FileCollection.extend({
     	}
 	},
 	readFail:function(error) {
-   		//alert("Failed to list directory contents: " + error.code);
+   		
 	}
 });
 

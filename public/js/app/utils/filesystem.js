@@ -8,7 +8,6 @@ LG.FileSystem = function(){
 };
 
 LG.FileSystem.prototype.deleteFile = function(model, options){
-	//alert("delete");
 	var filename = "file_"+model.get("name")+".txt";
 	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
 };

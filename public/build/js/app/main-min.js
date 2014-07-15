@@ -379,10 +379,6 @@ LG.FakeIPadCreate.prototype.galleryButton = function(){
 	return new LG.IPadGalleryButton();
 };
 
-// make 
-
-//alert("config "+LG.Config.PHONEGAP);
-
 if(LG.Config.PHONEGAP === "ios"){
 	LG.create = new LG.IPadCreate();
 }
@@ -655,7 +651,6 @@ LG.FileSystem = function(){
 };
 
 LG.FileSystem.prototype.deleteFile = function(model, options){
-	//alert("delete");
 	var filename = "file_"+model.get("name")+".txt";
 	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileDeleteEntry, this, model, options), $.proxy(this.failFileDeleteEntry, this, options));
 };
@@ -5309,9 +5304,9 @@ LG.output.MAX_SIZE_REACHED = "Exceeded output size";
 
 LG.output.MAX_SIZE = 100000;
 
-LG.output.BATCH_SIZE = 96;
+LG.output.BATCH_SIZE = 200;
 
-LG.output.TIMEOUT = 100;
+LG.output.TIMEOUT = 25;
 
 LG.Command = function(data){
 	this.data = data;
@@ -5916,7 +5911,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 				callback.success();
 			},
 			"fail":function(){
-				//alert("error deleting");
+				callback.fail();
 			}
 		};
 		if(this.selected.isNew()){
@@ -5980,7 +5975,7 @@ LG.IPadFileCollection = LG.FileCollection.extend({
     	}
 	},
 	readFail:function(error) {
-   		//alert("Failed to list directory contents: " + error.code);
+   		
 	}
 });
 
@@ -6133,7 +6128,9 @@ LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
 	_.each(LG.GraphicsModel.NAMES, function(s, i){
-		var clrs = s.split("/");
+		s = s.replace(" ", "$");
+		s = s.replace("/", "$");
+		var clrs = s.split("$");
 		_.each(clrs, function(c, key){
 			if(c === color){
 				r = LG.GraphicsModel.CLRS[i];
@@ -7178,7 +7175,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.commandsstage.snapToPixelEnabled = true;
 	},
 	makeTurtle:function(){
-		this.turtle = new LG.Easel.Turtle(10);
+		this.turtle = new LG.Easel.Turtle(12);
 		this.turtlecontainer = new createjs.Container();
 		this.turtlecontainer.addChild(this.turtle);
 		this.turtlestage.addChild(this.turtlecontainer);
@@ -7788,6 +7785,7 @@ LG.FileNameView = LG.APopUpView.extend({
 		return this.$("input#filenametext").val();
 	},
 	clickOk:function(e){
+		var _this = this;
 		this.stopProp(e);
 		var name = this.getName(), options, error;
 		error = LG.fileCollection.nameOk(name);
@@ -7797,9 +7795,10 @@ LG.FileNameView = LG.APopUpView.extend({
 		else{
 			options = {
 				"success":function(id){
-					LG.router.navigate("write/"+id, {"trigger":true});
-					LG.sounds.playSuccess();
+					_this.$("input#filenametext").blur();
 					LG.Utils.growl("File saved");
+					LG.sounds.playSuccess();
+					LG.router.navigate("write/"+id, {"trigger":true});
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){
@@ -7889,12 +7888,9 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		LG.Utils.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		//if(logo != this.logo){
-			this.setLogo(logo);
-		//}
+		this.setLogo(logo);
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
@@ -7903,7 +7899,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.showErrorText(msg);
 	},
 	showErrorText:function(msg){
-		alert("ERROR");
 		var _this = this;
 		LG.router.navigate("write", {"trigger":true});
 		LG.sounds.playError();
@@ -7928,9 +7923,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	clean:function(){
 		var logo = this.getLogo();
-		console.log("replace   "+logo+"  "+LG.WriteView.ALLOWED);
 		logo = logo.replace(new RegExp("[^"+LG.WriteView.ALLOWED+"]", 'g'), '');
-		console.log(" gives "+logo);
 		this.setLogo(logo);
 	},
 	save:function(){
@@ -7980,7 +7973,7 @@ LG.WriteView = LG.AMenuView.extend({
 
 LG.WriteView.TOP = 53;
 
-LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/-";
+LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/\n\r\t ,:=-";
 
 LG.TouchWriteView = LG.WriteView.extend({
 	initialize:function(){
@@ -9265,7 +9258,7 @@ LG.IPadLauncher.prototype.fileSystemOk = function(){
 };
 
 LG.IPadLauncher.prototype.fileSystemFail = function(){
-	//alert("file system fail");	
+	
 };
 
 LG.IPadLauncher.prototype.keyboardShowHandler = function(){

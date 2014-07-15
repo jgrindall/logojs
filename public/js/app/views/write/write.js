@@ -59,12 +59,9 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
 	},
 	load:function(){
-		LG.Utils.log("LOAD");
 		var logo, fileModel = LG.fileCollection.selected;
 		logo = fileModel.get("logo");
-		//if(logo != this.logo){
-			this.setLogo(logo);
-		//}
+		this.setLogo(logo);
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
@@ -73,7 +70,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.showErrorText(msg);
 	},
 	showErrorText:function(msg){
-		alert("ERROR");
 		var _this = this;
 		LG.router.navigate("write", {"trigger":true});
 		LG.sounds.playError();
@@ -98,9 +94,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	clean:function(){
 		var logo = this.getLogo();
-		console.log("replace   "+logo+"  "+LG.WriteView.ALLOWED);
 		logo = logo.replace(new RegExp("[^"+LG.WriteView.ALLOWED+"]", 'g'), '');
-		console.log(" gives "+logo);
 		this.setLogo(logo);
 	},
 	save:function(){
@@ -150,7 +144,7 @@ LG.WriteView = LG.AMenuView.extend({
 
 LG.WriteView.TOP = 53;
 
-LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/-";
+LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/\n\r\t ,:=-";
 
 LG.TouchWriteView = LG.WriteView.extend({
 	initialize:function(){

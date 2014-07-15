@@ -132,10 +132,6 @@ LG.FakeIPadCreate.prototype.galleryButton = function(){
 	return new LG.IPadGalleryButton();
 };
 
-// make 
-
-//alert("config "+LG.Config.PHONEGAP);
-
 if(LG.Config.PHONEGAP === "ios"){
 	LG.create = new LG.IPadCreate();
 }

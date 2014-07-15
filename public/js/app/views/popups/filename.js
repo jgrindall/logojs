@@ -34,6 +34,7 @@ LG.FileNameView = LG.APopUpView.extend({
 		return this.$("input#filenametext").val();
 	},
 	clickOk:function(e){
+		var _this = this;
 		this.stopProp(e);
 		var name = this.getName(), options, error;
 		error = LG.fileCollection.nameOk(name);
@@ -43,9 +44,10 @@ LG.FileNameView = LG.APopUpView.extend({
 		else{
 			options = {
 				"success":function(id){
-					LG.router.navigate("write/"+id, {"trigger":true});
-					LG.sounds.playSuccess();
+					_this.$("input#filenametext").blur();
 					LG.Utils.growl("File saved");
+					LG.sounds.playSuccess();
+					LG.router.navigate("write/"+id, {"trigger":true});
 				},
 				"error":function(){
 					LG.router.openErrorPage({"cancel":function(){

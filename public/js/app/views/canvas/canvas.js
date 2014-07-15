@@ -80,7 +80,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.commandsstage.snapToPixelEnabled = true;
 	},
 	makeTurtle:function(){
-		this.turtle = new LG.Easel.Turtle(10);
+		this.turtle = new LG.Easel.Turtle(12);
 		this.turtlecontainer = new createjs.Container();
 		this.turtlecontainer.addChild(this.turtle);
 		this.turtlestage.addChild(this.turtlecontainer);
