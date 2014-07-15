@@ -142,10 +142,15 @@ LG.Browser.textAreas = ["logodiv"];
 
 LG.Browser.configureScroll = function(){
 	$(document).bind("touchstart", function(e){
-		var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+		var i, currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 		LG.Browser.touchY = currentY;
 		$target = $(e.target);
-		if(LG.Browser.textAreas.indexOf($target.attr("id") >= 0)){
+		console.log(JSON.stringify(LG.Browser.textAreas));
+		console.log($target.attr("id"));
+		i = LG.Browser.textAreas.indexOf($target.attr("id"));
+		console.log("i  "+i+" gt0 "+(i>=0));
+		if(i >= 0){
+			LG.Utils.log(" i>=0  conf scroll "+$target.attr("id"));
 			LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		}
 	});

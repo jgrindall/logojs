@@ -190,6 +190,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 LG.IPadFileCollection = LG.FileCollection.extend({
 	model:LG.IPadFileModel,
 	fetch:function(){
+		LG.spinnerModel.set({"show":true});
 		LG.fileSystem.readFiles({"success":$.proxy(this.readSuccess, this), "fail":$.proxy(this.readFail, this)});
 	},
 	readSuccess:function(entries) {

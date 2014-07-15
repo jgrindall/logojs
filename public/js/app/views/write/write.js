@@ -7,6 +7,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.changedTextDeBounce = $.debounce( 400, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.KEYBOARD_DOWN, $.proxy(this.kbDown, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.KEYBOARD_UP, $.proxy(this.kbUp, this));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
@@ -28,6 +29,10 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	toBar:function(){
 		this.$logodiv.blur();
+	},
+	kbUp:function(){
+		LG.Utils.log("kbup");
+		this.resetError();
 	},
 	kbDown:function(){
 		window.scrollTo(0,0);
@@ -57,6 +62,12 @@ LG.WriteView = LG.AMenuView.extend({
 	draw:function(){
 		this.save();
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW);
+		try{
+			window.cordova.plugins.Keyboard.close();
+		}
+		catch(e){
+				
+		}
 	},
 	load:function(){
 		var logo, fileModel = LG.fileCollection.selected;
@@ -71,11 +82,12 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	showErrorText:function(msg){
 		var _this = this;
+		setTimeout(function(){
+			LG.Utils.log("show error!");
+			_this.$(".error").text(msg).addClass("show").css("right", 0);
+		}, 200);
 		LG.router.navigate("write", {"trigger":true});
 		LG.sounds.playError();
-		setTimeout(function(){
-			_this.$(".error").text(msg).addClass("show");
-		}, 100);
 	},
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
@@ -125,18 +137,25 @@ LG.WriteView = LG.AMenuView.extend({
 		this.changedTextDeBounce();
 	},
 	resetError:function(){
+		LG.Utils.log("resetError  "+this.error.show);
+		var w = this.$el.width();
 		if(this.error.show){
-			this.$(".error").removeClass("show");
+			this.$(".error").removeClass("show").css("right", -w);
 			this.error = {"show":false, "line":-1};
+			LG.Utils.log("removed");
 		}
 	},
 	onScroll:function(){
 		this.$logonums.scrollTop(this.$logodiv.scrollTop());
 	},
+	mouseDown:function(){
+		LG.Utils.log("md");
+		this.resetError();
+	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"_mousedown":"resetError"
+			"_mousedown":"mouseDown"
 		});
 		return obj;
 	}
