@@ -6128,8 +6128,8 @@ LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
 	_.each(LG.GraphicsModel.NAMES, function(s, i){
-		s = s.replace(" ", "$");
-		s = s.replace("/", "$");
+		s = s.replace(/ /g, "$");
+		s = s.replace(/\//g, "$");
 		var clrs = s.split("$");
 		_.each(clrs, function(c, key){
 			if(c === color){
@@ -7965,7 +7965,7 @@ LG.WriteView = LG.AMenuView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"mousedown":"resetError"
+			"_mousedown":"resetError"
 		});
 		return obj;
 	}
@@ -9090,7 +9090,7 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "menu", hash;
+	var defaultHash = "write", hash;
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		hash = this.hash;
 	}

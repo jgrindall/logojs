@@ -136,7 +136,7 @@ LG.WriteView = LG.AMenuView.extend({
 	events:function(){
 		var obj = Backbone.View.getTouch( {
 			"_keyup":"changedText",
-			"mousedown":"resetError"
+			"_mousedown":"resetError"
 		});
 		return obj;
 	}

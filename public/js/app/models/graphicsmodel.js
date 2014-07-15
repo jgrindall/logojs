@@ -50,8 +50,8 @@ LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
 	_.each(LG.GraphicsModel.NAMES, function(s, i){
-		s = s.replace(" ", "$");
-		s = s.replace("/", "$");
+		s = s.replace(/ /g, "$");
+		s = s.replace(/\//g, "$");
 		var clrs = s.split("$");
 		_.each(clrs, function(c, key){
 			if(c === color){

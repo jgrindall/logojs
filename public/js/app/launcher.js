@@ -62,7 +62,7 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "menu", hash;
+	var defaultHash = "write", hash;
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
 		hash = this.hash;
 	}
