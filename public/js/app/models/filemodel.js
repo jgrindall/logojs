@@ -7,13 +7,13 @@ LG.ImageModel = Backbone.Model.extend({
 
 
 LG.UndoRedoFileModel = Backbone.Model.extend({
-	initialize: function(){
+	initialize: function(data){
 		this.restart();
 		this.editing = false;
 		this.listenTo(this, "change:logo change:dino", $.proxy(this.modelChanged, this));
 	},
 	restart:function(options){
-		this.history = [  { "logo":null, "dino":0 }  ];
+		this.history = [  this.getValues()  ];
 		this.pointer = 0;
 	},
 	getValues : function(){
@@ -22,10 +22,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		obj["dino"] = this.get("dino");
 		return obj;
 	},
-	modelChanged:function(){
-		if(this.editing){
-			return;
-		}
+	saveState:function(){
 		var h, p, newValue;
 		h = this.history;
 		p = this.pointer;
@@ -46,6 +43,12 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 			h.push(newValues);
 		}
 	},
+	modelChanged:function(){
+		if(this.editing){
+			return;
+		}
+		this.saveState();
+	},
 	canUndo:function(){
 		if(this.history.length === 0 || this.pointer === 0){
 			return false;
@@ -65,7 +68,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
-		alert("undo "+this.id+"  "+this._id+"  "+this.output()+"    :  "+this.canUndo()+"  "+this.pointer);
+		console.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -73,7 +76,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		alert("redo "+this.canRedo()+"  "+this.pointer);
+		console.log("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}

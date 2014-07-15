@@ -35,7 +35,7 @@
 
 .buttonsmall{
 	height:37px;
-	min-width:80px !important; 
+	min-width:74px !important; 
 }
 
 .buttonxsmall{
@@ -83,7 +83,7 @@
 #cancelbutton i{
 	font-size:@fontsizevvlarge;
 	position: relative;
-	top: -13px;
+	top: -15px;
 }
 
 #filebutton{
@@ -116,20 +116,34 @@
 }
 
 #writebuttons .button{
-	min-width:50px;
+	min-width:42px;
 	padding: 0;
 	margin: 0;
 	color:@bg0;
 	float:left;
 }
 
+#writebuttons .button i{
+	top:-4px !important;
+}
 
 #writebuttons .button span{
 	.animate;
 }
 
 #menu li{
-	margin-top: 15px;
+	padding:5px;
+	min-height:60px;
+	box-sizing:border-box;
+}
+
+#menu li .button i{
+	font-size:@fontsizevvlarge !important;
+	top: 2px;
+}
+
+#menu li.disabled{
+	display:none;
 }
 
 .button span i{
@@ -142,7 +156,7 @@
 
 .menutop #helpbutton{
 	position: absolute;
-	right: 68px;
+	right: 75px;
 	top: 3px;
 }
 .menutop #homebutton{
@@ -195,13 +209,16 @@
 .alertbuttons1{
 	width:120px;
 }
+.alertbuttons .button:nth-child(1){
+	margin-left:5px;
+}
 .alertbuttons .button:nth-child(1),.alertbuttons .button:nth-child(2){
-	margin-right:25px;
+	margin-right:10px;
 }
 
 .menutop .button.right.transparent span{
 	margin-right: 11px;
 	font-size:@fontsizenormal;
 	position:relative;
-	top:-4px;
+	top:-8px;
 }

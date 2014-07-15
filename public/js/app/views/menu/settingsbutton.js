@@ -10,6 +10,7 @@ LG.SettingsButtonView = LG.MenuButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("menu", {"trigger":true});
 	}
 	

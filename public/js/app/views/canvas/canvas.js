@@ -51,7 +51,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onResize:function(){
 		var w, h;
-		w = $("body").width() - 50;
+		w = $("body").width();
 		h = $("body").height();
 		this.$el.width(w).height(h);
 		LG.canvasModel.set({"width":w, "height":h});
@@ -236,6 +236,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	finished:function(){
 		LG.Utils.growl("Finished!");
+		LG.sounds.playSuccess();
 		this.active = false;
 		this.ended = true;
 		this.flush();

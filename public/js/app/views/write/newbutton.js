@@ -36,6 +36,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;
 		if(!loggedIn){

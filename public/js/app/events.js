@@ -38,3 +38,5 @@ LG.Events.TO_BAR				=	"LG::toBar";
 LG.Events.RESUME				=	"LG::pause";
 LG.Events.PAUSE					=	"LG::resume";
 LG.Events.WRITE_GROWL			=	"LG::writeGrowl";
+LG.Events.KEYBOARD_UP			=	"LG::keyboardUp";
+LG.Events.KEYBOARD_DOWN			=	"LG::keyboardDown";

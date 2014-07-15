@@ -116,10 +116,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	loadById:function(id){
 		var selectedModel;
-		if(this.selected.get("_id") === id){
-			//LG.Utils.growl("File already open");
-		}
-		else{
+		if(this.selected.get("_id") != id){
 			selectedModel = this.getByProperty("_id", id);
 			if(selectedModel){
 				this.loadModel(selectedModel);
@@ -132,6 +129,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		var _this = this, options;
 		options = {
 			"success":function(){
+				LG.sounds.playSuccess();
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();

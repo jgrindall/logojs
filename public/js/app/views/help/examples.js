@@ -28,6 +28,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 		}
 	},
 	clickClose:function(){
+		LG.sounds.playClick();
 		window.history.back();
 	},
 	clickMe:function(e){

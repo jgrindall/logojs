@@ -10,6 +10,7 @@ LG.ALoadButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("load", {"trigger":true});
 	},
 	events:function(){

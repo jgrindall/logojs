@@ -14,7 +14,6 @@ LG.Easel.Commands.prototype.initialize = function() {
 };
 
 LG.Easel.Commands.prototype.toBitmap = function(canvas) {
-	alert("bmp");
 	this.draw(canvas.getContext("2d"));
 	this.graphics.clear();
 };

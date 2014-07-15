@@ -5,7 +5,7 @@
 	top:-200%;
 	left:0;
 	display:block;
-	font-size: @fontsizenormal;
+	background: white;
 	.animate;
 }
 
@@ -13,107 +13,59 @@
 	top:0;
 }
 
-
-
-#helpoverlay #helpoverlaycontent{
-	width:100%;
-	bottom:0;
-	position: absolute;
-	top:@topheight + 4;
-	left:0;
-	background:@mainmenubg;
-}
-
-#helpoverlay #helpoverlaycontent .language{
-	width:49%;
-	position:absolute;
-	top:0;
-	left:0;
-	bottom: 50px;
-	overflow: hidden;
-}
-
-#helpoverlay .langinner{
-	border-radius: 8px;
-	border-bottom-width: 4px;
-	border-bottom-style: solid;
-	color:white;
-	width:95%;
-	position:relative;
-	top:1px;
-	left:2%;
-	padding:10px;
-	box-sizing:border-box;
-}
-
-#helpoverlay #helpoverlaycontent .advanced{
-	position:absolute;
-	top:0;
-	left: 49%;
-	right:0;
-	bottom: 50px;
-	overflow: hidden;
-}
-
-#helpoverlay table td{
+#helpoverlay table{
 	padding:5px;
-	padding-bottom:10px;
+	color:white;
+	margin-left: auto;
+	margin-right: auto;
+	font-size:@fontsizenormal;
 }
 
-#helpoverlay table td:first-child{
-	font-size:@fontsizelarge;
+#helpoverlay table.commands{
+	background:@bg0;
+	border-radius: 10px;
+}
+
+#helpoverlay table.commands td{
+	padding:5px;
+	padding-bottom:20px;
+}
+
+#helpoverlay table.colors td{
+	padding:10px;
+	width:15%;
+	height:110px;
+	border-radius: 13px;
+	border: 5px solid white;
+}
+
+#helpoverlay table.commands td:first-child{
 	font-weight: bold;
 	padding-right: 20px;
 }
 
-#helpoverlay #helpoverlaycontent p.title{
-	font-size:@fontsizesmall;
-	margin: 0;
-	margin-bottom:5px;
-	color: @border0;
-	margin-right: 35px;
-	margin-top: 5px;
-	text-align: center;
-}
-#helpoverlay .language table td, #helpoverlay .advanced table td{
-	font-size:@fontsizesmall;
-}
-
-#helpoverlay .language table td, #helpoverlay .advanced table td{
+#helpoverlay table.commands td{
 	border-bottom: 1px dashed @border0;
 }
-#helpoverlay .language .italic, #helpoverlay .advanced .italic{
+#helpoverlay .italic, #helpoverlay .advanced .italic{
 	color:lighten(@bg0, 30%);
 }
 
-#helpoverlay div.colorsref{
-	position:absolute;
-	bottom:0;
-	left:0;
-	width:100%;
-	height:40px;
-}
-
-#helpoverlay div#colorsref1{
-	bottom:40px;	
-}
-
-#helpoverlay div.colorsref .colorblock{
-	width:11.111111%;
-	height:100%;
-	display:inline-block;
-	float:left;
-	color:white;
-}
-
-#helpoverlay div.colorsref .colorblock .colorname{
-	font-size: @fontsizevsmall;
-	width: 100%;
+#helpoverlay .colorname{
 	text-align: center;
+	width: 100%;
 	display: block;
-	margin-top: 6px;
 }
 
-#helpoverlay div.colorsref .colorblock .colornamedark{
+#helpoverlay .colornamedark{
 	color:#333;
+}
+
+#helpoverlay #refwrapper{
+	position:absolute;
+	left:0;
+	right:0;
+	top:50px;
+	bottom:0px;
+	overflow: hidden;
 }

@@ -9,6 +9,7 @@ LG.RefButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){

@@ -6,6 +6,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.AMenuView.prototype.initialize.call(this);
 		this.changedTextDeBounce = $.debounce( 400, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.KEYBOARD_DOWN, $.proxy(this.kbDown, this));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
@@ -27,6 +28,17 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	toBar:function(){
 		this.$logodiv.blur();
+	},
+	kbDown:function(){
+		window.scrollTo(0,0);
+		var h = $("body").height();
+		$("body").height(h+1);
+		$("body").height(h);
+		setTimeout(function(){
+			window.scrollTo(0,0);
+			$("body").height(h+1);
+			$("body").height(h);
+		}, 100);
 	},
 	resize:function(){
 		this.onScroll();
@@ -61,8 +73,13 @@ LG.WriteView = LG.AMenuView.extend({
 		this.showErrorText(msg);
 	},
 	showErrorText:function(msg){
-		this.$(".error").text(msg).addClass("show");
+		alert("ERROR");
+		var _this = this;
 		LG.router.navigate("write", {"trigger":true});
+		LG.sounds.playError();
+		setTimeout(function(){
+			_this.$(".error").text(msg).addClass("show");
+		}, 100);
 	},
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};

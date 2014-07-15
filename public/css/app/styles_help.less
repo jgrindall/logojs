@@ -2,7 +2,7 @@
 	color:#111;
 }
 
-#help .helpcontainer{
+.helpcontainer{
 	display:inline-block;
 	float:left;
 	padding:0px;
@@ -13,11 +13,12 @@
 	overflow:hidden;
 }
 
-#help .helpcontainer .helpcontent p{
+.helpcontainer .helpcontent p{
 	font-size:@fontsizehelp;
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
 }
 
-#help .helpcontainer .helpcontent{
+.helpcontainer .helpcontent{
 	width: 95%;
 	height: 97%;
 	top: 1.5%;
@@ -25,7 +26,7 @@
 	position: relative;
 }
 
-#help .helpcontainer .helpcontent .helpcontentleft, #help .helpcontainer .helpcontent .helpcontentleftlarge, #help .helpcontainer .helpcontent .helpcontentleftsmall{
+.helpcontainer .helpcontent .helpcontentleft, .helpcontainer .helpcontent .helpcontentleftlarge, .helpcontainer .helpcontent .helpcontentleftsmall{
 	height:99.5%;
 	display:inline-block;
 	position: relative;
@@ -34,7 +35,7 @@
 	box-sizing:border-box;
 }
 
-#help .helpcontainer .helpcontent .helpcontentright, #help .helpcontainer .helpcontent .helpcontentrightlarge, #help .helpcontainer .helpcontent .helpcontentrightsmall{
+.helpcontainer .helpcontent .helpcontentright,  .helpcontainer .helpcontent .helpcontentrightlarge,  .helpcontainer .helpcontent .helpcontentrightsmall{
 	position: absolute;
 	height:99.5%;
 	display:inline-block;
@@ -42,39 +43,40 @@
 	box-sizing:border-box;
 }
 
-#help .helpcontainer .helpcontent .helpcontentleft{
+.helpcontainer .helpcontent .helpcontentleft{
 	width:50%;
 }
-#help .helpcontainer .helpcontent .helpcontentleftsmall{
+.helpcontainer .helpcontent .helpcontentleftsmall{
 	width:35%;
 }
-#help .helpcontainer .helpcontent .helpcontentleftlarge{
+.helpcontainer .helpcontent .helpcontentleftlarge{
 	width:70%;
 }
-#help .helpcontainer .helpcontent .helpcontentright{
+.helpcontainer .helpcontent .helpcontentright{
 	width:49.5%;
 }
-#help .helpcontainer .helpcontent .helpcontentrightsmall{
+.helpcontainer .helpcontent .helpcontentrightsmall{
 	width:29.5%;
 }
 #help .helpcontainer .helpcontent .helpcontentrightlarge{
 	width:64.5%;
 }
-#help .helpcontainer .helpcontent .helpcontentrightsmall .helpblock2{
+.helpcontainer .helpcontent .helpcontentrightsmall .helpblock2{
 	position:relative;
 	height:49.5%;
 }
 
-#help .helpcontent pre{
+.helpcontent pre{
 	display: inline-block;
 	padding: 10px;
 	background: #eef;
 	margin-left: 50%;
 	position: relative;
+	font-size: 120%;
 	left: -100px;
 }
 
-#help .helpcontent p.quote{
+.helpcontent p.quote{
 	width: 75%;
 	background: #EEE;
 	padding: 10px;
@@ -83,12 +85,12 @@
 	color: #444;
 }
 
-#help.helpcontainer p{
+.helpcontainer p{
 	margin:4px;
 	line-height:1.7em;
 }
 
-#help #helpwrapper{
+#helpwrapper{
 	position:absolute;
 	left:0;
 	right:0;
@@ -101,6 +103,7 @@
 	width:220px;
 	position: relative;
 	left: 50px;
+	bottom:0;
 }
 
 #help #menubuttons .button{

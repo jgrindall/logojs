@@ -9,6 +9,7 @@ LG.HelpButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){
@@ -27,6 +28,7 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){

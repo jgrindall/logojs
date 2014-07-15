@@ -26,14 +26,17 @@ LG.AlertView = LG.APopUpView.extend({
 	},
 	clickOk:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_OK);
 	},
 	clickCancel:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_CANCEL);
 	},
 	clickNo:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_NO);
 	},
 	onShow:function(){

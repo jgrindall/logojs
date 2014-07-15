@@ -12,7 +12,8 @@ LG.HelpView = LG.AMenuView.extend({
 		return obj;
 	},
 	clickCancel:function(){
-		LG.router.navigate("write", {"trigger":true});
+		LG.sounds.playClick();
+		window.history.back();
 	},
 	updateLayout : function() {
 		if(this.wrapper && this.scroller && this.myScroll){
@@ -32,9 +33,10 @@ LG.HelpView = LG.AMenuView.extend({
 	},
 	onShow:function(){
 		this.initScroll();
+		this.$("img#anim").attr("src", "img/video/video.gif");
 	},
 	onHide:function(){
-		
+		this.$("img#anim").attr("src", "").removeAttr("src");
 	},
 	beforeClose:function(){
 		if(this.myScroll){

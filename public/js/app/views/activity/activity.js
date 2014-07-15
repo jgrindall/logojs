@@ -17,6 +17,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.canvasView = new LG.CanvasView();
 		this.$el.append(this.canvasView.render().el);
 		
+		this.writeGrowlView = new LG.WriteGrowlView();	
+		this.$el.append(this.writeGrowlView.render().el);
+		
 		this.writeView = LG.create.writeView();
 		this.$el.append(this.writeView.render().el);
 		
@@ -44,8 +47,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.examplesView = new LG.ExamplesView();	
 		this.$el.append(this.examplesView.render().el);
 		
-		this.writeGrowlView = new LG.WriteGrowlView();	
-		this.$el.append(this.writeGrowlView.render().el);
+		
 		
 		return this;
 	},

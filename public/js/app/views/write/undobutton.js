@@ -24,6 +24,7 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 	template:"tpl_undobutton",
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.CLICK_UNDO);
 	},
 	getDisabled:function(){

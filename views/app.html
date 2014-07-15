@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="ui-mobile-rendering">  
+<html class="ui-mobile-rendering" style="background:#34495e;">  
 	<head> 
 	
 		<title>logojs</title> 
@@ -146,9 +146,9 @@
 
 			
 			<button class="action button right transparent" >
-				<i class="fa fa-pencil"></i>
+				<i class="fa fa-chevron-right"></i>
 				<span>
-					Back to the Logo!
+					<%=label%>
 				</span>
 			</button>
 			
@@ -224,17 +224,17 @@
 		<script id="tpl_helpbuttonmenu" type="text/template">
 			
 			<li>
-				<a href="#" id="helpbuttonmenu" class="action button clr0" >
+				<button class="action button clr4<% if(disabled){print(" disabled");}%>">
 					<i class="fa fa-question-circle"></i>
-					<span>About Logotacular</span>
-				</a>
+					<span>About / Help</span>
+				</button>
 			</li>
 			
 		</script>
 		
 		<script id="tpl_gallerybutton" type="text/template">
 
-			  <li>
+			  <li class="<% if(disabled){print("disabled");} %>">
 				<button class="action button clr0<% if(disabled){print(" disabled");} %>">
 					<i class="fa fa-files-o"></i>
 					<span>Gallery</span>
@@ -332,7 +332,7 @@
 		
 		
 		<script id="tpl_loginbutton" type="text/template">
-			<li>
+			<li class="<% if(disabled){print("disabled");} %>">
 				<button id="loginbutton" class="action button<% if(disabled){print(" disabled");} %>" >
 				
 					<% if(pic){ %>
@@ -395,7 +395,7 @@
 				
 				<textarea editable="false" disabled="true" id="logonums"></textarea>
 				
-				<textarea placeholder="Write your Logo here..." resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+				<textarea placeholder="Write code here..." resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 				
 				<div class="error"></div>
 				
@@ -409,7 +409,7 @@
 			<div id="help" class="menuxlarge">
 				
 				<div class="gallerytop menutop" >
-					<span class="menutitle">About Logotacular</span>
+					<span class="menutitle">About / Help</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
 						<i class="fa fa-times"></i>
 						
@@ -424,40 +424,28 @@
 						
 							<div class="helpcontent">
 							
-								<div class="helpcontentleft">
-									<h3>What is Logotacular?</h3>
+								<div class="helpcontentleftsmall">
+									<h3>Welcome to Logotacular!</h3>
 										
-										<p>
-											Logo is a programming language, created in the 1960's to help kids learn about programming. 
-											
-											It became known as "Turtle graphics" because users could program an on-screen turtle and tell it how to move around the screen.
-											
-										</p> 
-											
 										<p>
 											Logotacular is an application for drawing colourful patterns using the Logo language, designed to help you explore geometry and programming.
 										</p>
 										
-										<ul id="menubuttons">
-				
-											<li>
-												<a href="#write">
-													<button class="action button clr4">
-													<i class="fa fa-pencil"></i>
-													<span>Start writing Logo!</span>
-													</button>
-												</a>
-											</li>
+										<p>
+											Write code in the textbox, and tap on the screen to draw it.
 											
-										</ul>
+											When you're ready, save your file and work on it later.
+										</p> 
+											
 										
-										<p>Or, swipe to keep reading!</p>
+										
+									
 									
 									</div>
 								
-									<div class="helpcontentright" style="background: #37485f;">
+									<div class="helpcontentrightlarge" style="background: #fff;">
 									
-										<img src="img/help/help1.png" class="centre"/>
+										<img class="centre" id="anim" />
 										
 									</div>
 							
@@ -465,48 +453,7 @@
 								
 							</div>
 						
-							<div class='helpcontainer'>
-								<div class="helpcontent">
 							
-							
-									<div class="helpcontentleftlarge">
-										
-										<h3>What is Logo?</h3>
-							
-										<p>
-							
-											Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
-										</p>
-										
-										<p>
-											Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
-										</p>
-										
-										<p class="quote">
-											" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
-							
-										</p>
-							
-										<p class="quote">
-								
-										...Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
-										... the Turtle is like a person: ' I am here and I am facing north...'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.
-										</p>
-									
-									</div>
-								
-									<div class="helpcontentrightsmall">
-										<div class="helpblock2">
-											<img src="img/help/help2.png" class="centre"/>
-										</div>
-										
-										<div class="helpblock2">
-											<img src="img/help/help3.png" class="centre"/>
-										</div>
-									</div>
-							
-								</div>
-							</div>
 						
 							<div class='helpcontainer'>
 								
@@ -532,7 +479,7 @@
 										</p>
 										<p>
 
-											One of the first Logo programs that a pupil would typically be exposed to would be to draw a square using:
+											Try drawing a square using:
 										</p>
 										<p class="code">
 											<pre>fd(100)
@@ -549,7 +496,7 @@ rt(90)</pre>
 									</div>
 							
 									<div class="helpcontentright">
-										<img class="centre" src="img/help/Untitled.gif"/>
+										<img class="centre" src="img/help/anim.gif"/>
 									</div>
 							
 								</div>
@@ -748,6 +695,50 @@ drawSpiral(10)</pre>
 						
 						
 							</div>
+							
+							<div class='helpcontainer'>
+								<div class="helpcontent">
+							
+							
+									<div class="helpcontentleftlarge">
+										
+										<h3>What is Logo?</h3>
+							
+										<p>
+							
+											Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
+										</p>
+										
+										<p>
+											Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
+										</p>
+										
+										<p class="quote">
+											" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
+							
+										</p>
+							
+										<p class="quote">
+								
+										...Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
+										... the Turtle is like a person: ' I am here and I am facing north...'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.
+										</p>
+									
+									</div>
+								
+									<div class="helpcontentrightsmall">
+										<div class="helpblock2">
+											<img src="img/help/help2.png" class="centre"/>
+										</div>
+										
+										<div class="helpblock2">
+											<img src="img/help/help3.png" class="centre"/>
+										</div>
+									</div>
+							
+								</div>
+							</div>
+							
 							
 							<div class='helpcontainer'>
 								
@@ -997,8 +988,6 @@ drawSpiral(10)</pre>
 			
 			<div id="helpoverlay" >
 				
-				<div id="helpoverlaybg"></div>
-				
 				<div class="menutop">
 					<span class="menutitle">Quick reference</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
@@ -1006,59 +995,87 @@ drawSpiral(10)</pre>
 					</button>
 				</div>
 				
-				<div id="helpoverlaycontent">
-					
-					<div class="language">
-						<p class="title">Basic commands</p>
-						<div class="langinner clr0">
+				
+				
+				<div id="refwrapper" >
+				
+					<div id="refscroller">
+						
+						<div class='helpcontainer'>
+						
+							<div class="helpcontent">
 							
-							<table>
-								<tbody>
-									<tr><td>fd</td><td>fd(100)<span class="italic"> - Move forward 100 units</span></td></tr>
-									<tr><td>rt</td><td>rt(90)<span class="italic"> - Turn right 90 degrees</span></td></tr>
-									<tr><td>penup</td><td>penup()<span class="italic"> - Take the pen off the paper</span></td></tr>
-									<tr><td>pendown</td><td>pendown()<span class="italic"> - Put it back down</span></td></tr>
-									<tr><td>color</td><td>color(black)<span class="italic"> - Set the pen color to black</span></td></tr>
-									<tr><td>bg</td><td>bg(red)<span class="italic"> - Set the background color to red</span></td></tr>
-									<tr><td>thick</td><td>thick(5)<span class="italic"> - Set the line thickness to 5 (between 1-10)</span></td></tr>
-									<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic"> - Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
-								</tbody>
-							</table>
+								<h3>Basic commands</h3>
+										
+								<table class="commands">
+									<tbody>
+										<tr><td>fd</td><td>fd(100)<span class="italic"> - Move forward 100 units</span></td></tr>
+										<tr><td>rt</td><td>rt(90)<span class="italic"> - Turn right 90 degrees</span></td></tr>
+										<tr><td>penup</td><td>penup()<span class="italic"> - Take the pen off the paper</span></td></tr>
+										<tr><td>pendown</td><td>pendown()<span class="italic"> - Put it back down</span></td></tr>
+										<tr><td>color</td><td>color(black)<span class="italic"> - Set the pen color to black</span></td></tr>
+										<tr><td>bg</td><td>bg(red)<span class="italic"> - Set the background color to red</span></td></tr>
+										<tr><td>thick</td><td>thick(5)<span class="italic"> - Set the line thickness to 5 (between 1-10)</span></td></tr>
+										<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic"> - Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
+									</tbody>
+								</table>
+								
+							</div>
+						
 						</div>
-					</div>
-					
-					<div class="advanced">
-						<p class="title">Advanced commands</p>
-						<div class="langinner clr0">
+						
+						
+						<div class='helpcontainer'>
+							<div class="helpcontent">
+						
+								<h3>Advanced Commands</h3>
+						
+								<table class="commands">
+									<tbody>
+										<tr><td>a:=</td><td>a:=10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
+										<tr><td>
+										proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
+										<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>
+										</td></tr>
+										<tr><td>
+										proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
+										<br/><span class="italic"> - Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
+										</td></tr>
 							
-							<table>
-								<tbody>
-									<tr><td>a:=</td><td>a:=10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
-									<tr><td>
-									proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
-									<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>
-									</td></tr>
-									<tr><td>
-									proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
-									<br/><span class="italic"> - Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
-									</td></tr>
-									
-								</tbody>
-							</table>
+									</tbody>
+								</table>
+						
+							</div>
+						</div>
+						
+						<div class='helpcontainer'>
+							
+							<div class="helpcontent">
+						
+								<h3>
+									Colors
+								</h3>
+							
+								<table class="colors">
+									<tbody>
+										<tr class="colors"></tr>
+										<tr class="colors"></tr>
+										<tr class="colors"></tr>
+									</tbody>
+								</table>
+						
+							</div>
 						</div>
 						
 					</div>
-					
+			
 				</div>
 				
-				<div class="colorsref" id="colorsref1"></div>
-				
-				<div class="colorsref" id="colorsref2"></div>
-				
 			</div>
-		
 					
 		</script>
+		
+		
 		
 		<script id="tpl_examples" type="text/template">
 			

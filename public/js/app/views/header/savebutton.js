@@ -12,6 +12,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	onClick:function(e){
 		this.stopProp(e);
 		var data = this.getData();
+		LG.sounds.playClick();
 		if(data.loggedIn && !data.disabled){
 			LG.fileCollection.save({
 				"success":function(){

@@ -62,13 +62,16 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "help";
+	var defaultHash = "menu", hash;
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
-		LG.router.navigate(this.hash, {"trigger":true});
+		hash = this.hash;
 	}
 	else{
-		LG.router.navigate(defaultHash, {"trigger":true});
+		hash = defaultHash;
 	}
+	setTimeout(function(){	
+		LG.router.navigate(hash, {"trigger":true});
+	}, 1000);
 	this._launched = true;
 };
 
@@ -230,11 +233,21 @@ LG.IPadLauncher.prototype.fileSystemFail = function(){
 	//alert("file system fail");	
 };
 
+LG.IPadLauncher.prototype.keyboardShowHandler = function(){
+	LG.EventDispatcher.trigger(LG.Events.KEYBOARD_UP);
+};
+
+LG.IPadLauncher.prototype.keyboardHideHandler = function(){
+	LG.EventDispatcher.trigger(LG.Events.KEYBOARD_DOWN);
+};
+
 LG.IPadLauncher.prototype.bindEvents = function(){
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
 	document.addEventListener("resume", $.proxy(this.resume, this) , false);
 	document.addEventListener("pause", $.proxy(this.pause, this) , false);
+	window.addEventListener('native.showkeyboard', $.proxy(this.keyboardShowHandler, this));
+	window.addEventListener('native.hidekeyboard', $.proxy(this.keyboardHideHandler, this));
 };
 
 LG.IPadLauncher.prototype.resume = function(){

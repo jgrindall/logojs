@@ -180,12 +180,20 @@ function visitminusexpression(node){
 	var num = stack.pop();
 	stack.push(-1*num);
 }
+
 function visitdefinefnstmt(node){
 	var name = node.name;
 	var argsNode = node.args;
 	var statementsNode = node.stmts;
 	symTable.addFunction(name, argsNode, statementsNode);
 }
+
+function visitnegate(node){
+	visitchildren(node);
+	var num = stack.pop();
+	stack.push(-1*num);
+}
+
 function visitcallfnstmt(node){
 	var name = node.name;
 	var f = symTable.getFunction(name);

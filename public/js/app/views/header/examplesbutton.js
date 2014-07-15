@@ -9,6 +9,7 @@ LG.ExamplesButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("examples", {"trigger":true});
 	},
 	events:function(){

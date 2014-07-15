@@ -11,7 +11,8 @@ LG.GalleryListView = Backbone.View.extend({
 	template:"tpl_gallerylist",
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click .galleryrow":"clickItem"
+			"_mousedown .galleryrow":"clickItemDown",
+			"_mouseup .galleryrow":"clickItemUp"
 		});
 		return obj;
 	},
@@ -21,12 +22,23 @@ LG.GalleryListView = Backbone.View.extend({
 		});
 		this.pages = [ ];
 	},
-	clickItem:function(e){
-		this.stopProp(e);
-		//TODO - this.scrolling etc
-		var idToOpen = $(e.currentTarget).data("id");
-		this.myScroll.scrollTo(0, 0); // TODO fix this!!
-		this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
+	clickItemDown:function(e){
+		//this.stopProp(e);
+		this.time = (new Date()).getTime();
+		console.log("click down "+this.scrolling+"  "+this.time);
+	},
+	clickItemUp:function(e){
+		//this.stopProp(e);
+		var timeNow, diff;
+		timeNow = (new Date()).getTime();
+		diff = (timeNow - this.time);
+		console.log("click up "+diff);
+		if(diff < 120){
+			LG.sounds.playClick();
+			var idToOpen = $(e.currentTarget).data("id");
+			this.myScroll.scrollTo(0, 0);
+			this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
+		}
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
@@ -106,8 +118,11 @@ LG.GalleryListView = Backbone.View.extend({
 			this.myScroll.refresh();
 		}
 	},
+	scrollStart:function(){
+		console.log("start");
+	},
 	scrollEnd:function(){
-		var wrapperWidth = this.wrapper.width(), w, p;
+		var wrapperWidth = this.wrapper.width(), w, p, _this = this;
 		this.scrollPos = -1 * this.scroller.offset().left;
 		w = this.scroller.width();
 		p = (this.scrollPos + wrapperWidth) * 100 / w;
@@ -120,8 +135,9 @@ LG.GalleryListView = Backbone.View.extend({
 			this.removeScroll();
 		}
 		if(this.$(".gallerypage").length >= 1){
-			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
+			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":true});
 			this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+			this.myScroll.on("scrollStart", $.proxy(this.scrollStart, this));
 		}
 	}
 });

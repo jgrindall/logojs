@@ -1320,6 +1320,8 @@ LG.Events.TO_BAR				=	"LG::toBar";
 LG.Events.RESUME				=	"LG::pause";
 LG.Events.PAUSE					=	"LG::resume";
 LG.Events.WRITE_GROWL			=	"LG::writeGrowl";
+LG.Events.KEYBOARD_UP			=	"LG::keyboardUp";
+LG.Events.KEYBOARD_DOWN			=	"LG::keyboardDown";
 
 LG.Facebook = function(){
 	
@@ -5308,7 +5310,7 @@ LG.output.MAX_SIZE_REACHED = "Exceeded output size";
 
 LG.output.MAX_SIZE = 100000;
 
-LG.output.BATCH_SIZE = 200;
+LG.output.BATCH_SIZE = 96;
 
 LG.output.TIMEOUT = 100;
 
@@ -5527,13 +5529,13 @@ LG.ImageModel = Backbone.Model.extend({
 
 
 LG.UndoRedoFileModel = Backbone.Model.extend({
-	initialize: function(){
+	initialize: function(data){
 		this.restart();
 		this.editing = false;
 		this.listenTo(this, "change:logo change:dino", $.proxy(this.modelChanged, this));
 	},
 	restart:function(options){
-		this.history = [  { "logo":null, "dino":0 }  ];
+		this.history = [  this.getValues()  ];
 		this.pointer = 0;
 	},
 	getValues : function(){
@@ -5542,10 +5544,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		obj["dino"] = this.get("dino");
 		return obj;
 	},
-	modelChanged:function(){
-		if(this.editing){
-			return;
-		}
+	saveState:function(){
 		var h, p, newValue;
 		h = this.history;
 		p = this.pointer;
@@ -5566,6 +5565,12 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 			h.push(newValues);
 		}
 	},
+	modelChanged:function(){
+		if(this.editing){
+			return;
+		}
+		this.saveState();
+	},
 	canUndo:function(){
 		if(this.history.length === 0 || this.pointer === 0){
 			return false;
@@ -5585,7 +5590,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
-		alert("undo "+this.id+"  "+this._id+"  "+this.output()+"    :  "+this.canUndo()+"  "+this.pointer);
+		console.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -5593,7 +5598,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		alert("redo "+this.canRedo()+"  "+this.pointer);
+		console.log("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
@@ -5893,10 +5898,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	loadById:function(id){
 		var selectedModel;
-		if(this.selected.get("_id") === id){
-			//LG.Utils.growl("File already open");
-		}
-		else{
+		if(this.selected.get("_id") != id){
 			selectedModel = this.getByProperty("_id", id);
 			if(selectedModel){
 				this.loadModel(selectedModel);
@@ -5909,6 +5911,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 		var _this = this, options;
 		options = {
 			"success":function(){
+				LG.sounds.playSuccess();
 				LG.Utils.growl("File deleted");
 				_this.addNewModel({"force":true});
 				callback.success();
@@ -6057,9 +6060,15 @@ LG.FileOpener.prototype.modelSynced = function(){
 };
 
 LG.FileOpener.prototype.openFromGallery = function(id){
-	var options;
+	var options, currentId;
 	this.id = id;
-	if(LG.userModel.isConnected()){
+	currentId = LG.fileCollection.selected.get("_id");
+	if(currentId === id){
+		LG.sounds.playError();
+		LG.Utils.growl("File already open");
+		window.history.back();
+	}
+	else if(LG.userModel.isConnected()){
 		if(!LG.fileCollection.selected.isSaved()){
 			options = {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) };
 			LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, options);
@@ -6120,9 +6129,7 @@ LG.GraphicsModel.CLR17 = "#000000";
 LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
 LG.GraphicsModel.BG		=	[4, 7, 16,  3,  7, 2,  16, 14, 4, 12, 8, 15, 10, 16, 12, 4, 14, 16, 13, 4,  16, 4, 16, 2,   2, 9, 16, 14, 2, 2,  3,  9, 16, 13, 7, 16, 8, 3, 17];
 LG.GraphicsModel.INNER	=	[9, 4, 1,  16,  2, 7,  3, 9, 14, 16, 4, 4,  4,  6,  4,  16, 3, 2, 7, 16,  0, 13, 7, 7, 16, 4, 9, 13,  4, 16, 16, 16, 7, 16, 2,  4,  16, 7, 3];
-LG.GraphicsModel.NAMES1	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org"];
-LG.GraphicsModel.NAMES2	=	["red","gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black"];
-LG.GraphicsModel.NAMES =	LG.GraphicsModel.NAMES1.concat(LG.GraphicsModel.NAMES2);
+LG.GraphicsModel.NAMES	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org","red","gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black"];
 LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
@@ -6587,6 +6594,7 @@ LG.ExamplesButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("examples", {"trigger":true});
 	},
 	events:function(){
@@ -6608,6 +6616,7 @@ LG.RefButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){
@@ -6661,6 +6670,7 @@ LG.HelpButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){
@@ -6679,6 +6689,7 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){
@@ -6703,6 +6714,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	onClick:function(e){
 		this.stopProp(e);
 		var data = this.getData();
+		LG.sounds.playClick();
 		if(data.loggedIn && !data.disabled){
 			LG.fileCollection.save({
 				"success":function(){
@@ -6744,6 +6756,7 @@ LG.ALoadButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("load", {"trigger":true});
 	},
 	events:function(){
@@ -6963,7 +6976,6 @@ LG.Easel.Commands.prototype.initialize = function() {
 };
 
 LG.Easel.Commands.prototype.toBitmap = function(canvas) {
-	alert("bmp");
 	this.draw(canvas.getContext("2d"));
 	this.graphics.clear();
 };
@@ -6989,6 +7001,9 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		
 		this.canvasView = new LG.CanvasView();
 		this.$el.append(this.canvasView.render().el);
+		
+		this.writeGrowlView = new LG.WriteGrowlView();	
+		this.$el.append(this.writeGrowlView.render().el);
 		
 		this.writeView = LG.create.writeView();
 		this.$el.append(this.writeView.render().el);
@@ -7017,8 +7032,7 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.examplesView = new LG.ExamplesView();	
 		this.$el.append(this.examplesView.render().el);
 		
-		this.writeGrowlView = new LG.WriteGrowlView();	
-		this.$el.append(this.writeGrowlView.render().el);
+		
 		
 		return this;
 	},
@@ -7136,7 +7150,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	onResize:function(){
 		var w, h;
-		w = $("body").width() - 50;
+		w = $("body").width();
 		h = $("body").height();
 		this.$el.width(w).height(h);
 		LG.canvasModel.set({"width":w, "height":h});
@@ -7321,6 +7335,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	finished:function(){
 		LG.Utils.growl("Finished!");
+		LG.sounds.playSuccess();
 		this.active = false;
 		this.ended = true;
 		this.flush();
@@ -7470,7 +7485,6 @@ LG.MenuView = LG.AMenuView.extend({
 		return this;
 	},
 	swipeMe:function(e){
-		alert("swipe");
 		this.stopProp(e);
 		if(e.gesture.direction === "right"){
 			LG.router.navigate("write", {"trigger":true});
@@ -7557,6 +7571,10 @@ LG.MenuTopView = Backbone.View.extend({
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
 LG.WriteButtonView = LG.MenuButton.extend({
+	initialize:function(){
+		LG.MenuButton.prototype.initialize.call(this);
+		this.listenTo(LG.fileCollection, "add sync change", $.proxy(this.rerender, this));
+	},
 	template:"tpl_writebutton",
 	events:function(){
 		var obj = Backbone.View.getTouch( {
@@ -7565,15 +7583,18 @@ LG.WriteButtonView = LG.MenuButton.extend({
 		return obj;
 	},
 	getData:function(){
-		return {"name":"Johns file", "saved":true};
+		var name = null, fileModel;
+		fileModel = LG.fileCollection.selected;
+		name = fileModel.get("name");
+		return {"label":name || "unsaved file"};
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("write", {"trigger":true});
 	}
 	
 });
-
 
 
 // extends Backbone.View - a base class for all "this is a button in the header" views
@@ -7587,6 +7608,7 @@ LG.SettingsButtonView = LG.MenuButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.router.navigate("menu", {"trigger":true});
 	}
 	
@@ -7713,14 +7735,17 @@ LG.AlertView = LG.APopUpView.extend({
 	},
 	clickOk:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_OK);
 	},
 	clickCancel:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_CANCEL);
 	},
 	clickNo:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.ALERT_NO);
 	},
 	onShow:function(){
@@ -7812,6 +7837,7 @@ LG.WriteView = LG.AMenuView.extend({
 		LG.AMenuView.prototype.initialize.call(this);
 		this.changedTextDeBounce = $.debounce( 400, $.proxy(this.save, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_CLEAR, $.proxy(this.clear, this));
+		this.listenTo(LG.EventDispatcher, LG.Events.KEYBOARD_DOWN, $.proxy(this.kbDown, this));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_TIDY, $.proxy(this.tidy, this));
 		this.listenTo(LG.EventDispatcher, LG.Events.CLICK_DRAW_START, $.proxy(this.draw, this));
@@ -7833,6 +7859,17 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	toBar:function(){
 		this.$logodiv.blur();
+	},
+	kbDown:function(){
+		window.scrollTo(0,0);
+		var h = $("body").height();
+		$("body").height(h+1);
+		$("body").height(h);
+		setTimeout(function(){
+			window.scrollTo(0,0);
+			$("body").height(h+1);
+			$("body").height(h);
+		}, 100);
 	},
 	resize:function(){
 		this.onScroll();
@@ -7867,8 +7904,13 @@ LG.WriteView = LG.AMenuView.extend({
 		this.showErrorText(msg);
 	},
 	showErrorText:function(msg){
-		this.$(".error").text(msg).addClass("show");
+		alert("ERROR");
+		var _this = this;
 		LG.router.navigate("write", {"trigger":true});
+		LG.sounds.playError();
+		setTimeout(function(){
+			_this.$(".error").text(msg).addClass("show");
+		}, 100);
 	},
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
@@ -8080,6 +8122,7 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 	template:"tpl_undobutton",
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.CLICK_UNDO);
 	},
 	getDisabled:function(){
@@ -8099,6 +8142,7 @@ LG.RedoButtonView = LG.UndoRedoButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.CLICK_REDO);
 	}
 	
@@ -8138,6 +8182,7 @@ LG.ClearButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		LG.EventDispatcher.trigger(LG.Events.CLICK_CLEAR);
 		LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 	},
@@ -8229,6 +8274,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		var model = LG.fileCollection.selected;
 		if(LG.userModel.isConnected()){
 			if(!model.isNew()){
@@ -8276,6 +8322,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;
 		if(!loggedIn){
@@ -8309,7 +8356,8 @@ LG.HelpView = LG.AMenuView.extend({
 		return obj;
 	},
 	clickCancel:function(){
-		LG.router.navigate("write", {"trigger":true});
+		LG.sounds.playClick();
+		window.history.back();
 	},
 	updateLayout : function() {
 		if(this.wrapper && this.scroller && this.myScroll){
@@ -8329,9 +8377,10 @@ LG.HelpView = LG.AMenuView.extend({
 	},
 	onShow:function(){
 		this.initScroll();
+		this.$("img#anim").attr("src", "img/video/video.gif");
 	},
 	onHide:function(){
-		
+		this.$("img#anim").attr("src", "").removeAttr("src");
 	},
 	beforeClose:function(){
 		if(this.myScroll){
@@ -8351,15 +8400,11 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 	template:"tpl_helpoverlay",
 	initialize:function(){
 		LG.AMenuView.prototype.initialize.call(this);
+		this.listenTo(LG.EventDispatcher, LG.Events.RESIZE, $.proxy(this.updateLayout, this));
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click button.next":"clickNext",
-			"_click button.copy":"clickCopy",
-			"_click button.more":"clickMore",
-			"_click button.draw":"clickDraw",
-			"_click #cancelbutton":"clickClose",
-			"_click":"clickMe"
+			"_click #cancelbutton":"clickClose"
 		} );
 		return obj;
 	},
@@ -8368,63 +8413,64 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		this.stopProp(e);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_DRAW_START);
 	},
-	clickNext:function(e){
-		this.stopProp(e);
-	},
-	clickMore:function(e){
-		this.stopProp(e);
-		LG.router.navigate("help", {"trigger":true});
-	},
-	clickCopy:function(e){
-		this.stopProp(e);
+	updateLayout : function() {
+		if(this.wrapper && this.scroller && this.myScroll){
+			var wrapperWidth = this.wrapper.width(), wrapperHeight = this.wrapper.height();
+			this.$(".helpcontainer").width(wrapperWidth - 1).height(wrapperHeight - 1);
+			this.scroller.css('width',  this.$(".helpcontainer").length * wrapperWidth + 1);
+			this.myScroll.refresh();
+		}
 	},
 	clickClose:function(){
+		LG.sounds.playClick();
 		window.history.back();
 	},
-	copy:function(){
-		var s = "rpt 6[\nfd(100);rt(60);\n]";
-		LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
-	},
-	clickMe:function(e){
-		this.stopProp(e);
-		LG.EventDispatcher.trigger(LG.Events.HIDE_HELP_OVERLAY);
-	},
 	onShow:function(){
-	
+		this.initScroll();
 	},
 	onHide:function(){
 		
 	},
 	renderColors:function(){
-		var $colors1 = this.$("#colorsref1"), $colors2 = this.$("#colorsref2"), displayName, dark, darkString;
-		_.each(LG.GraphicsModel.NAMES1, function(name, i){
+		var $colors1, $colors2, $colors3, $colors, displayName, dark, darkString;
+		$colors1 = this.$("tr.colors:nth-child(1)");
+		$colors2 = this.$("tr.colors:nth-child(2)");
+		$colors3 = this.$("tr.colors:nth-child(3)");
+		$colors = [$colors1, $colors2, $colors3];
+		_.each(LG.GraphicsModel.NAMES, function(name, i){
 			displayName = name.replace(/\//g, "<br/>");
 			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i) >= 0);
 			darkString = "";
 			if(dark){
 				darkString = " colornamedark";
 			}
-			$colors1.append("<div class='colorblock dino"+i+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
-		});
-		_.each(LG.GraphicsModel.NAMES2, function(name, i){
-			displayName = name.replace(/\//g, "<br/>");
-			dark = (LG.GraphicsModel.DARKTEXT.indexOf(i + LG.GraphicsModel.NAMES1.length) >= 0);
-			darkString = "";
-			if(dark){
-				darkString = " colornamedark";
-			}
-			$colors2.append("<div class='colorblock dino"+(i + LG.GraphicsModel.NAMES1.length)+"'><span class='colorname"+darkString+"'>"+displayName+"</span></div>");
+			var index = Math.floor(i/6);
+			$colors[index].append("<td class='colorblock dino"+i+"'><span class='colorname"+darkString+"'>"+displayName+"</span></td>");
 		});
 	},
 	render:function(){
 		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.scroller = this.$("#refscroller");
+		this.wrapper = this.$("#refwrapper");
 		this.renderColors();
 		return this;
 	},
+	initScroll:function(){
+		console.log("init scroll");
+		var _this = this;
+		this.myScroll = new IScroll("#refwrapper", {snap:".helpcontainer", scrollbars:true, scrollX:true, scrollY:false, interactiveScrollbars:true, momentum:false});
+		this.updateLayout();
+	},
 	beforeClose:function(){
-	
+		if(this.myScroll){
+			this.myScroll.destroy();
+		}
+		this.myScroll = null;
 	}
 });
+
+
+
 
 
 
@@ -8458,6 +8504,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 		}
 	},
 	clickClose:function(){
+		LG.sounds.playClick();
 		window.history.back();
 	},
 	clickMe:function(e){
@@ -8530,6 +8577,7 @@ LG.CancelButtonView = LG.Button.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		window.history.back();
 	}
 });
@@ -8564,7 +8612,8 @@ LG.GalleryListView = Backbone.View.extend({
 	template:"tpl_gallerylist",
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click .galleryrow":"clickItem"
+			"_mousedown .galleryrow":"clickItemDown",
+			"_mouseup .galleryrow":"clickItemUp"
 		});
 		return obj;
 	},
@@ -8574,12 +8623,23 @@ LG.GalleryListView = Backbone.View.extend({
 		});
 		this.pages = [ ];
 	},
-	clickItem:function(e){
-		this.stopProp(e);
-		//TODO - this.scrolling etc
-		var idToOpen = $(e.currentTarget).data("id");
-		this.myScroll.scrollTo(0, 0); // TODO fix this!!
-		this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
+	clickItemDown:function(e){
+		//this.stopProp(e);
+		this.time = (new Date()).getTime();
+		console.log("click down "+this.scrolling+"  "+this.time);
+	},
+	clickItemUp:function(e){
+		//this.stopProp(e);
+		var timeNow, diff;
+		timeNow = (new Date()).getTime();
+		diff = (timeNow - this.time);
+		console.log("click up "+diff);
+		if(diff < 120){
+			LG.sounds.playClick();
+			var idToOpen = $(e.currentTarget).data("id");
+			this.myScroll.scrollTo(0, 0);
+			this.trigger(LG.Events.PREVIEW_FILE, idToOpen);
+		}
 	},
 	addFiles:function(){
 		var _this = this, i, page, numPages, models, pageModels, startIndex;
@@ -8659,8 +8719,11 @@ LG.GalleryListView = Backbone.View.extend({
 			this.myScroll.refresh();
 		}
 	},
+	scrollStart:function(){
+		console.log("start");
+	},
 	scrollEnd:function(){
-		var wrapperWidth = this.wrapper.width(), w, p;
+		var wrapperWidth = this.wrapper.width(), w, p, _this = this;
 		this.scrollPos = -1 * this.scroller.offset().left;
 		w = this.scroller.width();
 		p = (this.scrollPos + wrapperWidth) * 100 / w;
@@ -8673,8 +8736,9 @@ LG.GalleryListView = Backbone.View.extend({
 			this.removeScroll();
 		}
 		if(this.$(".gallerypage").length >= 1){
-			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":false});
+			this.myScroll = new IScroll("#listwrapper"+this.showName, {"scrollbars":true, "snap":".gallerypage", "scrollX":true, "scrollY":false, "interactiveScrollbars":true, "momentum":true});
 			this.myScroll.on("scrollEnd", $.proxy(this.scrollEnd, this));
+			this.myScroll.on("scrollStart", $.proxy(this.scrollStart, this));
 		}
 	}
 });
@@ -9024,13 +9088,16 @@ LG.Launcher.prototype.makeObjects = function(){
 };
 
 LG.Launcher.prototype.launch = function(){
-	var defaultHash = "help";
+	var defaultHash = "menu", hash;
 	if(this.hash && this.hash.length >= 1 && this.hash != defaultHash){
-		LG.router.navigate(this.hash, {"trigger":true});
+		hash = this.hash;
 	}
 	else{
-		LG.router.navigate(defaultHash, {"trigger":true});
+		hash = defaultHash;
 	}
+	setTimeout(function(){	
+		LG.router.navigate(hash, {"trigger":true});
+	}, 1000);
 	this._launched = true;
 };
 
@@ -9192,11 +9259,21 @@ LG.IPadLauncher.prototype.fileSystemFail = function(){
 	//alert("file system fail");	
 };
 
+LG.IPadLauncher.prototype.keyboardShowHandler = function(){
+	LG.EventDispatcher.trigger(LG.Events.KEYBOARD_UP);
+};
+
+LG.IPadLauncher.prototype.keyboardHideHandler = function(){
+	LG.EventDispatcher.trigger(LG.Events.KEYBOARD_DOWN);
+};
+
 LG.IPadLauncher.prototype.bindEvents = function(){
 	LG.Launcher.prototype.bindEvents.call(this);
 	document.addEventListener("deviceready", $.proxy(this.deviceReady, this) , false);
 	document.addEventListener("resume", $.proxy(this.resume, this) , false);
 	document.addEventListener("pause", $.proxy(this.pause, this) , false);
+	window.addEventListener('native.showkeyboard', $.proxy(this.keyboardShowHandler, this));
+	window.addEventListener('native.hidekeyboard', $.proxy(this.keyboardHideHandler, this));
 };
 
 LG.IPadLauncher.prototype.resume = function(){

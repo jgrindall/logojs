@@ -28,6 +28,7 @@ LG.CancelButtonView = LG.Button.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.sounds.playClick();
 		window.history.back();
 	}
 });
