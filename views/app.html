@@ -774,10 +774,25 @@ drawSpiral(10)</pre>
 									Privacy policy
 							
 								</h3>
-						
-								<p>Logotacular collects no personal information from any users.</p>
 								
-								<p>It does not connect to the internet and your files are all saved locally, on your device.</p>
+								
+								
+								<% if(!web){ %>
+								
+									<p>Logotacular collects no personal information from any users.</p>
+									<p>It does not connect to the internet and your files are all saved locally, on your device.</p>
+								
+								<% } %>
+								
+								<% if(web){ %>
+
+									<p>Logotacular contains Facebook log in if you wish to save or load your files.</p>
+									<p>You can use Logotacular without logging in, in which case no personal information is collected.</p>
+									<p>If you do log in, Logotacular will store your Facebook id, to associate you with your files, and no other pieces of personal information such as your name or email address.</p>
+									<p>Your files will be visible on the public gallery to enable collaboration and sharing, but your name, Facebook id or any other piece of information is not visible.</p>
+									<p>All data is stored securely and is not shared with any 3rd parties.</p>
+								
+								<% } %>
 								
 							</div>
 						
