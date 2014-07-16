@@ -1,0 +1,26 @@
+html{
+	font-family:Arial;
+}
+
+td{
+	border:1px solid #ddd;
+}
+
+img.thumb{
+	width:150px;
+	height:150px;
+}
+
+button{
+	font-size:110%;
+	corner-radius:0;
+	background:green;
+	color:white;
+}
+
+button.activate{
+}
+
+button.deactivate{
+	background:orange;
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>  
+	<head> 
+	
+		<title>Logotacular service</title> 
+		<link rel="stylesheet" 						href="css/web/admin.css">
+		<script src = "js/app/libs-min.js"></script>
+		
+	</head>
+	
+	<body>
+		
+		<div id="container">
+			
+			<a id="load" href="#">Load</a>
+		</div>
+		
+		<div id="list">
+			<table>
+				<thead>
+					<tr>
+						<td>#</td><td>id</td><td>modified</td><td>img</td><td>userId</td><td>name</td><td>logo</td><td>active</td><td>actions</td><td>delete</td>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		
+		<script>
+			
+			var activateSuccess = function(data){
+				if(data.success){
+					alert("activated, reloading");
+					window.location.reload(true);
+				}
+				else{
+					alert("failed to activate");
+				}
+			};
+			
+			var activateError = function(){
+				alert("activate error");
+			};
+			
+			var deleteSuccess = function(data){
+				if(data.success){
+					alert("deleted, reloading");
+					window.location.reload(true);
+				}
+				else{
+					alert("failed to delete");
+				}
+			};
+			
+			var deleteError = function(){
+				alert("delete error");
+			};
+			
+			var sendDelete = function(_id){
+				$.ajax({
+  					data:{"_id":_id},
+  					type: "DELETE",
+  					url: "/delete",
+ 			 		success: deleteSuccess,
+ 			 		error: deleteError,
+  					dataType: "json"
+				});
+			};
+			
+			var sendActivate = function(_id, activate){
+				$.ajax({
+  					data:{"_id":_id, "activate":activate},
+  					type: "POST",
+  					url: "/activate",
+ 			 		success: activateSuccess,
+ 			 		error: activateError,
+  					dataType: "json"
+				});
+			};
+			
+			var displayData = function(data){
+				$("#list tbody").empty();
+				$.each(data.files, function(key, obj){
+					var src = obj.img;
+					var actions = "";
+					var s;
+					if(!obj.active){
+						actions = "<button class='action activate' data-isactive='0' data-id='"+obj._id+"'>Activate</button>";
+					}
+					else{
+						actions = "<button class='del deactivate' data-isactive='1' data-id='"+obj._id+"'>Deactivate</button>";
+					}
+					var del = "<button class='del' data-id='"+obj._id+"'>Delete</button>";
+					s = "<tr>";
+					s += "<td>"+key+"</td><td>"+obj._id+"</td><td>"+obj.modified+"</td><td><img class='thumb' src='"+src+"'/></td><td>"+obj.userId+"</td><td>"+obj.name+"</td><td>"+obj.logo+"</td><td>"+obj.active+"</td><td>"+actions+"</td><td>"+del+"</td>";
+					s += "</tr>";
+					$("#list tbody").append(s);
+					
+				});
+			};
+			
+			var addListeners = function(){
+				$("button.action").click(function(e){
+					var _id = $(e.currentTarget).data("id");
+					var isActive = parseInt($(e.currentTarget).data("isactive"), 10);
+					if(!isNaN(isActive)){
+						var activate = (isActive == 0);
+						sendActivate(_id, activate);
+					}
+				});
+				$("button.del").click(function(e){
+					var _id = $(e.currentTarget).data("id");
+					sendDelete(_id);
+				});
+			};
+			
+			var loadSuccess = function(data){
+				if(data.success){
+					displayData(data);
+					addListeners();
+				}
+			};
+			
+			var loadError = function(){
+				alert("error loading data");
+			};
+			
+			var loadData = function(){
+				$.ajax({
+  					type: "GET",
+  					url: "/list",
+ 			 		success: loadSuccess,
+ 			 		error: loadError,
+  					dataType: "json"
+				});
+			};
+			
+			$("a#load").click(function(){
+				loadData();
+			});
+			
+			$("document").ready(function(){
+				loadData();
+			});
+			
+		</script>
+		
+	</body>
+	
+</html>
