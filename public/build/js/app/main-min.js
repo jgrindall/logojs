@@ -9328,7 +9328,7 @@ LG.WebLauncher.prototype.socialChecked = function(){
 				});
 			},
 			"fail":function(){
-				alert("fail");
+				//alert("fail");
 				_this.onLoggedIn();
 			}
 		});
