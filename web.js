@@ -1,39 +1,16 @@
-var express, app, port, exec, fs, mkdirp, mongoose, File, FileSchema, saveImage, mongoUri, AWS, s3Explorer, auth;
+var express, app, port, exec, mongoose, File, FileSchema, mongoUri, auth;
 
 express = require("express");
 app = express();
 port = Number(process.env.PORT || 5000);
 exec = require('child_process').exec;
-fs = require('fs');
-mkdirp = require('mkdirp');
 mongoose = require('mongoose');
-AWS = require('aws-sdk'); 
-AWS.config.loadFromPath('./aws.json');
-s3Explorer = new AWS.S3(); 
+
 auth = express.basicAuth('logoUserName', 'logoPassword');
 var DEFAULT_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
 var MAX_FILES = 500;
 
 mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/logotacular'; 
-
-saveImage = function(id, base64, options){
-	var body = new Buffer(base64, 'base64');
-	var params = {
-		Bucket: 'com.jgrindall.logojspgthumbs',
-		Key: 'thumb_'+id+'.png',
-		Body: body
-	};
-	s3Explorer.putObject(params, function (error, response) {
-		if (error) {
-			console.log("aws error "+error);
-			options.error("Error uploading data: " + error);
-		}
-		else {
-			console.log("aws ok");
-			options.success();
-		}
-	});
-};
 
 var countAllFiles = function(options){
 	File.count(function(err, count){
@@ -75,6 +52,10 @@ app.get('/app', function(req, res){
 	res.render("app.jade");
 });
 
+app.get('/admin', auth, function(req, res){
+	res.render("admin.jade");
+});
+
 app.get('/files/:_id', auth, function(req, res){
 	console.log("get "+JSON.stringify(req.params));
 	var query, id;
@@ -90,6 +71,59 @@ app.get('/files/:_id', auth, function(req, res){
 			return;
 		}
 	});
+});
+
+app.get('/list', auth, function(req, res){
+	File.find().exec(function(err, doc){
+		if(err){
+			res.send(400);
+			return;
+		}
+		else{
+			var response = { "success":true };	
+			response.files = doc;
+			res.send(response);
+			return;
+		}
+	});		
+});
+
+
+app.post('/activate', function(req, res){
+	var _id = req.param("_id", null);
+	var activate = req.param("activate", false);
+	File.update({"_id":_id}, {"active":activate}, function(err, doc){
+		if(err){
+			console.log('activate file error: ' + err);
+			res.send(400);
+			return;
+		}
+		else if(doc){
+			console.log("ok! activated set to "+activate + " for " + doc);
+			res.send({"success":"true"});
+		}
+		else{
+			res.send(400);
+			return;
+		}
+	});
+});
+
+app.del('/delete', function(req, res){
+	var _id = req.param("_id", null);
+	console.log("deleting "+_id);
+	File.findById(_id, function (err, file) {
+    	file.remove(function (err) {
+      		if (err) {
+        		console.log("error removing");
+        		res.send(400);
+				return;
+      		} 
+      		else {
+        		res.send({"success":"true"});
+      		}
+    	});
+  	});
 });
 
 app.get('/files', auth, function(req, res){
@@ -158,15 +192,8 @@ app.put('/files/:_id', auth, function(req, res){
 			return;
 		}
 		else if(doc){
-			saveImage(_id, base64, {
-				"success":function(){
-					console.log("ok! put");
-					res.send({"success":true});
-				},
-				"error":function(err){
-					res.send(400);
-				}
-			}); 
+			console.log("ok! put");
+			res.send({"success":true});
 		}
 		else{
 			res.send(400);
@@ -185,7 +212,6 @@ app.post('/files', auth, function(req, res){
 	logo = req.param("logo", "");
 	dino = req.param("dino", 0);
 	img = req.param("img", DEFAULT_IMAGE);
-	base64 = img.replace(/^data:image\/png;base64,/,"");
 	model = {"name": name, "userId": userId, "logo":logo, "active":true, "img":img, "dino":dino, "modified":new Date()};
 	console.log('make file model: ' + JSON.stringify(model));
 	new File(model).save(function(err, doc){
@@ -195,16 +221,8 @@ app.post('/files', auth, function(req, res){
 			return;
 		}
 		else{
-			console.log("posted with "+doc._id);
-			saveImage(doc.id, base64, {
-				"success":function(){
-					console.log("ok! posted");
-					res.send({"_id":doc.id});
-				},
-				"error":function(err){
-					res.send(400);
-				}
-			}); 
+			console.log("ok! posted");
+			res.send({"_id":doc.id});
 		}
 	});
 });
