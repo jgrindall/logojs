@@ -545,33 +545,51 @@ fd(50)</pre>
 								<div class="helpcontentleft">
 									
 									<h3>
-										Variables and loops
+										Variables and arithmetic
 									</h3>
 									
 						
 									<p>
 
-										Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
-
-										So, our 'draw square' program could be written as :
+										Variables let you define a number so you can change it in one place if you need to.
+										
+										
 									</p>
 									
 									<p class="code">
-										<pre>rpt 4
-fd(100)
-rt(90)
-endrpt</pre>
+										<pre>side=200
+angle=90
+fd(side)
+rt(angle)
+fd(side)
+rt(angle)
+fd(side)
+rt(angle)
+fd(side)
+rt(angle)
+</pre>
 
 									</p>
 									<p>
 
-										Can you work out what the following code will draw?
+										You can do normal arithmetic using numbers or variables:
 									</p>
 									<p class="code">
-										<pre>rpt 5
-fd(100)
-rt(72)
-endrpt</pre>
+										<pre>s=10
+t=15
+fd(s)
+rt(t)
+s=s+10
+t=2*t-5
+fd(s)
+rt(t)
+s=s+20
+t=2*t-5
+fd(s)
+rt(t)
+s=s+30
+t=2*t-5
+</pre>
 							
 									</p>
 									
@@ -591,7 +609,62 @@ endrpt</pre>
 						
 						</div>
 							
+						
+						<div class='helpcontainer'>
 							
+							<div class="helpcontent">
+						
+								<div class="helpcontentleft">
+									
+									<h3>
+										Loops
+									</h3>
+									
+						
+									<p>
+
+										
+										Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
+
+										So, our 'draw square' program could be written as :
+									</p>
+									
+									<p class="code">
+										<pre>rpt 4
+fd(100)
+rt(90)
+endrpt</pre>
+
+									</p>
+									<p>
+
+										Can you work out what the following code will draw?
+									</p>
+									<p class="code">
+										<pre>angle=72
+rpt 5
+fd(100)
+rt(angle)
+endrpt</pre>
+							
+									</p>
+									
+									
+									<p>
+
+										Can you work out how to draw the image on the right?
+									</p>
+									
+								</div>
+						
+								<div class="helpcontentright">
+									<img class="centre" src="img/help/help5.png"/>
+								</div>
+						
+							</div>
+						
+						</div>
+						
 							
 						<div class='helpcontainer'>
 								
@@ -1042,7 +1115,7 @@ drawSpiral(10)</pre>
 						
 								<table class="commands">
 									<tbody>
-										<tr><td>a:=</td><td>a:=10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
+										<tr><td>a=</td><td>a=10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
 										<tr><td>
 										proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
 										<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>

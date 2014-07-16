@@ -133,7 +133,7 @@ insidefnlist = sep* l:insidestmt*
 	return obj;
 }
 
-makestmt = v:vardef sep* ':=' sep* e:expression eoline
+makestmt = v:vardef sep* '=' sep* e:expression eoline
 {
 	return {type:"makestmt", children:[v,e]};
 }
@@ -220,7 +220,7 @@ fnname = c0:([a-zA-Z])+ c1:[a-zA-Z0-9_]*
 } 
 
 
-expression = m:multexpression pm:plusorminus*
+expression = m:multexpression sep* pm:plusorminus*
 {
 	var obj={};
 	obj.type="expression";

@@ -1786,8 +1786,8 @@ LG.Utils.logoparser = (function() {
         	}
         	return obj;
         },
-        peg$c150 = ":=",
-        peg$c151 = { type: "literal", value: ":=", description: "\":=\"" },
+        peg$c150 = "=",
+        peg$c151 = { type: "literal", value: "=", description: "\"=\"" },
         peg$c152 = function(v, e) {
         	return {type:"makestmt", children:[v,e]};
         },
@@ -3863,9 +3863,9 @@ LG.Utils.logoparser = (function() {
           s3 = peg$parsesep();
         }
         if (s2 !== peg$FAILED) {
-          if (input.substr(peg$currPos, 2) === peg$c150) {
+          if (input.charCodeAt(peg$currPos) === 61) {
             s3 = peg$c150;
-            peg$currPos += 2;
+            peg$currPos++;
           } else {
             s3 = peg$FAILED;
             if (peg$silentFails === 0) { peg$fail(peg$c151); }
@@ -4591,21 +4591,32 @@ LG.Utils.logoparser = (function() {
     }
 
     function peg$parseexpression() {
-      var s0, s1, s2, s3;
+      var s0, s1, s2, s3, s4;
 
       s0 = peg$currPos;
       s1 = peg$parsemultexpression();
       if (s1 !== peg$FAILED) {
         s2 = [];
-        s3 = peg$parseplusorminus();
+        s3 = peg$parsesep();
         while (s3 !== peg$FAILED) {
           s2.push(s3);
-          s3 = peg$parseplusorminus();
+          s3 = peg$parsesep();
         }
         if (s2 !== peg$FAILED) {
-          peg$reportedPos = s0;
-          s1 = peg$c183(s1, s2);
-          s0 = s1;
+          s3 = [];
+          s4 = peg$parseplusorminus();
+          while (s4 !== peg$FAILED) {
+            s3.push(s4);
+            s4 = peg$parseplusorminus();
+          }
+          if (s3 !== peg$FAILED) {
+            peg$reportedPos = s0;
+            s1 = peg$c183(s1, s3);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$c0;
+          }
         } else {
           peg$currPos = s0;
           s0 = peg$c0;
@@ -6203,17 +6214,17 @@ LG.GraphicsModel.CLR8 = "#e67e22";
 LG.GraphicsModel.CLR9 = "#e74c3c";
 LG.GraphicsModel.CLR10 = "#95a5a6";
 LG.GraphicsModel.CLR11 = "#f39c12";
-LG.GraphicsModel.CLR12 = "#d35400";
+LG.GraphicsModel.CLR12 = "#ffffff";
 LG.GraphicsModel.CLR13 = "#c0392b";
 LG.GraphicsModel.CLR14 = "#bdc3c7";
 LG.GraphicsModel.CLR15 = "#6f7c7d";
-LG.GraphicsModel.CLR16 = "#ffffff";
+LG.GraphicsModel.CLR16 = "#d35400";
 LG.GraphicsModel.CLR17 = "#000000";
 
 LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17, LG.GraphicsModel.CLR18];
-LG.GraphicsModel.BG		=	[4, 7, 16,  3,  7, 2,  16, 14, 4, 12, 8, 15, 10, 16, 12, 4, 14, 16, 13, 4,  16, 4, 16, 2,   2, 9, 16, 14, 2, 2,  3,  9, 16, 13, 7, 16, 8, 3, 17];
-LG.GraphicsModel.INNER	=	[9, 4, 1,  16,  2, 7,  3, 9, 14, 16, 4, 4,  4,  6,  4,  16, 3, 2, 7, 16,  0, 13, 7, 7, 16, 4, 9, 13,  4, 16, 16, 16, 7, 16, 2,  4,  16, 7, 3];
-LG.GraphicsModel.NAMES	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org","red","gray grey", "ltorange lightorg/ltorg lightorange", "dkorange darkorg/dkorg darkorange", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "white", "black"];
+LG.GraphicsModel.BG		=	[4, 7, 12,  3,  7, 2,  12, 14, 4, 16, 8, 15, 10, 12, 16, 4, 14, 12, 13, 4,  12, 4, 16, 2,   2, 9, 12, 14, 2, 2,  3,  9, 12, 13, 7, 16, 8, 3, 17];
+LG.GraphicsModel.INNER	=	[9, 4, 1,  16,  2, 7,  3, 9, 14, 12, 4, 4,  4,  6,  4,  12, 3, 2, 7, 12,  0, 13, 7, 7, 12, 4, 9, 13,  4, 12, 12, 12, 7, 12, 2,  4,  12, 7, 3];
+LG.GraphicsModel.NAMES	=	["turquoise turq", "green", "blue", "purple", "midnight", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org","red","gray grey", "ltorange lightorg/ltorg lightorange", "white", "terracotta/dkred darkred", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "dkorange darkorg/dkorg darkorange", "black"];
 LG.GraphicsModel.DARKTEXT =	[7, 14, 16];
 LG.GraphicsModel.getHex = function(color){
 	var r = "#ff0000";
