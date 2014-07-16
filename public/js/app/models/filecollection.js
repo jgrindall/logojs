@@ -128,7 +128,6 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		LG.Utils.log("deleteCurrentFile");
 		var _this = this, options;
 		options = {
 			"success":function(){
@@ -137,6 +136,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 				_this.remove(_this.selected);
 				_this.addNewModel({"force":true});
 				callback.success();
+				LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 			},
 			"fail":function(){
 				callback.fail();

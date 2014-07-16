@@ -238,6 +238,7 @@ if(LG.Config.PHONEGAP){
 
 LG.Messages = {};
 LG.Messages.WANT_TO_SAVE = "Do you want to save your current file?";
+LG.Messages.SAVE_HEADER = "Save?";
 LG.Messages.SURE = "Are you sure?";
 LG.Messages.WANT_TO_DELETE = "Are you sure you want to delete this file?";
 LG.Messages.ERROR = "Error!";
@@ -699,7 +700,6 @@ LG.FileSystem.prototype.fetchFileFail = function(){
 };
 
 LG.FileSystem.prototype.gotFileFetchEntry = function(model, options, fileEntry){
-	console.log("gotFileFetchEntry");
 	this.readSuccess([fileEntry]);
 };
 
@@ -727,7 +727,6 @@ LG.FileSystem.prototype.saveFile = function(model, options){
 
 LG.FileSystem.prototype.fetchFile = function(model, options){
 	var filename = "file_"+model.get("name")+".txt";
-	console.log("fetchFile "+filename);
 	this.options = options;
 	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileFetchEntry, this, model, options), $.proxy(this.failFileFetchEntry, this, options));
 };
@@ -761,7 +760,6 @@ LG.FileSystem.prototype.fileIsRead = function(e){
     	this.readNext();
     }
     catch(e){
-    	//LG.Utils.log("parse failed");
     	this.options.fail();
     }
 };
@@ -772,7 +770,6 @@ LG.FileSystem.prototype.fileIsReadError = function(){
 };
 
 LG.FileSystem.prototype.readFileSuccess = function(file){
-	console.log("readFileSuccess");
 	this.fileReader.readAsText(file);
 };
 
@@ -783,7 +780,6 @@ LG.FileSystem.prototype.readFileFail = function(){
 
 LG.FileSystem.prototype.readNext = function() {
 	this.numLoaded++;
-	console.log(this.numLoaded +"/ "+this.numToLoad);
 	if(this.numLoaded == this.numToLoad){
 		this.reading = false;
 		this.options.success(this.fileContents);
@@ -5344,7 +5340,7 @@ LG.output.MAX_SIZE_REACHED = "Exceeded output size";
 
 LG.output.MAX_SIZE = 100000;
 
-LG.output.BATCH_SIZE = 200;
+LG.output.BATCH_SIZE = 500;
 
 LG.output.TIMEOUT = 25;
 
@@ -5973,6 +5969,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 				_this.remove(_this.selected);
 				_this.addNewModel({"force":true});
 				callback.success();
+				LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 			},
 			"fail":function(){
 				callback.fail();
@@ -8451,7 +8448,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 		else{
 			if(!fileModel.isNew() && !fileModel.isSaved()){
 				// unsaved
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				LG.popups.openPopup({"message":LG.Messages.SAVE_HEADER, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 			}
 			else{
 				// dump the old file, make a new one

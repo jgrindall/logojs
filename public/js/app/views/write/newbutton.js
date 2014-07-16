@@ -54,7 +54,7 @@ LG.NewButtonView = LG.WriteButton.extend({
 		else{
 			if(!fileModel.isNew() && !fileModel.isSaved()){
 				// unsaved
-				LG.popups.openPopup({"message":LG.Messages.WANT_TO_SAVE, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
+				LG.popups.openPopup({"message":LG.Messages.SAVE_HEADER, "body":LG.Messages.WANT_TO_SAVE, "okColor":1, "noColor":2, "okLabel":"Yes", "noLabel":"No"}, {"ok":$.proxy(this.alertOk, this), "no":$.proxy(this.alertNo, this), "cancel":$.proxy(this.alertCancel, this) });
 			}
 			else{
 				// dump the old file, make a new one
