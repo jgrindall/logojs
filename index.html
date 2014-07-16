@@ -559,36 +559,29 @@ fd(50)</pre>
 									<p class="code">
 										<pre>side=200
 angle=90
-fd(side)
-rt(angle)
-fd(side)
-rt(angle)
-fd(side)
-rt(angle)
-fd(side)
-rt(angle)
+fd(side) rt(angle)
+fd(side) rt(angle)
+fd(side) rt(angle)
+fd(side) rt(angle)
 </pre>
 
 									</p>
 									<p>
 
-										You can do normal arithmetic using numbers or variables:
+										You can do normal arithmetic using numbers or variables. Like most computer programs, you must write '*' for 'multiply' (or 'times') and '/' for 'divide'.
+										
+										You can use '+' and '-' and brackets like you normally would.
+										
 									</p>
 									<p class="code">
 										<pre>s=10
 t=15
 fd(s)
 rt(t)
-s=s+10
-t=2*t-5
+s = s + 10
+t = (2*t - 5) * 2
 fd(s)
 rt(t)
-s=s+20
-t=2*t-5
-fd(s)
-rt(t)
-s=s+30
-t=2*t-5
 </pre>
 							
 									</p>
@@ -602,7 +595,7 @@ t=2*t-5
 								</div>
 						
 								<div class="helpcontentright">
-									<img class="centre" src="img/help/help5.png"/>
+									<img class="centre" src="img/help/help12.png"/>
 								</div>
 						
 							</div>
@@ -635,6 +628,10 @@ fd(100)
 rt(90)
 endrpt</pre>
 
+									</p>
+									<p>
+
+										Notice that you start a repeat block with 'rpt' and you MUST end it with 'endrpt'.
 									</p>
 									<p>
 
