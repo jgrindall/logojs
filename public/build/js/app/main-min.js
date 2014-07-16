@@ -5686,9 +5686,7 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		var d1, d2;
 		d1 = this.get("dino");
 		d2 = (d1 + 1) % LG.GraphicsModel.BG.length;
-		alert("change dino "+d2+"  "+this.output());
 		this.set({"dino":d2});
-		alert("change dino "+this.output());
 	},
 	reset:function(){
 		this.set({"logo":""});
