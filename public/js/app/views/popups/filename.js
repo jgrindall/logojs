@@ -44,6 +44,7 @@ LG.FileNameView = LG.APopUpView.extend({
 		else{
 			options = {
 				"success":function(id){
+					//LG.Utils.log("success "+LG.fileCollection.length);
 					_this.$("input#filenametext").blur();
 					LG.Utils.growl("File saved");
 					LG.sounds.playSuccess();
@@ -55,6 +56,8 @@ LG.FileNameView = LG.APopUpView.extend({
 					}});
 				}
 			};
+			//LG.Utils.log("clickOk "+LG.fileCollection.length);
+			//LG.Utils.log("save file as "+name);
 			LG.fileCollection.saveFileAs(name, options);
 		}
 	},

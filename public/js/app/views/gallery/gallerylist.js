@@ -23,16 +23,14 @@ LG.GalleryListView = Backbone.View.extend({
 		this.pages = [ ];
 	},
 	clickItemDown:function(e){
-		//this.stopProp(e);
 		this.time = (new Date()).getTime();
-		LG.Utils.log("click down "+this.scrolling+"  "+this.time);
+		//LG.Utils.log("click down "+this.scrolling+"  "+this.time);
 	},
 	clickItemUp:function(e){
-		//this.stopProp(e);
 		var timeNow, diff;
 		timeNow = (new Date()).getTime();
 		diff = (timeNow - this.time);
-		LG.Utils.log("click up "+diff);
+		//LG.Utils.log("click up "+diff);
 		if(diff < 120){
 			LG.sounds.playClick();
 			var idToOpen = $(e.currentTarget).data("id");
@@ -119,7 +117,7 @@ LG.GalleryListView = Backbone.View.extend({
 		}
 	},
 	scrollStart:function(){
-		LG.Utils.log("start");
+		//LG.Utils.log("start");
 	},
 	scrollEnd:function(){
 		var wrapperWidth = this.wrapper.width(), w, p, _this = this;
@@ -145,6 +143,11 @@ LG.GalleryListView = Backbone.View.extend({
 LG.GalleryListView.NUMX = 3;
 LG.GalleryListView.NUMY = 3;
 
+LG.GalleryLoadListView =LG.GalleryListView.extend({
+	onShow:function(){
+		this.addFiles();
+	}
+});
 
 LG.GalleryPageView = Backbone.View.extend({
 	initialize:function(data){

@@ -8,7 +8,7 @@ LG.Config.DEBUG = true;
 // this variable is replaced by the ant build script
 LG.Config.PHONEGAP = LG.Utils.getPG();
 
-LG.Config.FAKE_PHONEGAP = true;
+//LG.Config.FAKE_PHONEGAP = true;
 
 LG.Config.IS_TOUCH = LG.Utils.isTouch();
 

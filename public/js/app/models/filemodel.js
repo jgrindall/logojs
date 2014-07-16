@@ -68,7 +68,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.editing = false;
 	},
 	undo:function(){
-		LG.Utils.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
+		//LG.Utils.log("undo "+this.id+"    :  "+this.canUndo()+"  "+this.pointer);
 		if(!this.canUndo()){
 			return;
 		}
@@ -76,7 +76,7 @@ LG.UndoRedoFileModel = Backbone.Model.extend({
 		this.reload();
 	},
 	redo:function(){
-		LG.Utils.log("redo "+this.canRedo()+"  "+this.pointer);
+		//LG.Utils.log("redo "+this.canRedo()+"  "+this.pointer);
 		if(!this.canRedo()){
 			return;
 		}
@@ -160,8 +160,18 @@ LG.IPadFileModel = LG.FileModel.extend({
 		this.set(_.extend(data, {"_id":id}));
 		LG.fileSystem.saveFile(this, callbacks);
     },
+    fetchSuccess:function(files){
+    	this.set(files[0]);
+    },
+    fetchFail:function(){
+    	
+    },
+    fetch:function(){
+    	var callbacks = {"success":$.proxy(this.fetchSuccess, this), "fail":$.proxy(this.fetchFail, this)};
+    	LG.fileSystem.fetchFile(this, callbacks);
+    },
     destroy:function(options){
-    	LG.Utils.log("ipad destroy");
+    	//LG.Utils.log("ipad destroy");
     	var callbacks = {"success":$.proxy(this.deleteSuccess, this, options), "fail":$.proxy(this.deleteFail, this, options)};
     	LG.fileSystem.deleteFile(this, callbacks);
     },
@@ -172,11 +182,13 @@ LG.IPadFileModel = LG.FileModel.extend({
     	options.fail();
     },
     saveSuccess:function(options){
+    	//LG.Utils.log("ipad model saveSuccess!!\n\n");
     	var id = this.get("_id");
     	var response = {"_id":id};
     	this.set({"dirty":false});
     	options.success(this, response);
     	this.trigger("change");
+    	//LG.Utils.log("TRIGGE SYNC");
     	this.trigger("sync");
     },
     saveFail:function(options){

@@ -128,7 +128,7 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 LG.WebFacebook.prototype.login = function(options){
 	try{
 		FB.login(function(response) {
-			LG.Utils.log("login response "+JSON.stringify(response));
+			//LG.Utils.log("login response "+JSON.stringify(response));
 			if (response.authResponse) {
 				LG.userModel.fbLoggedIn(options);
 			}

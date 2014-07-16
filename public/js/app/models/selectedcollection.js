@@ -6,8 +6,15 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 		this.addNewModel();
 	},
 	addNewModel:function(options){
+		//LG.Utils.log("addnew");
+		if(options){
+			//LG.Utils.log("options "+options.force);
+		}
+		if(this.selected){
+			//LG.Utils.log("selected "+this.selected+"  "+this.selected.isNew());
+		}
 		if(options && options.force){
-			if(this.selected){
+			if(this.selected.isNew()){
 				this.remove(this.selected);
 			}
 			this.selected = null;
@@ -16,6 +23,7 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 			this.selected = new this.model({"dirty":false});
 		}
 		this.add(this.selected);
+		//LG.Utils.log("added "+this.length);
 	},
 	onLoaded:function(){
 		LG.APaginatedCollection.prototype.onLoaded.call(this);

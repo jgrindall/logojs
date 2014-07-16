@@ -31,7 +31,7 @@ LG.WriteView = LG.AMenuView.extend({
 		this.$logodiv.blur();
 	},
 	kbUp:function(){
-		LG.Utils.log("kbup");
+		//LG.Utils.log("kbup");
 		this.resetError();
 	},
 	kbDown:function(){
@@ -83,7 +83,7 @@ LG.WriteView = LG.AMenuView.extend({
 	showErrorText:function(msg){
 		var _this = this;
 		setTimeout(function(){
-			LG.Utils.log("show error!");
+			//LG.Utils.log("show error!");
 			_this.$(".error").text(msg).addClass("show").css("right", 0);
 		}, 200);
 		LG.router.navigate("write", {"trigger":true});
@@ -115,6 +115,8 @@ LG.WriteView = LG.AMenuView.extend({
 		this.logo = data.logo;
 		this.stopListening(LG.fileCollection);
 		LG.fileCollection.selected.set(data);
+		//LG.Utils.log("SET "+JSON.stringify(data));
+		//LG.Utils.log("NOW "+JSON.stringify(LG.fileCollection.selected));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.drawNums();
 	},
@@ -137,19 +139,19 @@ LG.WriteView = LG.AMenuView.extend({
 		this.changedTextDeBounce();
 	},
 	resetError:function(){
-		LG.Utils.log("resetError  "+this.error.show);
+		//LG.Utils.log("resetError  "+this.error.show);
 		var w = this.$el.width();
 		if(this.error.show){
 			this.$(".error").removeClass("show").css("right", -w);
 			this.error = {"show":false, "line":-1};
-			LG.Utils.log("removed");
+			//LG.Utils.log("removed");
 		}
 	},
 	onScroll:function(){
 		this.$logonums.scrollTop(this.$logodiv.scrollTop());
 	},
 	mouseDown:function(){
-		LG.Utils.log("md");
+		//LG.Utils.log("md");
 		this.resetError();
 	},
 	events:function(){

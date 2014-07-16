@@ -75,7 +75,25 @@ app.get('/app', function(req, res){
 	res.render("app.jade");
 });
 
+app.get('/files/:_id', auth, function(req, res){
+	console.log("get "+JSON.stringify(req.params));
+	var query, id;
+	_id = req.params._id;
+	query = {"active":true, "_id":_id},
+	File.find(query).exec(function(err, doc){
+		if(err || doc.length <= 0){
+			res.send(400);
+			return;
+		}
+		else{
+			res.send(doc[0]);
+			return;
+		}
+	});
+});
+
 app.get('/files', auth, function(req, res){
+	console.log("get "+JSON.stringify(req.params));
 	var perPage, numPages, query = {"active":true}, userId, sort;
 	perPage = req.param("perPage", 24);
 	numPages = req.param("numPages", 1);

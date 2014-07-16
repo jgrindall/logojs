@@ -186,7 +186,7 @@ LG.CanvasView = Backbone.View.extend({
 			tree = LG.Utils.logoparser.parse(logo);
 		}
 		catch(e){
-			LG.Utils.log("Error "+JSON.stringify(e));
+			//LG.Utils.log("Error "+JSON.stringify(e));
 			this.showError(e.expected, e.line, e.offset);
 			this.active = false;
 		}
@@ -248,7 +248,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.bmpcontainer.addChild(flushbmp);
 		this.commands.graphics.clear();
 		this.tick();
-		LG.Utils.log("flushed "+this.bmpcontainer.getNumChildren());
+		//LG.Utils.log("flushed "+this.bmpcontainer.getNumChildren());
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;

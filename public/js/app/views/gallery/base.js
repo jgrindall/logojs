@@ -4,10 +4,10 @@ LG.AGalleryView = LG.AMenuView.extend({
 	initialize:function(options){
 		LG.AMenuView.prototype.initialize.call(this);
 		this.options = options;
+		this.listView = this.options.listView;
 	},
 	bottomView:LG.GalleryBottomView,
 	topView:LG.GalleryTopView,
-	listView:LG.GalleryListView,
 	sideView:LG.GallerySideView,
 	removeMenus:function(){
 		if(this.galleryTop){

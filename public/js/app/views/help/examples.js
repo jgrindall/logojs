@@ -22,6 +22,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 		var j = $(e.currentTarget).index();
 		var s = LG.ExamplesView.LOGO[j];
 		if(s){
+			LG.fileOpener.newFile();
 			LG.router.navigate("write", {"trigger":true});
 			LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
 			LG.Utils.growl("Click on the left panel to draw");

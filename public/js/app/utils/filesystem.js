@@ -29,26 +29,59 @@ LG.FileSystem.prototype.failFileDeleteEntry = function(options, error){
 };
 
 LG.FileSystem.prototype.gotFileSaveEntry = function(model, options, fileEntry){
-	fileEntry.createWriter($.proxy(this.onMakeWriterSuccess, this, model, options), $.proxy(this.onMakeWriterFail, this));		
+	//LG.Utils.log("gotFileSaveEntry "+model+"  "+fileEntry+"  "+options+"  fn: "+fileEntry.createWriter);
+	var success = $.proxy(this.onMakeWriterSuccess, this, model, options);
+	var fail = $.proxy(this.onMakeWriterFail, this, options);
+	//LG.Utils.log(success+" / "+fail);
+	fileEntry.createWriter(success, fail);		
 };
 
 LG.FileSystem.prototype.failFileSaveEntry = function(options, error){
 	options.fail();
 };
 
+LG.FileSystem.prototype.fetchFileSuccess = function(file){
+	this.numLoaded = 1;
+	this.fileReader = new FileReader();
+	this.fileReader.onloadend = $.proxy(this.fileIsRead, this);
+	this.fileReader.onerror = $.proxy(this.fileIsReadError, this);
+	this.fileReader.readAsText(file);
+};
+
+LG.FileSystem.prototype.fetchFileFail = function(){
+	this.options.fail();
+};
+
+LG.FileSystem.prototype.gotFileFetchEntry = function(model, options, fileEntry){
+	this.readSuccess([fileEntry]);
+};
+
+LG.FileSystem.prototype.failFileFetchEntry = function(options, error){
+	options.fail();
+};
+
 LG.FileSystem.prototype.onMakeWriterFail = function(options, error) {
+	//LG.Utils.log("onMakeWriterFail");
 	options.fail();
 };
 
 LG.FileSystem.prototype.onMakeWriterSuccess = function(model, options, writer) {
-	writer.write(JSON.stringify(model));
-    writer.abort();
+	//LG.Utils.log("onMakeWriterSuccess "+model+"  "+JSON.stringify(model.toJSON));
+	writer.write(JSON.stringify(model.toJSON()));
+    //writer.abort();
     options.success();
 };
 
 LG.FileSystem.prototype.saveFile = function(model, options){
 	var filename = "file_"+model.get("name")+".txt";
+	//LG.Utils.log("fs saveFile "+filename);
 	this.filesFolder.getFile(filename, {create: true}, $.proxy(this.gotFileSaveEntry, this, model, options), $.proxy(this.failFileSaveEntry, this, options));
+};
+
+LG.FileSystem.prototype.fetchFile = function(model, options){
+	var filename = "file_"+model.get("name")+".txt";
+	this.options = options;
+	this.filesFolder.getFile(filename, {create: false}, $.proxy(this.gotFileFetchEntry, this, model, options), $.proxy(this.failFileFetchEntry, this, options));
 };
 
 LG.FileSystem.prototype.readFiles = function(options){
@@ -80,7 +113,6 @@ LG.FileSystem.prototype.fileIsRead = function(e){
     	this.readNext();
     }
     catch(e){
-    	LG.Utils.log("parse failed");
     	this.options.fail();
     }
 };

@@ -59,7 +59,7 @@ LG.HelpOverlayView = LG.AMenuView.extend({
 		return this;
 	},
 	initScroll:function(){
-		LG.Utils.log("init scroll");
+		//LG.Utils.log("init scroll");
 		var _this = this;
 		this.myScroll = new IScroll("#refwrapper", {snap:".helpcontainer", scrollbars:true, scrollX:true, scrollY:false, interactiveScrollbars:true, momentum:false});
 		this.updateLayout();

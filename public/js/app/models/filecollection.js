@@ -95,8 +95,10 @@ LG.FileCollection = LG.AFileCollection.extend({
 		LG.EventDispatcher.trigger(LG.Events.RESET_CANVAS);
 	},
 	save:function(options){
+		//LG.Utils.log("save!!!! "+options);
 		if(LG.userModel.isConnected()){
 			if(!this.selected.isNew()){
+				//LG.Utils.log("scf\n\n");
 				this.saveCurrentFile(options);
 			}
 			else{
@@ -108,7 +110,8 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	loadModel:function(model){
-		if(this.selected){
+		if(this.selected.isNew()){
+			// why!
 			this.remove(this.selected);
 		}
 		this.selected = model;
@@ -131,6 +134,7 @@ LG.FileCollection = LG.AFileCollection.extend({
 			"success":function(){
 				LG.sounds.playSuccess();
 				LG.Utils.growl("File deleted");
+				_this.remove(_this.selected);
 				_this.addNewModel({"force":true});
 				callback.success();
 			},
@@ -147,8 +151,10 @@ LG.FileCollection = LG.AFileCollection.extend({
 	},
 	saveCurrentFile:function(options){
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
-		var data = {"img":LG.imageModel.get("img"),"logo":LG.fileCollection.selected.get("logo"),"userId":LG.userModel.get("userId")};
-		LG.Utils.log("save "+JSON.stringify(data));
+		//LG.Utils.log("saveCurrentFile selected is "+this.selected.get("logo"));
+		//LG.Utils.log("this is "+JSON.stringify(this)+"  ("+ this.length +")");
+		var data = {"img":LG.imageModel.get("img"),"logo":this.selected.get("logo"),"userId":LG.userModel.get("userId")};
+		//LG.Utils.log("save "+JSON.stringify(data));
 		this.selected.save(data, options);
 	},
 	nameOk:function(name){
@@ -165,6 +171,11 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 		return error;
 	},
+	reloadCurrent:function(){
+		if(this.selected && !this.selected.isNew()){
+			this.selected.fetch();
+		}
+	},
 	saveFileAs:function(name, callback){
 		var _this = this, model, data, options;
 		LG.EventDispatcher.trigger(LG.Events.CAPTURE_IMAGE);
@@ -173,7 +184,6 @@ LG.FileCollection = LG.AFileCollection.extend({
 		options = {
 			"success":function(model, response){
 				model.set({"_id":response._id});
-				model.set({"id":response._id});
 				_this.add(model);
 				callback.success(response._id);
 			},
