@@ -35,13 +35,13 @@ LG.WriteView = LG.AMenuView.extend({
 		this.resetError();
 	},
 	kbDown:function(){
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
 		var h = $("body").height();
-		$("body").height(h+1);
+		$("body").height(h + 1);
 		$("body").height(h);
 		setTimeout(function(){
 			window.scrollTo(0,0);
-			$("body").height(h+1);
+			$("body").height(h + 1);
 			$("body").height(h);
 		}, 100);
 	},
@@ -58,6 +58,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	forceLogo:function(s){
 		this.setLogo(s);
+		this.save();
 	},
 	draw:function(){
 		this.save();
@@ -115,8 +116,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.logo = data.logo;
 		this.stopListening(LG.fileCollection);
 		LG.fileCollection.selected.set(data);
-		//LG.Utils.log("SET "+JSON.stringify(data));
-		//LG.Utils.log("NOW "+JSON.stringify(LG.fileCollection.selected));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.drawNums();
 	},

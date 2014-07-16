@@ -142,7 +142,7 @@ LG.WebLauncher.prototype.social = function(options){
 	img = $("<img src='"+url+"'/>");
 	img.on("load", function(){
 		if(!_this.fbComplete){
-			LG.Network.FACEBOOK = true;
+			LG.Network.FACEBOOK_REACHABLE = true;
 			options.success();
 		}
 	});
@@ -161,7 +161,7 @@ LG.WebLauncher.prototype.social = function(options){
 LG.WebLauncher.prototype.socialChecked = function(){
 	var _this = this;
 	this.fbComplete = true;
-	if(LG.Network.FACEBOOK){
+	if(LG.Network.FACEBOOK_REACHABLE){
 		LG.facebook = new LG.WebFacebook();
 		LG.facebook.init({
 			"success":function(){
@@ -175,6 +175,7 @@ LG.WebLauncher.prototype.socialChecked = function(){
 				});
 			},
 			"fail":function(){
+				alert("fail");
 				_this.onLoggedIn();
 			}
 		});

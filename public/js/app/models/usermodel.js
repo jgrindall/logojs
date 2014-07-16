@@ -41,7 +41,7 @@ LG.AUserModel = Backbone.Model.extend({
 LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
 		var _this = this;
-		if(LG.facebook){
+		if(LG.facebook && LG.Network.FACEBOOK_ACTIVE){
 			LG.facebook.login({
 				"success":function(){
 					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_IN, "cancelColor":1, "cancelLabel":"Ok"};
@@ -55,12 +55,12 @@ LG.WebUserModel = LG.AUserModel.extend({
 		}
 		else{
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(_this.alertOk, _this) });
 		}
 	},
 	logout:function(){
 		var _this = this;
-		if(LG.facebook){
+		if(LG.facebook && LG.Network.FACEBOOK_ACTIVE){
 			LG.facebook.logout({
 				"success":function(){
 					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_OUT, "cancelColor":1, "cancelLabel":"Ok"};

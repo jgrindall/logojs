@@ -7,15 +7,11 @@ LG.Facebook.SRC 						= 	"http://connect.facebook.net/en_US/all.js";
 LG.Facebook.APP_ID						=	"169857723045523";
 LG.Facebook.ID 							= 	"facebook-jssdk";
 LG.Facebook.REDIRECT_URI 				= 	"https://www.facebook.com/connect/login_success.html";
-LG.Facebook.WEB_REDIRECT_URI 			= 	"http://www.numbersandpictures.com/logojs/build/web";
+LG.Facebook.WEB_REDIRECT_URI 			= 	"http://www.logotacular.com";
 LG.Facebook.CHANNEL_URL 				= 	"/channel/channel.html";
-LG.Facebook.SCOPE						=	"email,user_about_me,offline_access,publish_stream";
+LG.Facebook.SCOPE						=	"user_about_me";
 LG.Facebook.GRAPH_ME					=	"https://graph.facebook.com/me";
 LG.Facebook.GRAPH_ME_PIC				=	"https://graph.facebook.com/me/picture?redirect=false&";
-LG.Facebook.GRAPH_ME_STATUS_UPDATE		=	"https://graph.facebook.com/me/feed";
-LG.Facebook.FQL							=	"https://graph.facebook.com/fql";
-LG.Facebook.GET_FRIENDS_FBQL 			=	"SELECT uid, name FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY rand()";
-LG.Facebook.SMFH_LINK_URL 				=	"http://www.logotacular.com/logojs/build/web";
 LG.Facebook.SECONDS_TO_WAIT 			= 	8;
 
 LG.Facebook.INIT_OBJ = {status : false, cookie : true, xfbml : false, kidDirectedSite:true, appId : LG.Facebook.APP_ID,	channelUrl : LG.Facebook.CHANNEL_URL};
@@ -38,8 +34,6 @@ LG.Facebook.getPicture = function(uid){
 
 LG.WebFacebook = function(){
 	LG.Facebook.apply(this, arguments);
-	this.numWait = 0;
-	this.useFb = true;
 };
 
 LG.WebFacebook.prototype = Object.create(LG.Facebook.prototype);
@@ -48,14 +42,12 @@ LG.WebFacebook.prototype.constructor = LG.WebFacebook;
 LG.WebFacebook.prototype.init = function(options){
 	var _this = this;
 	window.fbAsyncInit = function() {
-		if(_this.useFb){
-			try{
-				FB.init(LG.Facebook.INIT_OBJ);
-				options.success();
-			}
-			catch(e){
-				options.fail();
-			}
+		try{
+			FB.init(LG.Facebook.INIT_OBJ);
+			options.success();
+		}
+		catch(e){
+			options.fail();
 		}
 	};
 	try{
@@ -67,9 +59,27 @@ LG.WebFacebook.prototype.init = function(options){
 	}
 };
 
+LG.WebFacebook.prototype.startListenStatus = function(options){
+	this.checkStatusInterval = setInterval($.proxy(this.checkStatusLoaded, this, options), 500);
+};
+
+
+LG.WebFacebook.prototype.checkStatusLoaded = function(options){
+	if(this.statusChecked){
+		clearInterval(this.checkStatusInterval);
+	}
+	else{
+		this.numWait++;
+		if(this.numWait >= LG.Facebook.SECONDS_TO_WAIT ){
+			clearInterval(this.checkStatusInterval);
+			options.fail();
+		}
+	}	
+};
 
 LG.WebFacebook.prototype.startListenToLoad = function(options){
 	var _this = this;
+	this.numWait = 0;
 	this.checkLoadInterval = setInterval(function(){
 		_this.checkScriptLoaded(options);
 	}, 500);
@@ -82,7 +92,6 @@ LG.WebFacebook.prototype.checkScriptLoaded = function(options){
 	else{
 		this.numWait++;
 		if(this.numWait >= LG.Facebook.SECONDS_TO_WAIT ){
-			this.useFb = false;
 			clearInterval(this.checkLoadInterval);
 			options.fail();
 		}
@@ -109,8 +118,13 @@ LG.WebFacebook.prototype.load = function(options){
 
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
+	this.statusChecked = false;
+	var _this = this;
+	this.numWait = 0;
 	try{
 		FB.getLoginStatus(function(response) {
+			_this.statusChecked = true;
+			LG.Network.FACEBOOK_ACTIVE = true;
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
@@ -118,6 +132,7 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 				options.fail();
 			}
 		}, true);
+		this.startListenStatus(options);
 	}
 	catch(e){
 		options.fail();
@@ -128,7 +143,6 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 LG.WebFacebook.prototype.login = function(options){
 	try{
 		FB.login(function(response) {
-			//LG.Utils.log("login response "+JSON.stringify(response));
 			if (response.authResponse) {
 				LG.userModel.fbLoggedIn(options);
 			}

@@ -642,7 +642,8 @@ if(LG.Config.IS_TOUCH){
 
 LG.Network = {};
 
-LG.Network.FACEBOOK = false;
+LG.Network.FACEBOOK_REACHABLE = false;
+LG.Network.FACEBOOK_ACTIVE = false;
 LG.Network.FILESYSTEM = false;
 LG.Network.FILE_ENTRY = false;
 
@@ -1361,15 +1362,11 @@ LG.Facebook.SRC 						= 	"http://connect.facebook.net/en_US/all.js";
 LG.Facebook.APP_ID						=	"169857723045523";
 LG.Facebook.ID 							= 	"facebook-jssdk";
 LG.Facebook.REDIRECT_URI 				= 	"https://www.facebook.com/connect/login_success.html";
-LG.Facebook.WEB_REDIRECT_URI 			= 	"http://www.numbersandpictures.com/logojs/build/web";
+LG.Facebook.WEB_REDIRECT_URI 			= 	"http://www.logotacular.com";
 LG.Facebook.CHANNEL_URL 				= 	"/channel/channel.html";
-LG.Facebook.SCOPE						=	"email,user_about_me,offline_access,publish_stream";
+LG.Facebook.SCOPE						=	"user_about_me";
 LG.Facebook.GRAPH_ME					=	"https://graph.facebook.com/me";
 LG.Facebook.GRAPH_ME_PIC				=	"https://graph.facebook.com/me/picture?redirect=false&";
-LG.Facebook.GRAPH_ME_STATUS_UPDATE		=	"https://graph.facebook.com/me/feed";
-LG.Facebook.FQL							=	"https://graph.facebook.com/fql";
-LG.Facebook.GET_FRIENDS_FBQL 			=	"SELECT uid, name FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY rand()";
-LG.Facebook.SMFH_LINK_URL 				=	"http://www.logotacular.com/logojs/build/web";
 LG.Facebook.SECONDS_TO_WAIT 			= 	8;
 
 LG.Facebook.INIT_OBJ = {status : false, cookie : true, xfbml : false, kidDirectedSite:true, appId : LG.Facebook.APP_ID,	channelUrl : LG.Facebook.CHANNEL_URL};
@@ -1392,8 +1389,6 @@ LG.Facebook.getPicture = function(uid){
 
 LG.WebFacebook = function(){
 	LG.Facebook.apply(this, arguments);
-	this.numWait = 0;
-	this.useFb = true;
 };
 
 LG.WebFacebook.prototype = Object.create(LG.Facebook.prototype);
@@ -1402,14 +1397,12 @@ LG.WebFacebook.prototype.constructor = LG.WebFacebook;
 LG.WebFacebook.prototype.init = function(options){
 	var _this = this;
 	window.fbAsyncInit = function() {
-		if(_this.useFb){
-			try{
-				FB.init(LG.Facebook.INIT_OBJ);
-				options.success();
-			}
-			catch(e){
-				options.fail();
-			}
+		try{
+			FB.init(LG.Facebook.INIT_OBJ);
+			options.success();
+		}
+		catch(e){
+			options.fail();
 		}
 	};
 	try{
@@ -1421,9 +1414,27 @@ LG.WebFacebook.prototype.init = function(options){
 	}
 };
 
+LG.WebFacebook.prototype.startListenStatus = function(options){
+	this.checkStatusInterval = setInterval($.proxy(this.checkStatusLoaded, this, options), 500);
+};
+
+
+LG.WebFacebook.prototype.checkStatusLoaded = function(options){
+	if(this.statusChecked){
+		clearInterval(this.checkStatusInterval);
+	}
+	else{
+		this.numWait++;
+		if(this.numWait >= LG.Facebook.SECONDS_TO_WAIT ){
+			clearInterval(this.checkStatusInterval);
+			options.fail();
+		}
+	}	
+};
 
 LG.WebFacebook.prototype.startListenToLoad = function(options){
 	var _this = this;
+	this.numWait = 0;
 	this.checkLoadInterval = setInterval(function(){
 		_this.checkScriptLoaded(options);
 	}, 500);
@@ -1436,7 +1447,6 @@ LG.WebFacebook.prototype.checkScriptLoaded = function(options){
 	else{
 		this.numWait++;
 		if(this.numWait >= LG.Facebook.SECONDS_TO_WAIT ){
-			this.useFb = false;
 			clearInterval(this.checkLoadInterval);
 			options.fail();
 		}
@@ -1463,8 +1473,13 @@ LG.WebFacebook.prototype.load = function(options){
 
 
 LG.WebFacebook.prototype.getLoginStatus = function(options){
+	this.statusChecked = false;
+	var _this = this;
+	this.numWait = 0;
 	try{
 		FB.getLoginStatus(function(response) {
+			_this.statusChecked = true;
+			LG.Network.FACEBOOK_ACTIVE = true;
 			if(response.status === "connected" && response.authResponse){
 				LG.userModel.fbLoggedIn(options);
 			}
@@ -1472,6 +1487,7 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 				options.fail();
 			}
 		}, true);
+		this.startListenStatus(options);
 	}
 	catch(e){
 		options.fail();
@@ -1482,7 +1498,6 @@ LG.WebFacebook.prototype.getLoginStatus = function(options){
 LG.WebFacebook.prototype.login = function(options){
 	try{
 		FB.login(function(response) {
-			//LG.Utils.log("login response "+JSON.stringify(response));
 			if (response.authResponse) {
 				LG.userModel.fbLoggedIn(options);
 			}
@@ -5671,7 +5686,9 @@ LG.FileModel = LG.UndoRedoFileModel.extend({
 		var d1, d2;
 		d1 = this.get("dino");
 		d2 = (d1 + 1) % LG.GraphicsModel.BG.length;
+		alert("change dino "+d2+"  "+this.output());
 		this.set({"dino":d2});
+		alert("change dino "+this.output());
 	},
 	reset:function(){
 		this.set({"logo":""});
@@ -6261,7 +6278,7 @@ LG.AUserModel = Backbone.Model.extend({
 LG.WebUserModel = LG.AUserModel.extend({
 	login:function(){
 		var _this = this;
-		if(LG.facebook){
+		if(LG.facebook && LG.Network.FACEBOOK_ACTIVE){
 			LG.facebook.login({
 				"success":function(){
 					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_IN, "cancelColor":1, "cancelLabel":"Ok"};
@@ -6275,12 +6292,12 @@ LG.WebUserModel = LG.AUserModel.extend({
 		}
 		else{
 			var data = {"message":LG.Messages.ERROR, "body":LG.Messages.ERROR_BODY, "cancelColor":1, "cancelLabel":"Ok"};
-			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this) });
+			LG.popups.openPopup(data, {"ok":$.proxy(this.alertOk, this), "cancel":$.proxy(_this.alertOk, _this) });
 		}
 	},
 	logout:function(){
 		var _this = this;
-		if(LG.facebook){
+		if(LG.facebook && LG.Network.FACEBOOK_ACTIVE){
 			LG.facebook.logout({
 				"success":function(){
 					var data = {"message":LG.Messages.SUCCESS, "body":LG.Messages.LOGGED_OUT, "cancelColor":1, "cancelLabel":"Ok"};
@@ -7942,13 +7959,13 @@ LG.WriteView = LG.AMenuView.extend({
 		this.resetError();
 	},
 	kbDown:function(){
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
 		var h = $("body").height();
-		$("body").height(h+1);
+		$("body").height(h + 1);
 		$("body").height(h);
 		setTimeout(function(){
 			window.scrollTo(0,0);
-			$("body").height(h+1);
+			$("body").height(h + 1);
 			$("body").height(h);
 		}, 100);
 	},
@@ -7965,6 +7982,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	forceLogo:function(s){
 		this.setLogo(s);
+		this.save();
 	},
 	draw:function(){
 		this.save();
@@ -8022,8 +8040,6 @@ LG.WriteView = LG.AMenuView.extend({
 		this.logo = data.logo;
 		this.stopListening(LG.fileCollection);
 		LG.fileCollection.selected.set(data);
-		//LG.Utils.log("SET "+JSON.stringify(data));
-		//LG.Utils.log("NOW "+JSON.stringify(LG.fileCollection.selected));
 		this.listenTo(LG.fileCollection, "add change sync", $.proxy(this.load, this));
 		this.drawNums();
 	},
@@ -9281,7 +9297,7 @@ LG.WebLauncher.prototype.social = function(options){
 	img = $("<img src='"+url+"'/>");
 	img.on("load", function(){
 		if(!_this.fbComplete){
-			LG.Network.FACEBOOK = true;
+			LG.Network.FACEBOOK_REACHABLE = true;
 			options.success();
 		}
 	});
@@ -9300,7 +9316,7 @@ LG.WebLauncher.prototype.social = function(options){
 LG.WebLauncher.prototype.socialChecked = function(){
 	var _this = this;
 	this.fbComplete = true;
-	if(LG.Network.FACEBOOK){
+	if(LG.Network.FACEBOOK_REACHABLE){
 		LG.facebook = new LG.WebFacebook();
 		LG.facebook.init({
 			"success":function(){
@@ -9314,6 +9330,7 @@ LG.WebLauncher.prototype.socialChecked = function(){
 				});
 			},
 			"fail":function(){
+				alert("fail");
 				_this.onLoggedIn();
 			}
 		});
