@@ -280,7 +280,7 @@ timesordivterm = sep* t:timesterm sep*
 }
 
 
-plusexpression = '+' m:multexpression
+plusexpression = sep* '+' sep* m:multexpression
 {
 	return {type:"plusexpression", children:[m]};
 }
