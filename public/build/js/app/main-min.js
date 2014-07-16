@@ -5806,12 +5806,6 @@ LG.ASelectedFileCollection = LG.APaginatedCollection.extend({
 	},
 	addNewModel:function(options){
 		//LG.Utils.log("addnew");
-		if(options){
-			//LG.Utils.log("options "+options.force);
-		}
-		if(this.selected){
-			//LG.Utils.log("selected "+this.selected+"  "+this.selected.isNew());
-		}
 		if(options && options.force){
 			if(this.selected.isNew()){
 				this.remove(this.selected);
@@ -5960,7 +5954,6 @@ LG.FileCollection = LG.AFileCollection.extend({
 		}
 	},
 	deleteCurrentFile:function(callback){
-		LG.Utils.log("deleteCurrentFile");
 		var _this = this, options;
 		options = {
 			"success":function(){
@@ -8485,7 +8478,7 @@ LG.HelpView = LG.AMenuView.extend({
 		LG.Utils.centreImages(this.$el);
 	},
 	render:function(){
-		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.loadTemplate(  this.template, {"web":!LG.Config.PHONEGAP},  {replace:true}  );
 		this.scroller = this.$("#helpscroller");
 		this.wrapper = this.$("#helpwrapper");
 		LG.Utils.centreImages(this.$el);

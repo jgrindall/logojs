@@ -428,74 +428,52 @@
 						
 							<div class="helpcontent">
 							
-								<div class="helpcontentleftsmall">
-									<h3>Welcome to Logotacular!</h3>
+								<h3>Welcome to Logotacular!</h3>
 										
-										<p>
-											Logotacular is an application for drawing colourful patterns using the Logo language, designed to help you explore geometry and programming.
-										</p>
-										
-										<p>
-											Write code in the textbox, and tap on the screen to draw it. The on-screen 'turtle' will draw the commands you have entered.
-											
-										</p>
-										
-										<p>
-											When you're ready, save your file and work on it later.
-										</p> 
-											
-										<ul>
-											<li>Learn about programming using an on-screen turtle</li>
-											<li>Make colourful patterns as you learn about geometry and coding</li>
-											<li>Understand variables and loops</li>
-											<li>Use functions (procedures) and recursion</li>
-											<li>Save your code and come back to it later</li>
-										</ul>
-									
-									</div>
+								<p>
+									Logotacular is an application for drawing colourful patterns using the Logo language, designed to help you explore geometry and programming.
+								</p>
 								
-									<div class="helpcontentrightlarge" style="background: #fff;">
-									
-										<img class="centre" id="anim" />
-										
-									</div>
-							
+								<div style="position: absolute;top: 70px;left: 0;right: 0;bottom: 0;">
+									<img class="centre" id="anim" />
 								</div>
 								
 							</div>
+							
+						</div>
 						
 							
 						
-							<div class='helpcontainer'>
+						<div class='helpcontainer'>
 								
-								<div class="helpcontent">
-							
-									<div class="helpcontentleft">
-									
-										<h3>
-											How to write a program
-										</h3>
-									
-										<p>
-							
-							
-							
-											The most basic commands in Logo are the 'go forward' command and the 'turn right' command.
+							<div class="helpcontent">
 						
-										
-										</p>
-										
-										<p>You use these commands to control a small on-screen 'turtle', which draws a colourful path as it moves.</p>
+								<div class="helpcontentleft">
+								
+									<h3>
+										How to write a program
+									</h3>
+								
+									<p>
+						
+						
+						
+										The most basic commands in Logo are the 'go forward' command and the 'turn right' command.
+					
 									
-										<p>
-											For example, fd(100) tells the turtle to go forward 100 units (in whatever direction it is facing), and rt(90) tells it turn on the spot 90 degrees clockwise.
-										</p>
-										<p>
+									</p>
+									
+									<p>You use these commands to control a small on-screen 'turtle', which draws a colourful path as it moves.</p>
+								
+									<p>
+										For example, fd(100) tells the turtle to go forward 100 units (in whatever direction it is facing), and rt(90) tells it turn on the spot 90 degrees clockwise.
+									</p>
+									<p>
 
-											Try drawing a square using:
-										</p>
-										<p class="code">
-											<pre>fd(100)
+										Try drawing a square using:
+									</p>
+									<p class="code">
+										<pre>fd(100)
 rt(90)
 fd(100)
 rt(90)
@@ -503,288 +481,304 @@ fd(100)
 rt(90)
 fd(100)
 rt(90)</pre>
-							
-										</p>
-							
-									</div>
-							
-									<div class="helpcontentright">
-										<img class="centre" src="img/help/anim.gif"/>
-									</div>
-							
+						
+									</p>
+						
 								</div>
+						
+								<div class="helpcontentright">
+									<img class="centre" src="img/help/anim.gif"/>
+								</div>
+						
 							</div>
+						</div>
 							
 							
-							<div class='helpcontainer'>
+						<div class='helpcontainer'>
 							
-								<div class="helpcontent">
-							
-									<div class="helpcontentleft">
-										
-										<h3>
-											Drawing with colors
-										</h3>
-										
-							
-										<p>
+							<div class="helpcontent">
+						
+								<div class="helpcontentleft">
+									
+									<h3>
+										Drawing with colors
+									</h3>
+									
+						
+									<p>
 You can change the drawing color of the lines, as well as the background color of the page by using the following commands:
 
-										</p>
-										
-										<p class="code">
-											<pre>bg(red)
+									</p>
+									
+									<p class="code">
+										<pre>bg(red)
 color(green)</pre>
 
-										</p>
-										<p>
+									</p>
+									<p>
 
-											You can change the thickness of the lines drawn (from 1 to 10), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
-										</p>
-										<p class="code">
-											<pre>thick(7)
+										You can change the thickness of the lines drawn (from 1 to 10), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
+									</p>
+									<p class="code">
+										<pre>thick(7)
 fd(50) penup() fd(50) pendown()
 fd(50) penup() fd(50) pendown()
 fd(50)</pre>
-								
-										</p>
 							
-									</div>
-							
-									<div class="helpcontentright">
-										<img class="centre" src="img/help/help4.png"/>
-									</div>
-							
+									</p>
+						
 								</div>
-							
+						
+								<div class="helpcontentright">
+									<img class="centre" src="img/help/help4.png"/>
+								</div>
+						
 							</div>
 							
+						</div>
 							
-							<div class='helpcontainer'>
 							
-								<div class="helpcontent">
+						<div class='helpcontainer'>
 							
-									<div class="helpcontentleft">
-										
-										<h3>
-											Variables and loops
-										</h3>
-										
-							
-										<p>
+							<div class="helpcontent">
+						
+								<div class="helpcontentleft">
+									
+									<h3>
+										Variables and loops
+									</h3>
+									
+						
+									<p>
 
-											Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
+										Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
 
-											So, our 'draw square' program could be written as :
-										</p>
-										
-										<p class="code">
-											<pre>rpt 4
-  fd(100)
-  rt(90)
+										So, our 'draw square' program could be written as :
+									</p>
+									
+									<p class="code">
+										<pre>rpt 4
+fd(100)
+rt(90)
 endrpt</pre>
 
-										</p>
-										<p>
+									</p>
+									<p>
 
-											Can you work out what the following code will draw?
-										</p>
-										<p class="code">
-											<pre>rpt 5
-  fd(100)
-  rt(72)
+										Can you work out what the following code will draw?
+									</p>
+									<p class="code">
+										<pre>rpt 5
+fd(100)
+rt(72)
 endrpt</pre>
-								
-										</p>
-										
-										
-										<p>
+							
+									</p>
+									
+									
+									<p>
 
-											Can you work out how to draw the image on the right?
-										</p>
-										
-									</div>
-							
-									<div class="helpcontentright">
-										<img class="centre" src="img/help/help5.png"/>
-									</div>
-							
+										Can you work out how to draw the image on the right?
+									</p>
+									
 								</div>
-							
+						
+								<div class="helpcontentright">
+									<img class="centre" src="img/help/help5.png"/>
+								</div>
+						
 							</div>
+						
+						</div>
 							
 							
 							
-							<div class='helpcontainer'>
+						<div class='helpcontainer'>
 								
-								<div class="helpcontent">
-									
-									<div class="helpcontentleftlarge">
-									
-										<h3>
-											Procedures and functions
-										</h3>
-									
-										<p>
+							<div class="helpcontent">
+								
+								<div class="helpcontentleftlarge">
+								
+									<h3>
+										Procedures and functions
+									</h3>
+								
+									<p>
 
-										
-											A function or procedure is often thought of as telling the turtle the meaning of a new word.
-										We could rewrite our 'draw square' program once more:
-										</p>
-										<p class="code">
-											<pre>proc drawSquare
-  rpt 4
-    fd(100)
-    rt(90)
-  endrpt
+									
+										A function or procedure is often thought of as telling the turtle the meaning of a new word.
+									We could rewrite our 'draw square' program once more:
+									</p>
+									<p class="code">
+										<pre>proc drawSquare
+rpt 4
+fd(100)
+rt(90)
+endrpt
 endproc
 
 drawSquare()</pre>
-										</p>
-										<p>
+									</p>
+									<p>
 
-											Recursion can also be used in Logo - for example the following program defines a procedure
-											which accepts one variable called 'dist' and repeatedly calls itself, increasing the
-											value of 'dist' each time, with the result that an increasing series of line segments is 
-											drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
-										</p>
-									
-										<p class="code">
-											<pre>proc drawSpiral(dist)
-  fd(dist)
-  rt(90)
-  drawSpiral(dist+5)
+										Recursion can also be used in Logo - for example the following program defines a procedure
+										which accepts one variable called 'dist' and repeatedly calls itself, increasing the
+										value of 'dist' each time, with the result that an increasing series of line segments is 
+										drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
+									</p>
+								
+									<p class="code">
+										<pre>proc drawSpiral(dist)
+fd(dist)
+rt(90)
+drawSpiral(dist+5)
 endproc
 
 drawSpiral(10)</pre>
+							
+									</p>
 								
-										</p>
-									
-									
+								
+								</div>
+							
+							
+							
+								<div class="helpcontentrightsmall">
+									<div class="helpblock2">
+										<img src="img/help/help7.png" class="centre"/>
 									</div>
 								
-								
-								
-									<div class="helpcontentrightsmall">
-										<div class="helpblock2">
-											<img src="img/help/help7.png" class="centre"/>
-										</div>
-									
-										<div class="helpblock2">
-											<img src="img/help/help6.png" class="centre"/>
-										</div>
+									<div class="helpblock2">
+										<img src="img/help/help6.png" class="centre"/>
 									</div>
-								
-						
 								</div>
 							
+					
 							</div>
+						
+						</div>
 							
 							
-							<div class='helpcontainer'>
+						<div class='helpcontainer'>
 								
-								<div class="helpcontent">
+							<div class="helpcontent">
+							
+								<h3>
+									How to use Logotacular - the main menu
+								</h3>
 								
-									<h3>
-										How to use Logotacular - the main menu
-									</h3>
+								<img class="centre" src="img/help/help8<%if(web){print("web");}%>.png"/>
+								
+							</div>
+					
+						</div>
+						
+						<% if(!web){ %>
+						
+						<div class='helpcontainer'>
+						
+							<div class="helpcontent">
+							
+								<h3>
+									How to use Logotacular - the main menu
+								</h3>
+								
+								<img class="centre" src="img/help/help9.png"/>
+								
+							</div>
+					
+						</div>
+						
+						<% } %>
+						
+							
+						<div class='helpcontainer'>
+							
+							<div class="helpcontent">
+							
+								<h3>
+									How to use Logotacular - writing Logo
+								</h3>
+								
+								<img class="centre" src="img/help/help10.png"/>
+								
+							</div>
+					
+					
+						</div>
+							
+						<div class='helpcontainer'>
+								
+							<div class="helpcontent">
+							
+								<h3>
+									How to use Logotacular - writing Logo
+								</h3>
+								
+								<img class="centre" src="img/help/help11.png"/>
+								
+							</div>
+					
+					
+						</div>
+							
+						<div class='helpcontainer'>
+							<div class="helpcontent">
+						
+						
+								<div class="helpcontentleftlarge">
 									
-									<img class="centre" src="img/help/help8.png"/>
+									<h3>History of Logo</h3>
+						
+									<p>
+						
+										Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
+									</p>
 									
+									<p>
+										Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
+									</p>
+									
+									<p class="quote">
+										" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
+						
+									</p>
+						
+									<p class="quote">
+							
+									&hellip;Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
+									&hellip; the Turtle is like a person: ' I am here and I am facing north&hellip;'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.
+									</p>
+								
 								</div>
-						
-						
-							</div>
 							
-							<div class='helpcontainer'>
-								
-								<div class="helpcontent">
-								
-									<h3>
-										How to use Logotacular - writing Logo
-									</h3>
-									
-									<img class="centre" src="img/help/help9.png"/>
-									
-								</div>
-						
-						
-							</div>
-							
-							<div class='helpcontainer'>
-								
-								<div class="helpcontent">
-								
-									<h3>
-										How to use Logotacular - writing Logo
-									</h3>
-									
-									<img class="centre" src="img/help/help10.png"/>
-									
-								</div>
-						
-						
-							</div>
-							
-							<div class='helpcontainer'>
-								<div class="helpcontent">
-							
-							
-									<div class="helpcontentleftlarge">
-										
-										<h3>History of Logo</h3>
-							
-										<p>
-							
-											Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
-										</p>
-										
-										<p>
-											Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
-										</p>
-										
-										<p class="quote">
-											" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
-							
-										</p>
-							
-										<p class="quote">
-								
-										...Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
-										... the Turtle is like a person: ' I am here and I am facing north...'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.
-										</p>
-									
+								<div class="helpcontentrightsmall">
+									<div class="helpblock2">
+										<img src="img/help/help2.png" class="centre"/>
 									</div>
-								
-									<div class="helpcontentrightsmall">
-										<div class="helpblock2">
-											<img src="img/help/help2.png" class="centre"/>
-										</div>
-										
-										<div class="helpblock2">
-											<img src="img/help/help3.png" class="centre"/>
-										</div>
+									
+									<div class="helpblock2">
+										<img src="img/help/help3.png" class="centre"/>
 									</div>
-							
-								</div>
-							</div>
-							
-							
-							<div class='helpcontainer'>
-								
-								<div class="helpcontent">
-							
-									<h3>
-										Privacy policy
-								
-									</h3>
-							
-									<p>Logotacular collects no personal information from any users.</p>
-									
-									<p>It does not connect to the internet and your files are all saved locally, on your device.</p>
-									
 								</div>
 						
+							</div>
+						</div>
+							
+							
+						<div class='helpcontainer'>
+								
+							<div class="helpcontent">
+						
+								<h3>
+									Privacy policy
+							
+								</h3>
+						
+								<p>Logotacular collects no personal information from any users.</p>
+								
+								<p>It does not connect to the internet and your files are all saved locally, on your device.</p>
+								
 							</div>
 						
 						</div>

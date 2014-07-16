@@ -25,7 +25,7 @@ LG.HelpView = LG.AMenuView.extend({
 		LG.Utils.centreImages(this.$el);
 	},
 	render:function(){
-		this.loadTemplate(  this.template, {},  {replace:true}  );
+		this.loadTemplate(  this.template, {"web":!LG.Config.PHONEGAP},  {replace:true}  );
 		this.scroller = this.$("#helpscroller");
 		this.wrapper = this.$("#helpwrapper");
 		LG.Utils.centreImages(this.$el);
