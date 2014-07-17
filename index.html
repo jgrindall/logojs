@@ -487,6 +487,11 @@ rt(90)</pre>
 						
 									</p>
 						
+									<p>
+
+										You don't have to out each command on a new line, but it can make it easier to read!
+									</p>
+						
 								</div>
 						
 								<div class="helpcontentright">
@@ -509,7 +514,7 @@ rt(90)</pre>
 									
 						
 									<p>
-You can change the drawing color of the lines, as well as the background color of the page by using the following commands:
+You can change the color of the lines, as well as the background color of the page by using the 'color' and 'bg' commands:
 
 									</p>
 									
@@ -520,7 +525,7 @@ color(green)</pre>
 									</p>
 									<p>
 
-										You can change the thickness of the lines drawn (from 1 to 10), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
+										You can change the thickness of the lines drawn (from 1 to 20), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
 									</p>
 									<p class="code">
 										<pre>thick(7)
@@ -617,7 +622,7 @@ fd(w+2*h) rt(90)
 										
 										Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
 
-										So, our 'draw square' program could be written as :
+										So, we could draw a square like this:
 									</p>
 									
 									<p class="code">
@@ -675,7 +680,7 @@ endrpt</pre>
 
 									
 										A function or procedure is often thought of as telling the turtle the meaning of a new word.
-									We could rewrite our 'draw square' program once more:
+									We could rewrite our 'draw square' program once more by defining a procedure called 'drawSquare' and then calling it.
 									</p>
 									<p class="code">
 										<pre>proc drawSquare
