@@ -7321,9 +7321,10 @@ LG.CanvasView = Backbone.View.extend({
 		this.turtlestage.addChild(this.turtlecontainer);
 	},
 	makeBacking:function(){
+		this.tempcontainer = new createjs.Container();
 		this.backingcontainer = new createjs.Container();
+		this.backingstage.addChild(this.tempcontainer);
 		this.backingstage.addChild(this.backingcontainer);
-		this.backingstage.addChild(this.bmpcontainer);
 	},
 	makeBg:function(){
 		this.bg = new LG.Easel.Bg();
@@ -7458,6 +7459,9 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
+		var bg = new createjs.Bitmap(this.bgcanvas);
+		this.tempcontainer.addChild(bg);
+		this.tick();
 		context = this.backingcanvas.getContext("2d");
 		x0 = Math.max(0, (this.bgcanvas.width - LG.CanvasModel.SNAPSHOT_WIDTH)/2 );
 		y0 = (this.bgcanvas.height - LG.CanvasModel.SNAPSHOT_HEIGHT)/2;
