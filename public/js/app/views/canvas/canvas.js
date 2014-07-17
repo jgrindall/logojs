@@ -41,7 +41,6 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	clickMe:function(){
 		var s = LG.layoutModel.get("show");
-		console.log(s+" "+this.working);
 		if(s === "write" || s === "writebar"){
 			if(this.working){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
@@ -225,11 +224,16 @@ LG.CanvasView = Backbone.View.extend({
 		LG.EventDispatcher.trigger(LG.Events.ERROR_RUNTIME, obj.message);
 	},
 	process:function(tree){
+		var _this = this;
 		this.working = true;
 		this.worker = new Worker(LG.Config.PARSER_VISIT);
 		this.worker.onmessage = $.proxy(this.onMessage, this);
 		this.worker.onerror = $.proxy(this.onError, this);
-		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
+		LG.spinnerModel.set({"show":true});
+		setTimeout(function(){
+			_this.worker.postMessage(  {"type":"tree", "tree":tree}  );
+			LG.spinnerModel.set({"show":false});
+		}, 600);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;

@@ -77,6 +77,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
+		msg = msg.replace(/Uncaught RangeError: /g,"Error while running your code: ");
 		this.showErrorText(msg);
 		this.error = {"show":true, "line":0};
 		this.showErrorText(msg);
@@ -93,12 +94,7 @@ LG.WriteView = LG.AMenuView.extend({
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
 		exp = expected[0].value;
-		if(exp === ";"){
-			msg = "Error on line "+ line +", did you miss off a semi-colon (\";\")?  Check your code!";
-		}
-		else{
-			msg = "Error on line "+ line +", expected: \""+exp+"\". Check your code!";
-		}
+		msg = "Error on line "+ line +". Check your code!";
 		this.showErrorText(msg);
 	},
 	clear:function(){

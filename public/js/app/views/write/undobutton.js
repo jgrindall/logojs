@@ -25,6 +25,7 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.sounds.playClick();
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_UNDO);
 	},
 	getDisabled:function(){

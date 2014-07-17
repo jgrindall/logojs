@@ -3,7 +3,7 @@
 LG.Config = {};
 
 // turn this off to prevent console logging completely
-LG.Config.DEBUG = true;
+LG.Config.DEBUG = false;
 
 // this variable is replaced by the ant build script
 LG.Config.PHONEGAP = LG.Utils.getPG();

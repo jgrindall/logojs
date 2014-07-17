@@ -30,5 +30,5 @@ LG.Stack.prototype.describe = function(){
 	return this.s.toString();
 };
 
-LG.Stack.MAX_STACK_SIZE = 256;
-LG.Stack.MAX_FLOAT_SIZE = 2000;
+LG.Stack.MAX_STACK_SIZE = 1024;
+LG.Stack.MAX_FLOAT_SIZE = 100000;

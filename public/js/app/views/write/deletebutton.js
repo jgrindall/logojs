@@ -42,6 +42,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.sounds.playClick();
 		var model = LG.fileCollection.selected;
 		if(LG.userModel.isConnected()){

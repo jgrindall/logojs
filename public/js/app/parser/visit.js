@@ -101,7 +101,7 @@ function visitrptstmt(node){
 	var ch = node.children;
 	visitNode( ch[0] );
 	var num = stack.pop();
-	if(num === parseInt(num, 10)){
+	if(num >= 0 && num === parseInt(num, 10)){
 		for(var i = 1;i<=num; i++){
 			visitNode(ch[1]);
 		}
@@ -195,7 +195,7 @@ function visitnegate(node){
 }
 
 function visitcallfnstmt(node){
-	var name = node.name;
+	var name = node.name, args = "argument";
 	var f = symTable.getFunction(name);
 	if(f){
 		var numSupplied, numArgs = 0;
@@ -204,7 +204,10 @@ function visitcallfnstmt(node){
 		}
 		numSupplied = node.args.children.length;
 		if(numArgs != numSupplied){
-			runTimeError("Function '"+name+"' has "+numArgs+" arguments, but you sent "+numSupplied);
+			if(numArgs == 0 || numArgs >= 2){
+				args += "s"
+			}
+			runTimeError("Function '"+name+"' has "+numArgs+" "+args+", but you sent "+numSupplied);
 		}
 		else{
 			symTable.enterBlock();

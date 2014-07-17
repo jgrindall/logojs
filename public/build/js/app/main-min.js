@@ -192,7 +192,7 @@ LG.Utils.find = function(list, attrName, match){
 };
 
 LG.Utils.log = function(s){
-	if(window.console){
+	if(window.console && LG.Config.DEBUG){
 		console.log("DEBUG> "+s+"\n");
 	}
 };
@@ -213,7 +213,7 @@ LG.Utils.requestAnimFrame = (function(){
 LG.Config = {};
 
 // turn this off to prevent console logging completely
-LG.Config.DEBUG = true;
+LG.Config.DEBUG = false;
 
 // this variable is replaced by the ant build script
 LG.Config.PHONEGAP = LG.Utils.getPG();
@@ -1854,7 +1854,7 @@ LG.Utils.logoparser = (function() {
         peg$c180 = /^[a-zA-Z0-9_]/,
         peg$c181 = { type: "class", value: "[a-zA-Z0-9_]", description: "[a-zA-Z0-9_]" },
         peg$c182 = function(c0, c1) {
-        	return {type:"fnname", name:c0.toString()+c1.toString()};
+        	return {type:"fnname", name:c0.join("") + c1.join("")};
         },
         peg$c183 = function(m, pm) {
         	var obj={};
@@ -6830,6 +6830,7 @@ LG.SaveButtonView = LG.HeaderButton.extend({
 	},
 	onClick:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		var data = this.getData();
 		LG.sounds.playClick();
 		if(data.loggedIn && !data.disabled){
@@ -7267,7 +7268,6 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	clickMe:function(){
 		var s = LG.layoutModel.get("show");
-		console.log(s+" "+this.working);
 		if(s === "write" || s === "writebar"){
 			if(this.working){
 				LG.EventDispatcher.trigger(LG.Events.CLICK_STOP);
@@ -7451,11 +7451,16 @@ LG.CanvasView = Backbone.View.extend({
 		LG.EventDispatcher.trigger(LG.Events.ERROR_RUNTIME, obj.message);
 	},
 	process:function(tree){
+		var _this = this;
 		this.working = true;
 		this.worker = new Worker(LG.Config.PARSER_VISIT);
 		this.worker.onmessage = $.proxy(this.onMessage, this);
 		this.worker.onerror = $.proxy(this.onError, this);
-		this.worker.postMessage(  {"type":"tree", "tree":tree}  );
+		LG.spinnerModel.set({"show":true});
+		setTimeout(function(){
+			_this.worker.postMessage(  {"type":"tree", "tree":tree}  );
+			LG.spinnerModel.set({"show":false});
+		}, 600);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
@@ -8031,6 +8036,7 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	showErrorRuntime:function(msg){
 		msg = msg.replace(/Uncaught Error: /g,"Error while running your code: ");
+		msg = msg.replace(/Uncaught RangeError: /g,"Error while running your code: ");
 		this.showErrorText(msg);
 		this.error = {"show":true, "line":0};
 		this.showErrorText(msg);
@@ -8047,12 +8053,7 @@ LG.WriteView = LG.AMenuView.extend({
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
 		exp = expected[0].value;
-		if(exp === ";"){
-			msg = "Error on line "+ line +", did you miss off a semi-colon (\";\")?  Check your code!";
-		}
-		else{
-			msg = "Error on line "+ line +", expected: \""+exp+"\". Check your code!";
-		}
+		msg = "Error on line "+ line +". Check your code!";
 		this.showErrorText(msg);
 	},
 	clear:function(){
@@ -8270,6 +8271,7 @@ LG.UndoButtonView = LG.UndoRedoButton.extend({
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.sounds.playClick();
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_UNDO);
 	},
 	getDisabled:function(){
@@ -8290,6 +8292,7 @@ LG.RedoButtonView = LG.UndoRedoButton.extend({
 	clickMe:function(e){
 		this.stopProp(e);
 		LG.sounds.playClick();
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.EventDispatcher.trigger(LG.Events.CLICK_REDO);
 	}
 	
@@ -8421,6 +8424,7 @@ LG.DeleteButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.sounds.playClick();
 		var model = LG.fileCollection.selected;
 		if(LG.userModel.isConnected()){
@@ -8477,6 +8481,8 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.sounds.playClick();
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;

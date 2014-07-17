@@ -295,7 +295,7 @@ LG.Utils.logoparser = (function() {
         peg$c180 = /^[a-zA-Z0-9_]/,
         peg$c181 = { type: "class", value: "[a-zA-Z0-9_]", description: "[a-zA-Z0-9_]" },
         peg$c182 = function(c0, c1) {
-        	return {type:"fnname", name:c0.toString()+c1.toString()};
+        	return {type:"fnname", name:c0.join("") + c1.join("")};
         },
         peg$c183 = function(m, pm) {
         	var obj={};

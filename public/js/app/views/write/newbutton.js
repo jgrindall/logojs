@@ -44,6 +44,8 @@ LG.NewButtonView = LG.WriteButton.extend({
 	},
 	clickMe:function(e){
 		this.stopProp(e);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
+		LG.EventDispatcher.trigger(LG.Events.RESET_ERROR);
 		LG.sounds.playClick();
 		var loggedIn = LG.userModel.isConnected();
 		var fileModel = LG.fileCollection.selected;
