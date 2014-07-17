@@ -232,7 +232,7 @@ LG.CanvasView = Backbone.View.extend({
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
-		context = this.bgcanvas.getContext("2d");
+		context = this.backingcanvas.getContext("2d");
 		x0 = Math.max(0, (this.bgcanvas.width - LG.CanvasModel.SNAPSHOT_WIDTH)/2 );
 		y0 = (this.bgcanvas.height - LG.CanvasModel.SNAPSHOT_HEIGHT)/2;
 		y0 = Math.max(0, y0 - LG.CanvasModel.SNAPSHOT_HEIGHT/3);
