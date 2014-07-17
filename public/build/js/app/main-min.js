@@ -1265,6 +1265,9 @@ LG.Router = Backbone.Router.extend({
 		if(s != LG.layoutModel.get("show")){
 			LG.layoutModel.set({"show":s});
 		}
+		if(s!="writebar"){
+			LG.EventDispatcher.trigger(LG.Events.FORCE_STOP);
+		}
 	},
 	write:function(id){
 		if(id){
@@ -1345,6 +1348,7 @@ LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
 LG.Events.ERROR_ROW				=	"LG::errorRow";
 LG.Events.ERROR_RUNTIME			=	"LG:errorRuntime";
 LG.Events.FORCE_LOGO			=	"LG::forceLogo";
+LG.Events.FORCE_STOP			=	"LG::forceStop";
 LG.Events.RESET_ERROR			=	"LG::resetError";
 LG.Events.INSERT				=	"LG::insert";
 LG.Events.TO_BAR				=	"LG::toBar";
@@ -5390,7 +5394,7 @@ LG.output.MAX_SIZE = 100000;
 
 LG.output.BATCH_SIZE = 500;
 
-LG.output.TIMEOUT = 25;
+LG.output.TIMEOUT = 20;
 
 LG.Command = function(data){
 	this.data = data;
@@ -7223,6 +7227,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.listenTo(LG.EventDispatcher,	LG.Events.TICK,					$.proxy(this.tick, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_DRAW,			$.proxy(this.draw, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_STOP,			$.proxy(this.stop, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.FORCE_STOP,			$.proxy(this.forceStop, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESIZE,				$.proxy(this.onResize, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESET_CANVAS,			$.proxy(this.reset, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.PAUSE,				$.proxy(this.pause, this));
@@ -7347,6 +7352,11 @@ LG.CanvasView = Backbone.View.extend({
 		this.turtlestage.update();
 		this.bgstage.update();
 		this.commandsstage.update();
+	},
+	forceStop:function(){
+		if(this.active){
+			this.stop();
+		}
 	},
 	stop:function(){
 		this.ended = false;
@@ -7481,7 +7491,7 @@ LG.CanvasView = Backbone.View.extend({
 			}
 			this.tick();
 			if(this.commandIndex % LG.CanvasView.FLUSH_INTERVAL === 0){
-				this.flush();
+				//this.flush();
 			}
 		}
 		var done = (!this.active || (this.ended && (this.commandIndex >= this.output.size() - 1) ));

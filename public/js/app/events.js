@@ -32,6 +32,7 @@ LG.Events.ALERT_CLOSED			=	"LG::alertClosed";
 LG.Events.ERROR_ROW				=	"LG::errorRow";
 LG.Events.ERROR_RUNTIME			=	"LG:errorRuntime";
 LG.Events.FORCE_LOGO			=	"LG::forceLogo";
+LG.Events.FORCE_STOP			=	"LG::forceStop";
 LG.Events.RESET_ERROR			=	"LG::resetError";
 LG.Events.INSERT				=	"LG::insert";
 LG.Events.TO_BAR				=	"LG::toBar";

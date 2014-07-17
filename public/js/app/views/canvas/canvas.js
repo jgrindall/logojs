@@ -5,6 +5,7 @@ LG.CanvasView = Backbone.View.extend({
 		this.listenTo(LG.EventDispatcher,	LG.Events.TICK,					$.proxy(this.tick, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_DRAW,			$.proxy(this.draw, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.CLICK_STOP,			$.proxy(this.stop, this));
+		this.listenTo(LG.EventDispatcher,	LG.Events.FORCE_STOP,			$.proxy(this.forceStop, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESIZE,				$.proxy(this.onResize, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.RESET_CANVAS,			$.proxy(this.reset, this));
 		this.listenTo(LG.EventDispatcher,	LG.Events.PAUSE,				$.proxy(this.pause, this));
@@ -130,6 +131,11 @@ LG.CanvasView = Backbone.View.extend({
 		this.bgstage.update();
 		this.commandsstage.update();
 	},
+	forceStop:function(){
+		if(this.active){
+			this.stop();
+		}
+	},
 	stop:function(){
 		this.ended = false;
 		this.active = false;
@@ -248,7 +254,6 @@ LG.CanvasView = Backbone.View.extend({
 		this.bmpcontainer.addChild(flushbmp);
 		this.commands.graphics.clear();
 		this.tick();
-		//LG.Utils.log("flushed "+this.bmpcontainer.getNumChildren());
 	},
 	drawBatch:function(){
 		var size = this.output.size(), i;

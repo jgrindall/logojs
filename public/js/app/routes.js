@@ -31,6 +31,9 @@ LG.Router = Backbone.Router.extend({
 		if(s != LG.layoutModel.get("show")){
 			LG.layoutModel.set({"show":s});
 		}
+		if(s!="writebar"){
+			LG.EventDispatcher.trigger(LG.Events.FORCE_STOP);
+		}
 	},
 	write:function(id){
 		if(id){
