@@ -21,7 +21,7 @@ LG.SymTable.prototype.get = function(name){
 	var block;
 	for(var i = this.blocks.length - 1; i>=0; i--){
 		block = this.blocks[i];
-		if(block[name]){
+		if(block[name] !== null && block[name] !== undefined){
 			return block[name];
 			break;
 		}
@@ -39,5 +39,14 @@ LG.SymTable.prototype.addFunction = function(name, argsNode, statementsNode){
 
 LG.SymTable.prototype.getFunction = function(name){
 	return this.functions[name];
+};
+
+LG.SymTable.prototype.clear = function(){
+	var i;
+	this.functions = null;
+	for(i = 0; i < this.blocks.length; i++){
+		this.blocks[i] = null;
+	}
+	this.blocks = null;
 };
 
