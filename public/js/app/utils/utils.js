@@ -111,15 +111,16 @@ LG.Utils.growl = function(msg){
 		"beforeClose":function(){
 			$(this).off("click");
 		},
-		"closeTemplate":"",
+		"closeTemplate":"kujghg",
 		"position":"top-left",
-		"life":1500
-	
+		"life":5000
 	};
 	$.jGrowl(msg, data);
 };
 
 $.jGrowl.defaults.pool = 1;
+$.jGrowl.defaults.closeTemplate = "<div>XYX</div>";
+$.jGrowl.defaults.life = 10000;
 
 LG.Utils.supportsLocalStorage = function(){
 	if (typeof window.localStorage !== 'undefined'){

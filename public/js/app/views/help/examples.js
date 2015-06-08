@@ -25,7 +25,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 			LG.fileOpener.newFile();
 			LG.router.navigate("write", {"trigger":true});
 			LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
-			LG.Utils.growl("Click on the left panel to draw");
+			LG.Utils.growl(LG.Messages.WRITE);
 		}
 	},
 	clickClose:function(){

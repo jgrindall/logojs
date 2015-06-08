@@ -233,7 +233,7 @@ LG.CanvasView = Backbone.View.extend({
 		setTimeout(function(){
 			_this.worker.postMessage(  {"type":"tree", "tree":tree}  );
 			LG.spinnerModel.set({"show":false});
-		}, 600);
+		}, 400);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;

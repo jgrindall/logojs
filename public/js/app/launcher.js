@@ -82,6 +82,7 @@ LG.Launcher.prototype.addActivity = function(){
 	$("body > #container").empty().append(LG.activityView.render().$el);
 	LG.activityView.afterAdded();
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
+	LG.Utils.growl(LG.Messages.WRITE);
 	Backbone.history.start();
 };
 

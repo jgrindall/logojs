@@ -111,15 +111,16 @@ LG.Utils.growl = function(msg){
 		"beforeClose":function(){
 			$(this).off("click");
 		},
-		"closeTemplate":"",
+		"closeTemplate":"kujghg",
 		"position":"top-left",
-		"life":1500
-	
+		"life":5000
 	};
 	$.jGrowl(msg, data);
 };
 
 $.jGrowl.defaults.pool = 1;
+$.jGrowl.defaults.closeTemplate = "<div>XYX</div>";
+$.jGrowl.defaults.life = 10000;
 
 LG.Utils.supportsLocalStorage = function(){
 	if (typeof window.localStorage !== 'undefined'){
@@ -6236,7 +6237,7 @@ LG.GraphicsModel.CLR10 = "#c0392b";
 LG.GraphicsModel.CLR11 = "#f39c12";
 LG.GraphicsModel.CLR12 = "#ffffff";
 LG.GraphicsModel.CLR13 = "#95a5a6";
-LG.GraphicsModel.CLR14 = "#bdc3c7";
+LG.GraphicsModel.CLR14 = "#aaaaaa";
 LG.GraphicsModel.CLR15 = "#6f7c7d";
 LG.GraphicsModel.CLR16 = "#34495e";
 LG.GraphicsModel.CLR17 = "#000000";
@@ -7130,9 +7131,6 @@ LG.ActivityView = LG.AbstractPageView.extend({
 		this.canvasView = new LG.CanvasView();
 		this.$el.append(this.canvasView.render().el);
 		
-		this.writeGrowlView = new LG.WriteGrowlView();	
-		this.$el.append(this.writeGrowlView.render().el);
-		
 		this.writeView = LG.create.writeView();
 		this.$el.append(this.writeView.render().el);
 		
@@ -7460,7 +7458,7 @@ LG.CanvasView = Backbone.View.extend({
 		setTimeout(function(){
 			_this.worker.postMessage(  {"type":"tree", "tree":tree}  );
 			LG.spinnerModel.set({"show":false});
-		}, 600);
+		}, 400);
 	},
 	capture:function(){
 		var context, data, tempCanvas, tempContext, img, x0, y0;
@@ -8662,7 +8660,7 @@ LG.ExamplesView = LG.AMenuView.extend({
 			LG.fileOpener.newFile();
 			LG.router.navigate("write", {"trigger":true});
 			LG.EventDispatcher.trigger(LG.Events.FORCE_LOGO, s);
-			LG.Utils.growl("Click on the left panel to draw");
+			LG.Utils.growl(LG.Messages.WRITE);
 		}
 	},
 	clickClose:function(){
@@ -9276,6 +9274,7 @@ LG.Launcher.prototype.addActivity = function(){
 	$("body > #container").empty().append(LG.activityView.render().$el);
 	LG.activityView.afterAdded();
 	LG.EventDispatcher.trigger(LG.Events.RESIZE);
+	LG.Utils.growl(LG.Messages.WRITE);
 	Backbone.history.start();
 };
 
