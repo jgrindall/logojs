@@ -1,5 +1,5 @@
 #write{
-	background:@textbg;
+	background:@trans1;
 }
 
 #textcontainer{
@@ -9,11 +9,11 @@
 
 #write #logodiv, #write #logonums{
 	position:absolute;
-	top:@bottomheight + 8;
+	top:@bottomheight + 4;
 	bottom:@bottomheight;
 	font-size:@fontsizewrite;
-	background:@textbg;
-	color:#111;
+	background:transparent;
+	color:white;
 	font-family:Arial, Helvetica, sans-serif !important;
 	resize:none;
 	border-radius:0;
@@ -36,11 +36,8 @@
 	width:30px;
 	word-wrap: normal;
 	overflow: hidden;
-	color: #888;
-	background: @textbg;
-	border-right-width: 1px;
-	border-right-style: dashed;
-	border-right-color: #ddd;
+	color: #aaa;
+	background: transparent;
 }
 
 #writebuttons{
@@ -58,6 +55,7 @@
 	left:0;
 	right:0;
 	height:@bottomheight;
+	background:transparent !important;
 }
 
 #writetop .button i.fa-align-justify{
@@ -71,7 +69,7 @@
 #writebuttons #savebutton, #writebuttons #newbutton{
 	color: white;
 	position: relative;
-	bottom: 7px;
+	bottom: 4px;
 	margin:7px;
 }
 #writebuttons #newbutton{
@@ -109,7 +107,6 @@
     color:white;
     cursor:hand;
     cursor:pointer;
-    .shadow;
 }
 #writebar.show{
     right:0;

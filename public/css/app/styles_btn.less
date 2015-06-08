@@ -13,7 +13,7 @@
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
-	border: 1px solid transparent;
+	border: none;
 	white-space: nowrap;
 	padding: 15px;
 	font-size: @fontsizenormal;
@@ -27,14 +27,13 @@
 	border-width: 0 1px 4px 1px;
 	color: @buttontext;
 	min-width:100px;
-	background-color: @bg0;
-	border-color: @border0;
+	background-color: @trans2;
 	.noselect;
 	.animate;
 }
 
 .buttonsmall{
-	height:37px;
+	height:35px;
 	min-width:74px !important; 
 }
 
@@ -83,13 +82,13 @@
 #cancelbutton i{
 	font-size:@fontsizevvlarge;
 	position: relative;
-	top: -15px;
+	top: -11px;
 }
 
 #filebutton{
 	padding-top: 9px;
 	text-align: left !important;
-	padding-left: 0px !important;
+	padding-left: 6px !important;
 	position: absolute;
 	width: 172px;
 	padding-right:0;
@@ -149,7 +148,7 @@
 	min-width:42px;
 	padding: 0;
 	margin: 0;
-	color:@bg0;
+	color:white;
 	float:left;
 }
 
@@ -203,6 +202,7 @@
 	padding:0;
 	margin:0;
 	min-width: 52px;
+	display:none !important;
 }
 
 .right{
@@ -247,8 +247,8 @@
 }
 
 .menutop .button.right.transparent span{
-	margin-right: 11px;
+	margin-right: 0px;
 	font-size:@fontsizenormal;
 	position:relative;
-	top:-8px;
+	top:-6px;
 }

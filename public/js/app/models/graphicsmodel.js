@@ -43,8 +43,8 @@ LG.GraphicsModel.CLR16 = "#34495e";
 LG.GraphicsModel.CLR17 = "#000000";
 
 LG.GraphicsModel.CLRS	=	[LG.GraphicsModel.CLR0, LG.GraphicsModel.CLR1, LG.GraphicsModel.CLR2, LG.GraphicsModel.CLR3, LG.GraphicsModel.CLR4, LG.GraphicsModel.CLR5, LG.GraphicsModel.CLR6, LG.GraphicsModel.CLR7, LG.GraphicsModel.CLR8, LG.GraphicsModel.CLR9, LG.GraphicsModel.CLR10, LG.GraphicsModel.CLR11, LG.GraphicsModel.CLR12, LG.GraphicsModel.CLR13, LG.GraphicsModel.CLR14, LG.GraphicsModel.CLR15, LG.GraphicsModel.CLR16, LG.GraphicsModel.CLR17];
-LG.GraphicsModel.BG		=	[16, 7, 12,  3,  7, 2,  12, 14, 16, 4, 8, 15, 13, 12, 4, 16, 14, 12, 10, 16,  12, 16, 4, 2,   2, 9, 12, 14, 2, 2,  3,  9, 12, 10, 7, 4, 8, 3, 17];
-LG.GraphicsModel.INNER	=	[9, 16, 1,  4,  2, 7,  3, 9, 14, 12, 16, 16,  16,  6,  16,  12, 3, 2, 7, 12,  0, 10, 7, 7, 12, 16, 9, 10,  16, 12, 12, 12, 7, 12, 2,  16,  12, 7, 3];
+LG.GraphicsModel.BG		=	[14, 16, 7, 12,  3,  7, 2,  12, 14, 16, 4, 8, 15, 13, 12, 4, 16, 14, 12, 10, 16,  12, 16, 4, 2,   2, 9, 12, 14, 2, 2,  3,  9, 12, 10, 7, 4, 8, 3, 17];
+LG.GraphicsModel.INNER	=	[17, 9, 16, 1,  4,  2, 7,  3, 9, 14, 12, 16, 16,  17,  6,  16,  12, 3, 2, 7, 12,  0, 10, 7, 7, 12, 16, 9, 10,  16, 12, 12, 12, 7, 12, 2,  16,  12, 7, 3];
 LG.GraphicsModel.NAMES	=	["turquoise turq", "green", "blue", "purple", "dkorange darkorg/dkorg darkorange", "dkturq dkturquoise/darkkturqoise", "darkgreen dkgreen", "yellow", "carrot/orange/org","red","terracotta/dkred darkred", "ltorange lightorg/ltorg lightorange", "white", "gray grey", "lightgrey ltgrey/lightgray ltgray", "darkgray dkgray/darkgrey dkgrey", "midnight", "black"];
 LG.GraphicsModel.DARKTEXT =	[7, 14, 12];
 LG.GraphicsModel.getHex = function(color){

@@ -9,6 +9,6 @@ LG.Messages.ERROR_BODY = "An error has occured connecting to the internet. You c
 LG.Messages.SUCCESS = "Success";
 LG.Messages.LOGGED_IN = "You are now logged in";
 LG.Messages.LOGGED_OUT = "You have been logged out";
-LG.Messages.WRITE = "Write your code and then tap anywhere to draw";
+LG.Messages.WRITE = "Click anywhere to draw";
 LG.Messages.MAX_SIZE_REACHED = "Exceeded output size";
 

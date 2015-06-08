@@ -218,9 +218,7 @@
 		
 		<script id="tpl_helpbutton" type="text/template">
 
-			<a href="#" id="helpbutton" class="action button buttonxsmall transparent" >
-				<i class="fa fa-book"></i>
-			</a>
+			
 			
 		</script>
 		
@@ -238,7 +236,7 @@
 		<script id="tpl_gallerybutton" type="text/template">
 
 			  <li class="<% if(disabled){print("disabled");} %>">
-				<button class="action button clr0<% if(disabled){print(" disabled");} %>">
+				<button class="action button <% if(disabled){print(" disabled");} %>">
 					<i class="fa fa-files-o"></i>
 					<span>Gallery</span>
 				</button>
@@ -251,7 +249,7 @@
 		<script id="tpl_examplesbutton" type="text/template">
 
 			  <li>
-				<button class="action button clr0">
+				<button class="action button">
 					<i class="fa fa-lightbulb-o"></i>
 					<span>Examples</span>
 				</button>
@@ -263,9 +261,9 @@
 		<script id="tpl_refbutton" type="text/template">
 
 			  <li>
-				<button class="action button clr0">
+				<button class="action button">
 					<i class="fa fa-book"></i>
-					<span>Quick reference</span>
+					<span>Reference</span>
 				</button>
 			</li>
 			  
@@ -368,7 +366,7 @@
 			
 			<div id="writegrowl" >
 				
-				<p><%= message%></p>
+				<p><%= message%><i style="margin-left:6px;" class="fa fa-times-circle-o"></i></p>
 				
 			</div>
 			
@@ -402,7 +400,7 @@
 				
 				<textarea editable="false" disabled="true" id="logonums"></textarea>
 				
-				<textarea placeholder="Write code here..." resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+				<textarea resize="no" id="logodiv" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 				
 				<div class="error"></div>
 				
@@ -418,7 +416,7 @@
 				<div class="gallerytop menutop" >
 					<span class="menutitle">About / Help</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-chevron-right"></i>
 						
 					</button>
 				</div>
@@ -730,71 +728,7 @@ drawSpiral(10)</pre>
 							</div>
 						
 						</div>
-							
-							
-						<div class='helpcontainer'>
-								
-							<div class="helpcontent">
-							
-								<h3>
-									How to use Logotacular - the main menu
-								</h3>
-								
-								<img class="centre" src="img/help/help8<% if(web){print("web");} %>.png"/>
-								
-							</div>
-					
-						</div>
-						
-						<% if(web){ %>
-						
-							<div class='helpcontainer'>
-						
-								<div class="helpcontent">
-							
-									<h3>
-										How to use Logotacular - the main menu
-									</h3>
-								
-									<img class="centre" src="img/help/help9.png"/>
-								
-								</div>
-					
-							</div>
-						
-						<% } %>
-						
-							
-						<div class='helpcontainer'>
-							
-							<div class="helpcontent">
-							
-								<h3>
-									How to use Logotacular - writing Logo
-								</h3>
-								
-								<img class="centre" src="img/help/help10.png"/>
-								
-							</div>
-					
-					
-						</div>
-							
-						<div class='helpcontainer'>
-								
-							<div class="helpcontent">
-							
-								<h3>
-									How to use Logotacular - writing Logo
-								</h3>
-								
-								<img class="centre" src="img/help/help11.png"/>
-								
-							</div>
-					
-					
-						</div>
-							
+
 						<div class='helpcontainer'>
 							<div class="helpcontent">
 						
@@ -897,7 +831,7 @@ drawSpiral(10)</pre>
 				<div class="menutop">
 					<p><%= message %></p>
 					<button id="closebutton" class="action button button1 right transparent">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-chevron-right"></i>
 					</button>
 				</div>
 				<p class="errorbody"><%= body %></p>
@@ -1000,7 +934,7 @@ drawSpiral(10)</pre>
 		
 		<script id="tpl_cancelbutton" type="text/template">
 			<button id="cancelbutton" class="action button button1 right transparent">
-				<i class="fa fa-times"></i>
+				<i class="fa fa-chevron-right"></i>
 			</button>
 		</script>
 		
@@ -1072,9 +1006,9 @@ drawSpiral(10)</pre>
 			<div id="helpoverlay" >
 				
 				<div class="menutop">
-					<span class="menutitle">Quick reference</span>
+					
 					<button id="cancelbutton" class="action button button1 right transparent">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-chevron-right"></i>
 					</button>
 				</div>
 				
@@ -1122,7 +1056,7 @@ drawSpiral(10)</pre>
 										</td></tr>
 										<tr><td>
 										proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
-										<br/><span class="italic"> - Define a procedure called 'drawpoly' which takes two parameters and then call it using parameters 100 and 5.</span>
+										<br/><span class="italic"> - Define 'drawpoly' which takes two parameters and then call it using 100 and 5.</span>
 										</td></tr>
 							
 									</tbody>
@@ -1165,9 +1099,9 @@ drawSpiral(10)</pre>
 			<div id="examples" >
 				
 				<div class="menutop">
-					<span class="menutitle">Examples</span>
+					<span class="menutitle">Back</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-chevron-right"></i>
 					
 					</button>
 				</div>
@@ -1195,7 +1129,7 @@ drawSpiral(10)</pre>
 		
 		<script id="tpl_gallerylist" type="text/template">
 			<div>
-				<span class="nonefound">No files found</span>
+				
 				<div class="listwrapper" id="listwrapper<%=showName%>" >
 				
 					<div class="listscroller" id="listscroller<%=showName%>">
@@ -1203,6 +1137,8 @@ drawSpiral(10)</pre>
 					</div>
 				
 				</div>
+
+				<span class="nonefound">No files found</span>
 				
 			</div>
 			
@@ -1236,7 +1172,7 @@ drawSpiral(10)</pre>
 					<p>Please choose a filename</p>
 					
 					<button id="closebutton" class="action button button1 right transparent">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-chevron-right"></i>
 					</button>
 					
 				</div>

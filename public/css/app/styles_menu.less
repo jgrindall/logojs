@@ -4,6 +4,7 @@
 	top: @topheight;
 	width:100%;
 	bottom:0;
+	background:@trans1;
 }
 
 #menu ul .iconimg{
@@ -40,14 +41,18 @@
 }
 
 .menutop{
-	background:@menu;
 	height: @topheight;
-	border-bottom: 4px solid @menuborder;
 	position: absolute;
 	top:0;
 	left:0;
 	right:0;
+	border:none !important;
 }
+
+#menutop{
+	background:@trans1;
+}
+
 #menutop a{
 	width: 100%;
 }
@@ -68,7 +73,7 @@
 	font-size: @fontsizesmall;
 	color:white;
 	font-weight:normal;
-	position: relative;
-	top: 11px;
-	left: 9px;
+	position: absolute;
+	top: 7px;
+	right: 59px;
 }
