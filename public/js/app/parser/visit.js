@@ -9,6 +9,8 @@ var symTable = new LG.SymTable();
 self.addEventListener('message', function(msg) {
 	if(msg.data.type === "tree"){
 		visitNode(msg.data.tree);
+		stack.clear();
+		symTable.clear();
 		postMessage({"type":"end"});
 	}
 }, false);
@@ -126,6 +128,7 @@ function visitnumber(node){
 function visitrtstmt(node){
 	visitchildren(node);
 	var amount = stack.pop();
+	amount = amount % 360;
 	self.postMessage({"type":"command", "name":"rt", "amount":amount });
 }
 
@@ -165,9 +168,9 @@ function visitplusexpression(node){
 	visitchildren(node);
 }
 
-function visitvarname(node){
+function visitusevar(node){
 	var num = symTable.get(node.name);
-	if(!num){
+	if(num === null || num === undefined){
 		runTimeError("Variable '"+node.name+"' not found.");
 	}
 	else{
@@ -195,7 +198,7 @@ function visitnegate(node){
 }
 
 function visitcallfnstmt(node){
-	var name = node.name, args = "argument";
+	var name = node.name, args = "input argument";
 	var f = symTable.getFunction(name);
 	if(f){
 		var numSupplied, numArgs = 0;
@@ -284,9 +287,6 @@ function visitNode(node){
 	else if(t=="outsidefnlist"){
 		visitoutsidefnlist(node);
 	}
-	else if(t=="vardef"){
-		visitvardef(node);
-	}
 	else if(t=="expression"){
 		visitexpression(node);
 	}
@@ -338,14 +338,14 @@ function visitNode(node){
 	else if(t=="number"){
 		visitnumber(node);
 	}
-	else if(t=="varname"){
-		visitvarname(node);
-	}
 	else if(t=="number"){
 		visitnumber(node);
 	}
 	else if(t=="thickstmt"){
 		visitthickstmt(node);
+	}
+	else if(t=="usevar"){
+		visitusevar(node);
 	}
 }
 

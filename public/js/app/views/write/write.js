@@ -93,9 +93,14 @@ LG.WriteView = LG.AMenuView.extend({
 	},
 	showErrorRow:function(expected, line, offset){
 		this.error = {"show":true, "line":line};
-		exp = expected[0].value;
-		msg = "Error on line "+ line +". Check your code!";
-		this.showErrorText(msg);
+		console.log("expected", expected);
+		console.log("line", line);
+		console.log("offset", offset);
+		if(expected && expected[0]){
+			exp = expected[0].value;
+			msg = "Error on line "+ line +". Check your code!";
+			this.showErrorText(msg);
+		}
 	},
 	clear:function(){
 		this.setLogo("");
@@ -160,7 +165,7 @@ LG.WriteView = LG.AMenuView.extend({
 
 LG.WriteView.TOP = 53;
 
-LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/\n\r\t ,:=-";
+LG.WriteView.ALLOWED = "_a-zA-Z0-9\(\)\.\+\*/\n\r\t ,:=-\[\]\"";
 
 LG.TouchWriteView = LG.WriteView.extend({
 	initialize:function(){
