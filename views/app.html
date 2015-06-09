@@ -449,47 +449,54 @@
 								
 							<div class="helpcontent">
 						
-								<div class="helpcontentleft">
 								
-									<h3>
-										How to write a program
-									</h3>
-								
-									<p>
-						
-						
-						
-										The most basic commands in Logo are the 'go forward' command and the 'turn right' command.
-					
 									
-									</p>
+									<div class="helptop">
+
+										<h3>
+											How to write a program
+										</h3>
 									
-									<p>You use these commands to control a small on-screen 'turtle', which draws a colourful path as it moves.</p>
-								
-									<p>
-										For example, fd(100) tells the turtle to go forward 100 units (in whatever direction it is facing), and rt(90) tells it turn on the spot 90 degrees clockwise.
-									</p>
-									<p>
+										<p>
+							
+							
+							
+											The most basic commands in Logo are the 'go forward' command and the 'turn right' command.
+						
+										
+										</p>
+										
+										<p>You use these commands to control a small on-screen 'turtle', which draws a colourful path as it moves.</p>
 
-										Try drawing a square using:
-									</p>
-									<p class="code">
-										<pre>fd(100)
-rt(90)
-fd(100)
-rt(90)
-fd(100)
-rt(90)
-fd(100)
-rt(90)</pre>
-						
-									</p>
-						
-									<p>
+									</div>
+									
+									<div class="helpside">
 
-										You don't have to out each command on a new line, but it can make it easier to read!
-									</p>
-						
+										<p>
+											For example, fd 100 tells the turtle to go forward 100 units (in whatever direction it is facing), and rt 90 tells it turn on the spot 90 degrees clockwise.
+										</p>
+										<p>
+
+											Try drawing a square using:
+										</p>
+										<p class="code">
+											<pre>fd 100
+rt 90
+fd 100
+rt 90
+fd 100
+rt 90
+fd 100
+rt 90</pre>
+							
+										</p>
+							
+										<p>
+
+											You don&#39;t have to out each command on a new line, but it can make it easier to read!
+										</p>
+
+							
 								</div>
 						
 								<div class="helpcontentright">
@@ -504,7 +511,7 @@ rt(90)</pre>
 							
 							<div class="helpcontent">
 						
-								<div class="helpcontentleft">
+								<div class="helptop">
 									
 									<h3>
 										Drawing with colors
@@ -516,9 +523,15 @@ You can change the color of the lines, as well as the background color of the pa
 
 									</p>
 									
+
+									</div>
+
+									<div class="helpside">
+
+
 									<p class="code">
-										<pre>bg(red)
-color(green)</pre>
+										<pre>bg red
+color green</pre>
 
 									</p>
 									<p>
@@ -526,10 +539,10 @@ color(green)</pre>
 										You can change the thickness of the lines drawn (from 1 to 20), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
 									</p>
 									<p class="code">
-										<pre>thick(7)
-fd(50) penup() fd(50) pendown()
-fd(50) penup() fd(50) pendown()
-fd(50)</pre>
+										<pre>thick 7
+fd 50 penup fd 50 pendown
+fd 50 penup fd 50 pendown
+fd 50</pre>
 							
 									</p>
 						
@@ -548,7 +561,7 @@ fd(50)</pre>
 							
 							<div class="helpcontent">
 						
-								<div class="helpcontentleft">
+								<div class="helptop">
 									
 									<h3>
 										Variables and arithmetic
@@ -561,14 +574,17 @@ fd(50)</pre>
 										
 										
 									</p>
-									
+									</div>
+
+									<div class="helpside">
+
 									<p class="code">
-										<pre>side=200
-angle=90
-fd(side) rt(angle)
-fd(side) rt(angle)
-fd(side) rt(angle)
-fd(side) rt(angle)
+										<pre>make "side 200
+make "angle 90
+fd side rt angle
+fd side rt angle
+fd side rt angle
+fd side rt angle
 </pre>
 
 									</p>
@@ -608,7 +624,7 @@ fd(w+2*h) rt(90)
 							
 							<div class="helpcontent">
 						
-								<div class="helpcontentleft">
+								<div class="helptop">
 									
 									<h3>
 										Loops
@@ -623,6 +639,12 @@ fd(w+2*h) rt(90)
 										So, we could draw a square like this:
 									</p>
 									
+
+									</div>
+
+									<div class="helpside">
+
+
 									<p class="code">
 										<pre>rpt 4
 fd(100)
@@ -668,7 +690,7 @@ endrpt</pre>
 								
 							<div class="helpcontent">
 								
-								<div class="helpcontentleftlarge">
+								<div class="helptop">
 								
 									<h3>
 										Procedures and functions
@@ -680,6 +702,12 @@ endrpt</pre>
 										A function or procedure is often thought of as telling the turtle the meaning of a new word.
 									We could rewrite our 'draw square' program once more by defining a procedure called 'drawSquare' and then calling it.
 									</p>
+
+									</div>
+
+									<div class="helpside">
+
+
 									<p class="code">
 										<pre>proc drawSquare
 rpt 4
@@ -714,14 +742,8 @@ drawSpiral(10)</pre>
 							
 							
 							
-								<div class="helpcontentrightsmall">
-									<div class="helpblock2">
-										<img src="img/help/help7.png" class="centre"/>
-									</div>
-								
-									<div class="helpblock2">
-										<img src="img/help/help6.png" class="centre"/>
-									</div>
+								<div class="helpcontentright">
+									
 								</div>
 							
 					
@@ -733,7 +755,7 @@ drawSpiral(10)</pre>
 							<div class="helpcontent">
 						
 						
-								<div class="helpcontentleftlarge">
+								<div class="helptop">
 									
 									<h3>History of Logo</h3>
 						
@@ -742,6 +764,10 @@ drawSpiral(10)</pre>
 										Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
 									</p>
 									
+</div>
+
+									<div class="helpside">
+
 									<p>
 										Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
 									</p>
@@ -760,13 +786,7 @@ drawSpiral(10)</pre>
 								</div>
 							
 								<div class="helpcontentrightsmall">
-									<div class="helpblock2">
-										<img src="img/help/help2.png" class="centre"/>
-									</div>
 									
-									<div class="helpblock2">
-										<img src="img/help/help3.png" class="centre"/>
-									</div>
 								</div>
 						
 							</div>
@@ -784,22 +804,11 @@ drawSpiral(10)</pre>
 								
 								
 								
-								<% if(!web){ %>
-								
-									<p>Logotacular collects no personal information from any users.</p>
-									<p>It does not connect to the internet and your files are all saved locally, on your device.</p>
-								
-								<% } %>
-								
-								<% if(web){ %>
-
-									<p>Logotacular contains Facebook log in if you wish to save or load your files.</p>
+								<p>Logotacular contains Facebook log in if you wish to save or load your files.</p>
 									<p>You can use Logotacular without logging in, in which case no personal information is collected.</p>
 									<p>If you do log in, Logotacular will store your Facebook id, to associate you with your files, and no other pieces of personal information such as your name or email address.</p>
 									<p>Your files will be visible on the public gallery to enable collaboration and sharing, but your name, Facebook id or any other piece of information is not visible.</p>
 									<p>All data is stored securely and is not shared with any 3rd parties.</p>
-								
-								<% } %>
 								
 							</div>
 						
@@ -1024,14 +1033,14 @@ drawSpiral(10)</pre>
 										
 								<table class="commands">
 									<tbody>
-										<tr><td>fd</td><td>fd(100)<span class="italic"> - Move forward 100 units</span></td></tr>
-										<tr><td>rt</td><td>rt(90)<span class="italic"> - Turn right 90 degrees</span></td></tr>
-										<tr><td>penup</td><td>penup()<span class="italic"> - Take the pen off the paper</span></td></tr>
-										<tr><td>pendown</td><td>pendown()<span class="italic"> - Put it back down</span></td></tr>
-										<tr><td>color</td><td>color(black)<span class="italic"> - Set the pen color to black</span></td></tr>
-										<tr><td>bg</td><td>bg(red)<span class="italic"> - Set the background color to red</span></td></tr>
-										<tr><td>thick</td><td>thick(5)<span class="italic"> - Set the line thickness to 5 (between 1-10)</span></td></tr>
-										<tr><td>rpt</td><td>rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(50) rt(90)<br/>endrpt<br/><span class="italic"> - Repeat the statements 'fd(50) rt(90)' 4 times</span></td></tr>
+										<tr><td>fd</td><td>fd 100<span class="italic"> - Move forward 100 units</span></td></tr>
+										<tr><td>rt</td><td>rt 90<span class="italic"> - Turn right 90 degrees</span></td></tr>
+										<tr><td>penup</td><td>penup<span class="italic"> - Take the pen off the paper</span></td></tr>
+										<tr><td>pendown</td><td>pendown<span class="italic"> - Put it back down</span></td></tr>
+										<tr><td>color</td><td>color black<span class="italic"> - Set the pen color to black</span></td></tr>
+										<tr><td>bg</td><td>bg red<span class="italic"> - Set the background color to red</span></td></tr>
+										<tr><td>thick</td><td>thick 5<span class="italic"> - Set the line thickness to 5 (between 1-10)</span></td></tr>
+										<tr><td>rpt</td><td>rpt 4 [<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd 50 rt 90<br/>]<br/><span class="italic"> - Repeat the statements 'fd 50 rt 90' four times</span></td></tr>
 									</tbody>
 								</table>
 								
@@ -1046,13 +1055,13 @@ drawSpiral(10)</pre>
 						
 								<table class="commands">
 									<tbody>
-										<tr><td>a=</td><td>a=10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
+										<tr><td>a=</td><td>make "a 10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
 										<tr><td>
-										proc</td><td>proc drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(100) rt(90)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawsquare()
+										to</td><td>to drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4 [<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd 100 rt 90<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>end<br/>drawsquare
 										<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>
 										</td></tr>
 										<tr><td>
-										proc(params)</td><td>proc drawpoly(side, n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd(side) rt(360/n)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>endproc<br/>drawpoly(100,5)
+										to :param</td><td>to drawpoly :side :n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt :n [<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd :side rt 360/:n<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endrpt<br/>end<br/>drawpoly 100 5
 										<br/><span class="italic"> - Define 'drawpoly' which takes two parameters and then call it using 100 and 5.</span>
 										</td></tr>
 							
