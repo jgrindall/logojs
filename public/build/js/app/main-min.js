@@ -5537,7 +5537,7 @@ LG.ASpinnerCollection  = Backbone.Collection.extend({
 	},
 	onLoaded:function(){
 		setTimeout(function(){
-			//LG.spinnerModel.set({"show":false});
+			LG.spinnerModel.set({"show":false});
 		}, 1000);
 	},
 	fetch:function(data){
@@ -7191,7 +7191,7 @@ LG.CanvasView = Backbone.View.extend({
 		LG.spinnerModel.set({"show":true});
 		setTimeout(function(){
 			_this.worker.postMessage(  {"type":"tree", "tree":tree}  );
-			//LG.spinnerModel.set({"show":false});
+			LG.spinnerModel.set({"show":false});
 		}, 400);
 	},
 	capture:function(){
