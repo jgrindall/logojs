@@ -8435,8 +8435,8 @@ LG.ExamplesView.LOGO.push("fd 50 rt 45\npenup fd 50 rt 45 pendown\nfd 50 rt 45\n
 LG.ExamplesView.LOGO.push("bg gray\nthick 4 color yellow fd 30\nthick 6 color blue fd 30\nthick 8 color orange fd 30\nthick 10  color red fd 30");
 LG.ExamplesView.LOGO.push("bg orange\ncolor white\nmake \"n 16\nmake \"s 200\nrpt :n[\n    fd :s  rt (180 - 360/:n)\n\]");
 LG.ExamplesView.LOGO.push("bg blue\ncolor yellow\nthick 10\nmake \"n 4\nto drawsquare\nrpt :n[\n  fd 100 rt 90\n]\nend\nrpt 8[\n  drawsquare\n  rt 45\n]");
-LG.ExamplesView.LOGO.push("make \"a 5\nto drawpoly :side :n\n    rpt :n[\n        fd :side rt(360/:n)\n    ]\nend\nrpt 10\n    drawpoly 25 :a\n    make \"a :a + 4\n]\n");
-LG.ExamplesView.LOGO.push("bg blue color white\nrpt 90 [fd 1 rt 1 ]\nrt 270\nrpt 180 [ fd 1 rt 1 ]\nrt 270\nrpt 90 fd 1 rt 1 ]");
+LG.ExamplesView.LOGO.push("make \"a 5\nto drawpoly :side :n\n    rpt :n[\n        fd :side rt(360/:n)\n    ]\nend\nrpt 10[\n    drawpoly 25 :a\n    make \"a :a + 4\n]\n");
+LG.ExamplesView.LOGO.push("bg blue color white\nrpt 90 [fd 1 rt 1 ]\nrt 270\nrpt 180 [ fd 1 rt 1 ]\nrt 270\nrpt 90 [] fd 1 rt 1 ]");
 LG.ExamplesView.LOGO.push("make \"a 10\nrpt 120[\n  fd 15 rt :a\n  make \"a :a * 1.02\n]");
 
 

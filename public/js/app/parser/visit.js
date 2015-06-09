@@ -200,6 +200,8 @@ function visitnegate(node){
 function visitcallfnstmt(node){
 	var name = node.name, args = "input argument";
 	var f = symTable.getFunction(name);
+	console.log("node", node);
+	console.log("f", f);
 	if(f){
 		var numSupplied, numArgs = 0;
 		if(f.argsNode){
@@ -227,12 +229,14 @@ function visitcallfnstmt(node){
 function executeFunction(f){
 	var i, vals, len, argNode, varName;
 	vals = [ ];
+	console.log("argsNode", f.argsNode);
 	if(f.argsNode){
 		len = f.argsNode.children.length;
 		for(i = 0; i <= len - 1; i++){
 			vals.push(stack.pop());
 		}
 	}
+	console.log("vals", vals);
 	for(i = 0; i <= len - 1; i++){
 		argNode = f.argsNode.children[i];
 		varName = argNode.name;
