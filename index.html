@@ -414,7 +414,7 @@
 			<div id="help" class="menuxlarge">
 				
 				<div class="gallerytop menutop" >
-					<span class="menutitle">About / Help</span>
+					<span class="menutitle">Back</span>
 					<button id="cancelbutton" class="action button button1 right transparent">
 						<i class="fa fa-chevron-right"></i>
 						
@@ -425,62 +425,71 @@
 				
 					<div id="helpscroller">
 						
-						<div class='helpcontainer'>
-						
-							<div class="helpcontent">
-							
-								<h3>Welcome to Logotacular!</h3>
-										
-								<p>
-									Logotacular is an application for drawing colourful patterns using the Logo language, designed to help you explore geometry and programming.
-								</p>
-								
-								<div style="position: absolute;top: 70px;left: 0;right: 0;bottom: 0;">
-									<img class="centre" id="anim" />
-								</div>
-								
-							</div>
-							
-						</div>
-						
-							
-						
-						<div class='helpcontainer'>
-								
-							<div class="helpcontent">
-						
-								
-									
-									<div class="helptop">
+							  <div class='helpcontainer'>
 
-										<h3>
-											How to write a program
-										</h3>
-									
-										<p>
-							
-							
-							
-											The most basic commands in Logo are the 'go forward' command and the 'turn right' command.
-						
-										
-										</p>
-										
-										<p>You use these commands to control a small on-screen 'turtle', which draws a colourful path as it moves.</p>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Welcome to Logotacular!</h3>
 
-									</div>
-									
-									<div class="helpside">
+							        <p>Logotacular is an application for drawing colourful patterns using a
+							        programming language called 'Logo'.</p>
 
-										<p>
-											For example, fd 100 tells the turtle to go forward 100 units (in whatever direction it is facing), and rt 90 tells it turn on the spot 90 degrees clockwise.
-										</p>
-										<p>
+							        <p>Logo was designed to help you explore geometry and programming, by controlling
+							        an on-screen imaginary 'turtle' that draws lines as it moves.</p>
+							      </div>
 
-											Try drawing a square using:
-										</p>
-										<p class="code">
-											<pre>fd 100
+							      <div class="helpside">
+							        <p>Learn about</p>
+
+							        <ul>
+							          <li>Logical reasoning</li>
+
+							          <li>Algorithms</li>
+
+							          <li>Testing and debugging</li>
+
+							          <li>Use of variables</li>
+
+							          <li>Use of functions</li>
+
+							          <li>Repeating - using loops</li>
+
+							          <li>Recursion</li>
+
+							          <li>Variable scope</li>
+
+							          <li>Lengths and angles</li>
+
+							          <li>Interior and exterior angles</li>
+
+							          <li>Regular polygons</li>
+
+							          <li>Circles and curve-based shapes</li>
+							        </ul>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/JgDz2hoSSOI" target="_blank"><img src="img/help/help13.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>How to write a program</h3>
+
+							        <p>In Logo we imagine a turtle that starts at the centre and is controlled by
+							        commands. As it moves around the screen it leaves a trail showing you where it
+							        has moved to.</p>
+
+							        <p>The most basic commands in Logo are 'go forward' and 'turn right'. For example
+							        <span class='mono'>'fd 100'</span> tells the turtle to go forward 100 units (in
+							        whatever direction it is facing), and <span class='mono'>'rt 90'</span> tells it
+							        turn 90 degrees clockwise.</p>
+							      </div>
+
+							      <div class="helpside">
+							        <p>Try drawing a square using:</p>
+							        <pre>fd 100
 rt 90
 fd 100
 rt 90
@@ -488,332 +497,405 @@ fd 100
 rt 90
 fd 100
 rt 90</pre>
-							
-										</p>
-							
-										<p>
 
-											You don&#39;t have to out each command on a new line, but it can make it easier to read!
-										</p>
+							        <p>You don&#8217;t have to put each command on a new line, but it can make it easier to
+							        read!</p>
+							      </div>
 
-							
-								</div>
-						
-								<div class="helpcontentright">
-									<img class="centre" src="img/help/anim.gif"/>
-								</div>
-						
-							</div>
-						</div>
-							
-							
-						<div class='helpcontainer'>
-							
-							<div class="helpcontent">
-						
-								<div class="helptop">
-									
-									<h3>
-										Drawing with colors
-									</h3>
-									
-						
-									<p>
-You can change the color of the lines, as well as the background color of the page by using the 'color' and 'bg' commands:
+							      <div class="helpcontentright"><a href="https://youtu.be/cT8RJnqaj5Y" target="_blank"><img src="img/help/help0.png"></img></a></div>
+							    </div>
+							  </div>
 
-									</p>
-									
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Drawing with colors</h3>
 
-									</div>
+							        <p>You can change the color of the lines, as well as the background color of the
+							        page by using the 'color' and 'bg' commands:</p>
+							        <pre>bg yellow
+color dkgreen</pre>
+							      </div>
 
-									<div class="helpside">
+							      <div class="helpside">
+							        <p>You can change the thickness of the lines drawn (from 1 to 20), and raise or
+							        lower the pen. Lifting the pen will stop lines being drawn until you place it
+							        down again.</p>
+							        <pre>thick 12
+fd 30 penup
+fd 30 pendown
+fd 30 penup
+fd 30 pendown
+fd 30 penup
+fd 30 pendown
+fd 30 penup
+fd 30 pendown
+fd 30
+							</pre>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/UDqcMnAWllE" target="_blank"><img src="img/help/help1.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Using variables</h3>
+
+							        <p>Variables let you define a number so you can use it in a lot of places later.
+							        Not only do they let you re-use numbers, but later on you only have to change
+							        them one place if you need to. Use the 'make' command to set the value of a
+							        variable - for example set the variable 'side' equal to 200 like this:</p>
+							        <pre>make &quot;side 200</pre>
+							      </div>
+
+							      <div class="helpside">
+							        <p>Notice that you must put a &quot; symbol in front when you set a variable.</p>
+
+							        <p>To use the variable, put a colon ( : ) in front like this:</p>
+							        <pre>fd :side</pre>
+
+							        <p>This is the same as writing 'fd 200', but it is
+							        easier to change the 200 to something else if you give it a name.</p>
+
+							        <p>Remember to use &quot; when you&#8217;re setting a variable and : when you want to use
+							        it.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/8tV-Rgoqsps" target="_blank"><img src="img/help/help2.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Doing arithmetic</h3>
+
+							        <p>You can do normal arithmetic using numbers or variables.</p>
+
+							        <p>Like most computer programs, you must write '*' for
+							        multiply (or times) and '/' for divide.</p>
+
+							        <p>You can use '+' and '-'
+							        and round brackets '( )' like you normally would.</p>
+							      </div>
+
+							      <div class="helpside">
+							        <p>For example:</p>
+							        <pre>make &quot;h 30
+make &quot;w 3*:h
+fd :w - 2*:h rt 90
+fd :w - :h rt 90
+fd :w rt 90
+fd :w + :h  rt 90
+fd :w + 2*:h rt 90</pre>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/CTukQ1iXYzA" target="_blank"><img src="img/help/help3.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Loops</h3>
+
+							        <p>Loops can be programmed by use of the 'rpt' (repeat)
+							        command which tells the turtle to execute the commands inside the square brackets
+							        a specific number of times.</p>
+							        <pre>rpt 10 [ put your commands here and they will be executed 10 times! ]</pre>
+							      </div>
+
+							      <div class="helpside">
+							        <p>We could draw a square like this:</p>
+							        <pre>rpt 4 [
+  fd 100
+  rt 90
+]</pre>
+
+							        <p>You must start a repeat block with '[' and you must
+							        end it with ']'.</p>
+
+							        <p>Can you work out what the following code will draw?</p>
+							        <pre>make &quot;a 72
+make &quot;n 5
+rpt :n [
+  fd 100
+  rt :a
+]</pre>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/HoqjmQ_mG6M" target="_blank"><img src="img/help/help4.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Procedures and functions</h3>
+
+							        <p>We know that the turtle knows the words 'make',
+							        'penup', 'color' etc. A
+							        function or procedure is often thought of as telling the turtle the meaning of a
+							        new word, for example we could draw a square by defining a procedure called
+							        'drawsquare' and then 'calling' that procedure.</p>
+
+							        <p>You use the 'to' keyword to define a procedure, and
+							        'end' to mark the end:</p>
+							      </div>
+
+							      <div class="helpside">
+							        <pre>to drawsquare
+  rpt 4 [
+    fd 100
+    rt 90
+  ]
+end
+drawsquare</pre>
+
+							        <p>The first 6 lines define the procedure and the last line 'calls' or 'executes'
+							        the function. The spaces at the start of the lines are optional but can make it
+							        easier to read.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/qqFdYA8EIPQ" target="_blank"><img src="img/help/help5.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Procedures and functions continued</h3>
+
+							        <p>Functions can optionally take some variables as input. For example, you might
+							        want to re-use a block of commands more than once, with different lengths or
+							        angles each time.</p>
+
+							        <p>List the variables one by one after the name of the function as shown:</p>
+							        <pre>to drawpoly :len :n</pre>
+							      </div>
+
+							      <div class="helpside">
+							        <pre>to drawpoly :len :n
+  rpt :n [
+    fd :len
+    rt (360/:n)
+  ]
+end
+drawpoly 200 4
+drawpoly 83 8</pre>
+
+							        <p>The procedure above has two arguments, called 'len' and 'n', and it is then
+							        called first with 'len' equal to 200 and 'n' equal to 4, and then with 'len'
+							        equal to 83 and 'n' equal to 8.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://youtu.be/51WmsvoBXys" target="_blank"><img src="img/help/help6.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Recursion</h3>
+
+							        <p>Recursion happens when, inside a function, you call the same function,
+							        normally with different input.</p>
+
+							        <p>For example the program below defines a procedure which accepts one variable
+							        called 'dist' and repeatedly calls itself, increasing the value of 'dist' by 5
+							        each time:</p>
+							      </div>
+
+							      <div class="helpside">
+							        <pre>to drawspiral :dist
+  fd :dist
+  rt 90
+  drawspiral (:dist+5)
+end
+drawspiral 10
+							</pre>
+
+							        <p>The result is an increasing series of line segments, with lengths 10, 15, 20,
+							        25... etc - forming a spiral.</p>
+
+							        <p>Eventually the program will crash because it calls itself too many times!</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=FROjuMglgF0" target="_blank"><img src="img/help/help7.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Variable scope</h3>
+
+							        <p>The program below illustrates the concept of 'scope' in Logotacular.</p>
+
+							        <p>Every variable exists in a 'scope' depending on where you defined it, so you
+							        can have two variables with the same name that exist in different 'scopes'.</p>
+
+							        <p>First look at the following lines from the program:</p>
+							      </div>
+
+							      <div class="helpside">
+							        <pre>make &quot;j 50
+to fn
+  fd :j
+end
+fn
+							</pre>
+
+							        <p>A variable called 'j' is set to 50 outside of the function. When called, the
+							        function will check if a variable called 'j' has been defined again inside the
+							        function itself.</p>
+
+							        <p>In this case it hasn&#8217;t, so the function uses the variable 'j' from outside. We
+							        can say that 'j' has 'global scope' because any code can use it.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=HyXY0ACrgO4" target="_blank"><img src="img/help/help8.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Variable scope continued</h3>
+
+							        <p>You can also define variables inside functions, and then they will exist
+							        inside that function only</p>
+							        
+							      </div>
+
+							      <div class="helpside">
+
+							      <pre>make &quot;i 50
+to fn
+  make &quot;i 100
+  fd :i
+end
+fn
+fd :i</pre>
+							        <p>A variable called 'i' is set to 50 outside the function. But when the function
+							        is called it immediately sets another variable called 'i' to 100, and goes
+							        forward 100 units.</p>
+							        <br/>
+							        <p>On the last line we go forward 'i' units again, but this time it will go
+							        forward 50 units.</p>
+
+							        <p>This is because there are actually two different variables called 'i', with
+							        different scope, and the one that equals 100 only exists temporarily, only inside
+							        the function.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=-0d6-71oeSM" target="_blank"><img src="img/help/help9.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Errors and debugging</h3>
+
+							        <p>Errors are of two kinds: they can be in your code itself or they might only
+							        happen when you run your code.</p>
+
+							        <p>The first kind of errors include those such as missing out a bracket or
+							        forgetting to put 'end' at the end of a function
+							        definition. The second kind of errors don&#8217;t appear until you press 'Play'. For
+							        example, you might try to use a variable or call a function that you haven&#8217;t
+							        defined, or you might divide by zero by mistake.</p>
+							      </div>
+
+							      <div class="helpside">
+							        <p>This program has an error of the first kind:</p>
+							        <pre>rpt 10 [fd 10</pre>
+
+							        <p>The program below has two errors of the second kind. Firstly 'b' is not
+							        defined, and secondly you cannot divide by 'a' since it is zero.</p>
+							        <pre>make &quot;a 0\nfd :b/:a</pre>
+
+							        <p>In Logotacular a red box appears describing the error and which line it thinks the error is on.</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=zuCOkS96lv8" target="_blank"><img src="img/help/help10.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>History of Logo</h3>
+
+							        <p>Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at
+							        MIT. Their goal was to create an easy to learn application where kids could play
+							        with words and the structure of sentences. Later versions of Logo included on
+							        screen graphics and the forward and right commands to move an on-screen 'turtle'
+							        around the screen, and it became known as Turtle graphics. In 1969, a physical
+							        robot was designed which would move across the floor tracing its path with a
+							        pen.</p>
+
+							        <p>Seymour Papert pioneered its use in school classrooms as an educational system
+							        in the early 1970&#8217;s, saying:</p>
+							      </div>
+
+							      <div class="helpside">
+							        <p class='quote'>&quot;In many schools today, the phrase 'Computer-Aided Instruction'
+							        means making the computer teach the child... In my vision the child programs the
+							        computer and, in so doing, both acquires a sense of mastery over a piece of the
+							        most modern and powerful technology and establishes an intimate contact with some
+							        of the deepest ideas from science, from mathematics, and from the art of
+							        intellectual model building...&quot;</p>
+
+							        <p class='quote'>&quot;...Traditional education codifies what it thinks citizens need
+							        to know and sets out to feed children this 'fish'. Constructionism is built on
+							        the assumption that children will do best by finding ('fishing') for
+							        themselves... the Turtle is like a person: 'I am here and I am facing north...'
+							        And from these similarities comes the Turtle&#8217;s special ability to serve as a
+							        representative of formal mathematics.&quot;</p>
+							      </div>
+
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=zFwhmGf13Es" target="_blank"><img src="img/help/help11.png"></img></a></div>
+							    </div>
+							  </div>
+
+							  <div class='helpcontainer'>
+							    <div class="helpcontent">
+							      <div class="helptop">
+							        <h3>Support</h3>
+							        	<p>For suggestions, improvements, to report bugs or to let me know how you used
+							        the app in the classroom or as a student, do drop me a message at
+							        john.grindall@gmail.com</p>
+							        
+							      </div>
+
+							      <div class="helpside">
+							      <h3 style="margin:5px;">Privacy policy</h3>
+							      <ul class='privacy'>
+							          <li>Logotacular has no form of log-in and collects no personal information from
+							          any users.</li>
+
+							          <li>It does not connect to any external services or servers.</li>
+
+							          <li>All data (your Logo files) are saved locally on your device.</li>
+
+							          <li>Logotacular contains no external links to any websites or similar.</li>
+
+							          <li>If at any time the app is updated to include features that require log in
+							          you will be provided notice and asked to choose whether to update or not.</li>
+							        </ul>
 
 
-									<p class="code">
-										<pre>bg red
-color green</pre>
+							        
+							      </div>
 
-									</p>
-									<p>
+							      <div class="helpcontentright"><a href="https://www.youtube.com/watch?v=Jo0w_4Yyu-s" target="_blank"><img src="img/help/help12.png"></img></a></div>
+							    </div>
+							  </div>
 
-										You can change the thickness of the lines drawn (from 1 to 20), and raise/lower the pen.  Lifting the pen will stop lines being drawn until you place it down again.
-									</p>
-									<p class="code">
-										<pre>thick 7
-fd 50 penup fd 50 pendown
-fd 50 penup fd 50 pendown
-fd 50</pre>
-							
-									</p>
-						
-								</div>
-						
-								<div class="helpcontentright">
-									<img class="centre" src="img/help/help4.png"/>
-								</div>
-						
-							</div>
-							
-						</div>
-							
-							
-						<div class='helpcontainer'>
-							
-							<div class="helpcontent">
-						
-								<div class="helptop">
-									
-									<h3>
-										Variables and arithmetic
-									</h3>
-									
-						
-									<p>
-
-										Variables let you define a number so you can change it in one place later if you need to.
-										
-										
-									</p>
-									</div>
-
-									<div class="helpside">
-
-									<p class="code">
-										<pre>make "side 200
-make "angle 90
-fd side rt angle
-fd side rt angle
-fd side rt angle
-fd side rt angle
-</pre>
-
-									</p>
-									<p>
-
-										You can do normal arithmetic using numbers or variables. Like most computer programs, you must write '*' for 'multiply' (or 'times') and '/' for 'divide'.
-										
-										You can use '+' and '-' and brackets like you normally would.
-										
-									</p>
-									<p class="code">
-										<pre>w=100 h=30
-fd(w-2*h) rt(90)
-fd(w-h) rt(90)
-fd(w) rt(90)
-fd(w+h) rt(90)
-fd(w+2*h) rt(90)
-</pre>
-							
-									</p>
-									
-									
-									
-									
-								</div>
-						
-								<div class="helpcontentright">
-									<img class="centre" src="img/help/help12.png"/>
-								</div>
-						
-							</div>
-						
-						</div>
-							
-						
-						<div class='helpcontainer'>
-							
-							<div class="helpcontent">
-						
-								<div class="helptop">
-									
-									<h3>
-										Loops
-									</h3>
-									
-						
-									<p>
-
-										
-										Loops can be programmed by use of the 'repeat' command which tells the turtle to execute the commands inside a specific number of times.
-
-										So, we could draw a square like this:
-									</p>
-									
-
-									</div>
-
-									<div class="helpside">
-
-
-									<p class="code">
-										<pre>rpt 4
-fd(100)
-rt(90)
-endrpt</pre>
-
-									</p>
-									<p>
-
-										Notice that you start a repeat block with 'rpt' and you MUST end it with 'endrpt'.
-									</p>
-									<p>
-
-										Can you work out what the following code will draw?
-									</p>
-									<p class="code">
-										<pre>angle=72
-rpt 5
-fd(100)
-rt(angle)
-endrpt</pre>
-							
-									</p>
-									
-									
-									<p>
-
-										Can you work out how to draw the image on the right?
-									</p>
-									
-								</div>
-						
-								<div class="helpcontentright">
-									<img class="centre" src="img/help/help5.png"/>
-								</div>
-						
-							</div>
-						
-						</div>
-						
-							
-						<div class='helpcontainer'>
-								
-							<div class="helpcontent">
-								
-								<div class="helptop">
-								
-									<h3>
-										Procedures and functions
-									</h3>
-								
-									<p>
-
-									
-										A function or procedure is often thought of as telling the turtle the meaning of a new word.
-									We could rewrite our 'draw square' program once more by defining a procedure called 'drawSquare' and then calling it.
-									</p>
-
-									</div>
-
-									<div class="helpside">
-
-
-									<p class="code">
-										<pre>proc drawSquare
-rpt 4
-fd(100)
-rt(90)
-endrpt
-endproc
-
-drawSquare()</pre>
-									</p>
-									<p>
-
-										Recursion can also be used in Logo - for example the following program defines a procedure
-										which accepts one variable called 'dist' and repeatedly calls itself, increasing the
-										value of 'dist' each time, with the result that an increasing series of line segments is 
-										drawn, forming a spiral. Eventually the program will crash because it calls itself too many times!
-									</p>
-								
-									<p class="code">
-										<pre>proc drawSpiral(dist)
-fd(dist)
-rt(90)
-drawSpiral(dist+5)
-endproc
-
-drawSpiral(10)</pre>
-							
-									</p>
-								
-								
-								</div>
-							
-							
-							
-								<div class="helpcontentright">
-									
-								</div>
-							
-					
-							</div>
-						
-						</div>
-
-						<div class='helpcontainer'>
-							<div class="helpcontent">
-						
-						
-								<div class="helptop">
-									
-									<h3>History of Logo</h3>
-						
-									<p>
-						
-										Logo was created in 1967 by Wally Feurzeig and Seymour Papert - researchers at MIT. Their goal was to create an easy to learn application where kids could play with words and the structure of sentences. Later versions of Logo included on screen graphics and the forward and right commands to move an on-screen "turtle" around the screen, and it became known as Turtle graphics. In 1969, a physical robot was designed which would move across the floor tracing its path with a pen.
-									</p>
-									
-</div>
-
-									<div class="helpside">
-
-									<p>
-										Seymour Papert pioneered its use in school classrooms as an educational system in the early 1970's, saying:
-									</p>
-									
-									<p class="quote">
-										" In many schools today, the phrase 'Computer-Aided Instruction' means making the computer teach the child. One might say the computer is being used to program the child. In my vision the child programs the computer and, in so doing, both acquires a sense of mastery over a piece of the most modern and powerful technology and establishes an intimate contact with some of the deepest ideas from science, from mathematics, and from the art of intellectual model building... 
-						
-									</p>
-						
-									<p class="quote">
-							
-									&hellip;Traditional education codifies what it thinks citizens need to know and sets out to feed children this 'fish'. Constructionism is built on the assumption that children will do best by finding ('fishing') for themselves the specific knowledge that they need.  "
-									&hellip; the Turtle is like a person: ' I am here and I am facing north&hellip;'And from these similarities comes the Turtle's special ability to serve as a representative of formal mathematics for a child.
-									</p>
-								
-								</div>
-							
-								<div class="helpcontentrightsmall">
-									
-								</div>
-						
-							</div>
-						</div>
-							
-							
-						<div class='helpcontainer'>
-								
-							<div class="helpcontent">
-						
-								<h3>
-									Privacy policy
-							
-								</h3>
-								
-								
-								
-								<p>Logotacular contains Facebook log in if you wish to save or load your files.</p>
-									<p>You can use Logotacular without logging in, in which case no personal information is collected.</p>
-									<p>If you do log in, Logotacular will store your Facebook id, to associate you with your files, and no other pieces of personal information such as your name or email address.</p>
-									<p>Your files will be visible on the public gallery to enable collaboration and sharing, but your name, Facebook id or any other piece of information is not visible.</p>
-									<p>All data is stored securely and is not shared with any 3rd parties.</p>
-								
-							</div>
-						
-						</div>
-				
 					</div>
 			
 				</div>
@@ -1055,7 +1137,7 @@ drawSpiral(10)</pre>
 						
 								<table class="commands">
 									<tbody>
-										<tr><td>a=</td><td>make "a 10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
+										<tr><td>a=</td><td>make &quot;a 10<span class="italic"> - Set the value of variable a to equal 10</span></td></tr>
 										<tr><td>
 										to</td><td>to drawsquare<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpt 4 [<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd 100 rt 90<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>end<br/>drawsquare
 										<br/><span class="italic"> - Define a procedure called 'drawsquare', and then call it</span>

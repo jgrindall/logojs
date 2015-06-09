@@ -41,7 +41,7 @@ LG.WebLoginButtonView.prototype.getData = function(){
 		label = "Logout";
 	}
 	else{
-		label = "Facebook login";
+		label = "Login";
 	}
 	return {"label":label, "name":user.name, "pic":user.pic};
 };
