@@ -10,7 +10,7 @@
   "license": "BSD",
   "dependencies": {
     "express": "latest",
-    "jade": "~latest",
+    "jade": "latest",
     "mkdirp": "latest",
     "urlencode":"latest",
     "json-middleware":"latest"

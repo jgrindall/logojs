@@ -1,0 +1,443 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 warn package.json logotacular@0.0.0 No repository field.
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/john/Documents/ios/logojs',
+6 verbose install   [ 'express', 'jade', 'mkdirp', 'urlencode', 'json-middleware' ] ]
+7 info preinstall logotacular@0.0.0
+8 verbose readDependencies using package.json deps
+9 verbose cache add [ 'json-middleware@latest', null ]
+10 verbose cache add name=undefined spec="json-middleware@latest" args=["json-middleware@latest",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'json-middleware@latest',
+11 verbose parsed url   path: 'json-middleware@latest',
+11 verbose parsed url   href: 'json-middleware@latest' }
+12 verbose cache add name="json-middleware" spec="latest" args=["json-middleware","latest"]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'latest',
+13 verbose parsed url   path: 'latest',
+13 verbose parsed url   href: 'latest' }
+14 verbose addNamed [ 'json-middleware', 'latest' ]
+15 verbose addNamed [ null, null ]
+16 verbose cache add [ 'urlencode@latest', null ]
+17 verbose cache add name=undefined spec="urlencode@latest" args=["urlencode@latest",null]
+18 verbose parsed url { protocol: null,
+18 verbose parsed url   slashes: null,
+18 verbose parsed url   auth: null,
+18 verbose parsed url   host: null,
+18 verbose parsed url   port: null,
+18 verbose parsed url   hostname: null,
+18 verbose parsed url   hash: null,
+18 verbose parsed url   search: null,
+18 verbose parsed url   query: null,
+18 verbose parsed url   pathname: 'urlencode@latest',
+18 verbose parsed url   path: 'urlencode@latest',
+18 verbose parsed url   href: 'urlencode@latest' }
+19 verbose cache add name="urlencode" spec="latest" args=["urlencode","latest"]
+20 verbose parsed url { protocol: null,
+20 verbose parsed url   slashes: null,
+20 verbose parsed url   auth: null,
+20 verbose parsed url   host: null,
+20 verbose parsed url   port: null,
+20 verbose parsed url   hostname: null,
+20 verbose parsed url   hash: null,
+20 verbose parsed url   search: null,
+20 verbose parsed url   query: null,
+20 verbose parsed url   pathname: 'latest',
+20 verbose parsed url   path: 'latest',
+20 verbose parsed url   href: 'latest' }
+21 verbose addNamed [ 'urlencode', 'latest' ]
+22 verbose addNamed [ null, null ]
+23 silly lockFile 2213e2af-json-middleware-latest json-middleware@latest
+24 verbose lock json-middleware@latest /Users/john/.npm/2213e2af-json-middleware-latest.lock
+25 verbose cache add [ 'express@latest', null ]
+26 verbose cache add name=undefined spec="express@latest" args=["express@latest",null]
+27 verbose parsed url { protocol: null,
+27 verbose parsed url   slashes: null,
+27 verbose parsed url   auth: null,
+27 verbose parsed url   host: null,
+27 verbose parsed url   port: null,
+27 verbose parsed url   hostname: null,
+27 verbose parsed url   hash: null,
+27 verbose parsed url   search: null,
+27 verbose parsed url   query: null,
+27 verbose parsed url   pathname: 'express@latest',
+27 verbose parsed url   path: 'express@latest',
+27 verbose parsed url   href: 'express@latest' }
+28 verbose cache add name="express" spec="latest" args=["express","latest"]
+29 verbose parsed url { protocol: null,
+29 verbose parsed url   slashes: null,
+29 verbose parsed url   auth: null,
+29 verbose parsed url   host: null,
+29 verbose parsed url   port: null,
+29 verbose parsed url   hostname: null,
+29 verbose parsed url   hash: null,
+29 verbose parsed url   search: null,
+29 verbose parsed url   query: null,
+29 verbose parsed url   pathname: 'latest',
+29 verbose parsed url   path: 'latest',
+29 verbose parsed url   href: 'latest' }
+30 verbose addNamed [ 'express', 'latest' ]
+31 verbose addNamed [ null, null ]
+32 silly lockFile c30a01ab-express-latest express@latest
+33 verbose lock express@latest /Users/john/.npm/c30a01ab-express-latest.lock
+34 verbose cache add [ 'jade@~latest', null ]
+35 verbose cache add name=undefined spec="jade@~latest" args=["jade@~latest",null]
+36 verbose parsed url { protocol: null,
+36 verbose parsed url   slashes: null,
+36 verbose parsed url   auth: null,
+36 verbose parsed url   host: null,
+36 verbose parsed url   port: null,
+36 verbose parsed url   hostname: null,
+36 verbose parsed url   hash: null,
+36 verbose parsed url   search: null,
+36 verbose parsed url   query: null,
+36 verbose parsed url   pathname: 'jade@~latest',
+36 verbose parsed url   path: 'jade@~latest',
+36 verbose parsed url   href: 'jade@~latest' }
+37 verbose cache add name="jade" spec="~latest" args=["jade","~latest"]
+38 verbose parsed url { protocol: null,
+38 verbose parsed url   slashes: null,
+38 verbose parsed url   auth: null,
+38 verbose parsed url   host: null,
+38 verbose parsed url   port: null,
+38 verbose parsed url   hostname: null,
+38 verbose parsed url   hash: null,
+38 verbose parsed url   search: null,
+38 verbose parsed url   query: null,
+38 verbose parsed url   pathname: '~latest',
+38 verbose parsed url   path: '~latest',
+38 verbose parsed url   href: '~latest' }
+39 verbose addNamed [ 'jade', '~latest' ]
+40 verbose addNamed [ null, null ]
+41 silly lockFile 3bbef025-jade-latest jade@~latest
+42 verbose lock jade@~latest /Users/john/.npm/3bbef025-jade-latest.lock
+43 verbose cache add [ 'mkdirp@latest', null ]
+44 verbose cache add name=undefined spec="mkdirp@latest" args=["mkdirp@latest",null]
+45 verbose parsed url { protocol: null,
+45 verbose parsed url   slashes: null,
+45 verbose parsed url   auth: null,
+45 verbose parsed url   host: null,
+45 verbose parsed url   port: null,
+45 verbose parsed url   hostname: null,
+45 verbose parsed url   hash: null,
+45 verbose parsed url   search: null,
+45 verbose parsed url   query: null,
+45 verbose parsed url   pathname: 'mkdirp@latest',
+45 verbose parsed url   path: 'mkdirp@latest',
+45 verbose parsed url   href: 'mkdirp@latest' }
+46 verbose cache add name="mkdirp" spec="latest" args=["mkdirp","latest"]
+47 verbose parsed url { protocol: null,
+47 verbose parsed url   slashes: null,
+47 verbose parsed url   auth: null,
+47 verbose parsed url   host: null,
+47 verbose parsed url   port: null,
+47 verbose parsed url   hostname: null,
+47 verbose parsed url   hash: null,
+47 verbose parsed url   search: null,
+47 verbose parsed url   query: null,
+47 verbose parsed url   pathname: 'latest',
+47 verbose parsed url   path: 'latest',
+47 verbose parsed url   href: 'latest' }
+48 verbose addNamed [ 'mkdirp', 'latest' ]
+49 verbose addNamed [ null, null ]
+50 silly lockFile 571ff56e-mkdirp-latest mkdirp@latest
+51 verbose lock mkdirp@latest /Users/john/.npm/571ff56e-mkdirp-latest.lock
+52 silly lockFile 5c566e68-urlencode-latest urlencode@latest
+53 verbose lock urlencode@latest /Users/john/.npm/5c566e68-urlencode-latest.lock
+54 info addNameTag [ 'express', 'latest' ]
+55 info addNameTag [ 'json-middleware', 'latest' ]
+56 info addNameTag [ 'jade', '~latest' ]
+57 info addNameTag [ 'mkdirp', 'latest' ]
+58 info addNameTag [ 'urlencode', 'latest' ]
+59 verbose url raw json-middleware
+60 verbose url resolving [ 'https://registry.npmjs.org/', './json-middleware' ]
+61 verbose url resolved https://registry.npmjs.org/json-middleware
+62 info trying registry request attempt 1 at 21:14:11
+63 http GET https://registry.npmjs.org/json-middleware
+64 verbose url raw urlencode
+65 verbose url resolving [ 'https://registry.npmjs.org/', './urlencode' ]
+66 verbose url resolved https://registry.npmjs.org/urlencode
+67 info trying registry request attempt 1 at 21:14:11
+68 http GET https://registry.npmjs.org/urlencode
+69 verbose url raw express
+70 verbose url resolving [ 'https://registry.npmjs.org/', './express' ]
+71 verbose url resolved https://registry.npmjs.org/express
+72 info trying registry request attempt 1 at 21:14:11
+73 verbose etag "A4B2FKN7RGJRABIZCLWRTQ210"
+74 http GET https://registry.npmjs.org/express
+75 verbose url raw jade
+76 verbose url resolving [ 'https://registry.npmjs.org/', './jade' ]
+77 verbose url resolved https://registry.npmjs.org/jade
+78 info trying registry request attempt 1 at 21:14:11
+79 verbose etag "20OZ1YOXDC0HRC445Z8TWD1X7"
+80 http GET https://registry.npmjs.org/jade
+81 verbose url raw mkdirp
+82 verbose url resolving [ 'https://registry.npmjs.org/', './mkdirp' ]
+83 verbose url resolved https://registry.npmjs.org/mkdirp
+84 info trying registry request attempt 1 at 21:14:12
+85 verbose etag "9YIRJA8UXXVYJ7YCHM67VKJB4"
+86 http GET https://registry.npmjs.org/mkdirp
+87 http 200 https://registry.npmjs.org/mkdirp
+88 silly registry.get cb [ 200,
+88 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+88 silly registry.get     etag: '"DV3T2GI2U25M7SY8OTKIZ5BJU"',
+88 silly registry.get     'content-type': 'application/json',
+88 silly registry.get     'cache-control': 'max-age=300',
+88 silly registry.get     'content-length': '24003',
+88 silly registry.get     'accept-ranges': 'bytes',
+88 silly registry.get     date: 'Wed, 27 Apr 2016 20:14:12 GMT',
+88 silly registry.get     via: '1.1 varnish',
+88 silly registry.get     age: '239',
+88 silly registry.get     connection: 'keep-alive',
+88 silly registry.get     'x-served-by': 'cache-ams4130-AMS',
+88 silly registry.get     'x-cache': 'HIT',
+88 silly registry.get     'x-cache-hits': '41',
+88 silly registry.get     'x-timer': 'S1461788052.822638,VS0,VE0',
+88 silly registry.get     vary: 'Accept-Encoding' } ]
+89 verbose addNamed [ 'mkdirp', '0.5.1' ]
+90 verbose addNamed [ '0.5.1', '0.5.1' ]
+91 silly lockFile 8968b51f-mkdirp-0-5-1 mkdirp@0.5.1
+92 verbose lock mkdirp@0.5.1 /Users/john/.npm/8968b51f-mkdirp-0-5-1.lock
+93 silly lockFile 8968b51f-mkdirp-0-5-1 mkdirp@0.5.1
+94 silly lockFile 8968b51f-mkdirp-0-5-1 mkdirp@0.5.1
+95 silly lockFile 571ff56e-mkdirp-latest mkdirp@latest
+96 silly lockFile 571ff56e-mkdirp-latest mkdirp@latest
+97 http 200 https://registry.npmjs.org/express
+98 silly registry.get cb [ 200,
+98 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+98 silly registry.get     etag: '"DN8FTM5M5HWJS5YV1RPTX3E77"',
+98 silly registry.get     'content-type': 'application/json',
+98 silly registry.get     'cache-control': 'max-age=300',
+98 silly registry.get     'content-length': '536512',
+98 silly registry.get     'accept-ranges': 'bytes',
+98 silly registry.get     date: 'Wed, 27 Apr 2016 20:14:12 GMT',
+98 silly registry.get     via: '1.1 varnish',
+98 silly registry.get     age: '107',
+98 silly registry.get     connection: 'keep-alive',
+98 silly registry.get     'x-served-by': 'cache-ams4135-AMS',
+98 silly registry.get     'x-cache': 'HIT',
+98 silly registry.get     'x-cache-hits': '1',
+98 silly registry.get     'x-timer': 'S1461788052.822859,VS0,VE1',
+98 silly registry.get     vary: 'Accept-Encoding' } ]
+99 http 200 https://registry.npmjs.org/urlencode
+100 silly registry.get cb [ 200,
+100 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+100 silly registry.get     etag: '"A20X9X50FFKRJNDX204FRVKNC"',
+100 silly registry.get     'content-type': 'application/json',
+100 silly registry.get     'cache-control': 'max-age=300',
+100 silly registry.get     'content-length': '15699',
+100 silly registry.get     'accept-ranges': 'bytes',
+100 silly registry.get     date: 'Wed, 27 Apr 2016 20:14:13 GMT',
+100 silly registry.get     via: '1.1 varnish',
+100 silly registry.get     age: '0',
+100 silly registry.get     connection: 'keep-alive',
+100 silly registry.get     'x-served-by': 'cache-ams4131-AMS',
+100 silly registry.get     'x-cache': 'MISS',
+100 silly registry.get     'x-cache-hits': '0',
+100 silly registry.get     'x-timer': 'S1461788052.835858,VS0,VE176',
+100 silly registry.get     vary: 'Accept-Encoding' } ]
+101 verbose addNamed [ 'express', '4.13.4' ]
+102 verbose addNamed [ '4.13.4', '4.13.4' ]
+103 silly lockFile 23607823-express-4-13-4 express@4.13.4
+104 verbose lock express@4.13.4 /Users/john/.npm/23607823-express-4-13-4.lock
+105 verbose addNamed [ 'urlencode', '1.1.0' ]
+106 verbose addNamed [ '1.1.0', '1.1.0' ]
+107 silly lockFile 3c3e8783-urlencode-1-1-0 urlencode@1.1.0
+108 verbose lock urlencode@1.1.0 /Users/john/.npm/3c3e8783-urlencode-1-1-0.lock
+109 silly lockFile 60f07ca4-rg-urlencode-urlencode-1-1-0-tgz https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz
+110 verbose lock https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz /Users/john/.npm/60f07ca4-rg-urlencode-urlencode-1-1-0-tgz.lock
+111 verbose addRemoteTarball [ 'https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz',
+111 verbose addRemoteTarball   '1f2ba26f013c85f0133f7a3ad6ff2730adf7cbb7' ]
+112 info retry fetch attempt 1 at 21:14:13
+113 verbose fetch to= /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz
+114 http GET https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz
+115 http 200 https://registry.npmjs.org/json-middleware
+116 silly registry.get cb [ 200,
+116 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+116 silly registry.get     etag: '"2CR0BU6N4B9YOWKRZECC5LG84"',
+116 silly registry.get     'content-type': 'application/json',
+116 silly registry.get     'cache-control': 'max-age=300',
+116 silly registry.get     'content-length': '12471',
+116 silly registry.get     'accept-ranges': 'bytes',
+116 silly registry.get     date: 'Wed, 27 Apr 2016 20:14:13 GMT',
+116 silly registry.get     via: '1.1 varnish',
+116 silly registry.get     age: '0',
+116 silly registry.get     connection: 'keep-alive',
+116 silly registry.get     'x-served-by': 'cache-ams4125-AMS',
+116 silly registry.get     'x-cache': 'MISS',
+116 silly registry.get     'x-cache-hits': '0',
+116 silly registry.get     'x-timer': 'S1461788052.835361,VS0,VE411',
+116 silly registry.get     vary: 'Accept-Encoding' } ]
+117 verbose addNamed [ 'json-middleware', '1.0.2' ]
+118 verbose addNamed [ '1.0.2', '1.0.2' ]
+119 silly lockFile 3544bcb1-json-middleware-1-0-2 json-middleware@1.0.2
+120 verbose lock json-middleware@1.0.2 /Users/john/.npm/3544bcb1-json-middleware-1-0-2.lock
+121 silly lockFile fe303268-leware-json-middleware-1-0-2-tgz https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz
+122 verbose lock https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz /Users/john/.npm/fe303268-leware-json-middleware-1-0-2-tgz.lock
+123 verbose addRemoteTarball [ 'https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz',
+123 verbose addRemoteTarball   'bc55c6d43231df6846df6ba880f72454e2a32596' ]
+124 info retry fetch attempt 1 at 21:14:13
+125 verbose fetch to= /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz
+126 http GET https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz
+127 silly lockFile 23607823-express-4-13-4 express@4.13.4
+128 silly lockFile 23607823-express-4-13-4 express@4.13.4
+129 silly lockFile c30a01ab-express-latest express@latest
+130 silly lockFile c30a01ab-express-latest express@latest
+131 http 200 https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz
+132 http 200 https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz
+133 verbose tar unpack /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz
+134 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+135 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package /Users/john/.npm/ce06e55b-53258-0-8510126085020602-package.lock
+136 silly lockFile ff1d1797-53258-0-8510126085020602-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz
+137 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz /Users/john/.npm/ff1d1797-53258-0-8510126085020602-tmp-tgz.lock
+138 verbose tar unpack /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz
+139 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+140 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package /Users/john/.npm/f6470a13-3230-0-40061126579530537-package.lock
+141 silly lockFile 100493c5-3230-0-40061126579530537-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz
+142 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz /Users/john/.npm/100493c5-3230-0-40061126579530537-tmp-tgz.lock
+143 silly gunzTarPerm modes [ '755', '644' ]
+144 silly gunzTarPerm modes [ '755', '644' ]
+145 silly gunzTarPerm extractEntry package.json
+146 silly gunzTarPerm extractEntry package.json
+147 silly gunzTarPerm extractEntry .npmignore
+148 silly gunzTarPerm extractEntry README.md
+149 silly gunzTarPerm extractEntry README.md
+150 silly gunzTarPerm extractEntry LICENSE.txt
+151 silly gunzTarPerm extractEntry src/json-middleware.js
+152 silly gunzTarPerm extractEntry History.md
+153 silly gunzTarPerm extractEntry lib/urlencode.js
+154 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+155 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+156 silly lockFile ff1d1797-53258-0-8510126085020602-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz
+157 silly lockFile ff1d1797-53258-0-8510126085020602-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/tmp.tgz
+158 verbose tar pack [ '/Users/john/.npm/json-middleware/1.0.2/package.tgz',
+158 verbose tar pack   '/var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package' ]
+159 verbose tarball /Users/john/.npm/json-middleware/1.0.2/package.tgz
+160 verbose folder /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+161 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+162 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package /Users/john/.npm/ce06e55b-53258-0-8510126085020602-package.lock
+163 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+164 verbose lock tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz /Users/john/.npm/97491f5e-son-middleware-1-0-2-package-tgz.lock
+165 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+166 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+167 silly lockFile 100493c5-3230-0-40061126579530537-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz
+168 silly lockFile 100493c5-3230-0-40061126579530537-tmp-tgz tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/tmp.tgz
+169 verbose tar pack [ '/Users/john/.npm/urlencode/1.1.0/package.tgz',
+169 verbose tar pack   '/var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package' ]
+170 verbose tarball /Users/john/.npm/urlencode/1.1.0/package.tgz
+171 verbose folder /var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+172 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+173 verbose lock tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package /Users/john/.npm/f6470a13-3230-0-40061126579530537-package.lock
+174 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+175 verbose lock tar:///Users/john/.npm/urlencode/1.1.0/package.tgz /Users/john/.npm/20e8ce79--npm-urlencode-1-1-0-package-tgz.lock
+176 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+177 silly lockFile ce06e55b-53258-0-8510126085020602-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053258-0.8510126085020602/package
+178 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+179 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+180 silly lockFile a9879418-pm-json-middleware-1-0-2-package /Users/john/.npm/json-middleware/1.0.2/package
+181 verbose lock /Users/john/.npm/json-middleware/1.0.2/package /Users/john/.npm/a9879418-pm-json-middleware-1-0-2-package.lock
+182 silly lockFile a9879418-pm-json-middleware-1-0-2-package /Users/john/.npm/json-middleware/1.0.2/package
+183 silly lockFile a9879418-pm-json-middleware-1-0-2-package /Users/john/.npm/json-middleware/1.0.2/package
+184 verbose tar unpack /Users/john/.npm/json-middleware/1.0.2/package.tgz
+185 silly lockFile 11287fc1-pm-json-middleware-1-0-2-package tar:///Users/john/.npm/json-middleware/1.0.2/package
+186 verbose lock tar:///Users/john/.npm/json-middleware/1.0.2/package /Users/john/.npm/11287fc1-pm-json-middleware-1-0-2-package.lock
+187 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+188 verbose lock tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz /Users/john/.npm/97491f5e-son-middleware-1-0-2-package-tgz.lock
+189 silly gunzTarPerm modes [ '755', '644' ]
+190 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+191 silly lockFile f6470a13-3230-0-40061126579530537-package tar:///var/folders/gj/2flks3zd4wg98vd3cth2qj5m0000gn/T/npm-835-3EEBGG1R/1461788053230-0.40061126579530537/package
+192 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+193 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+194 silly gunzTarPerm extractEntry package.json
+195 silly lockFile 42b30e98-john-npm-urlencode-1-1-0-package /Users/john/.npm/urlencode/1.1.0/package
+196 verbose lock /Users/john/.npm/urlencode/1.1.0/package /Users/john/.npm/42b30e98-john-npm-urlencode-1-1-0-package.lock
+197 silly gunzTarPerm extractEntry .npmignore
+198 silly gunzTarPerm extractEntry README.md
+199 silly lockFile 42b30e98-john-npm-urlencode-1-1-0-package /Users/john/.npm/urlencode/1.1.0/package
+200 silly lockFile 42b30e98-john-npm-urlencode-1-1-0-package /Users/john/.npm/urlencode/1.1.0/package
+201 verbose tar unpack /Users/john/.npm/urlencode/1.1.0/package.tgz
+202 silly lockFile 316767de-john-npm-urlencode-1-1-0-package tar:///Users/john/.npm/urlencode/1.1.0/package
+203 verbose lock tar:///Users/john/.npm/urlencode/1.1.0/package /Users/john/.npm/316767de-john-npm-urlencode-1-1-0-package.lock
+204 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+205 verbose lock tar:///Users/john/.npm/urlencode/1.1.0/package.tgz /Users/john/.npm/20e8ce79--npm-urlencode-1-1-0-package-tgz.lock
+206 silly gunzTarPerm modes [ '755', '644' ]
+207 silly gunzTarPerm extractEntry src/json-middleware.js
+208 silly gunzTarPerm extractEntry package.json
+209 silly gunzTarPerm extractEntry README.md
+210 silly gunzTarPerm extractEntry lib/urlencode.js
+211 silly lockFile 11287fc1-pm-json-middleware-1-0-2-package tar:///Users/john/.npm/json-middleware/1.0.2/package
+212 silly lockFile 11287fc1-pm-json-middleware-1-0-2-package tar:///Users/john/.npm/json-middleware/1.0.2/package
+213 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+214 silly lockFile 97491f5e-son-middleware-1-0-2-package-tgz tar:///Users/john/.npm/json-middleware/1.0.2/package.tgz
+215 verbose chmod /Users/john/.npm/json-middleware/1.0.2/package.tgz 644
+216 verbose chown /Users/john/.npm/json-middleware/1.0.2/package.tgz [ 501, 20 ]
+217 silly lockFile fe303268-leware-json-middleware-1-0-2-tgz https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz
+218 silly lockFile fe303268-leware-json-middleware-1-0-2-tgz https://registry.npmjs.org/json-middleware/-/json-middleware-1.0.2.tgz
+219 silly lockFile 3544bcb1-json-middleware-1-0-2 json-middleware@1.0.2
+220 silly lockFile 3544bcb1-json-middleware-1-0-2 json-middleware@1.0.2
+221 silly lockFile 2213e2af-json-middleware-latest json-middleware@latest
+222 silly lockFile 2213e2af-json-middleware-latest json-middleware@latest
+223 silly lockFile 316767de-john-npm-urlencode-1-1-0-package tar:///Users/john/.npm/urlencode/1.1.0/package
+224 silly lockFile 316767de-john-npm-urlencode-1-1-0-package tar:///Users/john/.npm/urlencode/1.1.0/package
+225 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+226 silly lockFile 20e8ce79--npm-urlencode-1-1-0-package-tgz tar:///Users/john/.npm/urlencode/1.1.0/package.tgz
+227 verbose chmod /Users/john/.npm/urlencode/1.1.0/package.tgz 644
+228 verbose chown /Users/john/.npm/urlencode/1.1.0/package.tgz [ 501, 20 ]
+229 silly lockFile 60f07ca4-rg-urlencode-urlencode-1-1-0-tgz https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz
+230 silly lockFile 60f07ca4-rg-urlencode-urlencode-1-1-0-tgz https://registry.npmjs.org/urlencode/-/urlencode-1.1.0.tgz
+231 silly lockFile 3c3e8783-urlencode-1-1-0 urlencode@1.1.0
+232 silly lockFile 3c3e8783-urlencode-1-1-0 urlencode@1.1.0
+233 silly lockFile 5c566e68-urlencode-latest urlencode@latest
+234 silly lockFile 5c566e68-urlencode-latest urlencode@latest
+235 http 200 https://registry.npmjs.org/jade
+236 silly registry.get cb [ 200,
+236 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+236 silly registry.get     etag: '"20NRNBOLS4QZRDJKO2H7T04QZ"',
+236 silly registry.get     'content-type': 'application/json',
+236 silly registry.get     'cache-control': 'max-age=300',
+236 silly registry.get     'content-length': '162110',
+236 silly registry.get     'accept-ranges': 'bytes',
+236 silly registry.get     date: 'Wed, 27 Apr 2016 20:14:13 GMT',
+236 silly registry.get     via: '1.1 varnish',
+236 silly registry.get     age: '1',
+236 silly registry.get     connection: 'keep-alive',
+236 silly registry.get     'x-served-by': 'cache-ams4134-AMS',
+236 silly registry.get     'x-cache': 'MISS',
+236 silly registry.get     'x-cache-hits': '0',
+236 silly registry.get     'x-timer': 'S1461788052.822827,VS0,VE1051',
+236 silly registry.get     vary: 'Accept-Encoding' } ]
+237 silly lockFile 3bbef025-jade-latest jade@~latest
+238 silly lockFile 3bbef025-jade-latest jade@~latest
+239 error notarget No compatible version found: jade@'~latest'
+239 error notarget Valid install targets:
+239 error notarget ["0.0.1","0.0.2","0.1.0","0.2.0","0.2.1","0.2.2","0.2.3","0.2.4","0.3.0","0.4.0","0.4.1","0.5.0","0.5.1","0.5.2","0.5.3","0.5.4","0.5.5","0.5.6","0.5.7","0.6.0","0.6.1","0.6.3","0.7.0","0.7.1","0.8.0","0.8.1","0.8.2","0.8.3","0.8.4","0.8.5","0.8.6","0.8.7","0.8.8","0.8.9","0.9.0","0.9.1","0.9.2","0.9.3","0.10.0","0.10.1","0.10.2","0.10.3","0.10.4","0.10.5","0.10.6","0.10.7","0.11.0","0.11.1","0.12.0","0.12.1","0.12.2","0.12.3","0.12.4","0.13.0","0.14.0","0.14.1","0.14.2","0.15.0","0.15.1","0.15.2","0.15.3","0.15.4","0.16.0","0.16.1","0.16.2","0.16.3","0.16.4","0.17.0","0.18.0","0.19.0","0.20.0","0.20.1","0.20.2","0.20.3","0.21.0","0.22.0","0.22.1","0.23.0","0.24.0","0.25.0","0.26.0","0.26.1","0.26.2","0.26.3","0.27.0","0.27.1","0.27.2","0.27.3","0.27.4","0.27.5","0.27.6","0.27.7","0.28.0","0.28.1","0.28.2","0.29.0","0.30.0","0.31.0","0.31.1","0.31.2","0.32.0","0.33.0","0.34.0","0.34.1","0.35.0","1.0.0","1.0.1","1.0.2","1.1.0","1.1.1","1.1.2","1.1.3","1.1.4","1.1.5","1.2.0","1.3.0","1.3.1","1.4.0","1.4.1","1.4.2","1.5.0","1.6.0","1.7.0","1.8.0","1.8.1","1.8.2","1.9.0","1.9.1","1.9.2","1.10.0","1.11.0"]
+239 error notarget
+239 error notarget This is most likely not a problem with npm itself.
+239 error notarget In most cases you or one of your dependencies are requesting
+239 error notarget a package version that doesn't exist.
+240 error System Darwin 15.4.0
+241 error command "node" "/usr/local/bin/npm" "install"
+242 error cwd /Users/john/Documents/ios/logojs
+243 error node -v v0.10.26
+244 error npm -v 1.4.3
+245 error code ETARGET
+246 verbose exit [ 1, true ]
