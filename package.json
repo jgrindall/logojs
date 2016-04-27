@@ -9,9 +9,10 @@
   "author": "jgrindall",
   "license": "BSD",
   "dependencies": {
-    "express": "~3.5.1",
-    "jade": "~1.3.0",
-    "mkdirp": "~0.3.5",
-    "mongoose": "~3.8.8"
+    "express": "latest",
+    "jade": "~latest",
+    "mkdirp": "latest",
+    "urlencode":"latest",
+    "json-middleware":"latest"
   }
 }
