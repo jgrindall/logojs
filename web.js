@@ -8,7 +8,8 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser());
 
 app.get('/', function(req, res){
-	res.render("index.jade");
+	res.writeHead(301, {Location: 'http://www.numbersandpictures.com/#logotacularapp'});
+	res.end();
 });
 
 app.listen(port, function(){
