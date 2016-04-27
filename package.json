@@ -13,6 +13,7 @@
     "jade": "latest",
     "mkdirp": "latest",
     "urlencode":"latest",
-    "json-middleware":"latest"
+    "json-middleware":"latest",
+    "body-parser":"latest"
   }
 }
