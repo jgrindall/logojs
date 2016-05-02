@@ -1,16 +1,19 @@
-var express, app, port, exec, mongoose, File, FileSchema, mongoUri, auth;
+var express, app, port, exec, mongoose, File, FileSchema, mongoUri, auth, bodyParser;
 
 express = require("express");
 app = express();
 port = Number(process.env.PORT || 5000);
 exec = require('child_process').exec;
 mongoose = require('mongoose');
+bodyParser = require('body-parser');
+app.use(express.static(__dirname + "/public"));
+app.use(bodyParser.json());
 
 auth = express.basicAuth('logoUserName', 'logoPassword');
 var DEFAULT_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAA5JREFUKFNjYBgFpIcAAAE2AAE4SGHYAAAAAElFTkSuQmCC";
 var MAX_FILES = 500;
 
-mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/logotacular'; 
+mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/logotacular';
 
 var countAllFiles = function(options){
 	File.count(function(err, count){
@@ -39,13 +42,11 @@ FileSchema = new mongoose.Schema({
 File = mongoose.model("File", FileSchema);
 
 app.configure(function(){
-	app.use(express.static(__dirname+"/public/build"));
-	app.use(express.bodyParser());
 	mongoose.connect(mongoUri);
 });
 
 app.get('/', function(req, res){
-	res.render("index.jade");
+	res.render("app.jade");
 });
 
 app.get('/app', function(req, res){

@@ -12,6 +12,8 @@
     "express": "~3.5.1",
     "jade": "~1.3.0",
     "mkdirp": "~0.3.5",
-    "mongoose": "~3.8.8"
+    "mongoose": "~3.8.8",
+    "json-middleware":"latest",
+    "body-parser":"latest"
   }
 }

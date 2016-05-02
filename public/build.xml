@@ -1,133 +1,71 @@
-<?xml version="1.0"?> 
+<?xml version="1.0"?>
 
-<project name="Logotacular" default="build"> 
-	
-	<condition property="is_windows">
-        <os family="windows"/>
-    </condition>
-	
-	<condition property="is_ios">
-        <os family="mac"/>
-    </condition>
-	
-	
+<project name="Logotacular" default="build">
+
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-	
+
 	<property file="build.properties"></property>
-	
-	<target name="minjs" if="${min}">
-		<echo message="compressing js"/>
-		
-		<java jar="${yuijar}" fork="true" failonerror="true" >
-			<arg line='"build/js/app/main-min.js" -o "build/js/app/main-min.js"'/> 
-		</java>
-		
-	</target>
-	
-	<target name="lesswin" if="is_windows">
-	
-		<echo message="lesswin"/>
-		
-		<exec executable="cmd.exe">
-			<arg line="/c lessc 'css/app/main.less' -x 'build/css/app/main-min.css'"/>
-		</exec>
-	</target>
-	
-	<target name="lessios" if="is_ios">
-		<exec executable="lessc">
-			<arg line="css/app/main.less -x build/css/app/main-min.css"/>
-		</exec>
-	</target>
-	
+
 	<target name="build" unless="built">
-		
-		<echo message="build"/>
-		
-		<echo message="deleting"/>
-		
-		<delete dir="min/build/css"/>
-		<delete dir="min/build/js"/>
-		<delete dir="min/build/img"/>
-		
-		
-		<echo message="linting"/>
-		
-		<exec executable="jsl" failifexecutionfails="false">
-			<arg line="conf min/logo.conf"/>
-		</exec>
-		
-		<echo message="handle css"/>
-		
-		<antcall target="lesswin"/>
-		<antcall target="lessios"/>
-		
-		<echo message="concatening libs"/>
-		
-		<concat destfile="build/js/app/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+
+		<concat destfile="js/libs-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
 			<filelist dir="libs">
-				
+
 				<file name="jquery.min.js" />
 				<file name="jquery.jgrowl.js" />
-				<file name="jquery.ba-throttle-debounce.js" /> 
-				<file name="json2.js" /> 
-				<file name="underscore-1.4.4.js" /> 			
-				<file name="backbone-1.0.0.js" /> 
+				<file name="jquery.ba-throttle-debounce.js" />
+				<file name="json2.js" />
+				<file name="underscore-1.4.4.js" />
+				<file name="backbone-1.0.0.js" />
 				<file name="jquery.easing.js" />
 				<file name="howler.js" />
 				<file name="iscroll5.js" />
-				<file name="createjs/easeljs-0.6.0.min.js" /> 	
+				<file name="createjs/easeljs-0.6.0.min.js" />
 				<file name="createjs/tweenjs-0.4.0.min.js" />
-				<file name="createjs/filters/Filter.js" /> 	
-				<file name="hammer.js" /> 	
-				<file name="jquery.specialevent.hammer.js" /> 	
-				
+				<file name="createjs/filters/Filter.js" />
+				<file name="hammer.js" />
+				<file name="jquery.specialevent.hammer.js" />
+
 			</filelist>
-	
+
 		</concat>
-		
-		<echo message="concatening js"/>
-		
-		<concat destfile="build/js/app/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
-			<filelist dir="js/app">
-				
-				<!--  utils MUST come first -->
-				<!--  the rest must be loaded in order or dependence (superclasses first) bit of a pain...-->
-				
-				
+
+		<concat destfile="js/main-min.js" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+			<filelist dir="js">
+
 				<file name="utils/utils.js"/>
 				<file name="config.js"/>
 				<file name="messages.js"/>
 				<file name="create.js"/>
-				
+
 				<file name="utils/implementations.js"/>
 				<file name="utils/browser.js"/>
 				<file name="utils/network.js"/>
 				<file name="utils/filesystem.js"/>
-				
+
 				<file name="utils/storage.js"/>
-			
-				<file name="utils/templates.js"/> 	
-				<file name="utils/sounds.js"/> 	
-				
-				<file name="routes.js"/>		
-				<file name="events.js"/>		
-				
-				<file name="social/facebook.js"/>
+
+				<file name="utils/templates.js"/>
+				<file name="utils/sounds.js"/>
+
+				<file name="routes.js"/>
+				<file name="events.js"/>
+
 				<file name="parser/parser.js"/>
 				<file name="parser/output.js"/>
 				<file name="parser/commands.js"/>
-				<file name="models/base.js"/>		
-				
+				<file name="models/base.js"/>
+
 				<file name="models/spinner.js"/>
 				<file name="models/filemodel.js"/>
-				
+
 				<file name="models/spinnercollection.js"/>
 				<file name="models/paginatedcollection.js"/>
 				<file name="models/selectedcollection.js"/>
 				<file name="models/filecollection.js"/>
-				
+
 				<file name="models/fileopener.js"/>
-				<file name="models/graphicsmodel.js"/>		
+				<file name="models/graphicsmodel.js"/>
 				<file name="models/usermodel.js"/>
 				<file name="models/sizemodel.js"/>
 				<file name="views/base.js"/>
@@ -143,135 +81,59 @@
 				<file name="views/header/loadbutton.js"/>
 				<file name="views/header/filebutton.js"/>
 				<file name="views/header/dinobutton.js"/>
-				<file name="views/spinner/spinner.js"/>		
-								
+				<file name="views/spinner/spinner.js"/>
+
 				<file name="views/easel/turtle.js"/>
 				<file name="views/easel/bg.js"/>
 				<file name="views/easel/commands.js"/>
-				<file name="views/activity/activity.js"/>	
-				<file name="views/activity/base.js"/>	
-				<file name="views/activity/activitybuttons.js"/>	
-				<file name="views/canvas/canvas.js"/>	
-				<file name="views/canvas/writegrowl.js"/>	
-				
-				<file name="views/menu/base.js"/>	
-				<file name="views/menu/menu.js"/>	
+				<file name="views/activity/activity.js"/>
+				<file name="views/activity/base.js"/>
+				<file name="views/activity/activitybuttons.js"/>
+				<file name="views/canvas/canvas.js"/>
+				<file name="views/canvas/writegrowl.js"/>
+
+				<file name="views/menu/base.js"/>
+				<file name="views/menu/menu.js"/>
 				<file name="views/menu/menubuttons.js"/>
-				<file name="views/menu/menutop.js"/>				
-				<file name="views/menu/writebutton.js"/>	
-				<file name="views/menu/settingsbutton.js"/>	
-				<file name="views/menu/homebutton.js"/>	
+				<file name="views/menu/menutop.js"/>
+				<file name="views/menu/writebutton.js"/>
+				<file name="views/menu/settingsbutton.js"/>
+				<file name="views/menu/homebutton.js"/>
 				<file name="views/popups/base.js"/>
 				<file name="views/popups/alert.js"/>
 				<file name="views/popups/filename.js"/>
-				
-				
-					
-				<file name="views/write/base.js"/>	
-				<file name="views/write/write.js"/>	
-				<file name="views/write/writebuttons.js"/>	
-				<file name="views/write/writetop.js"/>	
+
+				<file name="views/write/base.js"/>
+				<file name="views/write/write.js"/>
+				<file name="views/write/writebuttons.js"/>
+				<file name="views/write/writetop.js"/>
 				<file name="views/write/undobutton.js"/>
-				<file name="views/write/redobutton.js"/>	
-				<file name="views/write/tidybutton.js"/>	
-				<file name="views/write/clearbutton.js"/>	
-				<file name="views/write/writebar.js"/>	
+				<file name="views/write/redobutton.js"/>
+				<file name="views/write/tidybutton.js"/>
+				<file name="views/write/clearbutton.js"/>
+				<file name="views/write/writebar.js"/>
 				<file name="views/write/deletebutton.js"/>
 				<file name="views/write/newbutton.js"/>
-				
-				<file name="views/help/help.js"/>		
-				<file name="views/help/helpoverlay.js"/>	
-				<file name="views/help/examples.js"/>	
-						
+
+				<file name="views/help/help.js"/>
+				<file name="views/help/helpoverlay.js"/>
+				<file name="views/help/examples.js"/>
+
 				<file name="views/gallery/gallerybutton.js"/>
 
-				<file name="views/gallery/gallerylist.js"/>	
-				<file name="views/gallery/gallerytop.js"/>	
-				<file name="views/gallery/galleryside.js"/>	
-				<file name="views/gallery/galleryrow.js"/>	
-				<file name="views/gallery/base.js"/>	
-				<file name="views/gallery/gallery.js"/>	
-				
-				<file name="views/load/load.js"/>	
-				
-				<file name="launcher.js"/>	
+				<file name="views/gallery/gallerylist.js"/>
+				<file name="views/gallery/gallerytop.js"/>
+				<file name="views/gallery/galleryside.js"/>
+				<file name="views/gallery/galleryrow.js"/>
+				<file name="views/gallery/base.js"/>
+				<file name="views/gallery/gallery.js"/>
+
+				<file name="views/load/load.js"/>
+
+				<file name="launcher.js"/>
 			</filelist>
 		</concat>
-		
-		
-		<antcall target="minjs"/>
-		
-		<copy todir="build/css/web/">
-			<fileset dir="css/web"/>
-		</copy>
-		
-		<copy todir="build/css/app/font-awesome">
-			<fileset dir="css/app/font-awesome"/>
-		</copy>
-		
-		<copy todir="build/css/app/images">
-			<fileset dir="css/app/images"/>
-		</copy>
-		
-		<copy todir="build/css/app/fonts">
-			<fileset dir="css/app/fonts"/>
-		</copy>
-		
-		<copy todir="build/js/app/parser">
-			<fileset dir="js/app/parser"/>
-		</copy>
-		
-		<copy todir="build/img">
-			<fileset dir="img"/>
-		</copy>
-		
-		<copy overwrite="true" file="../index.html" tofile="../views/app.html">
-			<filterset begintoken="_" endtoken="_">
-				<filter token="PHONEGAP" value=""/>
-			</filterset>
-		</copy>
-		
-		<antcall target="ios"/>
-		
-		<antcall target="phonegap"/>
-		
+
 	</target>
-	
-	
-	
-	<target name="phonegap" if="is_ios">
-	
-		<echo message="phonegap"/>
-		
-		<exec executable="phonegap" dir="../../logojs_pg">
-			<arg line="build ios"/>
-		</exec>
-	</target>
-	
-	
-	
-	
-	<target name="ios">
-		
-		<echo message="ios"/>
-		
-		<delete dir="../../logojs_pg/www/min"/>
-		<delete dir="../../logojs_pg/www/img"/>
-		
-		<copydir src="build" dest="../../logojs_pg/www/" includes="**" >
-		</copydir>
-		
-		<copydir src="img" dest="../../logojs_pg/www/img" includes="**" >
-		</copydir>
-		
-		<copy overwrite="true" file="../index.html" todir="../../logojs_pg/www">
-			<filterset begintoken="_" endtoken="_">
-				<filter token="PHONEGAP" value="&lt;script src='cordova.js' type='text/javascript' charset='utf-8'&gt;&lt;/script&gt;&lt;script src='cordova_plugins.js' type='text/javascript' charset='utf-8' &gt;&lt;/script&gt;"/>
-			</filterset>
-		</copy>
-		
-	</target>
-	
-	
-	
+
 </project>

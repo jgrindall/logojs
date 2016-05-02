@@ -13,8 +13,8 @@
 		<meta http-equiv="X-UA-Compatible"					content="IE=Edge">
 		<meta name="format-detection" 						content="telephone=no">
 			
-		<link rel="stylesheet" 						href="css/app/main-min.css">
-		<link rel="stylesheet" 						href="css/app/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" 						href="css/main.css">
+		<link rel="stylesheet" 						href="css/font-awesome/css/font-awesome.min.css">
 		
 		
 		
@@ -104,11 +104,11 @@
 		
 		<script id="tpl_deletebutton" type="text/template">
 
-			<button class="action button transparent<% if(disabled){print(" disabled");} %>" >
+			<!--<button class="action button transparent<% if(disabled){print(" disabled");} %>" >
 				<span>
 					<i class="fa fa-trash-o"></i>
 				</span>
-			</button>
+			</button>-->
 			
 		</script>
 		
@@ -225,7 +225,7 @@
 					print(name);
 				}
 				else{
-					print("unsaved file");
+					print("your file");
 				}%>
 				<% if(!saved){print("*");}%>
 				</span>
@@ -254,12 +254,12 @@
 		
 		<script id="tpl_gallerybutton" type="text/template">
 
-			  <li class="<% if(disabled){print("disabled");} %>">
+			  <!--<li class="<% if(disabled){print("disabled");} %>">
 				<button class="action button <% if(disabled){print(" disabled");} %>">
 					<i class="fa fa-files-o"></i>
 					<span>Gallery</span>
 				</button>
-			</li>
+			</li>-->
 			  
 
 		</script>
@@ -352,7 +352,7 @@
 		
 		
 		<script id="tpl_loginbutton" type="text/template">
-			<li class="<% if(disabled){print("disabled");} %>">
+			<!--<li class="<% if(disabled){print("disabled");} %>">
 				<button id="loginbutton" class="action button<% if(disabled){print(" disabled");} %>" >
 				
 					<% if(pic){ %>
@@ -370,7 +370,7 @@
 					<% } %>
 				
 				</button>
-			</li>
+			</li>-->
 			  
 		</script>
 		
@@ -1343,12 +1343,12 @@ fd :i</pre>
 		</script>
 		
 		<!-- include all the javascript libraries -->
-		<script src="js/app/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
+		<script src="js/libs-min.js" 					type="text/javascript" charset="utf-8"></script>
 		
 		
 				
 		<!-- the main javascript -->
-		<script src="js/app/main-min.js" 					type="text/javascript" charset="utf-8"></script>
+		<script src="js/main-min.js" 					type="text/javascript" charset="utf-8"></script>
 		
 		
 
