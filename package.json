@@ -14,6 +14,7 @@
     "mkdirp": "~0.3.5",
     "mongoose": "~3.8.8",
     "json-middleware":"latest",
-    "body-parser":"latest"
+    "body-parser":"latest",
+    "mime":"latest"
   }
 }

@@ -469,6 +469,11 @@ h4 {
   height: 100%;
   max-height: 77px;
 }
+#menubuttons .button a {
+  color:white;
+  text-decoration:none;
+}
+
 #menubuttons .button span {
   position: relative;
   text-align: center;

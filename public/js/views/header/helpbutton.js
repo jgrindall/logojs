@@ -8,13 +8,12 @@ LG.HelpButtonView = LG.HeaderButton.extend({
 		LG.HeaderButton.prototype.initialize.call(this);
 	},
 	onClick:function(e){
-		this.stopProp(e);
+		//this.stopProp(e);
 		LG.sounds.playClick();
-		LG.router.navigate("helpoverlay", {"trigger":true});
+		//LG.router.navigate("helpoverlay", {"trigger":true});
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click":"onClick"
 		});
 		return obj;
 	
@@ -27,13 +26,13 @@ LG.HelpButtonMenuView = LG.HeaderButton.extend({
 		LG.HeaderButton.prototype.initialize.call(this);
 	},
 	onClick:function(e){
-		this.stopProp(e);
+		//this.stopProp(e);
 		LG.sounds.playClick();
-		LG.router.navigate("help", {"trigger":true});
+		//LG.router.navigate("help", {"trigger":true});
 	},
 	events:function(){
 		var obj = Backbone.View.getTouch( {
-			"_click":"onClick"
+
 		});
 		return obj;
 	
